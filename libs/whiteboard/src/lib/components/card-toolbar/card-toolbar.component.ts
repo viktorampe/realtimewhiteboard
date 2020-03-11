@@ -1,4 +1,10 @@
-import { animate, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  keyframes,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
 
@@ -11,19 +17,33 @@ import { ModeEnum } from '../../enums/mode.enum';
       transition(':enter', [
         style({ transform: 'scale(0) translateY(0px)' }),
         animate(
-          '150ms ease-in-out',
-          style({
-            transform: 'scale(1) translateY(-48px)'
-          })
+          '150ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ transform: 'translateY(48px) scale(0)', offset: 0 }),
+            style({ transform: 'translateY(10px)', offset: 0.65 }),
+            style({ transform: 'translateY(-6px)', offset: 0.8 }),
+            style({ transform: 'translateY(4px)', offset: 0.85 }),
+            style({ transform: 'translateY(-2px)', offset: 0.9 }),
+            style({ transform: 'translateY(0) scale(1)', offset: 1 })
+          ])
+        )
+      ]),
+      transition('multiSelect => void', [
+        style({
+          transform: 'translateY(0) scale(1)'
+        }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(48px) scale(0)' })
         )
       ]),
       transition(':leave', [
         style({
-          transform: 'scale(1) translateY(-48px)'
+          transform: 'translateY(0) scale(1)'
         }),
         animate(
-          '150ms ease-in-out',
-          style({ transform: 'scale(0) translateY(0px)' })
+          '150ms 500ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(48px) scale(0)' })
         )
       ])
     ])

@@ -35,14 +35,14 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
         })
       ]),
       transition(':leave', [
-        query('@showHideColorSwatchOne', stagger(100, [animateChild()]), {
+        query('@showHideColorSwatchOne', stagger(-100, [animateChild()]), {
           optional: true
         })
       ])
     ]),
     trigger('showHideToolbar', [
       transition(':enter', [
-        query('@showHideToolbarTool', stagger(100, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(-100, [animateChild()]), {
           optional: true
         })
       ]),

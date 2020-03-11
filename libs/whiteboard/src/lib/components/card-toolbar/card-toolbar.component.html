@@ -6,7 +6,7 @@
 >
   <div class="toolbar" *ngIf="mode !== Mode.EDIT; else editModeView">
     <div
-      [@showHideToolbarTool]
+      [@showHideToolbarTool]="'select'"
       class="toolbar__tool toolbar__delete"
       (click)="deleteIconClicked()"
     >
@@ -16,7 +16,7 @@
       ></mat-icon>
     </div>
     <div
-      [@showHideToolbarTool]
+      [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (click)="multiSelectClicked($event)"
     >
@@ -24,14 +24,14 @@
       </mat-icon>
     </div>
     <div
-      [@showHideToolbarTool]
+      [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (click)="flipIconClicked($event)"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
     <div
-      [@showHideToolbarTool]
+      [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (click)="editIconClicked($event)"
     >
@@ -41,7 +41,7 @@
   <ng-template #editModeView>
     <div class="toolbar">
       <div
-        [@showHideToolbarTool]
+        [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__delete"
         (click)="deleteIconClicked()"
       >
@@ -51,14 +51,14 @@
         ></mat-icon>
       </div>
       <div
-        [@showHideToolbarTool]
+        [@showHideToolbarTool]="'edit'"
         class="toolbar__tool"
         (click)="flipIconClicked($event)"
       >
         <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
       </div>
       <div
-        [@showHideToolbarTool]
+        [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__confirm"
         (click)="confirmIconClicked($event)"
       >
@@ -74,7 +74,7 @@
 <ng-template #multiSelectView>
   <div class="toolbar toolbar_multiSelect">
     <div
-      [@showHideToolbarTool]
+      [@showHideToolbarTool]="'multiSelect'"
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
       (click)="multiSelectClicked($event)"
@@ -84,7 +84,7 @@
     </div>
     <ng-template #notSelectView>
       <div
-        [@showHideToolbarTool]
+        [@showHideToolbarTool]="'multiSelect'"
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
         (click)="multiSelectSelectedClicked($event)"

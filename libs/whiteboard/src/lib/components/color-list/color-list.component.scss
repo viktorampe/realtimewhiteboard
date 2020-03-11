@@ -19,11 +19,10 @@ $swatch-size: 40px;
   flex-direction: column;
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateX(-$swatch-size) translateX(-8px) translateY(-50%);
 
   &__swatches {
     margin-bottom: 4px;
-    transform: scale(1) translateX(-48px);
     &:last-child {
       margin-bottom: 0px;
     }
