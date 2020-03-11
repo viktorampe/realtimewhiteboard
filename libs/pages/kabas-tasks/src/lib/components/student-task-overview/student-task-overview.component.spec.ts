@@ -6,8 +6,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
+import { TaskInfoByLearningAreaPipe } from '../manage-kabas-tasks-overview/task-info-by-learning-area.pipe';
 import { StudentTaskOverviewComponent } from './student-task-overview.component';
-
+// file.only
 describe('StudentTaskOverviewComponent', () => {
   let component: StudentTaskOverviewComponent;
   let fixture: ComponentFixture<StudentTaskOverviewComponent>;
@@ -16,7 +17,7 @@ describe('StudentTaskOverviewComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule, RouterTestingModule],
-      declarations: [StudentTaskOverviewComponent],
+      declarations: [StudentTaskOverviewComponent, TaskInfoByLearningAreaPipe],
       providers: [{ provide: ENVIRONMENT_UI_TOKEN, useValue: {} }]
     });
   });
@@ -35,9 +36,9 @@ describe('StudentTaskOverviewComponent', () => {
   describe('practice page redirect', () => {
     it('should navigate to free practice when empty-state cta is clicked', async () => {
       jest.spyOn(router, 'navigate');
-      component.emptyStateClick();
+      component.emptyStateClick('foo');
 
-      expect(router.navigate).toHaveBeenCalledWith(['practice']);
+      expect(router.navigate).toHaveBeenCalledWith(['foo']);
     });
   });
 

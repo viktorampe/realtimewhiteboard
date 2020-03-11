@@ -93,14 +93,14 @@ export class StudentTaskOverviewComponent implements OnInit {
         return showFinishedTasks
           ? {
               title: 'Hier is niets te zien',
-              description: 'Je hebt nog geen taken afgewerkt.',
+              description: 'Je hebt nog geen afgewerkte taken.',
               svgIcon: 'empty-state-all-done' // TODO: use correct icon
             }
           : {
               title: 'Je bent helemaal mee',
               description:
                 'Er staan geen taken voor je klaar. Je kan altijd vrij oefenen.',
-              ctaLabel: 'naar vrij oefenen',
+              ctaLabel: 'Naar vrij oefenen',
               ctaLink: 'practice',
               svgIcon: 'empty-state-all-done' // TODO: use correct icon
             };
