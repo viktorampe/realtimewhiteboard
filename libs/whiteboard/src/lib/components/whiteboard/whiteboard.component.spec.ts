@@ -501,8 +501,11 @@ describe('WhiteboardComponent', () => {
 
   describe('transition to selected mode', () => {
     it('should set other cards to IdleMode when a card mode changes to SelectedMode', () => {
-      const idleCard = new CardFixture({ mode: ModeEnum.IDLE });
-      const selectedCard = new CardFixture({ mode: ModeEnum.SELECTED });
+      const idleCard = new CardFixture({ mode: ModeEnum.IDLE, id: uuidv4() });
+      const selectedCard = new CardFixture({
+        mode: ModeEnum.SELECTED,
+        id: uuidv4()
+      });
       component.whiteboard$.value.cards = [idleCard, selectedCard];
 
       component.onCardPressed(idleCard);
