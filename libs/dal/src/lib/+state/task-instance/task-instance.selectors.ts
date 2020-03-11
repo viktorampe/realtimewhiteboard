@@ -3,6 +3,7 @@ import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   EduContent,
+  LearningAreaInterface,
   ResultInterface,
   TaskEduContentInterface,
   TaskInterface
@@ -10,6 +11,7 @@ import {
 import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
 import { EduContentQueries } from '../edu-content';
+import { LearningAreaQueries } from '../learning-area';
 import { ResultQueries } from '../result';
 import { TaskQueries } from '../task';
 import { TaskEduContentQueries } from '../task-edu-content';
@@ -119,7 +121,8 @@ export const getTaskInstanceWithTaskById = createSelector(
     TaskQueries.getAllEntities,
     ResultQueries.getResultsByTask,
     TaskEduContentQueries.getAllGroupedByTaskId,
-    EduContentQueries.getAllEntities
+    EduContentQueries.getAllEntities,
+    LearningAreaQueries.getAllEntities
   ],
   (
     taskInstance: TaskInstance,
@@ -127,6 +130,7 @@ export const getTaskInstanceWithTaskById = createSelector(
     resultsByTask: Dictionary<ResultInterface[]>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     eduContentDict: Dictionary<EduContent>,
+    learningAreaDict: Dictionary<LearningAreaInterface>,
     props: { id: number }
   ) => {
     return {
@@ -137,7 +141,9 @@ export const getTaskInstanceWithTaskById = createSelector(
         taskEduContents: taskEduContentByTask[taskInstance.taskId].map(tE => ({
           ...tE,
           eduContent: eduContentDict[tE.eduContentId]
-        }))
+        })),
+        learningArea:
+          learningAreaDict[taskDict[taskInstance.taskId].learningAreaId]
       }
     };
   }
