@@ -6,7 +6,6 @@ import {
   TaskInstanceInterface,
   TaskInstanceQueries
 } from '@campus/dal';
-import { groupArrayByKey } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
@@ -27,7 +26,10 @@ export const studentTaskWithContent = createSelector(
     props: { id: number }
   ): StudentTaskWithContentInterface => {
     const task = taskInstance.task;
-    const resultsByEducontent = groupArrayByKey(task.results, 'eduContentId');
+    const resultByEducontentId = task.results.reduce(
+      (acc, result) => Object.assign(acc, { [result.eduContentId]: result }),
+      {}
+    );
 
     const { name, description } = task;
     const learningAreaName = task.learningArea.name;
@@ -36,7 +38,7 @@ export const studentTaskWithContent = createSelector(
 
     const contents = toStudentTaskContent(
       task.taskEduContents,
-      resultsByEducontent
+      resultByEducontentId
     );
 
     return {
@@ -53,13 +55,12 @@ export const studentTaskWithContent = createSelector(
 
 function toStudentTaskContent(
   taskEduContents: TaskEduContentInterface[],
-  resultsByEduContentId: Dictionary<Result[]>
+  resultByEduContentId: Dictionary<Result>
 ): StudentTaskContentInterface[] {
   return taskEduContents.map(taskEduContent => {
     const eduContent = taskEduContent.eduContent as EduContent;
     const result =
-      (resultsByEduContentId[taskEduContent.eduContentId] &&
-        resultsByEduContentId[taskEduContent.eduContentId][0]) ||
+      resultByEduContentId[taskEduContent.eduContentId] ||
       ({} as Partial<ResultInterface>);
 
     const { name, description } = eduContent;
