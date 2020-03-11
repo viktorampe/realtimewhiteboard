@@ -1,5 +1,7 @@
 import { groupArrayByKey } from '@campus/utils';
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { ResultInterface } from '../../+models';
 import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
 import { ResultQueries } from '../result';
@@ -109,15 +111,28 @@ export const getTaskStudentTaskInstances = createSelector(
   [
     getAll,
     TaskQueries.getAllEntities,
-    ResultQueries.getAll,
+    ResultQueries.getResultsByTask,
     TaskEduContentQueries.getAllByTaskId
   ],
-  (taskInstances, tasksById, results, taskEduContentById) => {
+  (
+    taskInstances: TaskInstanceInterface[],
+    tasksById,
+    results: Dictionary<ResultInterface[]>,
+    taskEduContentById
+  ) => {
     // results group by taskId, filter out results without taksid
-    results.reduce((acc, prop) => {
-      return null;
-    }, []);
-
+    return taskInstances
+      .filter(ti => ti.taskId)
+      .map(ti => {
+        return {
+          ...ti,
+          task: {
+            ...tasksById[ti.taskId],
+            results: results[ti.id],
+            taskEduContents: taskEduContentById[ti.taskId]
+          }
+        };
+      });
     // loop taskInstances
     // const task = tasks£yId[taskInstance.taskid];
     // task.results = resultsByTaskId[task.id]
