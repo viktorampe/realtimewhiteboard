@@ -30,7 +30,7 @@
           [description]="emptyStateData.description"
           [ctaLabel]="emptyStateData.ctaLabel"
           [svgIcon]="emptyStateData.svgIcon"
-          (clickCta)="emptyStateClick()"
+          (clickCta)="emptyStateClick(emptyStateData.ctaLink)"
         ></campus-empty-state>
         <ng-template #filledState>
           <mat-list *ngFor="let section of taskListSections$ | async">
@@ -60,12 +60,12 @@
               <campus-button
                 inline
                 *ngIf="showFinishedTasks$ | async; else actionForActiveTasks"
-                (click)="setShowFinishedTasks(false)"
+                (click)="showFinishedTasks$.next(false)"
                 >Toon actieve taken</campus-button
               >
             </div>
             <ng-template #actionForActiveTasks>
-              <campus-button inline (click)="setShowFinishedTasks(true)"
+              <campus-button inline (click)="showFinishedTasks$.next(true)"
                 >Toon afgewerkte taken</campus-button
               >
             </ng-template>

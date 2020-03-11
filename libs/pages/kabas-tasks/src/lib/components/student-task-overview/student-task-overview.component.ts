@@ -1,9 +1,8 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SectionModeEnum } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { StudentTaskFixture } from '../../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
@@ -32,8 +31,8 @@ export class StudentTaskOverviewComponent implements OnInit {
   tasks$: Observable<StudentTaskInterface[]>; // this is the presentation stream
 
   // main section
-  private groupedByLearningArea$: Observable<TaskListSectionInterface[]>; // TODO: implement
-  private groupedByDate$: Observable<TaskListSectionInterface[]>; // TODO: implement
+  private groupedByLearningArea$: Observable<TaskListSectionInterface[]>; // TODO: implement (see #3352)
+  private groupedByDate$: Observable<TaskListSectionInterface[]>; // TODO: implement (see #3352)
 
   public sectionTitle$: Observable<string>;
   public inEmptyState$: Observable<boolean>;
@@ -42,6 +41,7 @@ export class StudentTaskOverviewComponent implements OnInit {
     title?: string;
     description: string;
     ctaLabel?: string;
+    ctaLink?: string;
   }>;
 
   public taskListSections$: Observable<TaskListSectionInterface[]>;
@@ -61,73 +61,7 @@ export class StudentTaskOverviewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.setIntermediateStreams();
     this.setPresentationStreams();
-  }
-
-  private setIntermediateStreams(): void {
-    // TODO: map from tasks$, also filter for active or finished (depends on showFinishedTasks$)
-    this.groupedByLearningArea$ = of([
-      {
-        learningAreaId: 1,
-        label: 'foo learning area',
-        items: [
-          new StudentTaskFixture(),
-          new StudentTaskFixture(),
-          new StudentTaskFixture()
-        ]
-      },
-      {
-        learningAreaId: 2,
-        label: 'bar learning area',
-        items: [
-          new StudentTaskFixture(),
-          new StudentTaskFixture(),
-          new StudentTaskFixture()
-        ]
-      },
-      {
-        learningAreaId: 3,
-        label: 'bar learning area',
-        items: [
-          new StudentTaskFixture(),
-          new StudentTaskFixture(),
-          new StudentTaskFixture()
-        ]
-      },
-      {
-        learningAreaId: 4,
-        label: 'bar learning area',
-        items: [
-          new StudentTaskFixture(),
-          new StudentTaskFixture(),
-          new StudentTaskFixture()
-        ]
-      }
-    ]);
-
-    // TODO: map from tasks$, also filter for active or finished (depends on showFinishedTasks$)
-    this.groupedByDate$ = of([
-      {
-        learningAreaId: 5,
-        label: 'baz learning area',
-        items: [
-          new StudentTaskFixture(),
-          new StudentTaskFixture(),
-          new StudentTaskFixture()
-        ]
-      }
-    ]);
-
-    // TODO: map from groupedByLearningArea$
-    this.tasksByLearningAreaInfo$ = of([
-      {
-        learningAreaId: 4,
-        learningAreaName: 'foo learning area',
-        taskCount: 3,
-        urgentCount: 1
-      }
-    ]);
   }
 
   private setPresentationStreams(): void {
@@ -167,6 +101,7 @@ export class StudentTaskOverviewComponent implements OnInit {
               description:
                 'Er staan geen taken voor je klaar. Je kan altijd vrij oefenen.',
               ctaLabel: 'naar vrij oefenen',
+              ctaLink: 'practice',
               svgIcon: 'empty-state-all-done' // TODO: use correct icon
             };
       })
@@ -189,10 +124,7 @@ export class StudentTaskOverviewComponent implements OnInit {
     });
   }
 
-  emptyStateClick() {
-    this.router.navigate(['practice']);
-  }
-  public setShowFinishedTasks(value: boolean) {
-    this.showFinishedTasks$.next(value);
+  emptyStateClick(url: string) {
+    this.router.navigate([url]);
   }
 }
