@@ -14,6 +14,7 @@
     "
   >
     <campus-whiteboard-toolbar
+      @showHideWhiteboardTools
       *ngIf="selectedCards.length"
       (deleteCards)="bulkDeleteClicked()"
       (changeSelectedColor)="changeSelectedCardsColor($event)"

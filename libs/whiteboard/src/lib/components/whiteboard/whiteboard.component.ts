@@ -1,7 +1,10 @@
 import {
+  animate,
   animateChild,
+  keyframes,
   query,
   stagger,
+  style,
   transition,
   trigger
 } from '@angular/animations';
@@ -28,6 +31,27 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
   animations: [
+    trigger('showHideWhiteboardTools', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ transform: 'translateY(-100%)', offset: 0 }),
+            style({ transform: 'translateY(8px)', offset: 0.75 }),
+            style({ transform: 'translateY(-5px)', offset: 0.9 }),
+            style({ transform: 'translateY(0)', offset: 1 })
+          ])
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(-100%)' })
+        )
+      ])
+    ]),
     trigger('showHideColorList', [
       transition(':enter', [
         query('@showHideColorSwatchOne', stagger(100, [animateChild()]), {
