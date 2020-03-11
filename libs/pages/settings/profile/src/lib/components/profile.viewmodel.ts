@@ -7,7 +7,7 @@ import {
   UserActions,
   UserQueries
 } from '@campus/dal';
-import { EnvironmentUIInterface, ENVIRONMENT_UI_TOKEN } from '@campus/shared';
+import { EnvironmentUIInterface, ENVIRONMENT_UI_TOKEN } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 

@@ -7,10 +7,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { AssigneeInterface, AssigneeTypesEnum } from '@campus/dal';
 
 export type Status = 'pending' | 'active' | 'finished' | 'paper';
 
@@ -28,6 +25,7 @@ export class TaskListItemComponent implements OnInit {
   private _assignees: AssigneeInterface[];
 
   @Input() title: string;
+  @Input() description: string;
   @Input() learningArea: string;
   @Input() archived: boolean;
   @Input() icon: string;

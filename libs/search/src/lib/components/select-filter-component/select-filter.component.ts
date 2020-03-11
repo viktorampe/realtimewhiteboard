@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -59,7 +61,7 @@ export class SelectFilterComponent
   @HostBinding('class.select-filter-component')
   selectFilterComponentClass = true;
 
-  constructor() {}
+  constructor(@Inject(ChangeDetectorRef) private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -71,16 +73,18 @@ export class SelectFilterComponent
               | SearchFilterCriteriaValuesInterface
               | SearchFilterCriteriaValuesInterface[]
           ): void => {
-            if (Array.isArray(selection)) {
-              // multiple === true
-              if (selection.includes(null)) {
-                // resetLabel was clicked
-                this.selectControl.setValue([]);
-                return;
-              }
-            } else {
-              selection = selection === null ? [] : [selection];
+            if (!selection) selection = [];
+
+            if (!Array.isArray(selection)) selection = [selection];
+
+            // multiple === true
+            // click reset -> adds null to array
+            if (selection.includes(null)) {
+              // this will emit a valuechange
+              this.selectControl.setValue([]);
+              return;
             }
+
             this.updateView(selection);
             this.updateCriteriaWithSelected(this.criteria.values, selection);
             this.filterSelectionChange.emit([this.criteria]);
@@ -93,8 +97,9 @@ export class SelectFilterComponent
     this.subscriptions.unsubscribe();
   }
 
-  public reset() {
-    throw new Error('Not implemented yet');
+  public reset(emit = true) {
+    this.selectControl.reset(undefined, { emitEvent: emit });
+    if (!emit) this.updateView(); // emit -> updateView called in valueChanges
   }
 
   private criteriaToOptions(
@@ -113,13 +118,19 @@ export class SelectFilterComponent
       );
   }
 
-  private updateView(selection: SearchFilterCriteriaValuesInterface[]): void {
+  // only updates view -> does not trigger valueChange
+  private updateView(
+    selection: SearchFilterCriteriaValuesInterface[] = []
+  ): void {
     this.count = selection.length;
+
     if (this.multiple) {
-      this.selectControl.setValue(selection);
+      this.selectControl.setValue(selection, { emitEvent: false });
     } else {
-      this.selectControl.setValue(selection[0] || null);
+      this.selectControl.setValue(selection[0] || null, { emitEvent: false });
     }
+
+    this.cd.markForCheck();
   }
 
   private updateCriteriaWithSelected(

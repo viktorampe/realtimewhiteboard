@@ -1,6 +1,34 @@
+import { CommonModule } from '@angular/common';
+import { Component, DebugElement, NgModule } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
+import { UiModule } from '../ui.module';
 import { SectionComponent, SectionModeEnum } from './section.component';
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
+  template: `
+    <campus-section withTitle>
+      <section-title>title</section-title>
+      <section-actions>action</section-actions>
+      <section-content>content</section-content>
+    </campus-section>
+    <campus-section withoutTitle>
+      <section-actions>action</section-actions>
+      <section-content>content</section-content>
+    </campus-section>
+  `
+})
+export class TestContainerComponent {}
+
+@NgModule({
+  declarations: [TestContainerComponent],
+  imports: [CommonModule, UiModule],
+  exports: [TestContainerComponent]
+})
+export class TestModule {}
 
 describe('SectionComponent', () => {
   let component: SectionComponent;
@@ -10,7 +38,7 @@ describe('SectionComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [SectionComponent]
+      imports: [TestModule]
     });
   });
 
@@ -68,6 +96,28 @@ describe('SectionComponent', () => {
 
       expect(actionClickSpy).not.toHaveBeenCalled();
       expect(modeChangeSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sectionTitle', () => {
+    let containerFixture: ComponentFixture<TestContainerComponent>;
+    let sections: DebugElement[];
+    beforeEach(() => {
+      containerFixture = TestBed.createComponent(TestContainerComponent);
+      containerFixture.detectChanges();
+      sections = containerFixture.debugElement.queryAll(
+        By.directive(SectionComponent)
+      );
+    });
+
+    it('should show the header when a section-title is added to the template', () => {
+      const header = sections[0].query(By.css('.ui-section__header'));
+      expect(header).not.toBeNull();
+    });
+
+    it('should remove the header when there is no section-title added to the template', () => {
+      const header = sections[1].query(By.css('.ui-section__header'));
+      expect(header).toBeNull();
     });
   });
 });

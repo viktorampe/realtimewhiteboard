@@ -2,8 +2,11 @@ import { ManageCollectionItemInterface } from './manage-collection-item.interfac
 
 export interface ManageCollectionsDataInterface {
   title: string;
+  subtitle?: string;
   item: ManageCollectionItemInterface;
   linkableItems: ManageCollectionItemInterface[];
   linkedItemIds: Set<number>;
   recentItemIds: Set<number>;
+  useFilter?: boolean;
+  collectionType?: string; // e.g. taken, bundels
 }

@@ -89,10 +89,10 @@ export class WhiteboardComponent implements OnChanges {
   private updateViewMode(cards) {
     cards.forEach(c => {
       if (!c.image.imageUrl) {
-        c.viewModeImage = false;
+        this.updateCard({ viewModeImage: false }, c);
       }
       if (!c.description) {
-        c.viewModeImage = true;
+        this.updateCard({ viewModeImage: true }, c);
       }
     });
   }
@@ -125,8 +125,6 @@ export class WhiteboardComponent implements OnChanges {
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     // update card
     Object.assign(card, updates);
-    // check if card became empty
-    this.deleteCardWhenEmpty(card);
     // sync shelfcard
     const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
       shelfcard => shelfcard.id === card.id
@@ -157,13 +155,13 @@ export class WhiteboardComponent implements OnChanges {
 
     // set multiselect mode
     if (this.selectedCards.length) {
-      card.mode = ModeEnum.MULTISELECT;
+      this.updateCard({ mode: ModeEnum.MULTISELECT }, card);
+    } else {
+      // set idle mode
+      this.whiteboard$.value.cards
+        .filter(c => c.mode !== ModeEnum.UPLOAD)
+        .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
     }
-
-    // set idle mode
-    this.whiteboard$.value.cards.forEach(c =>
-      this.updateCard({ mode: ModeEnum.IDLE }, c)
-    );
 
     // Update whiteboardsubject
     this.updateWhiteboardSubject({
@@ -181,7 +179,7 @@ export class WhiteboardComponent implements OnChanges {
         .map(shelfcard => shelfcard.id)
         .includes(card.id)
     ) {
-      card.mode = ModeEnum.SHELF;
+      this.updateCard({ mode: ModeEnum.SHELF }, card);
       this.updateWhiteboardSubject({
         shelfCards: [...this.whiteboard$.value.shelfCards, card]
       });
@@ -208,22 +206,21 @@ export class WhiteboardComponent implements OnChanges {
 
   onCardTapped(card: CardInterface) {
     if (card.mode === ModeEnum.ZOOM) {
-      card.mode = ModeEnum.IDLE;
+      this.updateCard({ mode: ModeEnum.IDLE }, card);
     } else if (this.isZoomAllowedForCard(card)) {
-      card.mode = ModeEnum.ZOOM;
+      this.updateCard({ mode: ModeEnum.ZOOM }, card);
     }
-
-    this.updateWhiteboardSubject({});
   }
 
   onCardPressed(card: CardInterface) {
     if (card.mode !== ModeEnum.SHELF) {
       if (card.mode === ModeEnum.SELECTED || card.mode === ModeEnum.EDIT) {
-        card.mode = ModeEnum.IDLE;
-        this.updateWhiteboardSubject({});
+        this.updateCard({ mode: ModeEnum.IDLE }, card);
       } else {
-        card.mode = ModeEnum.SELECTED;
-        this.setCardsModeIdleExceptUploadModeAndCard(card);
+        this.whiteboard$.value.cards
+          .filter(c => c.id !== card.id)
+          .forEach(c => (c.mode = ModeEnum.IDLE));
+        this.updateCard({ mode: ModeEnum.SELECTED }, card);
         this.selectedCards = [];
       }
     }
@@ -252,16 +249,19 @@ export class WhiteboardComponent implements OnChanges {
 
   // TODO: check upload flow
   uploadImageForCard(card: CardInterface, image: File) {
-    card.mode = ModeEnum.UPLOAD;
+    this.updateCard({ mode: ModeEnum.UPLOAD }, card);
     this.whiteboardHttpService
       .uploadFile(image)
       .subscribe((response: ImageInterface) => {
         this.updateCard({ image: response }, card);
         if (response.imageUrl) {
           if (this.selectedCards.length) {
-            card.mode = ModeEnum.MULTISELECT;
+            this.updateCard(
+              { mode: ModeEnum.MULTISELECT, viewModeImage: true },
+              card
+            );
           } else {
-            card.mode = ModeEnum.IDLE;
+            this.updateCard({ mode: ModeEnum.IDLE, viewModeImage: true }, card);
           }
           this.saveWhiteboard();
         }
@@ -270,33 +270,29 @@ export class WhiteboardComponent implements OnChanges {
 
   changeColorForCard(card: CardInterface, color: string) {
     this.lastColor = color;
-    card.color = color;
-    card.mode = ModeEnum.IDLE;
-    this.updateWhiteboardSubject({});
-    this.updateCard({ color: color }, card);
+    this.updateCard({ mode: ModeEnum.IDLE, color: color }, card);
     this.saveWhiteboard();
   }
 
-  onDragEnded(event: CdkDragEnd, card) {
+  onDragStarted(card: CardInterface) {
+    if (!this.selectedCards.length) {
+      const cards = this.whiteboard$.value.cards;
+      cards
+        .filter(c => c.id !== card.id && c.mode !== ModeEnum.UPLOAD)
+        .forEach(c => (c.mode = this.Mode.IDLE));
+      this.updateWhiteboardSubject({ cards: cards });
+    }
+  }
+
+  onDragEnded(event: CdkDragEnd, card: CardInterface) {
     const cardPosition = event.source.getFreeDragPosition();
-    card.top = cardPosition.y;
-    card.left = cardPosition.x;
+    this.updateCard({ top: cardPosition.y, left: cardPosition.x }, card);
     this.updateWhiteboardSubject({
       cards: [
         ...this.whiteboard$.value.cards.filter(c => c.id !== card.id),
         card
       ]
     });
-  }
-
-  private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
-    const cards = this.whiteboard$.value.cards;
-
-    cards
-      .filter(c => c !== card && c.mode !== ModeEnum.UPLOAD)
-      .forEach(c => (c.mode = ModeEnum.IDLE));
-
-    this.updateWhiteboardSubject({ cards: cards });
   }
 
   private isZoomAllowedForCard(card: CardInterface): Boolean {
@@ -317,12 +313,6 @@ export class WhiteboardComponent implements OnChanges {
     return !!this.whiteboard$.value.cards.filter(
       c => c.mode === ModeEnum.SELECTED
     ).length;
-  }
-
-  private deleteCardWhenEmpty(card: CardInterface) {
-    if (card.image.imageUrl === '' && card.description === '') {
-      this.onDeleteCard(card, true); // permanent delete
-    }
   }
   //#endregion
 
@@ -351,7 +341,7 @@ export class WhiteboardComponent implements OnChanges {
       const offsetY = y + i * this.multipleCardCreationOffset;
 
       const card = this.addEmptyCard({ top: offsetY, left: offsetX });
-      card.viewModeImage = true;
+      this.updateCard({ viewModeImage: true }, card);
       this.uploadImageForCard(card, images[i]);
     }
     this.saveWhiteboard();
@@ -379,9 +369,6 @@ export class WhiteboardComponent implements OnChanges {
         nonIdleUploadCards.forEach(c =>
           this.updateCard({ mode: ModeEnum.IDLE }, c)
         );
-        cards.forEach(c => {
-          this.deleteCardWhenEmpty(c);
-        });
       }
     }
   }
@@ -391,6 +378,9 @@ export class WhiteboardComponent implements OnChanges {
     card: CardInterface;
     cardElement: HTMLElement;
   }) {
+    this.whiteboard$.value.cards
+      .filter(c => c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => (c.mode = ModeEnum.IDLE));
     const { card, event, cardElement } = $event;
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
@@ -430,11 +420,16 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardFlipIconClicked(card: CardInterface) {
-    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
+    if (
+      (card.description && card.image.imageUrl) ||
+      card.mode === ModeEnum.EDIT
+    ) {
+      this.updateCard({ viewModeImage: !card.viewModeImage }, card);
 
-    if (card.mode !== ModeEnum.EDIT) {
-      card.mode = ModeEnum.IDLE;
-      this.updateViewMode(this.whiteboard$.value.cards);
+      if (card.mode !== ModeEnum.EDIT) {
+        this.updateCard({ mode: ModeEnum.IDLE }, card);
+        this.updateViewMode(this.whiteboard$.value.cards);
+      }
     }
   }
 
@@ -446,7 +441,7 @@ export class WhiteboardComponent implements OnChanges {
       c => !this.selectedCards.includes(c)
     );
     cards.forEach(c => this.onDeleteCard(c));
-    cards.forEach(c => (c.mode = this.Mode.IDLE));
+    cards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
     this.updateWhiteboardSubject({
       cards: cards
     });
@@ -473,21 +468,18 @@ export class WhiteboardComponent implements OnChanges {
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
-    this.updateWhiteboardSubject({});
-
-    card.mode = ModeEnum.MULTISELECTSELECTED;
+    this.updateCard({ mode: ModeEnum.MULTISELECTSELECTED }, card);
   }
 
   onDeselectCard(card: CardInterface) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
 
     if (!this.selectedCards.length) {
-      const cards = this.whiteboard$.value.cards;
-      cards.forEach(c => (c.mode = ModeEnum.IDLE));
-      this.updateWhiteboardSubject({ cards: cards });
+      this.whiteboard$.value.cards.forEach(c =>
+        this.updateCard({ mode: ModeEnum.IDLE }, c)
+      );
     } else {
-      card.mode = ModeEnum.MULTISELECT;
-      this.updateWhiteboardSubject({});
+      this.updateCard({ mode: ModeEnum.MULTISELECT }, card);
     }
   }
 

@@ -12,6 +12,7 @@ import {
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -51,7 +52,8 @@ describe('WhiteboardComponent', () => {
         BrowserAnimationsModule,
         MatProgressBarModule,
         MatInputModule,
-        DragDropModule
+        DragDropModule,
+        UiModule
       ],
       declarations: [
         WhiteboardComponent,
@@ -263,9 +265,11 @@ describe('WhiteboardComponent', () => {
         expect(card.viewModeImage).toBe(true);
       });
 
-      it('should set card mode to IdleMode if card.mode != edit', () => {
+      it('should set card mode to IdleMode if card.mode !== edit', () => {
         const [card] = component.whiteboard$.value.cards;
         card.mode = <ModeEnum>ModeEnum.SELECTED;
+        card.description = 'tekst';
+        card.image.imageUrl = 'imageUrl';
 
         const nonEditModes = Object.keys(ModeEnum).filter(
           key =>
@@ -497,8 +501,11 @@ describe('WhiteboardComponent', () => {
 
   describe('transition to selected mode', () => {
     it('should set other cards to IdleMode when a card mode changes to SelectedMode', () => {
-      const idleCard = new CardFixture({ mode: ModeEnum.IDLE });
-      const selectedCard = new CardFixture({ mode: ModeEnum.SELECTED });
+      const idleCard = new CardFixture({ mode: ModeEnum.IDLE, id: uuidv4() });
+      const selectedCard = new CardFixture({
+        mode: ModeEnum.SELECTED,
+        id: uuidv4()
+      });
       component.whiteboard$.value.cards = [idleCard, selectedCard];
 
       component.onCardPressed(idleCard);

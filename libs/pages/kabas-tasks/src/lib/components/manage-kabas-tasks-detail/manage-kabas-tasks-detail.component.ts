@@ -11,11 +11,15 @@ import {
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  AssigneeInterface,
+  AssigneeTypesEnum,
   EduContent,
   EduContentInterface,
   LearningAreaInterface,
   TaskEduContentInterface,
-  TaskInterface
+  TaskInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
@@ -29,7 +33,11 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
+import {
+  ConfirmationModalComponent,
+  SectionModeEnum,
+  SideSheetComponent
+} from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import {
@@ -42,14 +50,9 @@ import {
   withLatestFrom
 } from 'rxjs/operators';
 import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
@@ -75,6 +78,9 @@ export interface FilterStateInterface {
 })
 export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
+  public sectionModes: typeof SectionModeEnum = SectionModeEnum;
+  public sectionMode: SectionModeEnum;
+  public taskCache: TaskWithAssigneesInterface;
 
   public diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface;
   public requiredFilterCriteria: SearchFilterCriteriaInterface;
@@ -82,7 +88,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public isReordering = false;
 
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-  public task$: Observable<TaskWithAssigneesInterface>;
+  public task$: Observable<TaskWithTaskEduContentInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
@@ -90,6 +96,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     TaskEduContentWithEduContentInterface[]
   >;
   public selectedTaskEduContents: TaskEduContentWithEduContentInterface[] = [];
+  public showFilters = false;
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
   private subscriptions = new Subscription();
@@ -116,6 +123,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.sectionMode = this.sectionModes.EDITABLE;
     // set up filter values
     this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
     this.diaboloPhaseFilterCriteria = this.getDiaboloPhaseFilterCriteria();
@@ -186,15 +194,26 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.viewModel.removeTasks([tasks], true);
   }
 
-  public updateTitle(task: TaskWithAssigneesInterface, title: string) {
-    this.viewModel.updateTask({ id: task.id, name: title });
+  public updateCachedTask(task: TaskWithAssigneesInterface) {
+    this.taskCache = { ...task };
   }
 
-  public updateDescription(
-    task: TaskWithAssigneesInterface,
-    description: string
-  ) {
-    this.viewModel.updateTask({ id: task.id, name: task.name, description });
+  public cancelEdit(event: MouseEvent) {
+    event.stopPropagation();
+    this.sectionMode = this.sectionModes.EDITABLE;
+  }
+
+  public editTask(event: MouseEvent) {
+    event.stopPropagation();
+    if (!this.taskCache.name) {
+      return;
+    }
+    this.sectionMode = this.sectionModes.EDITABLE;
+    this.viewModel.updateTask({
+      id: this.taskCache.id,
+      name: this.taskCache.name,
+      description: this.taskCache.description
+    });
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {
@@ -308,6 +327,21 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  public clickAddContent() {
+    this.getCurrentTask$()
+      .pipe(take(1))
+      .subscribe(currentTask => {
+        this.router.navigate(['tasks', 'manage', currentTask.id, 'content']);
+      });
+  }
+  public clickBack() {
+    const queryParams = { tab: 0 };
+    if (this.route.snapshot.queryParams.paper) {
+      queryParams.tab = 1;
+    }
+    this.router.navigate(['tasks', 'manage'], { queryParams });
+  }
+
   public removeAssignee(
     task: TaskWithAssigneesInterface,
     assignee: AssigneeInterface
@@ -386,7 +420,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.viewModel.printTask(task.id, withNames);
   }
 
-  public printSolution(task: TaskWithAssigneesInterface) {
+  public printSolution(task: TaskWithTaskEduContentInterface) {
     if (!task.hasSolutionFiles) return;
     this.viewModel.printSolution(task);
   }

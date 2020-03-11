@@ -24,14 +24,6 @@
   $pages-method-chapter__filters-box-shadow-spread: 0 !default;
   $pages-method-chapter__filters-border-width: 1px !default;
 
-  $pages-method-chapter__reset-filters-width: 32px !default;
-  $pages-method-chapter__reset-filters-height: 32px !default;
-  $pages-method-chapter__reset-filters-border-width: 1px !default;
-  $pages-method-chapter__reset-filters-border-color: $pages-methods-text-color--secondary !default;
-  $pages-method-chapter__reset-filters-background-color: $pages-methods-background-color--secondary !default;
-  $pages-method-chapter__reset-filters-hover-background-color: $pages-method-filters-hover-background-color;
-  $pages-method-chapter__reset-filters-hover-color: $pages-methods-text-color--secondary !default;
-
   .method-chapter {
     .search-filter-title {
       display: none;
@@ -39,19 +31,6 @@
 
     .select-filter-component {
       width: 150px;
-    }
-
-    &--reset-filters {
-      width: $pages-method-chapter__reset-filters-width;
-      height: $pages-method-chapter__reset-filters-height;
-      background-color: $pages-method-chapter__reset-filters-background-color;
-      border: $pages-method-chapter__reset-filters-border-width solid
-        $pages-method-chapter__reset-filters-border-color;
-
-      &:hover {
-        color: $pages-method-chapter__reset-filters-hover-color;
-        background-color: $filters-hover-background-color;
-      }
     }
 
     &--filters {
