@@ -1,6 +1,7 @@
 import {
   EduContent,
   Result,
+  ResultInterface,
   TaskEduContentInterface,
   TaskInstanceInterface,
   TaskInstanceQueries
@@ -19,28 +20,22 @@ export const studentTasks$ = createSelector(
   () => ({} as StudentTaskInterface)
 );
 
-export const studentTaskWithContent$ = createSelector(
+export const studentTaskWithContent = createSelector(
   TaskInstanceQueries.getTaskInstanceWithTaskById,
   (
     taskInstance: TaskInstanceInterface,
     props: { id: number }
   ): StudentTaskWithContentInterface => {
     const task = taskInstance.task;
-
-    const taskEduContentByEducontent = task.taskEduContents.reduce(
-      (acc, tE) => Object.assign(acc, { [tE.eduContentId]: tE }),
-      {}
-    );
     const resultsByEducontent = groupArrayByKey(task.results, 'eduContentId');
 
-    const name = taskInstance.task.name;
-    const description = taskInstance.task.description;
-    const learningAreaName = taskInstance.task.learningArea.name;
-    const startDate = taskInstance.start;
-    const endDate = taskInstance.end;
-    const assigner = taskInstance.assigner;
+    const { name, description } = task;
+    const learningAreaName = task.learningArea.name;
+
+    const { assigner, start, end } = taskInstance;
+
     const contents = toStudentTaskContent(
-      taskEduContentByEducontent,
+      task.taskEduContents,
       resultsByEducontent
     );
 
@@ -48,8 +43,8 @@ export const studentTaskWithContent$ = createSelector(
       name,
       description,
       learningAreaName,
-      startDate,
-      endDate,
+      start,
+      end,
       assigner,
       contents
     };
@@ -57,42 +52,36 @@ export const studentTaskWithContent$ = createSelector(
 );
 
 function toStudentTaskContent(
-  taskEduContentByEducontentId: Dictionary<TaskEduContentInterface>,
+  taskEduContents: TaskEduContentInterface[],
   resultsByEduContentId: Dictionary<Result[]>
 ): StudentTaskContentInterface[] {
-  const eduContentIds = Object.keys(taskEduContentByEducontentId);
+  return taskEduContents.map(taskEduContent => {
+    const eduContent = taskEduContent.eduContent as EduContent;
+    const result =
+      (resultsByEduContentId[taskEduContent.eduContentId] &&
+        resultsByEduContentId[taskEduContent.eduContentId][0]) ||
+      ({} as Partial<ResultInterface>);
 
-  return (
-    eduContentIds
-      .map(eCId => {
-        const taskEduContent = taskEduContentByEducontentId[eCId];
-        const eduContent = taskEduContent.eduContent as EduContent;
-        const result = resultsByEduContentId[eCId][0];
+    const { name, description } = eduContent;
+    const icon = eduContent.fileExtension;
 
-        const name = eduContent.name;
-        const description = eduContent.description;
-        const icon = eduContent.fileExtension;
-        const required = taskEduContent.required;
-        const index = taskEduContent.index;
-        const status = result.status;
-        const lastUpdated = result['lastUpdated'] as Date; //TODO look into this
-        const score = result.score;
-        const actions = [];
+    const { eduContentId, required } = taskEduContent;
 
-        return {
-          required,
-          name,
-          description,
-          icon,
-          status,
-          lastUpdated,
-          score,
-          eduContentId: +eCId,
-          index,
-          actions
-        };
-      })
-      //
-      .sort((a, b) => b.index - a.index)
-  );
+    const { status, score } = result;
+    const lastUpdated = result['lastUpdated'] as Date; //TODO #3573
+
+    const actions = []; // these are added later;
+
+    return {
+      required,
+      name,
+      description,
+      icon,
+      status,
+      lastUpdated,
+      score,
+      eduContentId,
+      actions
+    };
+  });
 }
