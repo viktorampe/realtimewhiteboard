@@ -1,9 +1,15 @@
 import { groupArrayByKey } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ResultInterface } from '../../+models';
+import {
+  LearningAreaInterface,
+  ResultInterface,
+  TaskEduContentInterface,
+  TaskInterface
+} from '../../+models';
 import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
+import { LearningAreaQueries } from '../learning-area';
 import { ResultQueries } from '../result';
 import { TaskQueries } from '../task';
 import { TaskEduContentQueries } from '../task-edu-content';
@@ -112,32 +118,27 @@ export const getTaskStudentTaskInstances = createSelector(
     getAll,
     TaskQueries.getAllEntities,
     ResultQueries.getResultsByTask,
-    TaskEduContentQueries.getAllByTaskId
+    TaskEduContentQueries.getAllGroupedByTaskId,
+    LearningAreaQueries.getAllEntities
   ],
   (
     taskInstances: TaskInstanceInterface[],
-    tasksById,
-    results: Dictionary<ResultInterface[]>,
-    taskEduContentById
+    tasksById: Dictionary<TaskInterface>,
+    resultsByTaskId: Dictionary<ResultInterface[]>,
+    taskEduContentByTaskId: Dictionary<TaskEduContentInterface[]>,
+    learningAreaById: Dictionary<LearningAreaInterface>
   ) => {
-    // results group by taskId, filter out results without taksid
-    return taskInstances
-      .filter(ti => ti.taskId)
-      .map(ti => {
-        return {
-          ...ti,
-          task: {
-            ...tasksById[ti.taskId],
-            results: results[ti.id],
-            taskEduContents: taskEduContentById[ti.taskId]
-          }
-        };
-      });
-    // loop taskInstances
-    // const task = tasks£yId[taskInstance.taskid];
-    // task.results = resultsByTaskId[task.id]
-    // task.taskEduContents = taskEduContentById[task.id]
-    // taskInstance.task = task;
+    return taskInstances.map(ti => {
+      return {
+        ...ti,
+        task: {
+          ...tasksById[ti.taskId],
+          results: resultsByTaskId[ti.taskId],
+          taskEduContents: taskEduContentByTaskId[ti.taskId],
+          learningArea: learningAreaById[tasksById[ti.taskId].learningAreaId]
+        }
+      };
+    });
   }
 );
 
