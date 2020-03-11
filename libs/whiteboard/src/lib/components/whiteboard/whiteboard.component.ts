@@ -363,28 +363,26 @@ export class WhiteboardComponent implements OnChanges {
 
   onClickWhiteboard(event) {
     if (
-      !(event.target as HTMLElement).classList.contains('whiteboard__workspace')
+      event.target.classList.contains('whiteboard__workspace') ||
+      event.target.classList.contains('zoom')
     ) {
-      return;
-    }
+      this.selectedCards = [];
+      const cards = this.whiteboard$.value.cards;
 
-    console.log(event);
-    this.selectedCards = [];
-    const cards = this.whiteboard$.value.cards;
-
-    const nonIdleUploadCards = cards.filter(
-      c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
-    );
-
-    this.updateViewMode(cards);
-
-    if (nonIdleUploadCards.length) {
-      nonIdleUploadCards.forEach(c =>
-        this.updateCard({ mode: ModeEnum.IDLE }, c)
+      const nonIdleUploadCards = cards.filter(
+        c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
       );
-      cards.forEach(c => {
-        this.deleteCardWhenEmpty(c);
-      });
+
+      this.updateViewMode(cards);
+
+      if (nonIdleUploadCards.length) {
+        nonIdleUploadCards.forEach(c =>
+          this.updateCard({ mode: ModeEnum.IDLE }, c)
+        );
+        cards.forEach(c => {
+          this.deleteCardWhenEmpty(c);
+        });
+      }
     }
   }
 

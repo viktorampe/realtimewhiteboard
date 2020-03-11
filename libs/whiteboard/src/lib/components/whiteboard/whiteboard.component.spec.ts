@@ -583,7 +583,16 @@ describe('WhiteboardComponent', () => {
     component.selectedCards = [selectedCard];
 
     const whiteboard = fixture.debugElement.query(By.css('.whiteboard'));
-    whiteboard.triggerEventHandler('click', new MouseEvent('click'));
+    const touchEvent = new TouchEvent('tap');
+    Object.defineProperty(touchEvent, 'target', {
+      value: {
+        classList: {
+          contains: item => ['whiteboard__workspace'].includes(item)
+        }
+      }
+    });
+
+    whiteboard.triggerEventHandler('tap', touchEvent);
 
     expect(component.selectedCards.length).toBe(0);
     component.whiteboard$.value.cards.forEach(c =>
