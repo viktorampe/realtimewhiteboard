@@ -86,7 +86,7 @@ export class ContentOpenActionsStudentService
   }
 
   getActionsForTaskInstanceEduContent(
-    eduContent: Pick<EduContent, 'type' | 'streamable'>,
+    eduContent: EduContent,
     result: Pick<ResultInterface, 'status'>,
     taskInstance: Pick<TaskInstanceInterface, 'end'>
   ): ContentActionInterface[] {
@@ -106,7 +106,7 @@ export class ContentOpenActionsStudentService
   }
 
   private getEduContentActions(
-    eduContent: Pick<EduContent, 'type' | 'streamable'>
+    eduContent: EduContent
   ): ContentActionInterface[] {
     switch (eduContent.type) {
       case EduContentTypeEnum.BOEKE:
