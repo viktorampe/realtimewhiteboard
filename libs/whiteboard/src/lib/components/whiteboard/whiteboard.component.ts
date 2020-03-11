@@ -31,6 +31,12 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
   animations: [
+    trigger('showHideCard', [
+      transition(':leave', [
+        style({ opacity: '1' }),
+        animate('150ms cubic-bezier(.43,0,.31,1)', style({ opacity: '0' }))
+      ])
+    ]),
     trigger('showHideWhiteboardTools', [
       transition(':enter', [
         style({ transform: 'translateY(-100%)' }),
@@ -54,24 +60,24 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
     ]),
     trigger('showHideColorList', [
       transition(':enter', [
-        query('@showHideColorSwatchOne', stagger(100, [animateChild()]), {
+        query('@showHideColorSwatchOne', stagger(50, [animateChild()]), {
           optional: true
         })
       ]),
       transition(':leave', [
-        query('@showHideColorSwatchOne', stagger(-100, [animateChild()]), {
+        query('@showHideColorSwatchOne', stagger(-50, [animateChild()]), {
           optional: true
         })
       ])
     ]),
     trigger('showHideToolbar', [
       transition(':enter', [
-        query('@showHideToolbarTool', stagger(-100, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(-50, [animateChild()]), {
           optional: true
         })
       ]),
       transition(':leave', [
-        query('@showHideToolbarTool', stagger(100, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(50, [animateChild()]), {
           optional: true
         })
       ])
