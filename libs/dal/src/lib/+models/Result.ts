@@ -24,6 +24,7 @@ export class Result implements ResultInterface {
   taskInstanceId: number;
   personDisplayName: string;
   bundleId: number;
+  lastUpdated?: Date;
 
   get stars(): number {
     if (this.score) {
