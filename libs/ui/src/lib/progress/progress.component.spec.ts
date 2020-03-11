@@ -226,4 +226,17 @@ describe('ProgressComponent', () => {
       expect(containerDE.nativeElement.style.height).toBeFalsy();
     });
   });
+  describe('Spinner Mode', () => {
+    it('should have indeterminate mode if no count is given', () => {
+      expect(component.mode).toBe(component.modes.INDETERMINATE);
+    });
+    it('should have determinate mode if no count is given', () => {
+      const changes = {
+        count: new SimpleChange(undefined, 20, true)
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      expect(component.mode).toBe(component.modes.DETERMINATE);
+    });
+  });
 });

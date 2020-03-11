@@ -40,7 +40,7 @@ export class ProgressComponent implements OnChanges {
 
   @Input() showPercentage? = false;
   @Input() form: ProgressFormEnum = ProgressFormEnum.CIRCULAR;
-  @Input() mode? = ProgressModeEnum.DETERMINATE;
+  @Input() mode? = ProgressModeEnum.INDETERMINATE;
   @Input() diameter? = 100;
 
   @HostBinding('class.ui-progress')
@@ -60,6 +60,11 @@ export class ProgressComponent implements OnChanges {
     if (changes.total) {
       total = changes.total.currentValue;
     }
-    this.percentage = Math.min(Math.ceil((count / total) * 100), 100);
+    if (count) {
+      this.percentage = Math.min(Math.ceil((count / total) * 100), 100);
+      this.mode = ProgressModeEnum.DETERMINATE;
+    } else {
+      this.mode = ProgressModeEnum.INDETERMINATE;
+    }
   }
 }
