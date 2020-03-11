@@ -128,6 +128,11 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    // set idle mode
+    this.whiteboard$.value.cards
+      .filter(c => c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
     // add card to the workspace
     const card = {
       id: uuidv4(),
@@ -143,16 +148,6 @@ export class WhiteboardComponent implements OnChanges {
 
     // add a 'copy' ( card with a different reference ) to the shelf
     this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
-
-    // set multiselect mode
-    if (this.selectedCards.length) {
-      this.updateCard({ mode: ModeEnum.MULTISELECT }, card);
-    } else {
-      // set idle mode
-      this.whiteboard$.value.cards
-        .filter(c => c.mode !== ModeEnum.UPLOAD)
-        .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
-    }
 
     // Update whiteboardsubject
     this.updateWhiteboardSubject({
