@@ -1,1 +1,55 @@
-<p>progress works!</p>
+<ng-container>
+  <div
+    class="ui-progress__container"
+    data-cy="ui-progress-container"
+    [ngStyle]="
+      form === forms.CIRCULAR
+        ? { 'width.px': diameter, 'height.px': diameter }
+        : {}
+    "
+  >
+    <mat-progress-spinner
+      [diameter]="diameter"
+      [mode]="mode"
+      [value]="percentage"
+      *ngIf="form === forms.CIRCULAR"
+      data-cy="ui-progress-spinner"
+    >
+    </mat-progress-spinner>
+
+    <!--  
+        Ghost element needed, 
+        because mat-progress-spinner has no .mat-progress-spinner-background
+        Fix one to 100% and position above each-other
+    -->
+    <mat-progress-spinner
+      [diameter]="diameter"
+      value="100"
+      *ngIf="form === forms.CIRCULAR && mode === modes.DETERMINATE"
+      class="ui-progress__circular__ghost"
+      data-cy="ui-progress-ghost-spinner"
+    >
+    </mat-progress-spinner>
+
+    <mat-progress-bar
+      [mode]="mode"
+      [value]="percentage"
+      *ngIf="form === forms.LINEAR"
+      data-cy="ui-progress-bar"
+    ></mat-progress-bar>
+
+    <div
+      class="ui-caption"
+      *ngIf="showPercentage && !(completedIcon && count === 100)"
+      data-cy="ui-progress-percentage-label"
+      >{{ percentage }}%</div
+    >
+    <div
+      class="ui-progress__completed-icon"
+      data-cy="ui-progress-completed-icon"
+      *ngIf="completedIcon && count === 100"
+    >
+      <ng-content select="completed-progress-icon"></ng-content>
+    </div>
+  </div>
+</ng-container>
