@@ -36,7 +36,7 @@ export class ProgressComponent implements OnChanges {
   public percentage = 0;
 
   @Input() total? = 100;
-  @Input() count: number;
+  @Input() count?: number;
 
   @Input() showPercentage? = false;
   @Input() form: ProgressFormEnum = ProgressFormEnum.CIRCULAR;
