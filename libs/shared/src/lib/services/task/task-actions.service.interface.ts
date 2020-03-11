@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { TaskInstanceInterface } from '@campus/dal';
+import { TaskInstanceInterface, TaskInterface } from '@campus/dal';
 import { TaskActionInterface } from './task-action.interface';
 
 export interface TaskActionsServiceInterface {
@@ -7,7 +7,7 @@ export interface TaskActionsServiceInterface {
   getActions(taskInstance: TaskInstanceInterface);
 }
 export interface TaskOpenerInterface {
-  openTask(taskId: number);
+  openTask(task: TaskInterface);
 }
 
 export const TASK_OPENER_TOKEN = new InjectionToken<TaskOpenerInterface>(

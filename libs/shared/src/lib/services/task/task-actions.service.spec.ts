@@ -1,4 +1,3 @@
-// file.only
 import { inject, TestBed } from '@angular/core/testing';
 import { TaskInstanceFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
