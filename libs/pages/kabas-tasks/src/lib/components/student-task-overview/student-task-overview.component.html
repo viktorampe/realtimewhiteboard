@@ -33,7 +33,16 @@
           (clickCta)="emptyStateClick()"
         ></campus-empty-state>
         <ng-template #filledState>
-          <mat-list *ngFor="let task of tasks$">
+          <mat-list *ngFor="let section of taskListSections$ | async">
+            <h1 matSubheader [id]="section.learningAreaId">{{
+              section.label
+            }}</h1>
+            <mat-list-item *ngFor="let studentTask of section.items">
+              <!-- TODO: use ListItemContentComponent -->
+              {{ studentTask.name }}
+              {{ studentTask.description }}
+              <campus-button inline>openen</campus-button>
+            </mat-list-item>
             <mat-list-item></mat-list-item>
           </mat-list>
         </ng-template>

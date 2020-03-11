@@ -1,7 +1,8 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { SectionModeEnum } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
+import { StudentTaskFixture } from '../../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
@@ -9,6 +10,12 @@ interface TaskByLearningAreaInfoInterface {
   learningAreaName: string;
   taskCount: number;
   urgentCount: number;
+}
+
+interface TaskListSectionInterface {
+  label: string;
+  learningAreaId: number;
+  items: StudentTaskInterface[];
 }
 
 @Component({
@@ -22,29 +29,71 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   tasks$: Observable<StudentTaskInterface[]>; // this is the presentation stream
 
-  sectionTitle$: Observable<string>;
-  inEmptyState$: Observable<boolean>;
-  emptyStateData$: Observable<{
+  // main section
+  private groupedByLearningArea$: Observable<TaskListSectionInterface[]>; // TODO: implement
+  private groupedByDate$: Observable<TaskListSectionInterface[]>; // TODO: implement
+
+  public sectionTitle$: Observable<string>;
+  public inEmptyState$: Observable<boolean>;
+  public emptyStateData$: Observable<{
     svgIcon: string;
     title?: string;
     description: string;
     ctaLabel?: string;
   }>;
 
-  tasksByLearningAreaInfo$: Observable<TaskByLearningAreaInfoInterface[]>;
-  showFinishedTasks$ = new BehaviorSubject<boolean>(false);
-  isGroupedByDate$ = new BehaviorSubject<boolean>(false);
+  public taskListSections$: Observable<TaskListSectionInterface[]>;
 
+  // side section
+  public showFinishedTasks$ = new BehaviorSubject<boolean>(false);
+  public isGroupedByDate$ = new BehaviorSubject<boolean>(false);
+  public tasksByLearningAreaInfo$: Observable<
+    TaskByLearningAreaInfoInterface[]
+  >;
   public sectionModes: typeof SectionModeEnum = SectionModeEnum;
 
   // TODO: use the real viewmodel
   constructor(private viewmodel: MockStudentTasksViewModel) {}
 
   ngOnInit() {
+    this.groupedByLearningArea$ = of([
+      {
+        learningAreaId: 1,
+        label: 'foo learning area',
+        items: [
+          new StudentTaskFixture(),
+          new StudentTaskFixture(),
+          new StudentTaskFixture()
+        ]
+      },
+      {
+        learningAreaId: 2,
+        label: 'bar learning area',
+        items: [
+          new StudentTaskFixture(),
+          new StudentTaskFixture(),
+          new StudentTaskFixture()
+        ]
+      }
+    ]);
+    this.groupedByDate$ = of([
+      {
+        learningAreaId: 3,
+        label: 'baz learning area',
+        items: [
+          new StudentTaskFixture(),
+          new StudentTaskFixture(),
+          new StudentTaskFixture()
+        ]
+      }
+    ]);
+    this.setIntermediateStreams();
     this.setPresentationStreams();
   }
 
-  setPresentationStreams(): void {
+  private setIntermediateStreams(): void {}
+
+  private setPresentationStreams(): void {
     this.tasks$ = this.viewmodel.studentTasks$;
 
     this.inEmptyState$ = this.tasks$.pipe(map(tasks => tasks.length === 0));
@@ -83,6 +132,14 @@ export class StudentTaskOverviewComponent implements OnInit {
               ctaLabel: 'naar vrij oefenen',
               svgIcon: 'empty-state-all-done' // TODO: use correct icon
             };
+      })
+    );
+
+    this.taskListSections$ = this.isGroupedByDate$.pipe(
+      switchMap(isGroupedByDate => {
+        return isGroupedByDate
+          ? this.groupedByDate$
+          : this.groupedByLearningArea$;
       })
     );
   }
