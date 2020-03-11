@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 
 interface TaskByLearningAreaInfoInterface {
@@ -20,8 +20,9 @@ export class StudentTaskOverviewComponent implements OnInit {
   studentTaskOverviewClass = true;
 
   tasks$: Observable<StudentTaskWithContentInterface[]>; // this is the presentation stream
-  inEmptyState$: Observable<boolean>;
+
   sectionTitle$: Observable<string>;
+  inEmptyState$: Observable<boolean>;
   emptyStateData$: Observable<{
     svgIcon: string;
     title?: string;
@@ -42,7 +43,7 @@ export class StudentTaskOverviewComponent implements OnInit {
   }
 
   setPresentationStreams(): void {
-    this.tasks$ = new BehaviorSubject<StudentTaskWithContentInterface[]>([]);
+    this.tasks$ = new BehaviorSubject<StudentTaskWithContentInterface[]>([{}]);
 
     this.inEmptyState$ = this.tasks$.pipe(map(tasks => tasks.length === 0));
 
@@ -63,7 +64,9 @@ export class StudentTaskOverviewComponent implements OnInit {
       })
     );
 
-    this.emptyStateData$ = this.showFinishedTasks$.pipe(
+    this.emptyStateData$ = this.inEmptyState$.pipe(
+      filter(inEmptyState => !!inEmptyState),
+      switchMap(inEmptyState => this.showFinishedTasks$),
       map(showFinishedTasks => {
         return showFinishedTasks
           ? {

@@ -24,17 +24,14 @@
         </ng-template>
       </section-title>
       <section-content>
-        <ng-container *ngIf="inEmptyState$ | async; else filledState">
-          <campus-empty-state
-            *ngIf="emptyStateData$ | async as emptyStateData"
-            [title]="emptyStateData.title"
-            [description]="emptyStateData.description"
-            [ctaLabel]="emptyStateData.ctaLabel"
-            [svgIcon]="emptyStateData.svgIcon"
-            (clickCta)="emptyStateClick()"
-          ></campus-empty-state>
-        </ng-container>
-
+        <campus-empty-state
+          *ngIf="emptyStateData$ | async as emptyStateData; else filledState"
+          [title]="emptyStateData.title"
+          [description]="emptyStateData.description"
+          [ctaLabel]="emptyStateData.ctaLabel"
+          [svgIcon]="emptyStateData.svgIcon"
+          (clickCta)="emptyStateClick()"
+        ></campus-empty-state>
         <ng-template #filledState>
           <mat-list *ngFor="let task of tasks$">
             <mat-list-item></mat-list-item>
