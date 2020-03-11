@@ -1,5 +1,6 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -24,6 +25,7 @@ import { ImageDragDirective } from './directives/image-drag.directive';
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     MatCardModule,
     DragDropModule,
     FormsModule,
@@ -47,6 +49,6 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     CardTextComponent,
     ShelfComponent
   ],
-  exports: [WhiteboardComponent, ImageDragDirective]
+  exports: [WhiteboardComponent]
 })
 export class WhiteboardModule {}

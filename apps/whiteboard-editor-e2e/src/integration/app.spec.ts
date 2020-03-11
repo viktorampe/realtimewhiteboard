@@ -1,6 +1,6 @@
 import { getGreeting } from '../support/app.po';
 
-describe('whiteboard-editor', () => {
+describe('whiteboard-standalone', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
@@ -8,6 +8,6 @@ describe('whiteboard-editor', () => {
     cy.login('my-email@something.com', 'myPassword');
 
     // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome to whiteboard-editor!');
+    getGreeting().contains('Welcome to whiteboard-standalone!');
   });
 });
