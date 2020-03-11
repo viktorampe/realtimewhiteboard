@@ -33,6 +33,6 @@ export interface ContentOpenActionsServiceInterface {
   getActionsForTaskInstanceEduContent(
     eduContent: EduContent,
     result: ResultInterface,
-    taskInstance: TaskInstanceInterface
+    taskInstance: Partial<TaskInstanceInterface>
   ): ContentActionInterface[];
 }
