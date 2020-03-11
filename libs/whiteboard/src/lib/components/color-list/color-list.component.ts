@@ -5,7 +5,8 @@ import {
   transition,
   trigger
 } from '@angular/animations';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-color-list',
@@ -13,10 +14,10 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./color-list.component.scss'],
   animations: [
     trigger('showHideColorSwatchOne', [
-      transition(':enter', [
+      transition('void => edit', [
         style({ transform: 'scale(0) translateX(48px)' }),
         animate(
-          '150ms 500ms cubic-bezier(.43,0,.31,1)',
+          '150ms 350ms cubic-bezier(.43,0,.31,1)',
           keyframes([
             style({ transform: 'translateX(48px) scale(0)', offset: 0 }),
             style({ transform: 'translateX(10px)', offset: 0.65 }),
@@ -27,6 +28,21 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
           ])
         )
       ]),
+      transition('void => select', [
+        style({ transform: 'scale(0) translateX(48px)' }),
+        animate(
+          '150ms 450ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ transform: 'translateX(48px) scale(0)', offset: 0 }),
+            style({ transform: 'translateX(10px)', offset: 0.65 }),
+            style({ transform: 'translateX(-6px)', offset: 0.8 }),
+            style({ transform: 'translateX(4px)', offset: 0.85 }),
+            style({ transform: 'translateX(-2px)', offset: 0.9 }),
+            style({ transform: 'translateX(0) scale(1)', offset: 1 })
+          ])
+        )
+      ]),
+      transition('whiteboard => void', []),
       transition(':leave', [
         style({
           transform: 'translateX(0) scale(1)'
@@ -41,6 +57,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class ColorListComponent implements OnInit {
   @Output() selectedColor = new EventEmitter<string>();
+  @Input() mode: ModeEnum;
   defaultColors: string[] = [
     '#00A7E2',
     '#2EA03D',
@@ -51,6 +68,10 @@ export class ColorListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  get Mode() {
+    return ModeEnum;
+  }
 
   clickColor(color: string) {
     this.selectedColor.emit(color);

@@ -54,6 +54,7 @@
         <campus-color-list
           @showHideColorList
           class="whiteboard__color-list"
+          [mode]="card.mode"
           (selectedColor)="changeColorForCard(card, $event)"
           *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
         ></campus-color-list>

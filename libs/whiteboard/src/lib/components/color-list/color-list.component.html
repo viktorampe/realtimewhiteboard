@@ -1,6 +1,12 @@
 <div class="color-list">
   <div
-    @showHideColorSwatchOne
+    [@showHideColorSwatchOne]="
+      mode === Mode.SELECTED
+        ? 'select'
+        : mode === Mode.EDIT
+        ? 'edit'
+        : 'whiteboard'
+    "
     *ngFor="let swatch of defaultColors"
     class="color-list__swatches"
     (click)="clickColor(swatch)"
