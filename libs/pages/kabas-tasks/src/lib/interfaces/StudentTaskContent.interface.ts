@@ -10,4 +10,5 @@ export interface StudentTaskContentInterface {
   score: number;
   eduContentId: number;
   actions: ContentActionInterface[];
+  index: number;
 }
