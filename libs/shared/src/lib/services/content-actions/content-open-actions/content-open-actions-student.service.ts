@@ -87,15 +87,15 @@ export class ContentOpenActionsStudentService
 
   getActionsForTaskInstanceEduContent(
     eduContent: EduContent,
-    result: ResultInterface,
-    taskInstance: Partial<TaskInstanceInterface>
+    result: Pick<ResultInterface, 'status'>,
+    taskInstance: Pick<TaskInstanceInterface, 'end'>
   ): ContentActionInterface[] {
     if (eduContent.type === EduContentTypeEnum.EXERCISE) {
       if (taskInstance.end < new Date()) {
         return [this.contentActionDictionary.openEduContentAsSolution];
-      } else if (result.status === ResultStatus.STATUS_COMPLETED) {
+      } else if (result && result.status === ResultStatus.STATUS_COMPLETED) {
         return [];
-      } else if (result.status === ResultStatus.STATUS_INCOMPLETE) {
+      } else if (result && result.status === ResultStatus.STATUS_INCOMPLETE) {
         return [this.contentActionDictionary.continueEduContentAsExercise];
       }
 

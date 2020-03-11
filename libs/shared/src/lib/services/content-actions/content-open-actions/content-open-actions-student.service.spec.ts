@@ -22,7 +22,7 @@ describe('ContentOpenActionsStudentServiceInterface', () => {
 
   let contentOpenActionsStudentService: ContentOpenActionsServiceInterface;
   let contentOpener: ContentOpenerInterface;
-  let dateMock: MockDate;
+  const dateMock: MockDate = new MockDate(dateToday);
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -48,10 +48,6 @@ describe('ContentOpenActionsStudentServiceInterface', () => {
       ContentOpenActionsStudentService
     );
     contentOpener = TestBed.get(CONTENT_OPENER_TOKEN);
-  });
-
-  beforeAll(() => {
-    dateMock = new MockDate(dateToday);
   });
 
   afterAll(() => {
@@ -135,6 +131,19 @@ describe('ContentOpenActionsStudentServiceInterface', () => {
           mockResult: new ResultFixture({
             status: ResultStatus.STATUS_NOT_ATTEMPTED
           }),
+          expected: () => [
+            contentOpenActionsStudentService.contentActionDictionary[
+              'openEduContentAsExercise'
+            ]
+          ]
+        },
+        {
+          it: 'exercise with no result - open',
+          mockEduContent: mockEduContentExercise,
+          mockTaskInstance: new TaskInstanceFixture({
+            end: dateTomorrow
+          }),
+          mockResult: undefined,
           expected: () => [
             contentOpenActionsStudentService.contentActionDictionary[
               'openEduContentAsExercise'

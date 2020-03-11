@@ -11,6 +11,7 @@ export enum ResultStatus {
   STATUS_FAILED = 'failed',
   STATUS_BROWSED = 'browsed',
   STATUS_NOT_ATTEMPTED = 'not attempted',
+  // own extensions:
   STATUS_OPENED = 'opened'
 }
 
