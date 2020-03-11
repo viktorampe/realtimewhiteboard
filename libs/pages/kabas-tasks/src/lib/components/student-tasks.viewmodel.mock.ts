@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
+import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from './student-tasks.viewmodel';
 
 @Injectable({
@@ -11,6 +13,8 @@ import { StudentTasksViewModel } from './student-tasks.viewmodel';
 export class MockStudentTasksViewModel
   implements ViewModelInterface<StudentTasksViewModel> {
   public studentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+  public currentTask$: BehaviorSubject<StudentTaskWithContentInterface>;
+  public routeParams$: BehaviorSubject<Params>;
 
   private studentTasks = [
     new StudentTaskFixture({
@@ -22,10 +26,14 @@ export class MockStudentTasksViewModel
   ];
 
   constructor() {
-    this.studentTasks$ = new BehaviorSubject<StudentTaskInterface[]>(
-      this.studentTasks
-    );
+    this.studentTasks$ = new BehaviorSubject<StudentTaskInterface[]>([]);
   }
 
-  public setupStreams() {}
+  openEduContentAsExercise() {}
+  openEduContentAsSolution() {}
+  openEduContentFromResult() {}
+  openEduContentAsStream() {}
+  openEduContentAsDownload() {}
+  openBoeke() {}
+  previewEduContentAsImage() {}
 }
