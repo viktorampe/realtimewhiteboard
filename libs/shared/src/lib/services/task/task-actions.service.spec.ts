@@ -1,4 +1,6 @@
+// file.only
 import { inject, TestBed } from '@angular/core/testing';
+import { TaskInstanceFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
 import { TaskActionsService } from './task-actions.service';
 import {
@@ -36,4 +38,10 @@ describe('TaskActionsService', () => {
       expect(service).toBeTruthy();
     }
   ));
+
+  it('should return openTask action ', () => {
+    expect(taskActionService.getActions(new TaskInstanceFixture())).toEqual([
+      taskActionService.taskActionDictionary.openTask
+    ]);
+  });
 });

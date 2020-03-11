@@ -13,7 +13,7 @@ export class TaskActionsService implements TaskActionsServiceInterface {
     private taskOpener: TaskOpenerInterface
   ) {}
 
-  public TaskActionDictionary: {
+  public taskActionDictionary: {
     [key: string]: TaskActionInterface;
   } = {
     openTask: {
@@ -31,6 +31,6 @@ export class TaskActionsService implements TaskActionsServiceInterface {
   private getTaskActions(
     taskInstance: TaskInstanceInterface
   ): TaskActionInterface[] {
-    return [this.TaskActionDictionary.openTask];
+    return [this.taskActionDictionary.openTask];
   }
 }
