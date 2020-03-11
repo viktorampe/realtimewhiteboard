@@ -5,6 +5,6 @@ import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 export const studentTasks$ = createSelector(
   // TODO Replace with relevaton DAL selectors
   // only done this to scaffold this selector
-  [TaskInstanceQueries.getAllEntities],
-  () => ({} as StudentTaskInterface)
+  [TaskInstanceQueries.getTaskStudentTaskInstances],
+  getTaskStudentInstances => ({} as StudentTaskInterface)
 );
