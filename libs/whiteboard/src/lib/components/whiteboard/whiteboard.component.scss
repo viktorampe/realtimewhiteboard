@@ -80,13 +80,12 @@
     right: 24px;
     width: auto;
     overflow-x: scroll;
+    overflow-y: hidden;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border-radius: 45px;
-
-    // OLD DESIGN
-    min-height: 136px;
+    border-radius: 24px;
+    height: 108px;
     background-color: white;
     box-shadow: 0px -3px 15px #00000024;
   }
