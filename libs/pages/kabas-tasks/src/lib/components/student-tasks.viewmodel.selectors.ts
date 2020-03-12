@@ -40,11 +40,26 @@ export const studentTasks$ = createSelector(
           humanDateTimeRulesEnum.TODAY
         ]).some(rule => rule.condition(te.end.getTime(), new Date().getTime())),
         dateGroupLabel: date.transform(te.end, {
-          rules: getHumanDateTimeRules([])
+          rules: getHumanDateTimeRules([
+            humanDateTimeRulesEnum.TODAY,
+            humanDateTimeRulesEnum.TOMORROW,
+            humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+            humanDateTimeRulesEnum.NEXT_WEEK,
+            humanDateTimeRulesEnum.LATER
+          ])
         }),
-        dateLabel: date.transform(te.end, { rules: getHumanDateTimeRules([]) }),
+        dateLabel: date.transform(te.end, {
+          rules: getHumanDateTimeRules([
+            humanDateTimeRulesEnum.TODAY,
+            humanDateTimeRulesEnum.TOMORROW,
+            humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+            humanDateTimeRulesEnum.WEEKDAY,
+            humanDateTimeRulesEnum.NEXT_WEEK,
+            humanDateTimeRulesEnum.DATE
+          ])
+        }),
         endDate: te.end,
-        actions: [] // ask TaskActionService.getActions(taskInstance)
+        actions: [] // ask TaskActionService.getActions(taskInstance) (cant be done inside selector)
       };
     });
   }
