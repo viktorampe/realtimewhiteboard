@@ -7,7 +7,8 @@
       top: 0;
       left: 0;
 
-      + .ui-progress__label {
+      ~ .ui-progress__label {
+        opacity: 1;
         position: absolute;
         display: flex;
         align-items: center;

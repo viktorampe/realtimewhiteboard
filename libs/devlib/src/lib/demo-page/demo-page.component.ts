@@ -34,17 +34,20 @@ export class DemoPageComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    setInterval(
+    this.setupInterval();
+  }
+  setupInterval() {
+    const interval = setInterval(
       () =>
         this.countProgress < 50
           ? this.countProgress++
-          : (this.countProgress = 0),
-      500
+          : clearInterval(interval),
+      100
     );
   }
-
-  clickEmptyCta() {
-    console.log('Empty State CTA Clicked!');
+  clickResetProgress() {
+    this.countProgress = 0;
+    this.setupInterval();
   }
 
   log(data: MultiCheckBoxTableColumnChangeEventInterface<ClassGroupInterface>) {

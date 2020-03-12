@@ -39,6 +39,7 @@
 
   <span
     class="ui-caption ui-progress__label"
+    [@fadeLabel]
     *ngIf="
       form === forms.CIRCULAR &&
       showPercentage &&
@@ -50,8 +51,8 @@
   <div
     class="ui-progress__completed-icon ui-progress__label"
     data-cy="ui-progress-completed-icon"
+    [@explodeIcon]
     *ngIf="form === forms.CIRCULAR && completedIcon && percentage === 100"
-  >
-    <ng-content select="completed-progress-icon"></ng-content>
-  </div>
+    ><ng-content select="completed-progress-icon"></ng-content
+  ></div>
 </div>

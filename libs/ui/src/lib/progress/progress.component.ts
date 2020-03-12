@@ -1,4 +1,11 @@
 import {
+  animate,
+  keyframes,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
+import {
   Component,
   ContentChild,
   Directive,
@@ -23,12 +30,42 @@ export enum ProgressModeEnum {
   selector:
     '[campusCompletedProgressIcon], [completedProgressIcon], completed-progress-icon'
 })
-export class CompletedProgressIconDirective {}
+export class CompletedProgressIconDirective {
+  @HostBinding('class.ui-progress__completed-icon')
+  completedIconClass = true;
+}
 
 @Component({
   selector: 'campus-progress',
   templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.scss']
+  styleUrls: ['./progress.component.scss'],
+  animations: [
+    trigger('fadeLabel', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('250ms ease', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('250ms  ease', style({ opacity: 0 }))
+      ])
+    ]),
+    trigger('explodeIcon', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0)' }),
+        animate(
+          '800ms 200ms cubic-bezier(.01,.67,.31,1)',
+          keyframes([
+            style({ transform: 'scale(1.5)', opacity: 1, offset: 0.65 }),
+            style({ transform: 'scale(0.8)', opacity: 1, offset: 0.8 }),
+            style({ transform: 'scale(1.1)', opacity: 1, offset: 0.9 }),
+            style({ transform: 'scale(0.95)', opacity: 1, offset: 0.95 }),
+            style({ transform: 'scale(1)', opacity: 1, offset: 1 })
+          ])
+        )
+      ])
+    ])
+  ]
 })
 export class ProgressComponent implements OnChanges {
   public forms: typeof ProgressFormEnum = ProgressFormEnum;
