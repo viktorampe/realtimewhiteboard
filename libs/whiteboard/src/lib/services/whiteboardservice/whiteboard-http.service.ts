@@ -11,9 +11,9 @@ import {
   take
 } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { ModeEnum } from '../../lib/enums/mode.enum';
-import WhiteboardInterface from '../../lib/models/whiteboard.interface';
-import ImageInterface from '../models/image.interface';
+import { ModeEnum } from '../../enums/mode.enum';
+import ImageInterface from '../../models/image.interface';
+import WhiteboardInterface from '../../models/whiteboard.interface';
 
 const RETRY_AMOUNT = 2;
 
