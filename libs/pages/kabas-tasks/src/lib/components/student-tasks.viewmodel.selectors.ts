@@ -1,19 +1,17 @@
 import { TaskInstanceQueries } from '@campus/dal';
 import { EduContentTypeEnum } from '@campus/shared';
-import { createSelector } from '@ngrx/store';
-import { TaskActionsService } from 'libs/shared/src/lib/services/task/task-actions.service';
-import { HumanDateTimePipe } from 'libs/ui/src/lib/utils/pipes/human-date-time/human-date-time.pipe';
 import {
   getHumanDateTimeRules,
+  HumanDateTimePipe,
   humanDateTimeRulesEnum
-} from 'libs/ui/src/lib/utils/pipes/human-date-time/human-date-time.pipe.presets';
-
-let taskActionService: TaskActionsService;
+} from '@campus/ui';
+import { createSelector } from '@ngrx/store';
 
 export const studentTasks$ = createSelector(
   [TaskInstanceQueries.getTaskStudentTaskInstances],
   getTaskStudentInstances => {
     getTaskStudentInstances.map(te => {
+      const date = new HumanDateTimePipe();
       const requiredIds = te.task.taskEduContents
         .filter(
           tec =>
@@ -24,7 +22,6 @@ export const studentTasks$ = createSelector(
         requiredIds.includes(res.eduContent.id)
       );
 
-      let date: HumanDateTimePipe;
       return {
         name: te.task.name,
         description: te.task.description,
