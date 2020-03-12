@@ -240,7 +240,7 @@ describe('PracticeSearchResultComponent', () => {
     it('should show the possible actions for the eduContent', () => {
       const actionDEs = fixture.debugElement
         .query(By.directive(ListItemActionsDirective))
-        .queryAll(By.css('span'));
+        .queryAll(By.css('.ui-button--inline'));
 
       expect(actionDEs.length).toBe(mockActions.length);
       actionDEs.forEach((actionDE, index) => {

@@ -18,11 +18,12 @@
   <list-item-caption>{{ data.eduContent.description }}</list-item-caption>
 
   <list-item-actions>
-    <span
+    <campus-button
+      inline
       *ngFor="let action of actions"
       campusClickStopPropagation
       (click)="onActionClick(action)"
-      >{{ data.result ? 'maak opnieuw' : action.label }}</span
+      >{{ data.result ? 'maak opnieuw' : action.label }}</campus-button
     >
   </list-item-actions>
   <list-item-content
@@ -42,16 +43,7 @@
   <list-item-content
     class="app-practice-searchresult__stars"
     *ngIf="data.eduContent.type === 'exercise'"
-    ><mat-icon
-      *ngFor="let i of [1, 2, 3]"
-      class="app-practice-searchresult__stars__star"
-      [svgIcon]="
-        data.result
-          ? data.result.stars >= i
-            ? 'star'
-            : 'star-outline'
-          : 'star-outline'
-      "
-    ></mat-icon
-  ></list-item-content>
+  >
+    <campus-rating [total]="3" [count]="data.result.stars"></campus-rating>
+  </list-item-content>
 </campus-list-item-content>
