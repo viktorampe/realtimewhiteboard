@@ -1,7 +1,7 @@
 $swatch-size: 40px;
 
-$tool-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
-$tool-shadow-active: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+$swatch-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+$swatch-shadow-active: 2px 2px 3px #a2b1c6, -2px -2px 3px #ffffff;
 
 $gradient-angle: 135deg;
 
@@ -38,12 +38,12 @@ $color-yellow: #fadb48;
     box-sizing: border-box;
     border-radius: 100%;
 
-    box-shadow: $tool-shadow;
+    box-shadow: $swatch-shadow;
 
     transition: box-shadow 150ms cubic-bezier(0.43, 0, 0.31, 1);
 
     &:active {
-      box-shadow: $tool-shadow-active;
+      box-shadow: $swatch-shadow-active;
     }
 
     &.blue {
