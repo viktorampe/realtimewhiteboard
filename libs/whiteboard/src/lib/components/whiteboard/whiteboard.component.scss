@@ -29,7 +29,7 @@
   }
 
   &__workspace {
-    background: #e0e5ec;
+    background: white;
     width: 100%;
     position: relative;
     flex: 1 1 100%;
@@ -41,7 +41,6 @@
 
       &:active {
         z-index: 1;
-        box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #fff;
       }
 
       &.zoom {
@@ -78,6 +77,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
+    overflow-x: scroll;
     display: flex;
     justify-content: flex-start;
     align-items: center;
