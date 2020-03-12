@@ -348,11 +348,10 @@ export class WhiteboardComponent implements OnChanges {
   onClickWhiteboard() {
     this.selectedCards = [];
     const cards = this.whiteboard$.value.cards;
+    const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
 
-    if (cards.filter(c => c.mode === ModeEnum.EDIT).length) {
-      this.cardConfirmIconClicked(
-        cards.filter(c => c.mode === ModeEnum.EDIT)[0]
-      );
+    if (cardInEditMode) {
+      this.cardConfirmIconClicked(cardInEditMode);
     }
 
     const nonIdleUploadCards = cards.filter(
@@ -410,7 +409,10 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardConfirmIconClicked(card: CardInterface) {
-    this.updateCard({ mode: ModeEnum.IDLE }, card);
+    this.updateCard(
+      { mode: ModeEnum.IDLE, description: card.description },
+      card
+    );
     this.updateViewMode(this.whiteboard$.value.cards);
     this.saveWhiteboard();
   }
