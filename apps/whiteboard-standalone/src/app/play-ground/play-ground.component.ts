@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 })
 export class PlayGroundComponent implements OnInit {
   metadataId = 22;
-  apiBase = environment.api.APIBase;
+  apiBase = environment.api.APIBase + '/api';
 
   constructor() {}
 
