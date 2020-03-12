@@ -377,6 +377,7 @@ export class WhiteboardComponent implements OnChanges {
       .forEach(c => (c.mode = ModeEnum.IDLE));
     const { card, event, cardElement } = $event;
 
+    //put the card in multiselect mode if cards have been selected on whiteboard
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
       : ModeEnum.IDLE;
@@ -392,7 +393,9 @@ export class WhiteboardComponent implements OnChanges {
     };
 
     if (currentMode === ModeEnum.MULTISELECT) {
+      //return multiselectselected cards to the right mode so the icon is clicked + green
       this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
+      //change all cards to multiselect mode
       this.whiteboard$.value.cards
         .filter(c => c.mode !== ModeEnum.MULTISELECTSELECTED)
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
