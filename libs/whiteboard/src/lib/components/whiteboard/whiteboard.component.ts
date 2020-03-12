@@ -129,6 +129,8 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    //deselect all selected cards
+    this.selectedCards = [];
     // set idle mode
     this.whiteboard$.value.cards
       .filter(c => c.mode !== ModeEnum.UPLOAD)
