@@ -28,14 +28,12 @@ export class StudentTaskOverviewComponent implements OnInit {
   @HostBinding('class.student-task-overview')
   studentTaskOverviewClass = true;
 
-  tasks$: Observable<StudentTaskInterface[]>; // this is the presentation stream
-
   // main section
   private groupedByLearningArea$: Observable<TaskListSectionInterface[]>; // TODO: implement (see #3352)
   private groupedByDate$: Observable<TaskListSectionInterface[]>; // TODO: implement (see #3352)
 
   public sectionTitle$: Observable<string>;
-  public inEmptyState$: Observable<boolean>;
+  public taskCount$: Observable<number>;
   public emptyStateData$: Observable<{
     svgIcon: string;
     title?: string;
@@ -54,7 +52,6 @@ export class StudentTaskOverviewComponent implements OnInit {
   >;
   public sectionModes: typeof SectionModeEnum = SectionModeEnum;
 
-  // TODO: use the real viewmodel
   constructor(
     private viewmodel: StudentTasksViewModel,
     private router: Router
@@ -65,18 +62,18 @@ export class StudentTaskOverviewComponent implements OnInit {
   }
 
   private setPresentationStreams(): void {
-    this.tasks$ = this.viewmodel.studentTasks$;
-
-    this.inEmptyState$ = this.tasks$.pipe(map(tasks => tasks.length === 0));
+    this.taskCount$ = this.viewmodel.studentTasks$.pipe(
+      map(tasks => tasks.length)
+    );
 
     this.sectionTitle$ = combineLatest([
-      this.tasks$,
+      this.taskCount$,
       this.showFinishedTasks$
     ]).pipe(
-      map(([tasks, showFinishedTasks]) => {
+      map(([taskCount, showFinishedTasks]) => {
         let title = '';
 
-        if (tasks.length === 0) {
+        if (taskCount === 0) {
           if (showFinishedTasks) {
             title = 'Je hebt geen afgewerkte taken';
           } else {
@@ -86,8 +83,8 @@ export class StudentTaskOverviewComponent implements OnInit {
           if (showFinishedTasks) {
             title = 'Deze taken heb je gemaakt';
           } else {
-            title = `${tasks.length} ${
-              tasks.length === 1 ? 'taak staat' : 'taken staan'
+            title = `${taskCount} ${
+              taskCount === 1 ? 'taak staat' : 'taken staan'
             } voor je klaar`;
           }
         }
@@ -95,8 +92,8 @@ export class StudentTaskOverviewComponent implements OnInit {
       })
     );
 
-    this.emptyStateData$ = this.inEmptyState$.pipe(
-      filter(inEmptyState => !!inEmptyState),
+    this.emptyStateData$ = this.taskCount$.pipe(
+      filter(taskCount => taskCount === 0),
       switchMap(inEmptyState => this.showFinishedTasks$),
       map(showFinishedTasks => {
         return showFinishedTasks

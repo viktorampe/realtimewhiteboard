@@ -55,12 +55,12 @@ describe('StudentTaskOverviewComponent', () => {
     describe('inEmptyState$', () => {
       it('should emit true when there are no tasks', () => {
         viewModel.studentTasks$.next([]);
-        expect(component.inEmptyState$).toBeObservable(hot('a', { a: true }));
+        expect(component.taskCount$).toBeObservable(hot('a', { a: 0 }));
       });
 
       it('should emit false when there are tasks', () => {
         viewModel.studentTasks$.next([new StudentTaskFixture()]);
-        expect(component.inEmptyState$).toBeObservable(hot('a', { a: false }));
+        expect(component.taskCount$).toBeObservable(hot('a', { a: 1 }));
       });
     });
     it('should show emtpy state for active tasks', () => {
