@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { Inject, NgModule } from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { WhiteboardModule } from '@campus/whiteboard';
@@ -21,4 +22,26 @@ import { AppComponent } from './app.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer,
+    @Inject(ENVIRONMENT_ICON_MAPPING_TOKEN)
+    private iconMapping: { [icon: string]: string }
+  ) {
+    for (const key in this.iconMapping) {
+      if (key.indexOf(':') > 0) {
+        this.iconRegistry.addSvgIconInNamespace(
+          key.split(':')[0],
+          key.split(':')[1],
+          this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
+        );
+      } else {
+        this.iconRegistry.addSvgIcon(
+          key,
+          this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
+        );
+      }
+    }
+  }
+}

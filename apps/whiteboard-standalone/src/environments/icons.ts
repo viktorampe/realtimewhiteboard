@@ -6,5 +6,7 @@ export const icons: { [icon: string]: string } = {
   'multiselect-selected': 'assets/icons/multiselect-selected.svg',
   'open-in-new': 'assets/icons/material/open_in_new.svg',
   plus: 'assets/icons/add.svg',
-  delete: 'assets/icons/material/delete.svg'
+  delete: 'assets/icons/material/delete.svg',
+  flip: 'assets/icons/material/flip_camera.svg',
+  edit: 'assets/icons/material/edit.svg'
 };
