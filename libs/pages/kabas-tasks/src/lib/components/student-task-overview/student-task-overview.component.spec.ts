@@ -97,9 +97,19 @@ describe('StudentTaskOverviewComponent', () => {
     });
   });
 
-  //file.only
   describe('presentation streams', () => {
     let viewmodelStudentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+
+    const {
+      wiskunde,
+      frans,
+      vandaag,
+      volgendeWeekDonderdag,
+      volgendeWeekVrijdag,
+      gisteren,
+      vorigeWeekDonderdag,
+      vorigeWeekVrijdag
+    } = getPresets();
 
     beforeEach(() => {
       viewmodelStudentTasks$ = viewmodel.studentTasks$ as BehaviorSubject<
@@ -109,11 +119,11 @@ describe('StudentTaskOverviewComponent', () => {
 
     describe('taskCount$', () => {
       const mockTasks = [
-        new StudentTaskFixture({ isFinished: true }),
-        new StudentTaskFixture({ isFinished: true }),
-        new StudentTaskFixture({ isFinished: false }),
-        new StudentTaskFixture({ isFinished: false }),
-        new StudentTaskFixture({ isFinished: false })
+        new StudentTaskFixture({ ...vorigeWeekVrijdag }),
+        new StudentTaskFixture({ ...gisteren }),
+        new StudentTaskFixture({ ...volgendeWeekDonderdag }),
+        new StudentTaskFixture({ ...volgendeWeekDonderdag }),
+        new StudentTaskFixture({ ...vorigeWeekVrijdag })
       ];
 
       beforeEach(() => {
@@ -123,46 +133,23 @@ describe('StudentTaskOverviewComponent', () => {
       it('should emit the correct amount of tasks - active', () => {
         component.setShowFinishedTasks(false);
 
-        expect(component.taskCount$).toBeObservable(hot('a', { a: 3 }));
+        expect(component.taskCount$).toBeObservable(hot('a', { a: 2 }));
       });
 
       it('should emit the correct amount of tasks - finished', () => {
         component.setShowFinishedTasks(true);
 
-        expect(component.taskCount$).toBeObservable(hot('a', { a: 2 }));
+        expect(component.taskCount$).toBeObservable(hot('a', { a: 3 }));
       });
     });
 
     describe('tasksByLearningAreaInfo$', () => {
       const mockTasks = [
-        new StudentTaskFixture({
-          learningAreaId: 1,
-          learningAreaName: 'Wiskunde',
-          isFinished: true
-        }),
-        new StudentTaskFixture({
-          learningAreaId: 2,
-          learningAreaName: 'Frans',
-          isFinished: true
-        }),
-        new StudentTaskFixture({
-          learningAreaId: 1,
-          learningAreaName: 'Wiskunde',
-          isFinished: false,
-          isUrgent: true
-        }),
-        new StudentTaskFixture({
-          learningAreaId: 2,
-          learningAreaName: 'Frans',
-          isFinished: false,
-          isUrgent: true
-        }),
-        new StudentTaskFixture({
-          learningAreaId: 1,
-          learningAreaName: 'Wiskunde',
-          isFinished: false,
-          isUrgent: false
-        })
+        new StudentTaskFixture({ ...wiskunde, ...vorigeWeekDonderdag }),
+        new StudentTaskFixture({ ...frans, ...vorigeWeekDonderdag }),
+        new StudentTaskFixture({ ...wiskunde, ...vandaag }),
+        new StudentTaskFixture({ ...frans, ...vandaag }),
+        new StudentTaskFixture({ ...wiskunde, ...volgendeWeekDonderdag })
       ];
 
       beforeEach(() => {
@@ -217,13 +204,177 @@ describe('StudentTaskOverviewComponent', () => {
     });
 
     describe('taskListSections$', () => {
-      const mockTasks = [
-        new StudentTaskFixture({ learningAreaName: 'Wiskunde' })
-      ];
+      describe('active tasks', () => {
+        const mockTasks = [
+          new StudentTaskFixture({ ...wiskunde, ...vandaag }),
+          new StudentTaskFixture({ ...wiskunde, ...vandaag }),
+          new StudentTaskFixture({ ...frans, ...vandaag }),
+          new StudentTaskFixture({ ...frans, ...volgendeWeekVrijdag }),
+          new StudentTaskFixture({ ...frans, ...volgendeWeekDonderdag }),
+          new StudentTaskFixture({ ...frans, ...gisteren })
+        ];
 
-      beforeEach(() => {
-        viewmodelStudentTasks$.next(mockTasks);
+        beforeEach(() => {
+          viewmodelStudentTasks$.next(mockTasks);
+          component.setShowFinishedTasks(false);
+        });
+
+        it('should emit the correct sections, grouped by date', () => {
+          component.isGroupedByDate$.next(true);
+
+          const expected = [
+            {
+              items: [mockTasks[2], mockTasks[0], mockTasks[1]],
+              label: 'vandaag'
+            },
+            {
+              items: [mockTasks[4], mockTasks[3]],
+              label: 'volgende week'
+            }
+          ];
+
+          expect(component.taskListSections$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
+
+        it('should emit the correct sections, grouped by learningArea', () => {
+          component.isGroupedByDate$.next(false);
+
+          const expected = [
+            {
+              items: [mockTasks[2], mockTasks[4], mockTasks[3]],
+              label: 'Frans',
+              learningAreaId: 2
+            },
+            {
+              items: [mockTasks[0], mockTasks[1]],
+              label: 'Wiskunde',
+              learningAreaId: 1
+            }
+          ];
+
+          expect(component.taskListSections$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
+      });
+
+      describe('finished tasks', () => {
+        const mockTasks = [
+          new StudentTaskFixture({ ...wiskunde, ...vorigeWeekVrijdag }),
+          new StudentTaskFixture({ ...wiskunde, ...vorigeWeekDonderdag }),
+          new StudentTaskFixture({ ...frans, ...vorigeWeekVrijdag }),
+          new StudentTaskFixture({ ...frans, ...gisteren }),
+          new StudentTaskFixture({ ...frans, ...volgendeWeekDonderdag })
+        ];
+
+        beforeEach(() => {
+          viewmodelStudentTasks$.next(mockTasks);
+          component.setShowFinishedTasks(true);
+        });
+
+        it('should emit the correct sections, grouped by date', () => {
+          component.isGroupedByDate$.next(true);
+
+          const expected = [
+            {
+              items: [mockTasks[3]],
+              label: 'gisteren'
+            },
+            {
+              items: [mockTasks[2], mockTasks[0], mockTasks[1]],
+              label: 'vorige week'
+            }
+          ];
+
+          expect(component.taskListSections$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
+
+        it('should emit the correct sections, grouped by learningArea', () => {
+          component.isGroupedByDate$.next(false);
+
+          const expected = [
+            {
+              items: [mockTasks[3], mockTasks[2]],
+              label: 'Frans',
+              learningAreaId: 2
+            },
+            {
+              items: [mockTasks[0], mockTasks[1]],
+              label: 'Wiskunde',
+              learningAreaId: 1
+            }
+          ];
+
+          expect(component.taskListSections$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
       });
     });
   });
 });
+
+function getPresets(): { [key: string]: Partial<StudentTaskInterface> } {
+  // learningArea presets
+  const wiskunde = { learningAreaId: 1, learningAreaName: 'Wiskunde' };
+  const frans = { learningAreaId: 2, learningAreaName: 'Frans' };
+
+  // date presets
+  const vandaag = {
+    dateGroupLabel: 'vandaag',
+    dateLabel: 'vandaag',
+    endDate: new Date(2020, 2, 12),
+    isUrgent: true,
+    isFinished: false
+  };
+  const volgendeWeekVrijdag = {
+    dateGroupLabel: 'volgende week',
+    dateLabel: 'vrijdag',
+    endDate: new Date(2020, 2, 20),
+    isUrgent: false,
+    isFinished: false
+  };
+  const volgendeWeekDonderdag = {
+    dateGroupLabel: 'volgende week',
+    dateLabel: 'donderdag',
+    endDate: new Date(2020, 2, 19),
+    isUrgent: false,
+    isFinished: false
+  };
+  const gisteren = {
+    dateGroupLabel: 'gisteren',
+    dateLabel: 'gisteren',
+    endDate: new Date(2020, 2, 11),
+    isUrgent: false,
+    isFinished: true
+  };
+  const vorigeWeekDonderdag = {
+    dateGroupLabel: 'vorige week',
+    dateLabel: 'donderdag',
+    endDate: new Date(2020, 2, 5),
+    isUrgent: false,
+    isFinished: true
+  };
+  const vorigeWeekVrijdag = {
+    dateGroupLabel: 'vorige week',
+    dateLabel: 'vrijdag',
+    endDate: new Date(2020, 2, 6),
+    isUrgent: false,
+    isFinished: true
+  };
+
+  return {
+    wiskunde,
+    frans,
+    vandaag,
+    volgendeWeekDonderdag,
+    volgendeWeekVrijdag,
+    gisteren,
+    vorigeWeekDonderdag,
+    vorigeWeekVrijdag
+  };
+}
