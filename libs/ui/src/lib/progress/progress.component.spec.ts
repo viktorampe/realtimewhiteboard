@@ -229,7 +229,7 @@ describe('ProgressComponent', () => {
     it('should have indeterminate mode if no count is given', () => {
       expect(component.mode).toBe(component.modes.INDETERMINATE);
     });
-    it('should have determinate mode if no count is given', () => {
+    it('should have determinate mode if count is given', () => {
       const changes = {
         count: new SimpleChange(undefined, 20, true)
       };
