@@ -486,7 +486,9 @@ describe('WhiteboardComponent', () => {
       component.whiteboard$.value.shelfCards.forEach((shelfcard, index) => {
         expect({ ...shelfcard, mode: null }).toEqual({
           ...selectedCards[index],
-          mode: null
+          mode: null,
+          top: null,
+          left: null
         });
       });
     });
@@ -609,13 +611,22 @@ describe('WhiteboardComponent', () => {
     component.whiteboard$.value.shelfCards = [shelvedCard];
 
     component.saveWhiteboard();
-    const expected = new WhiteboardFixture({
-      title: 'test board',
-      cards: component.whiteboard$.value.cards,
-      shelfCards: component.whiteboard$.value.shelfCards
+
+    const cards = [...component.whiteboard$.value.shelfCards];
+
+    cards.forEach(c => {
+      c.top = null;
+      c.left = null;
+      c.mode = ModeEnum.SHELF;
     });
 
-    expect(setJsonSpy).toHaveBeenCalledWith(expected);
+    const expected = new WhiteboardFixture({
+      title: 'test board',
+      cards: cards,
+      shelfCards: null
+    });
+
+    expect(setJsonSpy).toHaveBeenCalledWith({ ...expected });
   });
 
   describe('addEmptyCard()', () => {
