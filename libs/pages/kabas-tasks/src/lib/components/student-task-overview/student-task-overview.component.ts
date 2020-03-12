@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
@@ -25,12 +26,13 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   public sectionModes: typeof SectionModeEnum = SectionModeEnum;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
 
-  emptyStateClick() {}
-
+  emptyStateClick() {
+    this.router.navigate(['practice']);
+  }
   public setShowFinishedTasks(value: boolean) {
     this.showFinishedTasks$.next(value);
   }

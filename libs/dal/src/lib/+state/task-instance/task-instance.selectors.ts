@@ -149,6 +149,35 @@ export const getTaskInstanceWithTaskById = createSelector(
   }
 );
 
+export const getTaskStudentTaskInstances = createSelector(
+  [
+    getAll,
+    TaskQueries.getAllEntities,
+    ResultQueries.getResultsByTask,
+    TaskEduContentQueries.getAllGroupedByTaskId,
+    LearningAreaQueries.getAllEntities
+  ],
+  (
+    taskInstances: TaskInstanceInterface[],
+    tasksById: Dictionary<TaskInterface>,
+    resultsByTaskId: Dictionary<ResultInterface[]>,
+    taskEduContentByTaskId: Dictionary<TaskEduContentInterface[]>,
+    learningAreaById: Dictionary<LearningAreaInterface>
+  ) => {
+    return taskInstances.map(ti => {
+      return {
+        ...ti,
+        task: {
+          ...tasksById[ti.taskId],
+          results: resultsByTaskId[ti.taskId],
+          taskEduContents: taskEduContentByTaskId[ti.taskId],
+          learningArea: learningAreaById[tasksById[ti.taskId].learningAreaId]
+        }
+      };
+    });
+  }
+);
+
 function asTaskInstance(item: TaskInstanceInterface): TaskInstance {
   if (item) {
     return Object.assign<TaskInstance, TaskInstanceInterface>(

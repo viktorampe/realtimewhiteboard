@@ -112,7 +112,24 @@ describe('ResultsService', () => {
 
   it('should return the result when it is saved', () => {
     const response = JSON.parse(
-      '{ "score": 100, "time": 64760, "status": "completed", "cmi": { "mode": "normal", "core": { "score": { "raw": 100 }, "lesson_location": "", "lesson_status": "completed", "total_time": "0:1:4.76", "session_time": "0000:00:00" } }, "created": "2018-11-07T16:11:24.000Z", "id": 3, "eduContentId": 1, "personId": 6, "taskId": null, "unlockedContentId": 1 }'
+      `{
+        "score": 100,
+        "time": 64760,
+        "status": "completed",
+        "cmi": { "mode": "normal",
+        "core": { "score": { "raw": 100 },
+        "lesson_location": "",
+        "lesson_status": "completed",
+        "total_time": "0:1:4.76",
+        "session_time": "0000:00:00" } },
+        "created": "2018-11-07T16:11:24.000Z",
+        "id": 3,
+        "eduContentId": 1,
+        "personId": 6,
+        "taskId": null,
+        "unlockedContentId": 1 ,
+        "lastUpdated": "2018-11-07T16:11:24.000Z"
+      }`
     );
 
     const cmi = {
@@ -131,7 +148,11 @@ describe('ResultsService', () => {
     });
     expect(service.saveResult(6, cmi as any)).toBeObservable(
       hot('-a-|', {
-        a: response as ResultInterface
+        a: {
+          ...response,
+          created: new Date(response.created),
+          lastUpdated: new Date(response.lastUpdated)
+        } as ResultInterface
       })
     );
   });
