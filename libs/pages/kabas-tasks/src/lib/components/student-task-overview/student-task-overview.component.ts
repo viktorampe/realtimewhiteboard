@@ -15,7 +15,7 @@ interface TaskByLearningAreaInfoInterface {
 
 interface TaskListSectionInterface {
   label: string;
-  learningAreaId: number;
+  learningAreaId?: number;
   items: StudentTaskInterface[];
 }
 
@@ -160,7 +160,8 @@ export class StudentTaskOverviewComponent implements OnInit {
         if (!acc[task[key]]) {
           acc[task[key]] = {
             label: task[key],
-            learningAreaId: task.learningAreaId,
+            learningAreaId:
+              key === 'learningAreaName' ? task.learningAreaId : undefined,
             items: []
           };
         }
@@ -194,8 +195,15 @@ export class StudentTaskOverviewComponent implements OnInit {
     order: SortOrder
   ): TaskListSectionInterface {
     return Object.assign(section, {
-      items: section.items.sort((a, b) =>
-        this.sortByDate(a.endDate, b.endDate, order)
+      items: section.items.sort(
+        (a, b) =>
+          this.sortByDate(a.endDate, b.endDate, order) ||
+          this.sortByString(
+            a.learningAreaName,
+            b.learningAreaName,
+            SortOrder.ASC
+          ) ||
+          this.sortByString(a.name, b.name, SortOrder.ASC)
       )
     });
   }
