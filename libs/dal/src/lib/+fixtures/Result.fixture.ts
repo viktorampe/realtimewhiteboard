@@ -16,6 +16,7 @@ export class ResultFixture extends Result {
   personDisplayName = 'bar';
   bundleId = 1;
   unlockedContentId = 2;
+  lastUpdated = new Date(2018, 11 - 1, 20);
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults
