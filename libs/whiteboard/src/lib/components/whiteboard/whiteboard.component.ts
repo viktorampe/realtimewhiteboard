@@ -86,15 +86,13 @@ export class WhiteboardComponent implements OnChanges {
     this.titleFC = new FormControl('', Validators.required);
   }
 
-  private updateViewMode(cards) {
-    cards.forEach(c => {
-      if (!c.image.imageUrl) {
-        this.updateCard({ viewModeImage: false }, c);
-      }
-      if (!c.description) {
-        this.updateCard({ viewModeImage: true }, c);
-      }
-    });
+  private updateViewMode(card: CardInterface) {
+    if (!card.image.imageUrl) {
+      this.updateCard({ viewModeImage: false }, card);
+    }
+    if (!card.description) {
+      this.updateCard({ viewModeImage: true }, card);
+    }
   }
   //#region WORKSPACE INTERACTIONS
 
@@ -347,12 +345,20 @@ export class WhiteboardComponent implements OnChanges {
   onClickWhiteboard() {
     this.selectedCards = [];
     const cards = this.whiteboard$.value.cards;
+    const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
+
+    if (cardInEditMode) {
+      this.updateCard(
+        { description: cardInEditMode.description },
+        cardInEditMode
+      );
+      this.updateViewMode(cardInEditMode);
+      this.saveWhiteboard();
+    }
 
     const nonIdleUploadCards = cards.filter(
       c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
     );
-
-    this.updateViewMode(cards);
 
     if (nonIdleUploadCards.length) {
       nonIdleUploadCards.forEach(c =>
@@ -403,8 +409,12 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardConfirmIconClicked(card: CardInterface) {
-    this.updateCard({ mode: ModeEnum.IDLE }, card);
-    this.updateViewMode(this.whiteboard$.value.cards);
+    this.updateCard(
+      { mode: ModeEnum.IDLE, description: card.description },
+      card
+    );
+    this.updateViewMode(card);
+    this.saveWhiteboard();
   }
 
   cardFlipIconClicked(card: CardInterface) {
@@ -416,7 +426,7 @@ export class WhiteboardComponent implements OnChanges {
 
       if (card.mode !== ModeEnum.EDIT) {
         this.updateCard({ mode: ModeEnum.IDLE }, card);
-        this.updateViewMode(this.whiteboard$.value.cards);
+        this.updateViewMode(card);
       }
     }
   }
