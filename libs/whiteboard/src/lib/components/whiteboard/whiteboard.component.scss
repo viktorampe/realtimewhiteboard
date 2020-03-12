@@ -85,7 +85,14 @@
     justify-content: flex-start;
     align-items: center;
     border-radius: 24px;
-    height: 108px;
+    height: auto;
+    background: linear-gradient(
+      145deg,
+      lighten(#e0e5ec, 5%),
+      darken(#e0e5ec, 5%)
+    );
+    box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+    border-radius: 12px;
   }
 
   .minimizedShelf {
