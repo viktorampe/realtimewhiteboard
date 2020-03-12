@@ -35,7 +35,7 @@ describe('HumanDateTimePipe rules', () => {
     testCases.forEach(testCase => {
       const { should, date, expected } = testCase;
 
-      it('should' + should, () => {
+      it('should ' + should, () => {
         expect(rule.condition(date, referenceDate)).toBe(expected);
       });
     });
@@ -76,7 +76,7 @@ describe('HumanDateTimePipe rules', () => {
     testCases.forEach(testCase => {
       const { should, date, expected } = testCase;
 
-      it('should' + should, () => {
+      it('should ' + should, () => {
         expect(rule.condition(date, referenceDate)).toBe(expected);
       });
     });
@@ -125,7 +125,7 @@ describe('HumanDateTimePipe rules', () => {
     testCases.forEach(testCase => {
       const { should, date, expected } = testCase;
 
-      it('should' + should, () => {
+      it('should ' + should, () => {
         expect(rule.condition(date, referenceDate)).toBe(expected);
       });
     });
@@ -174,7 +174,7 @@ describe('HumanDateTimePipe rules', () => {
     testCases.forEach(testCase => {
       const { should, date, expected } = testCase;
 
-      it('should' + should, () => {
+      it('should ' + should, () => {
         expect(rule.condition(date, referenceDate)).toBe(expected);
       });
     });
@@ -223,7 +223,7 @@ describe('HumanDateTimePipe rules', () => {
     testCases.forEach(testCase => {
       const { should, date, expected } = testCase;
 
-      it('should' + should, () => {
+      it('should ' + should, () => {
         expect(rule.condition(date, referenceDate)).toBe(expected);
       });
     });
@@ -243,6 +243,317 @@ describe('HumanDateTimePipe rules', () => {
       it('should show the correct weekday', () => {
         expect(rule.value(date.getTime(), referenceDate)).toBe(expected);
       });
+    });
+  });
+
+  describe('TODAY', () => {
+    const referenceDate = new Date().setHours(9, 0, 0, 0);
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.TODAY)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      {
+        should: 'match the condition',
+        date: referenceDate,
+        expected: true
+      },
+      {
+        should: 'not match the condition - tomorrow',
+        date: referenceDate + day,
+        expected: false
+      },
+      {
+        should: 'not match the condition - yesterday',
+        date: referenceDate - day,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value - singular', () => {
+      expect(rule.value(referenceDate, referenceDate)).toBe('vandaag');
+    });
+  });
+
+  describe('TOMORROW', () => {
+    const referenceDate = new Date().setHours(9, 0, 0, 0);
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.TOMORROW)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      {
+        should: 'match the condition',
+        date: referenceDate + day,
+        expected: true
+      },
+      {
+        should: 'not match the condition - today',
+        date: referenceDate,
+        expected: false
+      },
+      {
+        should: 'not match the condition - yesterday at 21h00',
+        date: referenceDate - 0.5 * day,
+        expected: false
+      },
+      {
+        should: 'not match the condition - day after tomorrow',
+        date: referenceDate + 2 * day,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value', () => {
+      expect(rule.value(referenceDate + 1 * day, referenceDate)).toBe('morgen');
+    });
+  });
+
+  describe('DAY_AFTER_TOMORROW', () => {
+    const referenceDate = new Date().setHours(9, 0, 0, 0);
+    const rule = getHumanDateTimeRules(
+      humanDateTimeRulesEnum.DAY_AFTER_TOMORROW
+    )[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      {
+        should: 'match the condition',
+        date: referenceDate + 2 * day,
+        expected: true
+      },
+      {
+        should: 'not match the condition - tomorrow at 21h00',
+        date: referenceDate + 1.5 * day,
+        expected: false
+      },
+      {
+        should: 'not match the condition - in 3 days',
+        date: referenceDate + 3 * day,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value', () => {
+      expect(rule.value(referenceDate + 2 * day, referenceDate)).toBe(
+        'overmorgen'
+      );
+    });
+  });
+
+  describe('WEEKDAY', () => {
+    const referenceDate = new Date().setHours(9, 0, 0, 0);
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.WEEKDAY)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      {
+        should: 'match the condition',
+        date: referenceDate + day,
+        expected: true
+      },
+      {
+        should: 'match the condition',
+        date: referenceDate + 6 * day,
+        expected: true
+      },
+      {
+        should: 'not match the condition - past value',
+        date: referenceDate - 1,
+        expected: false
+      },
+      {
+        should: 'not match the condition - difference more than a week',
+        date: referenceDate + 7 * day,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    const testCasesWeekDay = [
+      { date: new Date(2020, 2, 9), expected: 'Maandag' },
+      { date: new Date(2020, 2, 10), expected: 'Dinsdag' },
+      { date: new Date(2020, 2, 11), expected: 'Woensdag' },
+      { date: new Date(2020, 2, 12), expected: 'Donderdag' },
+      { date: new Date(2020, 2, 13), expected: 'Vrijdag' },
+      { date: new Date(2020, 2, 14), expected: 'Zaterdag' },
+      { date: new Date(2020, 2, 15), expected: 'Zondag' }
+    ];
+
+    testCasesWeekDay.forEach(testCase => {
+      const { date, expected } = testCase;
+      it('should show the correct weekday', () => {
+        expect(rule.value(date.getTime(), referenceDate)).toBe(expected);
+      });
+    });
+  });
+
+  describe('THIS_WEEK', () => {
+    const referenceDate = new Date(2020, 2, 10, 9).getTime(); // tuesday at 9h00
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.THIS_WEEK)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      ...[-1, 0, 1, 2, 3, 4, 5].map(i => ({
+        should: 'match the condition',
+        date: referenceDate + i * day,
+        expected: true
+      })),
+      {
+        should: 'not match the condition - next monday',
+        date: referenceDate + 6 * day,
+        expected: false
+      },
+      {
+        should: 'not match the condition - last sunday',
+        date: referenceDate - 2 * day,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value', () => {
+      expect(rule.value(referenceDate + 2 * day, referenceDate)).toBe(
+        'deze week'
+      );
+    });
+  });
+
+  describe('NEXT_WEEK', () => {
+    const referenceDate = new Date(2020, 2, 10, 9).getTime(); // tuesday at 9h00
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.NEXT_WEEK)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      ...[-1, 0, 1, 2, 3, 4, 5].map(i => ({
+        should: 'match the condition',
+        date: referenceDate + (i + 7) * day,
+        expected: true
+      })),
+      {
+        should: 'not match the condition - this week on sunday',
+        date: referenceDate + 5 * day,
+        expected: false
+      },
+      {
+        should: 'not match the condition - in 2 weeks',
+        date: referenceDate + 14 * day,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value', () => {
+      expect(rule.value(referenceDate + 2 * day, referenceDate)).toBe(
+        'volgende week'
+      );
+    });
+  });
+
+  describe('LATER', () => {
+    const referenceDate = new Date().getTime();
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.LATER)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      {
+        should: 'match the condition - future',
+        date: referenceDate + 1,
+        expected: true
+      },
+      {
+        should: 'not match the condition - past',
+        date: referenceDate - 1,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value', () => {
+      expect(rule.value(referenceDate + 2 * day, referenceDate)).toBe('later');
+    });
+  });
+
+  describe('EARLIER', () => {
+    const referenceDate = new Date().getTime();
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.EARLIER)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      {
+        should: 'match the condition - past',
+        date: referenceDate - 1,
+        expected: true
+      },
+      {
+        should: 'not match the condition - future',
+        date: referenceDate + 1,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value', () => {
+      expect(rule.value(referenceDate + 2 * day, referenceDate)).toBe(
+        'vroeger'
+      );
     });
   });
 });
