@@ -6,7 +6,6 @@ import {
   HostBinding,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges
 } from '@angular/core';
 
@@ -31,7 +30,7 @@ export class CompletedProgressIconDirective {}
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss']
 })
-export class ProgressComponent implements OnChanges, OnInit {
+export class ProgressComponent implements OnChanges {
   public forms: typeof ProgressFormEnum = ProgressFormEnum;
   public modes: typeof ProgressModeEnum = ProgressModeEnum;
   public percentage = 0;
