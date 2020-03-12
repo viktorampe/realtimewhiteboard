@@ -4,7 +4,7 @@ import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
-import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
+import { StudentTasksViewModel } from '../student-tasks.viewmodel';
 
 export interface TaskByLearningAreaInfoInterface {
   learningAreaId: number;
@@ -56,7 +56,7 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   // TODO: use the real viewmodel
   constructor(
-    private viewmodel: MockStudentTasksViewModel,
+    private viewmodel: StudentTasksViewModel,
     private router: Router
   ) {}
 
@@ -74,15 +74,24 @@ export class StudentTaskOverviewComponent implements OnInit {
       this.showFinishedTasks$
     ]).pipe(
       map(([tasks, showFinishedTasks]) => {
-        return tasks.length === 0
-          ? showFinishedTasks
-            ? 'Je hebt geen afgewerkte taken'
-            : 'Er staan geen taken voor je klaar'
-          : showFinishedTasks
-          ? 'Deze taken heb je gemaakt'
-          : `${tasks.length} ${
+        let title = '';
+
+        if (tasks.length === 0) {
+          if (showFinishedTasks) {
+            title = 'Je hebt geen afgewerkte taken';
+          } else {
+            title = 'Er staan geen taken voor je klaar';
+          }
+        } else {
+          if (showFinishedTasks) {
+            title = 'Deze taken heb je gemaakt';
+          } else {
+            title = `${tasks.length} ${
               tasks.length === 1 ? 'taak staat' : 'taken staan'
             } voor je klaar`;
+          }
+        }
+        return title;
       })
     );
 
