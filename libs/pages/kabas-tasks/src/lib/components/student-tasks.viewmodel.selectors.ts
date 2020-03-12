@@ -1,15 +1,51 @@
 import { TaskInstanceQueries } from '@campus/dal';
+import { EduContentTypeEnum } from '@campus/shared';
 import { createSelector } from '@ngrx/store';
+import { TaskActionsService } from 'libs/shared/src/lib/services/task/task-actions.service';
+import { HumanDateTimePipe } from 'libs/ui/src/lib/utils/pipes/human-date-time/human-date-time.pipe';
+import {
+  getHumanDateTimeRules,
+  humanDateTimeRulesEnum
+} from 'libs/ui/src/lib/utils/pipes/human-date-time/human-date-time.pipe.presets';
+
+let taskActionService: TaskActionsService;
 
 export const studentTasks$ = createSelector(
-  // TODO Replace with relevaton DAL selectors
-  // only done this to scaffold this selector
   [TaskInstanceQueries.getTaskStudentTaskInstances],
   getTaskStudentInstances => {
-    return getTaskStudentInstances.map(e => {
-      let required = e.task.taskEduContents.filter(ee => ee.required); // zal gaan via results
-      //elke property overriden
-      return { name: e.task.name };
+    getTaskStudentInstances.map(te => {
+      const requiredIds = te.task.taskEduContents
+        .filter(
+          tec =>
+            tec.required && tec.eduContent.type === EduContentTypeEnum.EXERCISE
+        )
+        .map(e => e.eduContent.id);
+      const completedRequired = te.task.results.filter(res =>
+        requiredIds.includes(res.eduContent.id)
+      );
+
+      let date: HumanDateTimePipe;
+      return {
+        name: te.task.name,
+        description: te.task.description,
+        learningAreaName: te.task.learningArea,
+        learningAreaId: te.task.learningAreaId,
+        count: {
+          completedRequired: completedRequired.length,
+          totalRequired: requiredIds.length
+        },
+        isfinished: te.end > new Date(),
+        isUrgent: getHumanDateTimeRules([
+          humanDateTimeRulesEnum.TOMORROW,
+          humanDateTimeRulesEnum.TODAY
+        ]).some(rule => rule.condition(te.end.getTime(), new Date().getTime())),
+        dateGroupLabel: date.transform(te.end, {
+          rules: getHumanDateTimeRules([])
+        }),
+        dateLabel: date.transform(te.end, { rules: getHumanDateTimeRules([]) }),
+        endDate: te.end,
+        actions: [] // ask TaskActionService.getActions(taskInstance)
+      };
     });
   }
 );
