@@ -1,3 +1,9 @@
+import { icons } from './icons';
+
 export const environment = {
-  production: true
+  production: true,
+  api: {
+    APIBase: 'https://api.staging.lk2020.be'
+  },
+  iconMapping: icons
 };
