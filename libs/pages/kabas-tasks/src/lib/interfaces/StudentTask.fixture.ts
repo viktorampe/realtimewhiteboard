@@ -11,7 +11,7 @@ export class StudentTaskFixture implements StudentTaskInterface {
     totalRequired: 3
   };
   isFinished = false;
-  isUrgent = true;
+  isUrgent = false;
   dateGroupLabel = 'fooDateGroupLabel';
   dateLabel = 'fooDateLabel';
   endDate = new Date(new Date().setDate(new Date().getDate() + 5));
