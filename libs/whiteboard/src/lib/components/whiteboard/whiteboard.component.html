@@ -103,7 +103,9 @@
     >
       <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
     </button>
-    <button class="whiteboard__shelf__button" (click)="toggleShelf()">X</button>
+    <button class="whiteboard__shelf__button" (click)="toggleShelf()"
+      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
+    ></button>
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       [class.minimizedShelf]="isShelfMinimized"
