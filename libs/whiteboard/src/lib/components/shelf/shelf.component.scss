@@ -1,11 +1,16 @@
 .shelf {
   height: auto;
   padding-top: 24px;
-  padding-bottom: 24px;
   padding-left: 24px;
-  overflow-x: scroll;
   display: flex;
   width: 100%;
+  background: linear-gradient(
+    145deg,
+    lighten(#e0e5ec, 5%),
+    darken(#e0e5ec, 5%)
+  );
+  box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+  border-radius: 12px;
 
   &__button {
     width: 48px;
