@@ -66,6 +66,11 @@
     }
   }
 
+  &__empty {
+    position: absolute;
+    align-self: center;
+  }
+
   &__addbutton {
     position: absolute;
     right: 40px;
