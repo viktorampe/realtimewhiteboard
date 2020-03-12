@@ -7,10 +7,15 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./play-ground.component.scss']
 })
 export class PlayGroundComponent implements OnInit {
-  metadataId = 22;
+  metadataIds = [22, 123, 124, 125];
+  metadataId = undefined;
   apiBase = environment.api.APIBase + '/api';
 
   constructor() {}
 
   ngOnInit() {}
+
+  onPickWhiteboard(id: number) {
+    this.metadataId = id;
+  }
 }

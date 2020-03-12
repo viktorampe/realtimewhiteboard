@@ -1,4 +1,12 @@
 <campus-whiteboard
+  *ngIf="metadataId; else whiteboardPicker"
   [metadataId]="metadataId"
   [apiBase]="apiBase"
 ></campus-whiteboard>
+
+<ng-template #whiteboardPicker>
+  Kies je whiteboard:
+  <button *ngFor="let id of metadataIds" (click)="onPickWhiteboard(id)"
+    >whiteboard {{ id }}</button
+  >
+</ng-template>
