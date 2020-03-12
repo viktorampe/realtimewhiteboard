@@ -349,7 +349,7 @@ export class WhiteboardComponent implements OnChanges {
 
     if (cardInEditMode) {
       this.updateCard(
-        { mode: ModeEnum.IDLE, description: cardInEditMode.description },
+        { description: cardInEditMode.description },
         cardInEditMode
       );
       this.updateViewMode(cardInEditMode);
