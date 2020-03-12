@@ -80,6 +80,7 @@
           [(mode)]="card.mode"
           [viewModeImage]="card.viewModeImage"
           (update)="updateCard($event, card)"
+          (remove)="removeImage(card)"
           (openFilePicker)="openFilePicker(filePicker)"
           (click)="onCardClicked($event, card)"
           (press)="onCardPressed(card)"
