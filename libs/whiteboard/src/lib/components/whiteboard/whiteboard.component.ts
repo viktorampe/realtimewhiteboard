@@ -404,7 +404,11 @@ export class WhiteboardComponent implements OnChanges {
       this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
       //change all cards to multiselect mode
       this.whiteboard$.value.cards
-        .filter(c => c.mode !== ModeEnum.MULTISELECTSELECTED)
+        .filter(
+          c =>
+            c.mode !== ModeEnum.MULTISELECTSELECTED &&
+            c.mode !== ModeEnum.UPLOAD
+        )
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
