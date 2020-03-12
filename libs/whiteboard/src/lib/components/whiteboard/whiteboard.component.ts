@@ -31,6 +31,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
+
   @Input() metadataId: number;
   @Input() apiBase: string;
 
@@ -408,6 +409,7 @@ export class WhiteboardComponent implements OnChanges {
       });
     }
   }
+
   //#endregion
 
   //#region CARD TOOLBAR
