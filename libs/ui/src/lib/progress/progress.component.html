@@ -37,16 +37,20 @@
     data-cy="ui-progress-bar"
   ></mat-progress-bar>
 
-  <div
-    class="ui-caption"
-    *ngIf="showPercentage && !(completedIcon && count === 100)"
+  <span
+    class="ui-caption ui-progress__label"
+    *ngIf="
+      form === forms.CIRCULAR &&
+      showPercentage &&
+      !(completedIcon && percentage === 100)
+    "
     data-cy="ui-progress-percentage-label"
-    >{{ percentage }}%</div
+    >{{ percentage }}%</span
   >
   <div
-    class="ui-progress__completed-icon"
+    class="ui-progress__completed-icon ui-progress__label"
     data-cy="ui-progress-completed-icon"
-    *ngIf="completedIcon && count === 100"
+    *ngIf="form === forms.CIRCULAR && completedIcon && percentage === 100"
   >
     <ng-content select="completed-progress-icon"></ng-content>
   </div>

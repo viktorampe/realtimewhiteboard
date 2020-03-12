@@ -114,17 +114,19 @@
 
   <front-layer-header>Subtitle</front-layer-header>
   <front-layer-content>
-    <div>
+    <p>
       <campus-progress
-        [count]="100"
+        [count]="30"
         [total]="30"
         [diameter]="50"
         [showPercentage]="true"
       >
-        <completed-progress-icon>TEST</completed-progress-icon>
+        <completed-progress-icon
+          ><mat-icon svgIcon="check"></mat-icon
+        ></completed-progress-icon>
       </campus-progress>
-    </div>
-    <div>
+    </p>
+    <p>
       <campus-progress
         [count]="50"
         [total]="100"
@@ -133,23 +135,23 @@
       >
         <completed-progress-icon>TEST</completed-progress-icon>
       </campus-progress>
-    </div>
-    <div>
+    </p>
+    <p>
       <campus-progress [count]="50" [showPercentage]="true" form="linear">
         <completed-progress-icon>TEST</completed-progress-icon>
       </campus-progress>
-    </div>
-    <div>
+    </p>
+    <p>
       <campus-progress [count]="100" [showPercentage]="true" form="linear">
         <completed-progress-icon>TEST</completed-progress-icon>
       </campus-progress>
-    </div>
-    <div>
+    </p>
+    <p>
       <campus-progress mode="indeterminate"> </campus-progress>
-    </div>
-    <div>
+    </p>
+    <p>
       <campus-progress mode="indeterminate" form="linear"> </campus-progress>
-    </div>
+    </p>
 
     <campus-button inline (click)="isOpen = !isOpen"
       >toggle container</campus-button

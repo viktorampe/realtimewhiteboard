@@ -67,7 +67,6 @@ describe('ProgressComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  //file.only
   describe('percentage label', () => {
     it('should calculate and ceil the percentage with a given count and default total', () => {
       const changes = {
