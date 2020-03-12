@@ -186,4 +186,16 @@ describe('StudentTaskOverviewComponent', () => {
       );
     });
   });
+
+  describe('scrollTo()', () => {
+    it('should scroll to the provided target', () => {
+      const scrollSpy = jest
+        .spyOn(document, 'getElementById')
+        .mockReturnValue({ scrollIntoView: jest.fn() } as any);
+
+      component.scrollTo(1);
+
+      expect(scrollSpy).toHaveBeenCalledWith('1');
+    });
+  });
 });
