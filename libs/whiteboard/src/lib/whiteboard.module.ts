@@ -21,6 +21,7 @@ import { ShelfComponent } from './components/shelf/shelf.component';
 import { WhiteboardToolbarComponent } from './components/whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
 import { ImageDragDirective } from './directives/image-drag.directive';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     ProgressBarComponent,
     ImageToolbarComponent,
     CardTextComponent,
-    ShelfComponent
+    ShelfComponent,
+    SettingsComponent
   ],
   exports: [WhiteboardComponent, ImageDragDirective]
 })
