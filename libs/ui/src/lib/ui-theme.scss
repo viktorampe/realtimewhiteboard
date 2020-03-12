@@ -90,9 +90,15 @@ $ui-icon-size: 24px !default;
 $ui-icon-dense-size: 20px !default;
 /* #endregion */
 
+// Lists
 $ui-list-item-3-line-height: 88px !default;
 $ui-list-item-2-line-height: 56px !default;
 $ui-list-item-default-height: 48px !default;
+
+$ui-list-item-background-color--even: transparent !default;
+$ui-list-item-background-color--odd: rgba($ui-color-base, 0.04);
+$ui-list-item-background-color--hover: rgba($ui-color-secondary, 0.04);
+$ui-list-item-background-color--selected: rgba($ui-color-secondary, 0.08);
 
 /* #region Typograpy Classes */
 @mixin setFont(
