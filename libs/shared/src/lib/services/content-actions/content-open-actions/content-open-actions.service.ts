@@ -88,7 +88,7 @@ export class ContentOpenActionsService
   getActionsForTaskInstanceEduContent(
     eduContent: EduContent,
     result: ResultInterface,
-    taskInstance: TaskInstanceInterface
+    taskInstance: Partial<TaskInstanceInterface>
   ): ContentActionInterface[] {
     throw new Error('Method not implemented.');
   }
