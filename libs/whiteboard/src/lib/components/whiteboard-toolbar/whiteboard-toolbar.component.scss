@@ -1,13 +1,19 @@
+$tools-background: #e0e5ec;
+$default-color: #d9328a;
+
+$shadow-color-dark: #a3b1c6;
+$shadow-color-light: #ffffff;
+
 .whiteboard__tools {
   display: flex;
   justify-content: center;
 
-  &__tool {
-    box-shadow: 0px 3px 4px #00000024;
-    border-radius: 0px 0px 10px 10px;
-    margin-right: 20px;
-    background: #ffffff;
-  }
+  background: $tools-background;
+  box-shadow: 3px 3px 16px -1px rgba($default-color, 0.3),
+    9px 9px 16px $shadow-color-dark,
+    -1px -1px 6px -3px rgba($default-color, 0.2),
+    -9px -9px 16px $shadow-color-light;
+  border-radius: 24px;
 
   #delete {
     width: 90px;
