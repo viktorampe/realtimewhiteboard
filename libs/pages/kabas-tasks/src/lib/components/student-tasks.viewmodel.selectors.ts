@@ -1,10 +1,15 @@
 import { TaskInstanceQueries } from '@campus/dal';
 import { createSelector } from '@ngrx/store';
-import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 
 export const studentTasks$ = createSelector(
   // TODO Replace with relevaton DAL selectors
   // only done this to scaffold this selector
   [TaskInstanceQueries.getTaskStudentTaskInstances],
-  getTaskStudentInstances => ({} as StudentTaskInterface)
+  getTaskStudentInstances => {
+    return getTaskStudentInstances.map(e => {
+      let required = e.task.taskEduContents.filter(ee => ee.required); // zal gaan via results
+      //elke property overriden
+      return { name: e.task.name };
+    });
+  }
 );
