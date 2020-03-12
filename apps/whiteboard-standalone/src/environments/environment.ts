@@ -6,6 +6,9 @@ import { icons } from './icons';
 
 export const environment = {
   production: false,
+  api: {
+    APIBase: 'https://api.staging.lk2020.be'
+  },
   iconMapping: icons
 };
 

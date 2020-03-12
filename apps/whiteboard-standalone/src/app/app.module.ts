@@ -2,16 +2,29 @@ import { Inject, NgModule } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { DalModule } from '@campus/dal';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { WhiteboardModule } from '@campus/whiteboard';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
+import { PlayGroundComponent } from './play-ground/play-ground.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LoginComponent, PlayGroundComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabled' }),
+    DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
+    RouterModule.forRoot(
+      [
+        { path: '', pathMatch: 'full', redirectTo: 'login' },
+        { path: 'login', component: LoginComponent },
+        { path: 'whiteboard', component: PlayGroundComponent }
+      ],
+      {
+        initialNavigation: 'enabled'
+      }
+    ),
     WhiteboardModule
   ],
   providers: [

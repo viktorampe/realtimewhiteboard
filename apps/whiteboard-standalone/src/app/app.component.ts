@@ -7,7 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'whiteboard-standalone';
-
-  metadataId = 22;
-  apiBase = 'https://api.staging.lk2020.be/api';
 }
