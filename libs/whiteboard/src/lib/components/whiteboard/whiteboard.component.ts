@@ -376,13 +376,10 @@ export class WhiteboardComponent implements OnChanges {
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => (c.mode = ModeEnum.IDLE));
     const { card, event, cardElement } = $event;
-    // const currentMode = this.selectedCards.length
-    //   ? ModeEnum.MULTISELECTSELECTED
-    //   : ModeEnum.IDLE;
-    let currentMode = ModeEnum.IDLE;
-    if (this.selectedCards.length) {
-      currentMode = ModeEnum.MULTISELECTSELECTED;
-    }
+
+    const currentMode = this.selectedCards.length
+      ? ModeEnum.MULTISELECT
+      : ModeEnum.IDLE;
 
     const workspaceCard: CardInterface = {
       ...card,
@@ -394,9 +391,12 @@ export class WhiteboardComponent implements OnChanges {
         Math.abs(event.distance.y)
     };
 
-    this.whiteboard$.value.cards
-      .filter(c => c.mode === ModeEnum.MULTISELECTSELECTED)
-      .forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
+    if (currentMode === ModeEnum.MULTISELECT) {
+      this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
+      this.whiteboard$.value.cards
+        .filter(c => c.mode !== ModeEnum.MULTISELECTSELECTED)
+        .forEach(c => (c.mode = ModeEnum.MULTISELECT));
+    }
 
     if (
       !this.whiteboard$.value.cards
