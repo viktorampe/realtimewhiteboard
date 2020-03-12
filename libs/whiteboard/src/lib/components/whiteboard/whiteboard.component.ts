@@ -347,7 +347,6 @@ export class WhiteboardComponent implements OnChanges {
       c.left = null;
     });
     this.whiteboardHttpService.setJson(whiteboard).subscribe();
-    console.log('SAVED');
   }
 
   onClickWhiteboard() {
