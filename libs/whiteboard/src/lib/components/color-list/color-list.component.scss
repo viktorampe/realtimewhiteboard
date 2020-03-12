@@ -1,5 +1,32 @@
 $swatch-size: 40px;
 
+$tool-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+$tool-shadow-active: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+
+$gradient-angle: 135deg;
+
+$color-blue: #00a7e2;
+$color-green: #2ea03d;
+$color-red: #e22940;
+$color-purple: #5d3284;
+$color-yellow: #fadb48;
+
+@mixin background-gradient($color) {
+  background: linear-gradient(
+    $gradient-angle,
+    lighten($color, 5%),
+    darken($color, 5%)
+  );
+
+  &:active {
+    background: linear-gradient(
+      $gradient-angle,
+      darken($color, 5%),
+      lighten($color, 5%)
+    );
+  }
+}
+
 .color-list {
   display: flex;
   flex-wrap: wrap;
@@ -11,7 +38,33 @@ $swatch-size: 40px;
     box-sizing: border-box;
     border-radius: 100%;
 
-    box-shadow: 0px 1px 1px #00000024;
+    box-shadow: $tool-shadow;
+
+    transition: box-shadow 150ms cubic-bezier(0.43, 0, 0.31, 1);
+
+    &:active {
+      box-shadow: $tool-shadow-active;
+    }
+
+    &.blue {
+      @include background-gradient($color-blue);
+    }
+
+    &.green {
+      @include background-gradient($color-green);
+    }
+
+    &.red {
+      @include background-gradient($color-red);
+    }
+
+    &.purple {
+      @include background-gradient($color-purple);
+    }
+
+    &.yellow {
+      @include background-gradient($color-yellow);
+    }
   }
 }
 
