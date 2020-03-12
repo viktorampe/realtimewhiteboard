@@ -39,6 +39,15 @@
       (dblclick)="onDblClick($event)"
       #workspace
     >
+      <div class="whiteboard__workspace__actions">
+        <button
+          mat-fab
+          color="primary"
+          class="whiteboard__workspace__actions__settingsbutton"
+        >
+          <mat-icon style="color: #FFFFFF;" [svgIcon]="'settings'"></mat-icon>
+        </button>
+      </div>
       <div
         class="whiteboard__workspace__container"
         *ngFor="let card of whiteboard.cards"
