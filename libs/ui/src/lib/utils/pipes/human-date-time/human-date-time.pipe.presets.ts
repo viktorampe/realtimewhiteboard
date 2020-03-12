@@ -24,7 +24,29 @@ export enum humanDateTimeRulesEnum {
   'PAST_MINUTES',
   'PAST_HOURS',
   'PAST_DAYS',
-  'PAST_WEEKDAY'
+  'PAST_WEEKDAY',
+  'TODAY',
+  'TOMORROW',
+  'DAY_AFTER_TOMORROW',
+  'WEEKDAY',
+  'THIS_WEEK',
+  'NEXT_WEEK',
+  'DATE',
+  'LATER',
+  'EARLIER'
+}
+
+function midnight(date: number): number {
+  return new Date(date).setHours(0, 0, 0, 0);
+}
+
+function startOfWeek(date: number, startDay: number = 1): number {
+  // default startDay of week should be monday
+  let dayOfWeek = new Date(date).getDay() - startDay;
+  if (dayOfWeek < 0) {
+    dayOfWeek += 7;
+  }
+  return midnight(date) - dayOfWeek * day;
 }
 
 const humanDateTimeRules: {
@@ -55,7 +77,7 @@ const humanDateTimeRules: {
   },
   [humanDateTimeRulesEnum.PAST_DAYS]: {
     condition: (date, referenceDate) =>
-      referenceDate > date && referenceDate - date < week,
+      referenceDate > date && midnight(referenceDate) - midnight(date) < week,
     value: (date, referenceDate) => {
       const timeInDays = Math.floor((referenceDate - date) / day);
       return `${timeInDays} ${timeInDays === 1 ? 'dag' : 'dagen'} geleden`;
@@ -63,11 +85,63 @@ const humanDateTimeRules: {
   },
   [humanDateTimeRulesEnum.PAST_WEEKDAY]: {
     condition: (date, referenceDate) =>
-      referenceDate > date && referenceDate - date < week,
+      referenceDate > date && midnight(referenceDate) - midnight(date) < week,
     value: (date, referenceDate) => {
       const dayOfWeek = new Date(date).getDay();
       return weekdays[dayOfWeek];
     }
+  },
+  [humanDateTimeRulesEnum.TODAY]: {
+    condition: (date, referenceDate) =>
+      midnight(date) === midnight(referenceDate),
+    value: (date, referenceDate) => 'vandaag'
+  },
+  [humanDateTimeRulesEnum.TOMORROW]: {
+    condition: (date, referenceDate) =>
+      midnight(date) === midnight(referenceDate) + day,
+    value: (date, referenceDate) => 'morgen'
+  },
+  [humanDateTimeRulesEnum.DAY_AFTER_TOMORROW]: {
+    condition: (date, referenceDate) =>
+      midnight(date) === midnight(referenceDate) + 2 * day,
+    value: (date, referenceDate) => 'overmorgen'
+  },
+  [humanDateTimeRulesEnum.WEEKDAY]: {
+    condition: (date, referenceDate) =>
+      referenceDate < date && midnight(date) - midnight(referenceDate) < week,
+    value: (date, referenceDate) => {
+      const dayOfWeek = new Date(date).getDay();
+      return weekdays[dayOfWeek];
+    }
+  },
+  [humanDateTimeRulesEnum.THIS_WEEK]: {
+    condition: (date, referenceDate) => {
+      const midnightDate = midnight(date);
+      const weekStartDate = startOfWeek(referenceDate);
+      return (
+        midnightDate >= weekStartDate && midnightDate < weekStartDate + week
+      );
+    },
+    value: (date, referenceDate) => 'deze week'
+  },
+  [humanDateTimeRulesEnum.NEXT_WEEK]: {
+    condition: (date, referenceDate) => {
+      const midnightDate = midnight(date);
+      const nextWeekStartDate = startOfWeek(referenceDate) + week;
+      return (
+        midnightDate >= nextWeekStartDate &&
+        midnightDate < nextWeekStartDate + week
+      );
+    },
+    value: (date, referenceDate) => 'volgende week'
+  },
+  [humanDateTimeRulesEnum.LATER]: {
+    condition: (date, referenceDate) => referenceDate < date,
+    value: (date, referenceDate) => 'later'
+  },
+  [humanDateTimeRulesEnum.EARLIER]: {
+    condition: (date, referenceDate) => referenceDate > date,
+    value: (date, referenceDate) => 'vroeger'
   }
 };
 

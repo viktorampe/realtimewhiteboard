@@ -11,7 +11,7 @@ export class HumanDateTimePipe implements PipeTransform {
    * returns empty string when date is undefined or null
    */
   transform(
-    value: Date,
+    value: Date | number | string,
     args: HumanDateTimeArgsInterface = humanDateTimeDefaultArgs
   ): String {
     if (!value) return '';
