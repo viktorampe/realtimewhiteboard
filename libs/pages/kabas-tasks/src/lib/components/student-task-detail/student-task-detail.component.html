@@ -1,27 +1,36 @@
 <campus-backdrop title="TASK_NAME_HERE" static>
   <front-layer-content>
-    <campus-section [mode]="sectionModes.CONTAINER">
-      <section-title>Moetjes in deze taak</section-title>
+    <div *ngIf="task$ | async as task">
+      <campus-section [mode]="sectionModes.CONTAINER">
+        <section-title>Moetjes in deze taak</section-title>
 
-      <section-content>
-        Moetjes in deze taak inhoud.
-      </section-content>
-    </campus-section>
+        <section-content>
+          Moetjes in deze taak inhoud.
+        </section-content>
+      </campus-section>
 
-    <campus-section [mode]="sectionModes.CONTAINER">
-      <section-title>Magjes in deze taak</section-title>
+      <campus-section [mode]="sectionModes.CONTAINER">
+        <section-title>Magjes in deze taak</section-title>
 
-      <section-content>
-        Magjes in deze taak inhoud.
-      </section-content>
-    </campus-section>
+        <section-content>
+          Magjes in deze taak inhoud.
+        </section-content>
+      </campus-section>
 
-    <campus-section [mode]="sectionModes.CONTAINER">
-      <section-title>Over deze taak</section-title>
+      <campus-section [mode]="sectionModes.CONTAINER">
+        <section-title>Over deze taak</section-title>
 
-      <section-content>
-        Over deze taak inhoud.
-      </section-content>
-    </campus-section>
+        <section-content>
+          <campus-person-badge [person]="task.assigner"></campus-person-badge>
+          <div class="ui-title">{{ task.name }}</div>
+          <div class="ui-headline">{{ task.learningAreaName }}</div>
+          <div class="ui-subheading"
+            >Deze taak moet op {{ task.endDate.toLocaleDateString('nl-BE') }} af
+            zijn.
+          </div>
+          <div class="ui-caption">{{ task.description }} </div>
+        </section-content>
+      </campus-section>
+    </div>
   </front-layer-content>
 </campus-backdrop>

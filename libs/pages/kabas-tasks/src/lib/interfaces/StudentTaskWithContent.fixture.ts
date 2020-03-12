@@ -6,7 +6,7 @@ export class StudentTaskWithContentFixture
   implements StudentTaskWithContentInterface {
   name = 'FooTask';
   description = 'Maak deze taak als voorbereiding op deze taak.';
-  learningAreaName: 'Wiskunde';
+  learningAreaName = 'Wiskunde';
   startDate = new Date('1 january 2018');
   endDate = new Date('20 january 2018');
   assigner = new PersonFixture({ firstName: 'Jan', name: 'Smit' });

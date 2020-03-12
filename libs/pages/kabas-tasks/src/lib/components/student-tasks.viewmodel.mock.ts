@@ -1,3 +1,4 @@
+import { PersonFixture } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
@@ -10,7 +11,13 @@ export class MockStudentTasksViewModel
   implements ViewModelInterface<StudentTasksViewModel> {
   public studentTasks$: BehaviorSubject<StudentTaskInterface[]>;
   public currentTask$ = new BehaviorSubject<StudentTaskWithContentInterface>(
-    new StudentTaskWithContentFixture()
+    new StudentTaskWithContentFixture({
+      assigner: new PersonFixture({
+        name: 'Smit',
+        firstName: 'Fooke',
+        displayName: 'Fooke Smit'
+      })
+    })
   );
 
   private studentTasks = [
