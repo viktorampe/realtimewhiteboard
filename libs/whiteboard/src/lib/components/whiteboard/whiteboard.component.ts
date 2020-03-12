@@ -358,11 +358,12 @@ export class WhiteboardComponent implements OnChanges {
     event: CdkDragDrop<any>;
     card: CardInterface;
     cardElement: HTMLElement;
+    scrollLeft: number;
   }) {
     this.whiteboard$.value.cards
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => (c.mode = ModeEnum.IDLE));
-    const { card, event, cardElement } = $event;
+    const { card, event, cardElement, scrollLeft } = $event;
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
       : ModeEnum.IDLE;
@@ -370,7 +371,7 @@ export class WhiteboardComponent implements OnChanges {
     const workspaceCard: CardInterface = {
       ...card,
       mode: currentMode,
-      left: cardElement.offsetLeft + event.distance.x,
+      left: cardElement.offsetLeft + event.distance.x - scrollLeft,
       top:
         this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
         (167 + cardElement.offsetTop) -
