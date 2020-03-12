@@ -387,6 +387,7 @@ export class WhiteboardComponent implements OnChanges {
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => (c.mode = ModeEnum.IDLE));
     const { card, event, cardElement, scrollLeft } = $event;
+
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
       : ModeEnum.IDLE;
@@ -400,6 +401,19 @@ export class WhiteboardComponent implements OnChanges {
         (167 + cardElement.offsetTop) -
         Math.abs(event.distance.y)
     };
+
+    if (currentMode === ModeEnum.MULTISELECT) {
+      //return multiselectselected cards to the right mode so the icon is clicked + green
+      this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
+      //change all cards to multiselect mode
+      this.whiteboard$.value.cards
+        .filter(
+          c =>
+            c.mode !== ModeEnum.MULTISELECTSELECTED &&
+            c.mode !== ModeEnum.UPLOAD
+        )
+        .forEach(c => (c.mode = ModeEnum.MULTISELECT));
+    }
 
     if (
       !this.whiteboard$.value.cards
