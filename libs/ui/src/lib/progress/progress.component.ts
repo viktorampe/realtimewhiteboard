@@ -6,6 +6,7 @@ import {
   HostBinding,
   Input,
   OnChanges,
+  OnInit,
   SimpleChanges
 } from '@angular/core';
 
@@ -30,7 +31,7 @@ export class CompletedProgressIconDirective {}
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss']
 })
-export class ProgressComponent implements OnChanges {
+export class ProgressComponent implements OnChanges, OnInit {
   public forms: typeof ProgressFormEnum = ProgressFormEnum;
   public modes: typeof ProgressModeEnum = ProgressModeEnum;
   public percentage = 0;
@@ -52,19 +53,16 @@ export class ProgressComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    let count = this.count;
-    let total = this.total;
     if (changes.count) {
-      count = changes.count.currentValue;
-    }
-    if (changes.total) {
-      total = changes.total.currentValue;
-    }
-    if (count) {
-      this.percentage = Math.min(Math.ceil((count / total) * 100), 100);
-      this.mode = ProgressModeEnum.DETERMINATE;
-    } else {
-      this.mode = ProgressModeEnum.INDETERMINATE;
+      this.mode =
+        this.count === undefined
+          ? ProgressModeEnum.INDETERMINATE
+          : ProgressModeEnum.DETERMINATE;
+
+      this.percentage = Math.min(
+        Math.ceil((this.count / this.total) * 100),
+        100
+      );
     }
   }
 }

@@ -29,10 +29,19 @@ export class DemoPageComponent implements OnInit {
   backHeaderTitle = 'Lesmateriaal toevoegen';
   showBack = false;
   isOpen = false;
+  countProgress = 0;
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    setInterval(
+      () =>
+        this.countProgress < 50
+          ? this.countProgress++
+          : (this.countProgress = 0),
+      500
+    );
+  }
 
   clickEmptyCta() {
     console.log('Empty State CTA Clicked!');

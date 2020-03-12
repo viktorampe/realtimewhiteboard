@@ -69,6 +69,7 @@ describe('ProgressComponent', () => {
 
   describe('percentage label', () => {
     it('should calculate and ceil the percentage with a given count and default total', () => {
+      component.count = 49;
       const changes = {
         count: new SimpleChange(0, 49, false)
       };
@@ -79,6 +80,8 @@ describe('ProgressComponent', () => {
       expect(component.percentage).toBe(49);
     });
     it('should calculate and ceil the percentage with a given count and a given total', () => {
+      component.count = 49;
+      component.total = 55;
       const changes = {
         count: new SimpleChange(0, 49, false),
         total: new SimpleChange(100, 55, false)
@@ -91,6 +94,7 @@ describe('ProgressComponent', () => {
     });
     it('should render percentage label when showPercentage is true', () => {
       component.showPercentage = true;
+      component.count = 60;
       const changes = {
         count: new SimpleChange(0, 60, false)
       };
@@ -230,6 +234,7 @@ describe('ProgressComponent', () => {
       expect(component.mode).toBe(component.modes.INDETERMINATE);
     });
     it('should have determinate mode if count is given', () => {
+      component.count = 20;
       const changes = {
         count: new SimpleChange(undefined, 20, true)
       };
