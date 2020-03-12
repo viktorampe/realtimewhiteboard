@@ -3,6 +3,8 @@
   flex-direction: column;
   height: 100%;
 
+  justify-content: center;
+
   campus-whiteboard-toolbar {
     position: absolute;
     z-index: 1;
@@ -69,6 +71,10 @@
   &__empty {
     position: absolute;
     align-self: center;
+
+    .ui-title {
+      font-size: 10rem;
+    }
   }
 
   &__addbutton {
