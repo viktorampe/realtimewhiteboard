@@ -8,7 +8,8 @@
   border-radius: 10px;
   border: 1px solid;
   border-left: 25px solid;
-  box-shadow: 0px 2px 4px #00000029;
+  box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+  transition: box-shadow 300ms cubic-bezier(0.43, 0, 0.31, 1);
 
   &.zoom {
     border: 5px solid;
@@ -21,6 +22,10 @@
     width: auto;
 
     box-shadow: 2px 4px 20px #0000008a;
+  }
+
+  &.active {
+    box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #fff;
   }
 
   &__content {
