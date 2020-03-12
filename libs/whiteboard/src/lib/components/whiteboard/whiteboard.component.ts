@@ -93,6 +93,8 @@ export class WhiteboardComponent implements OnChanges {
     if (!card.description) {
       this.updateCard({ viewModeImage: true }, card);
     }
+
+    this.saveWhiteboard();
   }
   //#region WORKSPACE INTERACTIONS
 
@@ -169,6 +171,11 @@ export class WhiteboardComponent implements OnChanges {
       });
       this.saveWhiteboard();
     }
+  }
+
+  removeImage(card: CardInterface) {
+    this.updateCard({ image: {} }, card);
+    this.saveWhiteboard();
   }
 
   onDeleteCard(card: CardInterface, permanent: boolean = false) {

@@ -11,6 +11,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
@@ -25,6 +26,8 @@ describe('CardComponent', () => {
   let component: CardComponent;
   let fixture: ComponentFixture<CardComponent>;
   let updateSpy;
+  let removeSpy;
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -59,8 +62,10 @@ describe('CardComponent', () => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
     updateSpy = spyOn(component.update, 'emit');
+    removeSpy = spyOn(component.remove, 'emit');
 
     const mockData: CardInterface = {
+      id: uuidv4(),
       color: 'white',
       description: '',
       image: {},
@@ -83,9 +88,9 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('updateImage should trigger update', () => {
-    component.updateImage();
-    expect(updateSpy).toHaveBeenCalled();
+  it('removeImage should trigger remove', () => {
+    component.removeImage();
+    expect(removeSpy).toHaveBeenCalled();
   });
 
   it('selectColor should trigger update', () => {
