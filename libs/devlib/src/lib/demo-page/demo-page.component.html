@@ -114,6 +114,10 @@
 
   <front-layer-header>Subtitle</front-layer-header>
   <front-layer-content>
+    <div>
+      <campus-rating [total]="5" [count]="3"></campus-rating>
+    </div>
+
     <campus-button inline (click)="isOpen = !isOpen"
       >toggle container</campus-button
     >
@@ -245,10 +249,6 @@
     </campus-empty-state>
     <div>
       <campus-progress></campus-progress>
-    </div>
-
-    <div>
-      <campus-rating></campus-rating>
     </div>
 
     <div class="ui-headline">Headline (Regular 24px)</div>

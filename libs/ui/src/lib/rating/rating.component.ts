@@ -7,11 +7,15 @@ import { Component, HostBinding, Input } from '@angular/core';
 })
 export class RatingComponent {
   @Input() count: number;
-  @Input() total: number;
-  @Input() icon: string;
+  @Input() total? = 3;
+  @Input() svgIcon: string;
 
   @HostBinding('class.ui-rating')
   private uiRatingClass = true;
 
   constructor() {}
+
+  public totalAsArray() {
+    return Array.from(Array(this.total).keys());
+  }
 }
