@@ -129,8 +129,11 @@ describe('WhiteboardComponent', () => {
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.whiteboard$.value.cards.length;
 
-    const clickEvent = new MouseEvent('click');
-    component.btnPlusClicked(clickEvent);
+    const touchEvent = new TouchEvent('tap');
+    Object.assign(touchEvent, 'event', {
+      srcEvent: { stopPropagation: () => {} }
+    });
+    component.btnPlusClicked(touchEvent);
 
     expect(component.whiteboard$.value.cards.length).toBe(
       cardsSizeBeforeClicked + 1
@@ -308,14 +311,21 @@ describe('WhiteboardComponent', () => {
     });
 
     it('should not propagate click when mode != idle', () => {
+      const touchEvent = new TouchEvent('tap');
+
+      Object.assign(touchEvent, 'event', {
+        srcEvent: { stopPropagation: () => {} }
+      });
+
       nonIdleModes.forEach(mode => {
         component.onCardClicked(
-          mockMouseEvent as any,
+          touchEvent,
           new CardFixture({ mode: ModeEnum[mode] })
         );
-        expect(mockMouseEvent.stopPropagation).toHaveBeenCalled();
+        expect(touchEvent.stopPropagation).toHaveBeenCalled();
       });
     });
+
     it('should propagate click when mode === idle', () => {
       component.onCardClicked(
         mockMouseEvent as any,
