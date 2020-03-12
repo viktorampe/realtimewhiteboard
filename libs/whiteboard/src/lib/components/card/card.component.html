@@ -10,7 +10,7 @@
         class="card__content__image"
         [imageUrl]="image.imageUrl"
         [mode]="mode"
-        (remove)="updateImage()"
+        (remove)="removeImage()"
         (openFilePicker)="selectImage()"
       ></campus-card-image>
       <ng-template #viewModeText class="card__content__input">

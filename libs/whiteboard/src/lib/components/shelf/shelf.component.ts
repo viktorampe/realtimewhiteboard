@@ -1,5 +1,13 @@
 import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import CardInterface from '../../models/card.interface';
 
 @Component({
@@ -8,6 +16,8 @@ import CardInterface from '../../models/card.interface';
   styleUrls: ['./shelf.component.scss']
 })
 export class ShelfComponent implements OnInit {
+  @ViewChild('shelf', { static: false }) shelf: ElementRef;
+
   @Input() cards: CardInterface[];
   @Input() isMinimized = false;
   @Output() isMinimizedChange = new EventEmitter<boolean>();
@@ -33,7 +43,8 @@ export class ShelfComponent implements OnInit {
       this.cardDraggedOutsideContainer.emit({
         event: event,
         card: card,
-        cardElement: this.cardElementBeingDragged
+        cardElement: this.cardElementBeingDragged,
+        scrollLeft: this.shelf.nativeElement.scrollLeft
       });
     }
     this.cardElementBeingDragged = null;
