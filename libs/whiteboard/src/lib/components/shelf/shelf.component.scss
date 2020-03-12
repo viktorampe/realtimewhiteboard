@@ -8,10 +8,18 @@
   width: 100%;
 
   &__button {
+    width: 48px;
+    height: 32px;
+    background: linear-gradient(
+      145deg,
+      lighten(#e0e5ec, 5%),
+      darken(#e0e5ec, 5%)
+    );
+    box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+    border-radius: 12px;
     position: absolute;
-    top: 0;
-    left: 20px;
-    text-align: center;
+    z-index: 1;
+    left: 50%;
   }
 
   &__card {
