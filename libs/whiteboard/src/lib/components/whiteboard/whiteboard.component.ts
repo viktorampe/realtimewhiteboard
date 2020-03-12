@@ -334,7 +334,14 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   saveWhiteboard() {
-    this.whiteboardHttpService.setJson(this.whiteboard$.value);
+    const whiteboard = { ...this.whiteboard$.value };
+    whiteboard.cards = whiteboard.shelfCards;
+    whiteboard.shelfCards = null;
+    whiteboard.cards.forEach(c => {
+      c.top = null;
+      c.left = null;
+    });
+    this.whiteboardHttpService.setJson(whiteboard).subscribe();
     console.log('SAVED');
   }
 
