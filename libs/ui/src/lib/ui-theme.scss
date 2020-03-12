@@ -73,7 +73,7 @@ $ui-border-radius-medium: 10px !default;
 $ui-border-radius-large: 24px !default;
 
 // transitions
-$ui-transition-easing: ease-out !default;
+$ui-transition-easing: cubic-bezier(0.43, 0, 0.31, 1) !default;
 
 $ui-transition-at-ease: 1000ms !default;
 $ui-transition-slow: 500ms !default;

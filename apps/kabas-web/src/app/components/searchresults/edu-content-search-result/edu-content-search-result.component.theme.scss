@@ -4,28 +4,65 @@
   $app-edu-content-search-result-icon-color: $primary-color-accent !default;
   $app-edu-content-search-result-even-background-color: $secondary-bg-color !default;
   $app-edu-content-search-result-icon-width: $ui-list-item-content_icon-width !default;
+  $app-edu-content-search-result-border-color-transition: border-color
+    $ui-transition-normal $ui-transition-easing;
+
+  $app-edu-content-search-result-included-border-radius: $ui-border-radius-medium !default;
+  $app-edu-content-search-result-included-border-color: $ui-color-primary !default;
+  $app-edu-content-search-result-included-margin: 4px auto;
+  $app-edu-content-search-result-margin-transition: margin $ui-transition-normal
+    $ui-transition-easing;
+  $app-edu-content-search-result-box-shadow-transition: box-shadow
+    $ui-transition-normal $ui-transition-easing;
 
   .app-educontentsearchresult {
-    &.ui-list-view__list__item--selected,
-    &.ui-list-view__list__item--selected > * {
-      transform: none !important;
-      box-shadow: none !important;
-    }
+    // &.ui-list-view__list__item--selected,
+    // &.ui-list-view__list__item--selected > * {
+    //   transform: none !important;
+    //   box-shadow: none !important;
+    // }
 
-    border-left: $app-edu-content-search-result-selected-border-width solid
-      transparent;
+    campus-list-view .ui-list-view__list--line &.ui-list-view__list__item {
+      &--selected,
+      &--selected > * {
+        transform: none;
+        box-shadow: none;
+      }
 
-    &.ui-list-view__list__item--selected {
+      &--selected {
+        border-left: $app-edu-content-search-result-selected-border-width solid
+          $app-edu-content-search-result-selected-border-color;
+      }
+
       border-left: $app-edu-content-search-result-selected-border-width solid
-        $app-edu-content-search-result-selected-border-color !important;
-    }
+        transparent;
+      transition: $app-edu-content-search-result-border-color-transition,
+        $app-edu-content-search-result-margin-transition,
+        $app-edu-content-search-result-box-shadow-transition;
 
-    &:nth-child(odd) {
-      background-color: $app-edu-content-search-result-even-background-color;
-    }
+      &:nth-child(odd) {
+        background-color: $app-edu-content-search-result-even-background-color;
+      }
+      &__icon {
+        width: $app-edu-content-search-result-icon-width;
+      }
 
-    &__icon {
-      width: $app-edu-content-search-result-icon-width !important;
+      &.app-educontentsearchresult--included {
+        border-radius: $app-edu-content-search-result-included-border-radius;
+        border-left-color: $app-edu-content-search-result-included-border-color;
+        box-shadow: inset 0 0px 1px 1px
+          $app-edu-content-search-result-included-border-color;
+        margin: $app-edu-content-search-result-included-margin;
+      }
+    }
+    // &.ui-list-view__list__item--selected {
+    //   border-left: $app-edu-content-search-result-selected-border-width solid
+    //     $app-edu-content-search-result-selected-border-color !important;
+    // }
+
+    campus-list-view
+      .ui-list-view__list--line
+      &--included.ui-list-view__list__item {
     }
   }
 }
