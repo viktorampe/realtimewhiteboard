@@ -94,6 +94,8 @@ export class WhiteboardComponent implements OnChanges {
       if (!c.description) {
         this.updateCard({ viewModeImage: true }, c);
       }
+
+      this.saveWhiteboard();
     });
   }
   //#region WORKSPACE INTERACTIONS
@@ -171,6 +173,11 @@ export class WhiteboardComponent implements OnChanges {
       });
       this.saveWhiteboard();
     }
+  }
+
+  removeImage(card: CardInterface) {
+    this.updateCard({ image: {} }, card);
+    this.saveWhiteboard();
   }
 
   onDeleteCard(card: CardInterface, permanent: boolean = false) {
@@ -342,6 +349,7 @@ export class WhiteboardComponent implements OnChanges {
       c.left = null;
     });
     this.whiteboardHttpService.setJson(whiteboard).subscribe();
+    console.log('SAVED');
   }
 
   onClickWhiteboard() {
