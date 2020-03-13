@@ -44,6 +44,9 @@
     class="app-practice-searchresult__stars"
     *ngIf="data.eduContent.type === 'exercise'"
   >
-    <campus-rating [total]="3" [count]="data.result.stars"></campus-rating>
+    <campus-rating
+      [total]="3"
+      [count]="data.result && data.result.stars"
+    ></campus-rating>
   </list-item-content>
 </campus-list-item-content>
