@@ -1,6 +1,7 @@
 import { Dictionary } from '@ngrx/entity';
 import { TaskInstanceQueries } from '.';
 import {
+  EduContentFixture,
   LearningAreaFixture,
   ResultFixture,
   TaskEduContentFixture,
@@ -8,6 +9,7 @@ import {
 } from '../../+fixtures';
 import { TaskInstanceFixture } from '../../+fixtures/TaskInstance.fixture';
 import {
+  EduContent,
   LearningAreaInterface,
   ResultInterface,
   TaskEduContentInterface,
@@ -16,7 +18,10 @@ import {
 } from '../../+models';
 import { TaskInstance } from '../../+models/TaskInstance';
 import { State } from './task-instance.reducer';
-import { getTaskStudentTaskInstances } from './task-instance.selectors';
+import {
+  getTaskInstanceWithTaskById,
+  getTaskStudentTaskInstances
+} from './task-instance.selectors';
 
 describe('TaskInstance Selectors', () => {
   function createTaskInstance(id: number): TaskInstanceInterface | any {
@@ -155,6 +160,87 @@ describe('TaskInstance Selectors', () => {
         { date: new Date() }
       );
       expect(results).toEqual(new Set([11]));
+    });
+  });
+
+  describe('getTaskInstanceWithTaskById', () => {
+    const projector = getTaskInstanceWithTaskById.projector;
+
+    let taskInstance: TaskInstance;
+    let taskDict: Dictionary<TaskInterface>;
+    let resultsByTask: Dictionary<ResultInterface[]>;
+    let taskEduContentByTask: Dictionary<TaskEduContentInterface[]>;
+    let eduContentDict: Dictionary<EduContent>;
+    let learningAreaDict: Dictionary<LearningAreaInterface>;
+
+    beforeEach(() => {
+      taskInstance = new TaskInstanceFixture({ taskId: 1 });
+
+      taskDict = {
+        1: new TaskFixture({ id: 1 }),
+        2: new TaskFixture({ id: 2 })
+      };
+
+      resultsByTask = {
+        1: [
+          new ResultFixture({ id: 1, taskId: 1 }),
+          new ResultFixture({ id: 2, taskId: 1 })
+        ],
+        2: [
+          new ResultFixture({ id: 3, taskId: 2 }),
+          new ResultFixture({ id: 4, taskId: 2 })
+        ]
+      };
+
+      taskEduContentByTask = {
+        1: [
+          new TaskEduContentFixture({ id: 1, taskId: 1, eduContentId: 1 }),
+          new TaskEduContentFixture({ id: 2, taskId: 1, eduContentId: 2 })
+        ],
+        2: [
+          new TaskEduContentFixture({ id: 3, taskId: 2, eduContentId: 3 }),
+          new TaskEduContentFixture({ id: 4, taskId: 2, eduContentId: 4 })
+        ]
+      };
+
+      eduContentDict = {
+        1: new EduContentFixture({ id: 1 }),
+        2: new EduContentFixture({ id: 2 }),
+        3: new EduContentFixture({ id: 3 }),
+        4: new EduContentFixture({ id: 4 })
+      };
+
+      learningAreaDict = {
+        1: new LearningAreaFixture({ id: 1 }),
+        2: new LearningAreaFixture({ id: 2 })
+      };
+    });
+
+    it('should combine all related data', () => {
+      const result = projector(
+        taskInstance,
+        taskDict,
+        resultsByTask,
+        taskEduContentByTask,
+        eduContentDict,
+        learningAreaDict,
+        {} // props -> not used in this selector
+      );
+
+      const expected = jasmine.objectContaining({
+        id: 1,
+        task: jasmine.objectContaining({
+          id: 1,
+          taskEduContents: [
+            { ...taskEduContentByTask[1][0], eduContent: eduContentDict[1] },
+            { ...taskEduContentByTask[1][1], eduContent: eduContentDict[2] }
+          ],
+          results: resultsByTask[1],
+          learningArea: learningAreaDict[1]
+        })
+      });
+
+      expect(result).toEqual(expected);
     });
   });
 });

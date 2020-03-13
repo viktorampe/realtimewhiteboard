@@ -36,4 +36,5 @@ export interface ResultInterface {
   personDisplayName: string;
   bundleId: number;
   stars: number;
+  lastUpdated?: Date;
 }
