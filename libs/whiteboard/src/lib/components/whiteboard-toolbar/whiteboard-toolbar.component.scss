@@ -15,6 +15,15 @@ $shadow-color-light: #ffffff;
     -9px -9px 16px $shadow-color-light;
   border-radius: 24px;
 
+  &__seperator {
+    height: 40px;
+    width: 1px;
+
+    align-self: center;
+
+    box-shadow: -1px 0px 1px $shadow-color-dark, 1px 0px 1px $shadow-color-light;
+  }
+
   #delete {
     width: 90px;
     display: flex;
