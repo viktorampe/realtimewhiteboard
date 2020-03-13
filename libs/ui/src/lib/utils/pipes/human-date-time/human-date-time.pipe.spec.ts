@@ -54,6 +54,30 @@ describe('HumanDateTimePipe', () => {
       });
     });
 
+    it('should allow input date as number', () => {
+      pipe.transform(date.getTime(), args);
+
+      rules.forEach(rule => {
+        expect(rule.condition).toHaveBeenCalledTimes(1);
+        expect(rule.condition).toHaveBeenCalledWith(
+          date.getTime(),
+          dateMock.mockDate.getTime()
+        );
+      });
+    });
+
+    it('should allow input date as string', () => {
+      pipe.transform(date.toISOString(), args);
+
+      rules.forEach(rule => {
+        expect(rule.condition).toHaveBeenCalledTimes(1);
+        expect(rule.condition).toHaveBeenCalledWith(
+          date.getTime(),
+          dateMock.mockDate.getTime()
+        );
+      });
+    });
+
     it('should test the conditions in the correct order', () => {
       args.rules[0].condition.mockReturnValue(true);
       pipe.transform(date, args);
