@@ -5,128 +5,115 @@
   campusImageDrag
   (click)="onClickWhiteboard()"
 >
-  <ng-container
-    *ngIf="
-      whiteboard.title ||
-        whiteboard.cards.length ||
-        whiteboard.shelfCards.length;
-      else emptyStateView
-    "
-  >
-    <campus-whiteboard-toolbar
-      *ngIf="selectedCards.length"
-      (deleteCards)="bulkDeleteClicked()"
-      (changeSelectedColor)="changeSelectedCardsColor($event)"
-    ></campus-whiteboard-toolbar>
-    <div class="whiteboard__header">
-      <h2
-        *ngIf="!isTitleInputSelected"
-        class="whiteboard__header__title"
-        (click)="showTitleInput()"
-        >{{ whiteboard.title }}</h2
-      >
+  <campus-whiteboard-toolbar
+    *ngIf="selectedCards.length"
+    (deleteCards)="bulkDeleteClicked()"
+    (changeSelectedColor)="changeSelectedCardsColor($event)"
+  ></campus-whiteboard-toolbar>
+  <div class="whiteboard__header">
+    <h2
+      *ngIf="!isTitleInputSelected"
+      class="whiteboard__header__title"
+      (click)="showTitleInput()"
+      >{{ whiteboard.title }}</h2
+    >
+    <input
+      type="text"
+      #titleInput
+      [formControl]="titleFC"
+      (keyup.enter)="hideTitleInput()"
+      (focusout)="hideTitleInput()"
+      *ngIf="isTitleInputSelected"
+    />
+  </div>
+  <div class="whiteboard__workspace__actions">
+    <div color="primary" class="whiteboard__workspace__actions__settingsbutton">
+      <mat-icon [svgIcon]="'settings'"></mat-icon>
+    </div>
+  </div>
+  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
+    <div
+      class="whiteboard__workspace__container"
+      *ngFor="let card of whiteboard.cards"
+      cdkDrag
+      [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
+      [cdkDragDisabled]="card.mode === Mode.ZOOM"
+      cdkDragBoundary=".whiteboard__workspace"
+      [class.zoom]="card.mode === Mode.ZOOM"
+      [class.onTop]="card.mode === Mode.SELECTED"
+      (cdkDragEnded)="onDragEnded($event, card)"
+      (cdkDragStarted)="onDragStarted(card)"
+    >
+      <campus-color-list
+        class="whiteboard__color-list"
+        (selectedColor)="changeColorForCard(card, $event)"
+        *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
+      ></campus-color-list>
+      <campus-card-toolbar
+        *ngIf="
+          card.mode === Mode.EDIT ||
+          card.mode === Mode.SELECTED ||
+          card.mode === Mode.MULTISELECTSELECTED ||
+          card.mode === Mode.MULTISELECT
+        "
+        class="whiteboard__card_toolbar"
+        [mode]="card.mode"
+        (clickDeleteIcon)="onDeleteCard(card)"
+        (clickEditIcon)="cardEditIconClicked(card)"
+        (clickFlipIcon)="cardFlipIconClicked(card)"
+        (clickConfirmIcon)="cardConfirmIconClicked(card)"
+        (clickMultiSelectIcon)="onSelectCard(card)"
+        (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
+      ></campus-card-toolbar>
+      <campus-card
+        class="whiteboard__card"
+        [description]="card.description"
+        [color]="card.color"
+        [image]="card.image"
+        [(mode)]="card.mode"
+        [viewModeImage]="card.viewModeImage"
+        (update)="updateCard($event, card)"
+        (remove)="removeImage(card)"
+        (openFilePicker)="openFilePicker(filePicker)"
+        (click)="onCardClicked($event, card)"
+        (press)="onCardPressed(card)"
+        (tap)="onCardTapped(card)"
+      ></campus-card>
       <input
-        type="text"
-        #titleInput
-        [formControl]="titleFC"
-        (keyup.enter)="hideTitleInput()"
-        (focusout)="hideTitleInput()"
-        *ngIf="isTitleInputSelected"
+        (change)="onFilePickerImageSelected($event, card)"
+        type="file"
+        #filePicker
+        multiple="false"
+        style="display: none;"
       />
     </div>
-    <div
-      class="whiteboard__workspace"
-      (dblclick)="onDblClick($event)"
-      #workspace
-    >
-      <div class="whiteboard__workspace__actions">
-        <div
-          color="primary"
-          class="whiteboard__workspace__actions__settingsbutton"
-        >
-          <mat-icon [svgIcon]="'settings'"></mat-icon>
-        </div>
-      </div>
-      <div
-        class="whiteboard__workspace__container"
-        *ngFor="let card of whiteboard.cards"
-        cdkDrag
-        [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
-        [cdkDragDisabled]="card.mode === Mode.ZOOM"
-        cdkDragBoundary=".whiteboard__workspace"
-        [class.zoom]="card.mode === Mode.ZOOM"
-        [class.onTop]="card.mode === Mode.SELECTED"
-        (cdkDragEnded)="onDragEnded($event, card)"
-        (cdkDragStarted)="onDragStarted(card)"
-      >
-        <campus-color-list
-          class="whiteboard__color-list"
-          (selectedColor)="changeColorForCard(card, $event)"
-          *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
-        ></campus-color-list>
-        <campus-card-toolbar
-          *ngIf="
-            card.mode === Mode.EDIT ||
-            card.mode === Mode.SELECTED ||
-            card.mode === Mode.MULTISELECTSELECTED ||
-            card.mode === Mode.MULTISELECT
-          "
-          class="whiteboard__card_toolbar"
-          [mode]="card.mode"
-          (clickDeleteIcon)="onDeleteCard(card)"
-          (clickEditIcon)="cardEditIconClicked(card)"
-          (clickFlipIcon)="cardFlipIconClicked(card)"
-          (clickConfirmIcon)="cardConfirmIconClicked(card)"
-          (clickMultiSelectIcon)="onSelectCard(card)"
-          (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
-        ></campus-card-toolbar>
-        <campus-card
-          class="whiteboard__card"
-          [description]="card.description"
-          [color]="card.color"
-          [image]="card.image"
-          [(mode)]="card.mode"
-          [viewModeImage]="card.viewModeImage"
-          (update)="updateCard($event, card)"
-          (remove)="removeImage(card)"
-          (openFilePicker)="openFilePicker(filePicker)"
-          (click)="onCardClicked($event, card)"
-          (press)="onCardPressed(card)"
-          (tap)="onCardTapped(card)"
-        ></campus-card>
-        <input
-          (change)="onFilePickerImageSelected($event, card)"
-          type="file"
-          #filePicker
-          multiple="false"
-          style="display: none;"
-        />
-      </div>
-    </div>
-    <button
-      mat-fab
-      color="primary"
-      class="whiteboard__addbutton"
-      (click)="btnPlusClicked($event)"
-    >
-      <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
-    </button>
+  </div>
+  <campus-empty-state
+    class="whiteboard__empty"
+    *ngIf="!whiteboard.cards.length"
+    [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
+    [description]="
+      true
+        ? 'Sleep kaartjes uit de shelf naar het bord.'
+        : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
+    "
+    [svgIcon]="
+      true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+    "
+  ></campus-empty-state>
+  <button
+    mat-fab
+    color="primary"
+    class="whiteboard__addbutton"
+    (click)="btnPlusClicked($event)"
+  >
+    <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
+  </button>
 
-    <campus-shelf
-      (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
-      [class.minimizedShelf]="isShelfMinimized"
-      [cards]="whiteboard.shelfCards"
-      [(isMinimized)]="isShelfMinimized"
-    ></campus-shelf>
-  </ng-container>
-
-  <ng-template #emptyStateView>
-    <campus-empty-state
-      title="Hier valt niets te zien!"
-      description="Voeg een kaartje toe om te beginnen."
-      image="https://images.unsplash.com/photo-1532630571098-79a3d222b00d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2038&q=80"
-      ctaLabel="Voeg een kaartje toe"
-      (clickCta)="addEmptyCard()"
-    ></campus-empty-state>
-  </ng-template>
+  <campus-shelf
+    (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
+    [class.minimizedShelf]="isShelfMinimized"
+    [cards]="whiteboard.shelfCards"
+    [(isMinimized)]="isShelfMinimized"
+  ></campus-shelf>
 </div>
