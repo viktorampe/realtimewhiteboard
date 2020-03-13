@@ -39,8 +39,7 @@ export const studentTasks$ = createSelector(
         dateGroupLabel: date.transform(te.end, {
           rules: getHumanDateTimeRules([
             humanDateTimeRulesEnum.THIS_WEEK,
-            humanDateTimeRulesEnum.LAST_WEEK,
-            humanDateTimeRulesEnum.LAST_TRIMESTER,
+            humanDateTimeRulesEnum.PAST_WEEK,
             humanDateTimeRulesEnum.EARLIER,
             humanDateTimeRulesEnum.TODAY,
             humanDateTimeRulesEnum.TOMORROW,
