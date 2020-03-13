@@ -67,8 +67,8 @@
 
     &__actions {
       position: absolute;
-      top: 0;
-      right: 40px;
+      top: 36px;
+      right: 36px;
 
       &__settingsbutton {
         display: flex;
@@ -76,12 +76,23 @@
         align-items: center;
         width: 40px;
         height: 40px;
+        border-radius: 50%;
         box-shadow: 3px 3px 16px -1px rgba(#008ecf, 0.3), 9px 9px 16px #a3b1c6,
           -1px -1px 6px -3px rgba(#008ecf, 0.2), -9px -9px 16px #ffffff;
         background: linear-gradient(
           145deg,
           lighten(#e0e5ec, 5%),
           darken(#e0e5ec, 5%)
+        );
+      }
+
+      &__settingsbutton:active {
+        box-shadow: 1px 1px 16px -1px rgba(#008ecf, 0.3), 1px 1px 16px #a3b1c6,
+          -1px -1px 6px -3px rgba(#008ecf, 0.2), -1px -1px 16px #ffffff;
+        background: linear-gradient(
+          145deg,
+          darken(#e0e5ec, 5%),
+          lighten(#e0e5ec, 5%)
         );
       }
     }
