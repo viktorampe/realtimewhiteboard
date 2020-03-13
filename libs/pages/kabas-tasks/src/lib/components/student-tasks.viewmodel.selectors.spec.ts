@@ -1,7 +1,7 @@
 import {
   EduContentFixture,
   ResultFixture,
-  ScormStatus,
+  ResultStatus,
   TaskEduContentFixture,
   TaskFixture,
   TaskInstanceFixture
@@ -46,7 +46,7 @@ describe('student-tasks viewmodel selectors', () => {
             name: 'neuspeuteren',
             description: 'instructiefilmpje',
             icon: 'mp4',
-            status: 'completed',
+            status: ResultStatus.STATUS_COMPLETED,
             lastUpdated,
             score: 100,
             eduContentId: 1,
@@ -57,7 +57,7 @@ describe('student-tasks viewmodel selectors', () => {
             name: 'nagelbijten',
             description: 'herhalingsoefening',
             icon: 'oefening',
-            status: 'incomplete',
+            status: ResultStatus.STATUS_COMPLETED,
             lastUpdated,
             score: 50,
             eduContentId: 2,
@@ -122,15 +122,15 @@ function getMockTask(lastUpdated) {
     new ResultFixture({
       eduContentId: 1,
       score: 100,
-      status: ScormStatus.STATUS_COMPLETED,
-      lastUpdated //TODO #3573
-    } as any),
+      status: ResultStatus.STATUS_COMPLETED,
+      lastUpdated
+    }),
     new ResultFixture({
       eduContentId: 2,
       score: 50,
-      status: ScormStatus.STATUS_INCOMPLETE,
-      lastUpdated //TODO #3573
-    } as any)
+      status: ResultStatus.STATUS_INCOMPLETE,
+      lastUpdated
+    })
   ];
 
   const taskEduContents = [
