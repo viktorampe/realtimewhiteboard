@@ -8,7 +8,7 @@
       left: 0;
 
       ~ .ui-progress__label {
-        transform: 'scale(1)';
+        transform: scale(1);
         opacity: 1;
         position: absolute;
         display: flex;
