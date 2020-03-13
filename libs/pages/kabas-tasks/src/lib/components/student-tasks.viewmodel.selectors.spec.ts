@@ -123,6 +123,12 @@ describe('student-tasks viewmodel selectors', () => {
   });
 
   describe('studentTasks', () => {
+    const start = new Date(2020, 1, 1);
+    const end = new Date(2020, 2, 1);
+    const assigner = new PersonFixture();
+    const lastUpdated = new Date(2020, 1, 15);
+
+    const task = getMockTask(lastUpdated);
     const mockDate = new MockDate(); // je kan date setten in de mockdate (anders gebruikt hij de gewonenew Date())
     //use getMockDate -> mockdate gebruiken en new Date() wordt dan gezet op de gewone mockdate -> is het gemakkelijkst!
     const projector = studentTasks.projector;
@@ -143,7 +149,25 @@ describe('student-tasks viewmodel selectors', () => {
       endDate: new Date(),
       actions: []
     };
-    it('should return expected values given all expected values', () => {});
+    it('should return expected values given all expected values', () => {
+      const studentTasks = [
+        new TaskInstanceFixture({
+          start,
+          end,
+          task: {
+            ...task,
+            results: [],
+            taskEduContents: [
+              new TaskEduContentFixture(),
+              new TaskEduContentFixture()
+            ],
+            learningAreaId: 1
+          }
+        })
+      ];
+      const res = projector(studentTasks);
+      expect(res).toEqual(expected);
+    });
 
     it('should show isFinished=false if there are no results', () => {});
   });
