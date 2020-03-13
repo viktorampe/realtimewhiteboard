@@ -14,8 +14,4 @@ export class RatingComponent {
   private uiRatingClass = true;
 
   constructor() {}
-
-  public totalAsArray() {
-    return Array.from(Array(this.total).keys());
-  }
 }
