@@ -25,6 +25,7 @@ export class Result implements ResultInterface {
   taskInstanceId: number;
   personDisplayName: string;
   bundleId: number;
+  lastUpdated?: Date;
 
   get stars(): number {
     return ResultFunctions.starsFromScore(this.score);
