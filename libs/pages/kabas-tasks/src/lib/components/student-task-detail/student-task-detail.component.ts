@@ -36,7 +36,6 @@ export class StudentTaskDetailComponent {
       humanDateTimeRulesEnum.TOMORROW,
       humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
       humanDateTimeRulesEnum.WEEKDAY,
-      humanDateTimeRulesEnum.THIS_WEEK,
       humanDateTimeRulesEnum.NEXT_WEEK
     ])
   };
