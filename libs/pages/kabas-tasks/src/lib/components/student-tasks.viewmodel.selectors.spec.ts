@@ -1,5 +1,7 @@
 import {
   EduContentFixture,
+  LearningAreaFixture,
+  PersonFixture,
   ResultFixture,
   ResultStatus,
   TaskEduContentFixture,
@@ -7,8 +9,6 @@ import {
   TaskInstanceFixture
 } from '@campus/dal';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
-import { LearningAreaFixture } from './../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
-import { PersonFixture } from './../../../../../dal/src/lib/+fixtures/Person.fixture';
 import { studentTaskWithContent } from './student-tasks.viewmodel.selectors';
 
 describe('student-tasks viewmodel selectors', () => {
