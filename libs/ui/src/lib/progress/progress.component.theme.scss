@@ -1,4 +1,21 @@
 @mixin ui-progress {
+  $ui-progress-color: $ui-color-secondary !default;
+
   .ui-progress {
+    &__container {
+      &__circular__ghost {
+        opacity: 0.2;
+      }
+
+      .mat-progress-spinner circle,
+      .mat-spinner circle {
+        stroke: $ui-progress-color;
+      }
+    }
+
+    &__completed-icon {
+      line-height: 0;
+      color: $ui-progress-color;
+    }
   }
 }
