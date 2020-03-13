@@ -356,9 +356,12 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   onClickWhiteboard(event) {
-    console.log(event.target.classList);
     if (
       event.target.classList.contains('whiteboard__workspace') ||
+      event.target.classList.contains('card') ||
+      event.target.classList.contains('card-text') ||
+      event.target.classList.contains('card-image') ||
+      event.target.classList.contains('card-image__image') ||
       event.target.classList.contains('zoom')
     ) {
       this.selectedCards = [];
