@@ -1,14 +1,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatCardModule,
-  MatDialogModule,
-  MatIconModule,
-  MatIconRegistry,
-  MatInputModule,
-  MatProgressBarModule
-} from '@angular/material';
+import { MatCardModule, MatDialogModule, MatIconModule, MatIconRegistry, MatInputModule, MatProgressBarModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -21,10 +14,7 @@ import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
 import { WhiteboardFixture } from '../../models/whiteboard.fixture';
-import {
-  WhiteboardHttpService,
-  WhiteboardHttpServiceInterface
-} from '../../services/whiteboard-http.service';
+import { WhiteboardHttpService, WhiteboardHttpServiceInterface } from '../../services/whiteboard-http.service';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
 import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
@@ -315,26 +305,6 @@ describe('WhiteboardComponent', () => {
       mockMouseEvent.stopPropagation.mockReset();
       mockTouchEvent.srcEvent.stopPropagation.mockReset();
     });
-
-    it('should not propagate click when mode != idle', () => {
-      nonIdleModes.forEach(mode => {
-        component.onCardClicked(
-          mockTouchEvent as any,
-          new CardFixture({ mode: ModeEnum[mode] })
-        );
-        expect(mockTouchEvent.srcEvent.stopPropagation).toHaveBeenCalled();
-      });
-    });
-
-    it('should propagate click when mode === idle', () => {
-      component.onCardClicked(
-        mockMouseEvent as any,
-        new CardFixture({ mode: ModeEnum.IDLE })
-      );
-
-      expect(mockMouseEvent.stopPropagation).not.toHaveBeenCalled();
-    });
-  });
 
   describe('onCardPressed()', () => {
     it('should not change mode if card.mode = shelf', () => {

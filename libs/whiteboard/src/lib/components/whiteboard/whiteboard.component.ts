@@ -229,12 +229,6 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  onCardClicked(event, card: CardInterface) {
-    if (card.mode !== ModeEnum.IDLE) {
-      event.srcEvent.stopPropagation();
-    }
-  }
-
   openFilePicker(filePicker: HTMLElement) {
     filePicker.click();
   }
@@ -362,6 +356,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   onClickWhiteboard(event) {
+    console.log(event.target.classList);
     if (
       event.target.classList.contains('whiteboard__workspace') ||
       event.target.classList.contains('zoom')
