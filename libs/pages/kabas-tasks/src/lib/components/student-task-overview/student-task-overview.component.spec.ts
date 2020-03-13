@@ -9,7 +9,7 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { StudentTaskFixture } from '../../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
-import { TaskInfoByLearningAreaPipe } from '../manage-kabas-tasks-overview/task-info-by-learning-area.pipe';
+import { TaskInfoByLearningAreaPipe } from '../../pipes/task-info-by-learning-area.pipe';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 import { StudentTaskOverviewComponent } from './student-task-overview.component';

@@ -27,7 +27,6 @@ import { ManageKabasTasksAddAssigneesComponent } from './components/manage-kabas
 import { ManageKabasTasksAssigneeModalComponent } from './components/manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
-import { TaskInfoByLearningAreaPipe } from './components/manage-kabas-tasks-overview/task-info-by-learning-area.pipe';
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { PrintPaperTaskModalComponent } from './components/print-paper-task-modal/print-paper-task-modal.component';
@@ -37,6 +36,7 @@ import { TaskEduContentListItemComponent } from './components/task-edu-content-l
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PendingTaskGuard } from './guards/pending-task.guard';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+import { TaskInfoByLearningAreaPipe } from './pipes/task-info-by-learning-area.pipe';
 
 @NgModule({
   imports: [

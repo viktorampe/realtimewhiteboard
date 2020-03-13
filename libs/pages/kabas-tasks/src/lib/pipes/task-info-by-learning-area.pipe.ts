@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TaskByLearningAreaInfoInterface } from '../student-task-overview/student-task-overview.component';
+import { TaskByLearningAreaInfoInterface } from '../components/student-task-overview/student-task-overview.component';
 
 @Pipe({ name: 'taskInfoByLearningArea' })
 export class TaskInfoByLearningAreaPipe implements PipeTransform {
