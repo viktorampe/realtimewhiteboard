@@ -1,3 +1,4 @@
+import { ResultFunctions } from '@campus/utils';
 import { EduContentInterface } from './EduContent.interface';
 import { PersonInterface } from './Person.interface';
 import { ResultInterface } from './Result.interface';
@@ -26,17 +27,6 @@ export class Result implements ResultInterface {
   bundleId: number;
 
   get stars(): number {
-    if (this.score) {
-      if (this.score === 100) {
-        return 3;
-      }
-      if (this.score >= 75) {
-        return 2;
-      }
-      if (this.score >= 50) {
-        return 1;
-      }
-    }
-    return 0;
+    return ResultFunctions.starsFromScore(this.score);
   }
 }
