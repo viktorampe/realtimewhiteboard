@@ -14,7 +14,7 @@
 
   $app-edu-content-search-result-icon-width: $ui-list-item-content_icon-width !default;
   $app-edu-content-search-result-border-color-transition: border-color
-    $ui-transition-normal $ui-transition-easing;
+    $ui-transition-normal $ui-transition-easing !default;
 
   $app-edu-content-search-result-included-border-radius: $ui-border-radius-medium !default;
   $app-edu-content-search-result-included-border-color: $ui-color-primary !default;
