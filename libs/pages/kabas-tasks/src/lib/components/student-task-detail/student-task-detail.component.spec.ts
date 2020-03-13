@@ -96,7 +96,7 @@ describe('StudentTaskDetailComponent', () => {
         expect(component.taskProgress$).toBeObservable(
           hot('a', {
             a: {
-              count: 2,
+              total: 2,
               finished: 1
             }
           })
