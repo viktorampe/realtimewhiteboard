@@ -14,7 +14,11 @@ export class ResultsService implements ResultsServiceInterface {
   getAllForUser(userId: number): Observable<ResultInterface[]> {
     return this.personApi
       .getData(userId, 'results')
-      .pipe(map((res: { results: ResultInterface[] }) => res.results));
+      .pipe(
+        map((res: { results: ResultInterface[] }) =>
+          res.results.map(castResult)
+        )
+      );
   }
 
   /**
@@ -35,7 +39,7 @@ export class ResultsService implements ResultsServiceInterface {
   ): Observable<ResultInterface> {
     return this.personApi
       .resultForTask(userId, taskId, eduContentId)
-      .pipe(map(res => res as ResultInterface));
+      .pipe(map(castResult));
   }
 
   /**
@@ -50,7 +54,7 @@ export class ResultsService implements ResultsServiceInterface {
   ): Observable<ResultInterface> {
     return this.personApi
       .resultForUnlockedContent(userId, unlockedContentId, eduContentId)
-      .pipe(map(res => res as ResultInterface));
+      .pipe(map(castResult));
   }
 
   /**
@@ -69,7 +73,7 @@ export class ResultsService implements ResultsServiceInterface {
         unlockedFreePracticeId,
         eduContentId
       )
-      .pipe(map(res => res as ResultInterface));
+      .pipe(map(castResult));
   }
 
   /**
@@ -88,6 +92,14 @@ export class ResultsService implements ResultsServiceInterface {
         result.status,
         result.cmi
       )
-      .pipe(map(res => res as ResultInterface));
+      .pipe(map(castResult));
   }
+}
+
+function castResult(result: ResultInterface) {
+  return {
+    ...result,
+    created: result.created && new Date(result.created),
+    lastUpdated: result.lastUpdated && new Date(result.lastUpdated)
+  };
 }

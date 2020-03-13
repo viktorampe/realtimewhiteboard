@@ -8,15 +8,14 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
-import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskContentInterface } from '../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
 export const studentTasks$ = createSelector(
   // TODO Replace with relevaton DAL selectors
   // only done this to scaffold this selector
-  [TaskInstanceQueries.getAllEntities],
-  () => ({} as StudentTaskInterface)
+  [TaskInstanceQueries.getTaskStudentTaskInstances],
+  getTaskStudentInstances => {}
 );
 
 export const studentTaskWithContent = createSelector(
@@ -69,7 +68,7 @@ function toStudentTaskContent(
     const { eduContentId, required } = taskEduContent;
 
     const { status, score } = result;
-    const lastUpdated = result['lastUpdated'] as Date; //TODO #3573
+    const lastUpdated = result.lastUpdated;
 
     const actions = []; // these are added later;
 

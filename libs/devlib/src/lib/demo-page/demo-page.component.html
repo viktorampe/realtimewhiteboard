@@ -114,6 +114,43 @@
 
   <front-layer-header>Subtitle</front-layer-header>
   <front-layer-content>
+    <p>
+      <campus-progress
+        [count]="countProgress"
+        [total]="30"
+        [diameter]="50"
+        [showPercentage]="true"
+      >
+        <completed-progress-icon
+          ><mat-icon svgIcon="check"></mat-icon
+        ></completed-progress-icon>
+      </campus-progress>
+    </p>
+    <p>
+      <campus-progress
+        [count]="50"
+        [total]="100"
+        [diameter]="50"
+        [showPercentage]="true"
+      >
+        <completed-progress-icon>TEST</completed-progress-icon>
+      </campus-progress>
+    </p>
+    <p>
+      <campus-progress [count]="50" [showPercentage]="true" form="linear">
+        <completed-progress-icon>TEST</completed-progress-icon>
+      </campus-progress>
+    </p>
+    <p>
+      <campus-progress [count]="100" [showPercentage]="true" form="linear">
+        <completed-progress-icon>TEST</completed-progress-icon>
+      </campus-progress>
+    </p>
+    <p> <campus-progress></campus-progress> </p>
+    <p>
+      <campus-progress form="linear"> </campus-progress>
+    </p>
+
     <campus-button inline (click)="isOpen = !isOpen"
       >toggle container</campus-button
     >
@@ -243,9 +280,6 @@
       (clickCta)="clickEmptyCta()"
     >
     </campus-empty-state>
-    <div>
-      <campus-progress></campus-progress>
-    </div>
 
     <div>
       <campus-rating></campus-rating>
