@@ -17,7 +17,7 @@ import { createSelector } from '@ngrx/store';
 import { StudentTaskContentInterface } from '../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
-export const studentTasks$ = createSelector(
+export const studentTasks = createSelector(
   [TaskInstanceQueries.getTaskStudentTaskInstances],
   getTaskStudentInstances => {
     getTaskStudentInstances.map(te => {

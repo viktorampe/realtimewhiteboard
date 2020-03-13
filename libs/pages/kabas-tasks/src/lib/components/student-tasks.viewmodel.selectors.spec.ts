@@ -1,3 +1,4 @@
+// file.only
 import {
   EduContentFixture,
   ResultFixture,
@@ -6,10 +7,14 @@ import {
   TaskFixture,
   TaskInstanceFixture
 } from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 import { LearningAreaFixture } from './../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
 import { PersonFixture } from './../../../../../dal/src/lib/+fixtures/Person.fixture';
-import { studentTaskWithContent } from './student-tasks.viewmodel.selectors';
+import {
+  studentTasks,
+  studentTaskWithContent
+} from './student-tasks.viewmodel.selectors';
 
 describe('student-tasks viewmodel selectors', () => {
   describe('studentTaskWithContent', () => {
@@ -57,7 +62,7 @@ describe('student-tasks viewmodel selectors', () => {
             name: 'nagelbijten',
             description: 'herhalingsoefening',
             icon: 'oefening',
-            status: ResultStatus.STATUS_COMPLETED,
+            status: ResultStatus.STATUS_INCOMPLETE,
             lastUpdated,
             score: 50,
             eduContentId: 2,
@@ -114,6 +119,12 @@ describe('student-tasks viewmodel selectors', () => {
       };
       expect(result).toEqual(expected);
     });
+  });
+
+  describe('studentTasks', () => {
+    const mockDate = new MockDate(); // je kan date setten in de mockdate (anders gebruikt hij de gewonenew Date())
+    //use getMockDate -> mockdate gebruiken en new Date() wordt dan gezet op de gewone mockdate -> is het gemakkelijkst!
+    const projector = studentTasks.projector;
   });
 });
 
