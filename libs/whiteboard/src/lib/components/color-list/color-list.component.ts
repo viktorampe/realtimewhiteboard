@@ -58,12 +58,12 @@ import { ModeEnum } from '../../enums/mode.enum';
 export class ColorListComponent implements OnInit {
   @Output() selectedColor = new EventEmitter<string>();
   @Input() mode: ModeEnum;
-  defaultColors: string[] = [
-    '#00A7E2',
-    '#2EA03D',
-    '#E22940',
-    '#5D3284',
-    '#FADB48'
+  defaultColors: { colorName: string; hexCode: string }[] = [
+    { colorName: 'blue', hexCode: '#00A7E2' },
+    { colorName: 'green', hexCode: '#2EA03D' },
+    { colorName: 'red', hexCode: '#E22940' },
+    { colorName: 'purple', hexCode: '#5D3284' },
+    { colorName: 'yellow', hexCode: '#FADB48' }
   ];
   constructor() {}
 

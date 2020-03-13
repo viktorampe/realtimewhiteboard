@@ -66,8 +66,35 @@
     }
   }
 
-  &__addbutton {
+  &__empty {
     position: absolute;
+    align-self: center;
+
+    pointer-events: none;
+
+    width: 100%;
+
+    .ui-empty-state__image {
+      max-width: 300px;
+    }
+
+    .ui-empty-state__title,
+    .ui-empty-state__description {
+      font-family: 'Open Sans', sans-serif;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .ui-empty-state__title {
+      font-size: 64px;
+    }
+
+    .ui-empty-state__description {
+      font-size: 32px;
+    }
+  }
+
+  &__addbutton {
+    position: absolute !important;
     right: 40px;
     bottom: 107px;
     z-index: 1;
@@ -77,7 +104,6 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    overflow-x: scroll;
     display: flex;
     justify-content: flex-start;
     align-items: center;

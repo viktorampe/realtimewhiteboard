@@ -7,9 +7,9 @@
         ? 'edit'
         : 'whiteboard'
     "
-    *ngFor="let swatch of defaultColors"
+    *ngFor="let colorMap of defaultColors"
     class="color-list__swatches"
-    (click)="clickColor(swatch)"
-    [style.background-color]="swatch"
+    (click)="clickColor(colorMap.hexCode)"
+    [ngClass]="colorMap.colorName"
   ></div>
 </div>
