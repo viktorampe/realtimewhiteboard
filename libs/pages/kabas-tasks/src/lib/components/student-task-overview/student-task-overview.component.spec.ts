@@ -13,7 +13,7 @@ import { TaskInfoByLearningAreaPipe } from '../manage-kabas-tasks-overview/task-
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 import { StudentTaskOverviewComponent } from './student-task-overview.component';
-// file.only
+
 describe('StudentTaskOverviewComponent', () => {
   let component: StudentTaskOverviewComponent;
   let fixture: ComponentFixture<StudentTaskOverviewComponent>;
