@@ -31,7 +31,7 @@ import { ModeEnum } from '../../enums/mode.enum';
       transition('void => select', [
         style({ transform: 'scale(0) translateX(48px)' }),
         animate(
-          '150ms 450ms cubic-bezier(.43,0,.31,1)',
+          '150ms 400ms cubic-bezier(.43,0,.31,1)',
           keyframes([
             style({ transform: 'translateX(48px) scale(0)', offset: 0 }),
             style({ transform: 'translateX(10px)', offset: 0.65 }),

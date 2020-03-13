@@ -42,7 +42,7 @@ import { ModeEnum } from '../../enums/mode.enum';
           transform: 'translateY(0) scale(1)'
         }),
         animate(
-          '150ms 500ms cubic-bezier(.43,0,.31,1)',
+          '150ms 450ms cubic-bezier(.43,0,.31,1)',
           style({ transform: 'translateY(48px) scale(0)' })
         )
       ])
