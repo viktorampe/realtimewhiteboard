@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ResultStatus } from '@campus/dal';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -45,7 +46,8 @@ describe('StudentTaskDetailComponent', () => {
     const mockContents = [
       new StudentTaskContentFixture({
         name: 'Required 1',
-        required: true
+        required: true,
+        status: ResultStatus.STATUS_COMPLETED
       }),
       new StudentTaskContentFixture({
         name: 'Required 2',
@@ -53,7 +55,8 @@ describe('StudentTaskDetailComponent', () => {
       }),
       new StudentTaskContentFixture({
         name: 'Optional 1',
-        required: false
+        required: false,
+        status: ResultStatus.STATUS_COMPLETED
       }),
       new StudentTaskContentFixture({
         name: 'Optional 2',
@@ -83,6 +86,19 @@ describe('StudentTaskDetailComponent', () => {
         expect(component.optionalTaskContents$).toBeObservable(
           hot('a', {
             a: [mockContents[2], mockContents[3]]
+          })
+        );
+      });
+    });
+
+    describe('taskProgress', () => {
+      it('should contain info from completed tasks', () => {
+        expect(component.taskProgress$).toBeObservable(
+          hot('a', {
+            a: {
+              count: 2,
+              finished: 1
+            }
           })
         );
       });

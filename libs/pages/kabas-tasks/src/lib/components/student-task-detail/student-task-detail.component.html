@@ -1,22 +1,66 @@
 <campus-backdrop title="TASK_NAME_HERE" static>
   <front-layer-content>
-    <campus-section [mode]="sectionModes.CONTAINER">
-      <section-title>Moetjes in deze taak</section-title>
+    <div class="student-task-detail__content">
+      <ng-container
+        *ngIf="requiredTaskContents$ | async as requiredTaskContents"
+      >
+        <campus-section
+          [mode]="sectionModes.CONTAINER"
+          *ngIf="requiredTaskContents.length"
+        >
+          <section-title>Moetjes in deze taak</section-title>
 
-      <section-content>
-        Moetjes in deze taak inhoud.
-      </section-content>
-    </campus-section>
+          <section-actions>
+            <campus-progress
+              *ngIf="taskProgress$ | async as progress"
+              [total]="progress.total"
+              [count]="progress.finished"
+              [showPercentage]="true"
+              [diameter]="48"
+              ><mat-icon completedProgressIcon svgIcon="check"></mat-icon>
+            </campus-progress>
+          </section-actions>
 
-    <campus-section [mode]="sectionModes.CONTAINER">
-      <section-title>Magjes in deze taak</section-title>
+          <section-content>
+            <mat-list>
+              <mat-list-item
+                *ngFor="let requiredTaskContent of requiredTaskContents"
+                data-cy="required-task-content"
+              >
+                merci Karl
+              </mat-list-item>
+            </mat-list>
+          </section-content>
+        </campus-section>
+      </ng-container>
 
-      <section-content>
-        Magjes in deze taak inhoud.
-      </section-content>
-    </campus-section>
+      <ng-container
+        *ngIf="optionalTaskContents$ | async as optionalTaskContents"
+      >
+        <campus-section
+          [mode]="sectionModes.CONTAINER"
+          *ngIf="optionalTaskContents.length"
+        >
+          <section-title>Magjes in deze taak</section-title>
 
-    <campus-section [mode]="sectionModes.CONTAINER">
+          <section-content>
+            <mat-list>
+              <mat-list-item
+                *ngFor="let optionalTaskContent of optionalTaskContents"
+                data-cy="optional-task-content"
+              >
+                merci Karl
+              </mat-list-item>
+            </mat-list>
+          </section-content>
+        </campus-section>
+      </ng-container>
+    </div>
+
+    <campus-section
+      [mode]="sectionModes.CONTAINER"
+      class="student-task-detail__side"
+    >
       <section-title>Over deze taak</section-title>
 
       <section-content>

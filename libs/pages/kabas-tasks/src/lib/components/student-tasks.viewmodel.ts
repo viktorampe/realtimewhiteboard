@@ -17,9 +17,10 @@ import {
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
+import { StudentTaskWithContentFixture } from '../interfaces/StudentTaskWithContent.fixture';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
 @Injectable({
@@ -40,6 +41,7 @@ export class StudentTasksViewModel
     private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.setSourceStreams();
+    this.currentTask$ = of(new StudentTaskWithContentFixture()); // TODO set actual stream
   }
 
   private setSourceStreams() {
