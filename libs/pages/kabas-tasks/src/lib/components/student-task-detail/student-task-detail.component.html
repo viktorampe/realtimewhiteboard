@@ -22,13 +22,17 @@
 
         <section-content>
           <campus-person-badge [person]="task.assigner"></campus-person-badge>
-          <div class="ui-title">{{ task.name }}</div>
-          <div class="ui-headline">{{ task.learningAreaName }}</div>
-          <div class="ui-subheading"
+          <div data-cy="task-name" class="ui-title">{{ task.name }}</div>
+          <div data-cy="task-learning-area-name" class="ui-headline">{{
+            task.learningAreaName
+          }}</div>
+          <div data-cy="task-finish-by" class="ui-subheading"
             >Deze taak moet op {{ task.endDate.toLocaleDateString('nl-BE') }} af
             zijn.
           </div>
-          <div class="ui-caption">{{ task.description }} </div>
+          <div data-cy="task-description" class="ui-caption"
+            >{{ task.description }}
+          </div>
         </section-content>
       </campus-section>
     </div>
