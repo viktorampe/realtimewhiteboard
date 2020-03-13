@@ -377,7 +377,10 @@ export class WhiteboardComponent implements OnChanges {
         this.saveWhiteboard();
       }
       const nonIdleUploadCards = cards.filter(
-        c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
+        c =>
+          c.mode !== ModeEnum.UPLOAD &&
+          c.mode !== ModeEnum.IDLE &&
+          c.mode !== ModeEnum.ZOOM
       );
       if (nonIdleUploadCards.length) {
         nonIdleUploadCards.forEach(c =>
