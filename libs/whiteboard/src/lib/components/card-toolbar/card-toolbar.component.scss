@@ -50,6 +50,8 @@ $tool-bg-green-active: linear-gradient(
   justify-content: flex-end;
   align-items: center;
 
+  z-index: 1;
+
   &__tool {
     margin-left: 10px;
     border-radius: 50%;
