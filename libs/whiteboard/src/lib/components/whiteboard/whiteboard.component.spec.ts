@@ -302,27 +302,25 @@ describe('WhiteboardComponent', () => {
       stopPropagation: jest.fn()
     };
 
+    const mockTouchEvent = {
+      stopPropagation: jest.fn()
+    };
     const nonIdleModes = Object.keys(ModeEnum).filter(
       key => !isNaN(Number(ModeEnum[key])) && ModeEnum[key] !== ModeEnum.IDLE
     );
 
     beforeEach(() => {
       mockMouseEvent.stopPropagation.mockReset();
+      mockTouchEvent.stopPropagation.mockReset();
     });
 
     it('should not propagate click when mode != idle', () => {
-      const touchEvent = new TouchEvent('tap');
-
-      Object.assign(touchEvent, 'event', {
-        srcEvent: { stopPropagation: () => {} }
-      });
-
       nonIdleModes.forEach(mode => {
         component.onCardClicked(
-          touchEvent,
+          mockTouchEvent as any,
           new CardFixture({ mode: ModeEnum[mode] })
         );
-        expect(touchEvent.stopPropagation).toHaveBeenCalled();
+        expect(mockTouchEvent.stopPropagation).toHaveBeenCalled();
       });
     });
 
