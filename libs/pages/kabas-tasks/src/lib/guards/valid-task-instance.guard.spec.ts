@@ -15,6 +15,7 @@ import {
   TaskInstanceFixture,
   TaskInstanceQueries
 } from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -33,6 +34,7 @@ describe('ValidTaskInstanceGuard', () => {
     } as unknown
   };
   const urlTree: UrlTree = new UrlTree();
+  const dateMock = new MockDate();
 
   let shouldResolve$: BehaviorSubject<boolean>;
 
@@ -70,6 +72,10 @@ describe('ValidTaskInstanceGuard', () => {
     store = TestBed.get(Store);
 
     shouldResolve$ = new BehaviorSubject(true);
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
   });
 
   function setGroupedTaskInstances(
