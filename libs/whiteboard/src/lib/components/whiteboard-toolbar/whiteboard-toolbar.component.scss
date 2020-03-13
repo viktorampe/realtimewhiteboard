@@ -19,7 +19,8 @@ $shadow-color-light: #ffffff;
     height: 40px;
     width: 1px;
 
-    align-self: center;
+    align-self: stretch;
+    margin: 12px 0;
 
     box-shadow: -1px 0px 1px $shadow-color-dark, 1px 0px 1px $shadow-color-light;
   }
