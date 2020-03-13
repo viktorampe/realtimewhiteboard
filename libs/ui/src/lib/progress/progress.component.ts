@@ -42,19 +42,41 @@ export class CompletedProgressIconDirective {
   animations: [
     trigger('fadeLabel', [
       transition(':enter', [
-        style({ opacity: 0 }),
+        style({ opacity: 0, transform: 'scale(1)' }),
         animate('250ms ease', style({ opacity: 1 }))
       ]),
       transition(':leave', [
-        style({ opacity: 1 }),
-        animate('250ms  ease', style({ opacity: 0 }))
+        style({ opacity: 1, transform: 'scale(1)' }),
+        animate(
+          '500ms cubic-bezier(.01,.67,.31,1)',
+          keyframes([
+            style({
+              transform: 'scale(1.2)',
+              opacity: 0.9,
+              offset: 0.55,
+              textShadow: 'none'
+            }),
+            style({
+              transform: 'scale(0.7)',
+              opacity: 0.85,
+              offset: 0.75,
+              textShadow: '1px 1px 2px #999'
+            }),
+            style({
+              transform: 'scale(2)',
+              opacity: 0,
+              offset: 1,
+              textShadow: '1px 1px 3px #999'
+            })
+          ])
+        )
       ])
     ]),
     trigger('explodeIcon', [
       transition(':enter', [
         style({ opacity: 0, transform: 'scale(0)' }),
         animate(
-          '800ms 200ms cubic-bezier(.01,.67,.31,1)',
+          '800ms 300ms cubic-bezier(.01,.67,.31,1)',
           keyframes([
             style({ transform: 'scale(1.5)', opacity: 1, offset: 0.65 }),
             style({ transform: 'scale(0.8)', opacity: 1, offset: 0.8 }),
