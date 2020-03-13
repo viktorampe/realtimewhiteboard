@@ -11,6 +11,7 @@ import { StudentTaskDetailResolver } from './components/student-task-detail/stud
 import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
 import { StudentTaskOverviewResolver } from './components/student-task-overview/student-task-overview.resolver';
 import { PendingTaskGuard } from './guards/pending-task.guard';
+import { ValidTaskInstanceGuard } from './guards/valid-task-instance.guard';
 
 const routes: Routes = [
   {
@@ -75,6 +76,8 @@ const routes: Routes = [
       {
         path: ':id',
         resolve: { isResolved: StudentTaskDetailResolver },
+        runGuardsAndResolvers: 'always',
+        canActivate: [ValidTaskInstanceGuard],
         children: [{ path: '', component: StudentTaskDetailComponent }]
       }
     ]
