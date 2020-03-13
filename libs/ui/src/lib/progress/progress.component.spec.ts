@@ -5,6 +5,7 @@ import {
   MatProgressSpinnerModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
 import {
   CompletedProgressIconDirective,
@@ -53,7 +54,11 @@ describe('ProgressComponent', () => {
         TestProgressComponent,
         CompletedProgressIconDirective
       ],
-      imports: [MatProgressBarModule, MatProgressSpinnerModule]
+      imports: [
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        NoopAnimationsModule
+      ]
     });
   });
 
