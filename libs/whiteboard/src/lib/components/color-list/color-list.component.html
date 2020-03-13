@@ -1,8 +1,8 @@
 <div class="color-list">
   <div
-    *ngFor="let swatch of defaultColors"
+    *ngFor="let colorMap of defaultColors"
     class="color-list__swatches"
-    (tap)="clickColor(swatch)"
-    [style.background-color]="swatch"
+    (tap)="clickColor(colorMap.hexCode)"
+    [ngClass]="colorMap.colorName"
   ></div>
 </div>

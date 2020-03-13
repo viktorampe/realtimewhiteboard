@@ -1,4 +1,4 @@
-<div class="shelf" cdkDropList>
+<div class="shelf" cdkDropList #shelf>
   <div class="shelf__button">
     <button (tap)="toggleShelf()">{{
       isMinimized ? 'expand' : 'minimize'

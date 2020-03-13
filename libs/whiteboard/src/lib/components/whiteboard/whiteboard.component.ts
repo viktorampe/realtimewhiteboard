@@ -31,6 +31,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
+
   @Input() metadataId: number;
   @Input() apiBase: string;
 
@@ -86,15 +87,15 @@ export class WhiteboardComponent implements OnChanges {
     this.titleFC = new FormControl('', Validators.required);
   }
 
-  private updateViewMode(cards) {
-    cards.forEach(c => {
-      if (!c.image.imageUrl) {
-        this.updateCard({ viewModeImage: false }, c);
-      }
-      if (!c.description) {
-        this.updateCard({ viewModeImage: true }, c);
-      }
-    });
+  private updateViewMode(card: CardInterface) {
+    if (!card.image.imageUrl) {
+      this.updateCard({ viewModeImage: false }, card);
+    }
+    if (!card.description) {
+      this.updateCard({ viewModeImage: true }, card);
+    }
+
+    this.saveWhiteboard();
   }
   //#region WORKSPACE INTERACTIONS
   createCard(event: any) {
@@ -137,6 +138,13 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    //deselect all selected cards
+    this.selectedCards = [];
+    // set idle mode
+    this.whiteboard$.value.cards
+      .filter(c => c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
     // add card to the workspace
     const card = {
       id: uuidv4(),
@@ -152,16 +160,6 @@ export class WhiteboardComponent implements OnChanges {
 
     // add a 'copy' ( card with a different reference ) to the shelf
     this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
-
-    // set multiselect mode
-    if (this.selectedCards.length) {
-      this.updateCard({ mode: ModeEnum.MULTISELECT }, card);
-    } else {
-      // set idle mode
-      this.whiteboard$.value.cards
-        .filter(c => c.mode !== ModeEnum.UPLOAD)
-        .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
-    }
 
     // Update whiteboardsubject
     this.updateWhiteboardSubject({
@@ -185,6 +183,11 @@ export class WhiteboardComponent implements OnChanges {
       });
       this.saveWhiteboard();
     }
+  }
+
+  removeImage(card: CardInterface) {
+    this.updateCard({ image: {} }, card);
+    this.saveWhiteboard();
   }
 
   onDeleteCard(card: CardInterface, permanent: boolean = false) {
@@ -348,7 +351,14 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   saveWhiteboard() {
-    this.whiteboardHttpService.setJson(this.whiteboard$.value);
+    const whiteboard = { ...this.whiteboard$.value };
+    whiteboard.cards = whiteboard.shelfCards;
+    whiteboard.shelfCards = null;
+    whiteboard.cards.forEach(c => {
+      c.top = null;
+      c.left = null;
+    });
+    this.whiteboardHttpService.setJson(whiteboard).subscribe();
   }
 
   onClickWhiteboard(event) {
@@ -358,13 +368,19 @@ export class WhiteboardComponent implements OnChanges {
     ) {
       this.selectedCards = [];
       const cards = this.whiteboard$.value.cards;
+      const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
 
+      if (cardInEditMode) {
+        this.updateCard(
+          { description: cardInEditMode.description },
+          cardInEditMode
+        );
+        this.updateViewMode(cardInEditMode);
+        this.saveWhiteboard();
+      }
       const nonIdleUploadCards = cards.filter(
         c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
       );
-
-      this.updateViewMode(cards);
-
       if (nonIdleUploadCards.length) {
         nonIdleUploadCards.forEach(c =>
           this.updateCard({ mode: ModeEnum.IDLE }, c)
@@ -377,11 +393,13 @@ export class WhiteboardComponent implements OnChanges {
     event: CdkDragDrop<any>;
     card: CardInterface;
     cardElement: HTMLElement;
+    scrollLeft: number;
   }) {
     this.whiteboard$.value.cards
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => (c.mode = ModeEnum.IDLE));
-    const { card, event, cardElement } = $event;
+    const { card, event, cardElement, scrollLeft } = $event;
+
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
       : ModeEnum.IDLE;
@@ -389,12 +407,25 @@ export class WhiteboardComponent implements OnChanges {
     const workspaceCard: CardInterface = {
       ...card,
       mode: currentMode,
-      left: cardElement.offsetLeft + event.distance.x,
+      left: cardElement.offsetLeft + event.distance.x - scrollLeft,
       top:
         this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
         (167 + cardElement.offsetTop) -
         Math.abs(event.distance.y)
     };
+
+    if (currentMode === ModeEnum.MULTISELECT) {
+      //return multiselectselected cards to the right mode so the icon is clicked + green
+      this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
+      //change all cards to multiselect mode
+      this.whiteboard$.value.cards
+        .filter(
+          c =>
+            c.mode !== ModeEnum.MULTISELECTSELECTED &&
+            c.mode !== ModeEnum.UPLOAD
+        )
+        .forEach(c => (c.mode = ModeEnum.MULTISELECT));
+    }
 
     if (
       !this.whiteboard$.value.cards
@@ -406,6 +437,7 @@ export class WhiteboardComponent implements OnChanges {
       });
     }
   }
+
   //#endregion
 
   //#region CARD TOOLBAR
@@ -415,8 +447,12 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardConfirmIconClicked(card: CardInterface) {
-    this.updateCard({ mode: ModeEnum.IDLE }, card);
-    this.updateViewMode(this.whiteboard$.value.cards);
+    this.updateCard(
+      { mode: ModeEnum.IDLE, description: card.description },
+      card
+    );
+    this.updateViewMode(card);
+    this.saveWhiteboard();
   }
 
   cardFlipIconClicked(card: CardInterface) {
@@ -428,7 +464,7 @@ export class WhiteboardComponent implements OnChanges {
 
       if (card.mode !== ModeEnum.EDIT) {
         this.updateCard({ mode: ModeEnum.IDLE }, card);
-        this.updateViewMode(this.whiteboard$.value.cards);
+        this.updateViewMode(card);
       }
     }
   }
