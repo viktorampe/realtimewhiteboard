@@ -37,7 +37,7 @@ export const studentTasks = createSelector(
         name: te.task.name,
         description: te.task.description,
         learningAreaName: te.task.learningArea.name,
-        learningAreaId: te.task.learningAreaId,
+        learningAreaId: te.task.learningArea.id,
         count: {
           completedRequired: completedRequired.length,
           totalRequired: requiredIds.length
