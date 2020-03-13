@@ -1,0 +1,72 @@
+<campus-list-item-content>
+  <mat-icon
+    list-item-icon
+    svgIcon="{{ fileIcon != 'ludo.zip' ? 'general-file' : 'exercise' }}"
+  ></mat-icon>
+
+  <list-item-title>{{ title }}</list-item-title>
+  <list-item-caption>{{ description }}</list-item-caption>
+  <list-item-actions *ngIf="actions"
+    ><campus-button
+      inline
+      campusClickStopPropagation
+      *ngFor="let action of actions"
+      (click)="onActionClick(action)"
+    >
+      {{ action.label }}
+    </campus-button></list-item-actions
+  >
+
+  <ng-container *ngIf="isFinished; else activeTask">
+    <ng-container *ngIf="status === resultStatuses.STATUS_COMPLETED">
+      <list-item-content class="student-task-content-list-item__score">
+        <campus-rating [count]="score"></campus-rating>
+      </list-item-content>
+      <list-item-content
+        class="student-task-content-list-item__last-updated ui-caption"
+        >ingediend op {{ lastUpdated }}</list-item-content
+      >
+      <mat-icon
+        list-item-content
+        class="student-task-content-list-item__status-icon"
+        svgIcon="check"
+      ></mat-icon>
+    </ng-container>
+    <ng-container *ngIf="status === resultStatuses.STATUS_OPENEND">
+      <list-item-content
+        class="student-task-content-list-item__last-updated ui-caption"
+        >niet ingediend</list-item-content
+      >
+      <mat-icon
+        list-item-content
+        class="student-task-content-list-item__last-updated"
+        svgIcon="pending"
+      ></mat-icon>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #activeTask>
+    <ng-container *ngIf="status === resultStatuses.STATUS_COMPLETED">
+      <list-item-content
+        class="student-task-content-list-item__last-updated ui-caption"
+        >ingediend op {{ lastUpdated }}</list-item-content
+      >
+      <mat-icon
+        list-item-content
+        class="student-task-content-list-item__status-icon"
+        svgIcon="check"
+      ></mat-icon>
+    </ng-container>
+    <ng-container *ngIf="status === resultStatuses.STATUS_OPENEND">
+      <list-item-content
+        class="student-task-content-list-item__last-updated ui-caption"
+        >gestart op {{ lastUpdated }}</list-item-content
+      >
+      <mat-icon
+        list-item-content
+        class="student-task-content-list-item__last-updated"
+        svgIcon="pending"
+      ></mat-icon>
+    </ng-container>
+  </ng-template>
+</campus-list-item-content>

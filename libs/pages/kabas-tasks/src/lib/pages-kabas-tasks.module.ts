@@ -30,6 +30,7 @@ import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tas
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { PrintPaperTaskModalComponent } from './components/print-paper-task-modal/print-paper-task-modal.component';
+import { StudentTaskContentListItemComponent } from './components/student-task-content-list-item/student-task-content-list-item.component';
 import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
 import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
 import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
@@ -70,7 +71,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     PrintPaperTaskModalComponent,
     ManageTaskContentComponent,
     StudentTaskOverviewComponent,
-    StudentTaskDetailComponent
+    StudentTaskDetailComponent,
+    StudentTaskContentListItemComponent
   ],
   providers: [
     {
