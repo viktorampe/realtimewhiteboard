@@ -49,7 +49,7 @@
       </section-content>
     </campus-section>
     <campus-section
-      *ngIf="(taskCount$ | async) === 0"
+      *ngIf="(taskCount$ | async) !== 0"
       [mode]="sectionModes.CONTAINER"
       class="student-task-overview__aside"
     >

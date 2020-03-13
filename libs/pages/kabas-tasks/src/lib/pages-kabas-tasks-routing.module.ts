@@ -7,9 +7,11 @@ import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
+import { StudentTaskDetailResolver } from './components/student-task-detail/student-task-detail.resolver';
 import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
 import { StudentTaskOverviewResolver } from './components/student-task-overview/student-task-overview.resolver';
 import { PendingTaskGuard } from './guards/pending-task.guard';
+import { ValidTaskInstanceGuard } from './guards/valid-task-instance.guard';
 
 const routes: Routes = [
   {
@@ -73,6 +75,9 @@ const routes: Routes = [
       { path: '', component: StudentTaskOverviewComponent },
       {
         path: ':id',
+        resolve: { isResolved: StudentTaskDetailResolver },
+        runGuardsAndResolvers: 'always',
+        canActivate: [ValidTaskInstanceGuard],
         children: [{ path: '', component: StudentTaskDetailComponent }]
       }
     ]

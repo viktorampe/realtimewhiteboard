@@ -4,6 +4,7 @@ import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
+import { StudentTaskWithContentFixture } from '../interfaces/StudentTaskWithContent.fixture';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from './student-tasks.viewmodel';
 
@@ -13,8 +14,11 @@ import { StudentTasksViewModel } from './student-tasks.viewmodel';
 export class MockStudentTasksViewModel
   implements ViewModelInterface<StudentTasksViewModel> {
   public studentTasks$: BehaviorSubject<StudentTaskInterface[]>;
-  public currentTask$: BehaviorSubject<StudentTaskWithContentInterface>;
+
   public routeParams$: BehaviorSubject<Params>;
+  public currentTask$ = new BehaviorSubject<StudentTaskWithContentInterface>(
+    new StudentTaskWithContentFixture()
+  );
 
   private studentTasks = [
     new StudentTaskFixture({
