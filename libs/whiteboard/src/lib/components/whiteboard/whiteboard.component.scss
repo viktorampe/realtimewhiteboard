@@ -70,6 +70,8 @@
     position: absolute;
     align-self: center;
 
+    pointer-events: none;
+
     width: 100%;
 
     .ui-empty-state__image {
@@ -92,7 +94,7 @@
   }
 
   &__addbutton {
-    position: absolute;
+    position: absolute !important;
     right: 40px;
     bottom: 107px;
     z-index: 1;

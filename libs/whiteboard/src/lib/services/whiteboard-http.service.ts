@@ -1,6 +1,6 @@
 import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import {
   catchError,
   filter,
@@ -45,7 +45,6 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
   }
 
   public getJson(): Observable<WhiteboardInterface> {
-    return of({ title: '', cards: [], shelfCards: [] });
     const response$ = this.apiSettings$.pipe(
       filter(settings => !!settings),
       take(1),
