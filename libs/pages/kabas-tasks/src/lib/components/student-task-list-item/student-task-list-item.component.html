@@ -1,0 +1,54 @@
+<campus-list-item-content>
+  <list-item-title
+    data-cy="tli-title"
+    class="manage-kabas-tasks-student-task-list-item__container__title"
+    (click)="actions[0].handler()"
+    campusClickStopPropagation
+    mat-line
+    >{{ title }}</list-item-title
+  >
+
+  <list-item-caption mat-line>{{ description }}</list-item-caption>
+
+  <list-item-actions
+    mat-line
+    *ngIf="actions.length"
+    class="manage-kabas-tasks-student-task-list-item__container__actions"
+    ><campus-button
+      data-cy="tli-action"
+      inline
+      campusClickStopPropagation
+      *ngFor="let action of actions"
+      (click)="action.handler()"
+      >{{ action.label }}</campus-button
+    ></list-item-actions
+  >
+
+  <list-item-content
+    data-cy="tli-learning-area"
+    class="manage-kabas-tasks-student-task-list-item__learning-area ui-caption"
+  >
+    {{ learningAreaName }}
+  </list-item-content>
+
+  <list-item-content
+    data-cy="tli-date-label"
+    class="manage-kabas-tasks-student-task-list-item__date-label ui-body-1"
+  >
+    {{ dateLabel }}
+  </list-item-content>
+
+  <list-item-content
+    data-cy="tli-progress"
+    class="manage-kabas-tasks-student-task-list-item__progress"
+    *ngIf="totalRequired && !finished"
+  >
+    <campus-progress
+      [count]="finishedRequired"
+      [diameter]="50"
+      [total]="totalRequired"
+      [showPercentage]="true"
+    >
+    </campus-progress>
+  </list-item-content>
+</campus-list-item-content>

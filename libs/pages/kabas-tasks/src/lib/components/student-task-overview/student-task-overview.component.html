@@ -3,6 +3,19 @@
     <mat-icon svgIcon="tasks"></mat-icon>
   </backdrop-reveal-action>
   <front-layer-content class="student-task-overview">
+    <div style="width: 100%">
+      <campus-student-task-list-item
+        title="Overhoring 1"
+        description="Maak deze taak als voorbereiding op deze taak."
+        [finishedRequired]="4"
+        [totalRequired]="7"
+        dateLabel="morgen"
+        learningAreaName="Wiskunde"
+        [actions]="[{ label: 'Openen' }]"
+      >
+      </campus-student-task-list-item>
+    </div>
+
     <ng-container *ngIf="tasks$ | async as tasks; else noTasks">
       <!-- MAIN-->
       <campus-section
