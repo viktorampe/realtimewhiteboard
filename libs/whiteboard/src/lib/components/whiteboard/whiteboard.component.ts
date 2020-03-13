@@ -99,7 +99,7 @@ export class WhiteboardComponent implements OnChanges {
   }
   //#region WORKSPACE INTERACTIONS
   createCard(event: any) {
-    if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
+    if (event.target.className.includes('whiteboard__workspace')) {
       if (event.type === 'longpress') {
         event.srcEvent.stopPropagation();
         const top =
