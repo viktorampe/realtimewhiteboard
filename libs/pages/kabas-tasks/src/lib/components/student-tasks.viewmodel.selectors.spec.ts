@@ -125,6 +125,24 @@ describe('student-tasks viewmodel selectors', () => {
     const mockDate = new MockDate(); // je kan date setten in de mockdate (anders gebruikt hij de gewonenew Date())
     //use getMockDate -> mockdate gebruiken en new Date() wordt dan gezet op de gewone mockdate -> is het gemakkelijkst!
     const projector = studentTasks.projector;
+    it('should return expected values given all expected values', () => {
+      const expected = {
+        name: 'test',
+        description: 'testje',
+        learningAreaName: 'wiskunde',
+        learningAreaId: 7,
+        count: {
+          completedRequired: 2,
+          totalRequired: 2
+        },
+        isfinished: true,
+        isUrgent: true,
+        dateGroupLabel: 'morgen',
+        dateLabel: 'morgen',
+        endDate: new Date(),
+        actions: [] // ask TaskActionService.getA
+      };
+    });
   });
 });
 

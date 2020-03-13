@@ -14,6 +14,7 @@ import {
 } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
+import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskContentInterface } from '../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
@@ -35,13 +36,13 @@ export const studentTasks = createSelector(
       return {
         name: te.task.name,
         description: te.task.description,
-        learningAreaName: te.task.learningArea,
+        learningAreaName: te.task.learningArea.name,
         learningAreaId: te.task.learningAreaId,
         count: {
           completedRequired: completedRequired.length,
           totalRequired: requiredIds.length
         },
-        isfinished: te.end > new Date(),
+        isFinished: te.end > new Date(),
         isUrgent: getHumanDateTimeRules([
           humanDateTimeRulesEnum.TOMORROW,
           humanDateTimeRulesEnum.TODAY
@@ -69,8 +70,8 @@ export const studentTasks = createSelector(
           ])
         }),
         endDate: te.end,
-        actions: [] // ask TaskActionService.getActions(taskInstance) (cant be done inside selector)
-      };
+        actions: [] // TaskActionService.getActions(taskInstance) (cant be done inside selector)
+      } as StudentTaskInterface;
     });
   }
 );
