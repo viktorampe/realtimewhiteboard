@@ -3,8 +3,6 @@
   flex-direction: column;
   height: 100%;
 
-  justify-content: center;
-
   campus-whiteboard-toolbar {
     position: absolute;
     z-index: 1;
@@ -72,8 +70,24 @@
     position: absolute;
     align-self: center;
 
+    width: 100%;
+
+    .ui-empty-state__image {
+      max-width: 300px;
+    }
+
+    .ui-empty-state__title,
+    .ui-empty-state__description {
+      font-family: 'Open Sans', sans-serif;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
     .ui-empty-state__title {
-      font-size: 10rem;
+      font-size: 64px;
+    }
+
+    .ui-empty-state__description {
+      font-size: 32px;
     }
   }
 
