@@ -22,15 +22,56 @@ export class MockStudentTasksViewModel
 
   private studentTasks = [
     new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde',
       isFinished: true,
       endDate: new Date(2019, 8, 31)
     }),
-    new StudentTaskFixture(),
-    new StudentTaskFixture()
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde',
+      isUrgent: true
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde',
+      isUrgent: true
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 2,
+      learningAreaName: 'wiskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 2,
+      learningAreaName: 'wiskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 2,
+      learningAreaName: 'wiskunde',
+      isUrgent: true
+    })
   ];
 
   constructor() {
-    this.studentTasks$ = new BehaviorSubject<StudentTaskInterface[]>([]);
+    this.studentTasks$ = new BehaviorSubject<StudentTaskInterface[]>(
+      this.studentTasks
+    );
   }
 
   openEduContentAsExercise() {}
