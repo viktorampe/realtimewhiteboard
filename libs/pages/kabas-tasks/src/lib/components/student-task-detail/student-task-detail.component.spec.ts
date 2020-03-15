@@ -1,5 +1,3 @@
-// file.only
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,7 +24,6 @@ describe('StudentTaskDetailComponent', () => {
   const nextWeek = new Date(2020, 2, 16);
   const endNextWeek = new Date(2020, 2, 22);
   const farFuture = new Date(2020, 3, 20);
-
   const dateMock = new MockDate(today);
 
   configureTestSuite(() => {
@@ -165,8 +162,6 @@ describe('StudentTaskDetailComponent', () => {
           endDate: testCase.input
         });
         fixture.detectChanges();
-
-        console.log(new Date());
 
         const finishByCE = fixture.debugElement.query(
           By.css('[data-cy=task-finish-by]')
