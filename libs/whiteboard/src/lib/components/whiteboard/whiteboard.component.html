@@ -101,14 +101,9 @@
       true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard__addbutton"
-    (click)="btnPlusClicked($event)"
-  >
-    <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
-  </button>
+  <div class="whiteboard__addbutton" (click)="btnPlusClicked($event)">
+    <mat-icon [svgIcon]="'plus'"></mat-icon>
+  </div>
 
   <campus-shelf
     (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
