@@ -159,10 +159,10 @@ export class KabasTasksViewModel
   unarchiveTask(task: TaskWithAssigneesInterface) {
     this.startArchivingTasks([task], !task.archivedYear);
   }
-  openResultForTask(task: TaskInterface) {
+  openResultsForTask(task: TaskInterface) {
     throw new Error('Method not implemented.');
   }
-  openLearningPlanGoalMatrix(task: TaskInterface) {
+  openLearningPlanGoalMatrixForTask(task: TaskInterface) {
     throw new Error('Method not implemented.');
   }
 
