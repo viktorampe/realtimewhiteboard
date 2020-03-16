@@ -383,7 +383,6 @@ export class WhiteboardComponent implements OnChanges {
   hideTitleInput() {
     if (!!this.titleFC.value) {
       this.isTitleInputSelected = false;
-      this.saveWhiteboard();
       this.updateWhiteboardSubject({ title: this.titleFC.value });
     }
   }
