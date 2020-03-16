@@ -8,9 +8,13 @@ import {
   TaskFixture,
   TaskInstanceFixture
 } from '@campus/dal';
+import { MockDate } from '@campus/testing';
+import { HumanDateTimePipe } from '@campus/ui';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 import {
+  dateLabelRules,
+  isUrgent,
   studentTasks,
   studentTaskWithContent
 } from './student-tasks.viewmodel.selectors';
@@ -124,11 +128,16 @@ describe('student-tasks viewmodel selectors', () => {
     const start = new Date(2020, 1, 1);
     const end = new Date(2020, 2, 1);
     const lastUpdated = new Date(2020, 1, 15);
+    const dateMock = new MockDate();
+
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
 
     const task = getMockTask(lastUpdated);
     const projector = studentTasks.projector;
 
-    it('should return expected values given all expected values', () => {
+    it('should return expected values', () => {
       const expected: StudentTaskInterface[] = [
         {
           name: 'Huiswerk',
@@ -139,7 +148,7 @@ describe('student-tasks viewmodel selectors', () => {
             completedRequired: 2,
             totalRequired: 2
           },
-          isFinished: false,
+          isFinished: true,
           isUrgent: false,
           dateGroupLabel: 'vroeger',
           dateLabel: '2020-3-1',
@@ -179,7 +188,7 @@ describe('student-tasks viewmodel selectors', () => {
       expect(res).toEqual(expected);
     });
 
-    it('should show isFinished=false if date is before', () => {
+    it('should show isFinished=true if endDate is before today', () => {
       const expected: StudentTaskInterface[] = [
         {
           name: 'Huiswerk',
@@ -190,7 +199,7 @@ describe('student-tasks viewmodel selectors', () => {
             completedRequired: 0,
             totalRequired: 2
           },
-          isFinished: false,
+          isFinished: true,
           isUrgent: false,
           dateGroupLabel: 'vroeger',
           dateLabel: '2019-4-1',
@@ -221,6 +230,24 @@ describe('student-tasks viewmodel selectors', () => {
       ];
       const res = projector(taskInstances);
       expect(res).toEqual(expected);
+    });
+    it('should return the right day given the preset', () => {
+      const pipe = new HumanDateTimePipe();
+
+      expect(
+        pipe.transform(dateMock.mockDate, {
+          rules: dateLabelRules
+        })
+      ).toEqual('vandaag');
+    });
+    it('should return true if its today or tomorrow', () => {
+      expect(isUrgent(new Date())).toBeTruthy(); //today
+      expect(
+        isUrgent(new Date(new Date().setDate(new Date().getDate() + 1)))
+      ).toBeTruthy(); //tomorrow
+      expect(
+        isUrgent(new Date(new Date().setDate(new Date().getDate() + 7)))
+      ).toBeFalsy(); // next week
     });
   });
 });

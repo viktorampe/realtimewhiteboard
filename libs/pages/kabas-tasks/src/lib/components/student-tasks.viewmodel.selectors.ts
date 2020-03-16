@@ -18,6 +18,36 @@ import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskContentInterface } from '../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
+export const dateLabelRules = getHumanDateTimeRules([
+  humanDateTimeRulesEnum.TODAY,
+  humanDateTimeRulesEnum.TOMORROW,
+  humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+  humanDateTimeRulesEnum.WEEKDAY,
+  humanDateTimeRulesEnum.NEXT_WEEK
+]);
+
+export const dateGroupLabelRules = getHumanDateTimeRules([
+  humanDateTimeRulesEnum.THIS_WEEK,
+  humanDateTimeRulesEnum.PAST_WEEK,
+  humanDateTimeRulesEnum.EARLIER,
+  humanDateTimeRulesEnum.TODAY,
+  humanDateTimeRulesEnum.TOMORROW,
+  humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+  humanDateTimeRulesEnum.NEXT_WEEK,
+  humanDateTimeRulesEnum.LATER
+]);
+
+export const isUrgentRules = getHumanDateTimeRules([
+  humanDateTimeRulesEnum.TODAY,
+  humanDateTimeRulesEnum.TOMORROW
+]);
+
+export function isUrgent(endDate: Date) {
+  return isUrgentRules.some(rule =>
+    rule.condition(endDate.getTime(), new Date().getTime())
+  );
+}
+
 export const studentTasks = createSelector(
   [TaskInstanceQueries.getTaskStudentTaskInstances],
   getTaskStudentInstances => {
@@ -42,31 +72,13 @@ export const studentTasks = createSelector(
           completedRequired: completedRequired.length,
           totalRequired: requiredIds.length
         },
-        isFinished: te.end > new Date(),
-        isUrgent: getHumanDateTimeRules([
-          humanDateTimeRulesEnum.TOMORROW,
-          humanDateTimeRulesEnum.TODAY
-        ]).some(rule => rule.condition(te.end.getTime(), new Date().getTime())),
+        isFinished: te.end < new Date(),
+        isUrgent: isUrgent(te.end),
         dateGroupLabel: date.transform(te.end, {
-          rules: getHumanDateTimeRules([
-            humanDateTimeRulesEnum.THIS_WEEK,
-            humanDateTimeRulesEnum.PAST_WEEK,
-            humanDateTimeRulesEnum.EARLIER,
-            humanDateTimeRulesEnum.TODAY,
-            humanDateTimeRulesEnum.TOMORROW,
-            humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
-            humanDateTimeRulesEnum.NEXT_WEEK,
-            humanDateTimeRulesEnum.LATER
-          ])
+          rules: dateGroupLabelRules
         }),
         dateLabel: date.transform(te.end, {
-          rules: getHumanDateTimeRules([
-            humanDateTimeRulesEnum.TODAY,
-            humanDateTimeRulesEnum.TOMORROW,
-            humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
-            humanDateTimeRulesEnum.WEEKDAY,
-            humanDateTimeRulesEnum.NEXT_WEEK
-          ])
+          rules: dateLabelRules
         }),
         endDate: te.end,
         actions: [] // TaskActionService.getActions(taskInstance) (cant be done inside selector)
