@@ -21,8 +21,9 @@ export class MockDate {
 
   private overrideDate(mockDate: Date): void {
     this._mockDate = mockDate;
-    // @ts-ignore
-    global.Date = (...d) => (d.length ? new this._Date(...d) : mockDate);
+    global.Date = (...d) =>
+      // @ts-ignore
+      d.length ? new this._Date(...d) : new this._Date(mockDate);
     global.Date.UTC = this._Date.UTC;
     global.Date.parse = this._Date.parse;
     // @ts-ignore

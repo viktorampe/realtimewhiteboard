@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -26,7 +28,8 @@ describe('StudentTaskOverviewComponent', () => {
       declarations: [StudentTaskOverviewComponent, TaskInfoByLearningAreaPipe],
       providers: [
         { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
-        { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel }
+        { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     });
   });

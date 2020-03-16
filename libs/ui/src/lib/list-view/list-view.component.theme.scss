@@ -79,7 +79,7 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
       /*Line*/
       &--line {
         & .ui-list-view__list__item {
-          transition: padding-left 0.15s ease-out;
+          transition: padding-left 250ms ease-out, margin 250ms ease-out;
           box-sizing: border-box;
           cursor: pointer;
           display: block;

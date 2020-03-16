@@ -30,11 +30,14 @@ import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tas
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { PrintPaperTaskModalComponent } from './components/print-paper-task-modal/print-paper-task-modal.component';
+import { StudentTaskContentListItemComponent } from './components/student-task-content-list-item/student-task-content-list-item.component';
 import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
+import { StudentTaskListItemComponent } from './components/student-task-list-item/student-task-list-item.component';
 import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
 import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PendingTaskGuard } from './guards/pending-task.guard';
+import { ValidTaskInstanceGuard } from './guards/valid-task-instance.guard';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
 import { TaskInfoByLearningAreaPipe } from './pipes/task-info-by-learning-area.pipe';
 
@@ -72,7 +75,9 @@ import { TaskInfoByLearningAreaPipe } from './pipes/task-info-by-learning-area.p
     ManageTaskContentComponent,
     StudentTaskOverviewComponent,
     StudentTaskDetailComponent,
-    TaskInfoByLearningAreaPipe
+    TaskInfoByLearningAreaPipe,
+    StudentTaskListItemComponent,
+    StudentTaskContentListItemComponent
   ],
   providers: [
     {
@@ -91,7 +96,8 @@ import { TaskInfoByLearningAreaPipe } from './pipes/task-info-by-learning-area.p
       provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
       useClass: ContentTaskActionsService
     },
-    PendingTaskGuard
+    PendingTaskGuard,
+    ValidTaskInstanceGuard
   ],
   exports: [],
   entryComponents: [
