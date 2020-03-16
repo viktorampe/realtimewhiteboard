@@ -35,10 +35,7 @@ export class TaskListItemComponent implements OnInit {
   @Input() endDate: Date;
   @Input() status: Status;
   @Input() isFavorite: boolean;
-  @Input() actions: {
-    label: string;
-    handler: () => any; //prevents warning "Member handler is not callable in template"
-  }[];
+  @Input() actions: TaskActionInterface[];
   @Input()
   set assignees(assignees: AssigneeInterface[]) {
     this._assignees = assignees.sort(this.sortByType);
