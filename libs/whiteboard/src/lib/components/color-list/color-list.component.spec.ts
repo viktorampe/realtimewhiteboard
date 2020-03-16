@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorListComponent } from './color-list.component';
 
 describe('ColorListComponent', () => {
@@ -7,6 +8,7 @@ describe('ColorListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [BrowserAnimationsModule],
       declarations: [ColorListComponent]
     }).compileComponents();
   }));
