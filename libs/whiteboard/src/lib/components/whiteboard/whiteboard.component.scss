@@ -102,6 +102,10 @@
     z-index: 1;
   }
 
+  &__addbutton__shelfMinimized {
+    bottom: 20px !important;
+  }
+
   &__shelf__button {
     width: 48px;
     height: 32px;
@@ -116,22 +120,11 @@
     z-index: 1;
     left: 50%;
     bottom: 115px;
+    text-align: center;
   }
 
   &__shelf__minimized__button {
-    width: 48px;
-    height: 32px;
-    background: linear-gradient(
-      145deg,
-      lighten(#e0e5ec, 5%),
-      darken(#e0e5ec, 5%)
-    );
-    box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
-    border-radius: 12px;
-    position: absolute;
-    z-index: 1;
-    left: 50%;
-    bottom: 30px;
+    bottom: 30px !important;
   }
 
   campus-shelf {
@@ -152,7 +145,6 @@
       darken(#e0e5ec, 5%)
     );
     box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
-    border-radius: 12px;
   }
 
   .minimizedShelf {

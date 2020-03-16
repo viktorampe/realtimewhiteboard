@@ -90,22 +90,20 @@
     <button
       mat-fab
       color="primary"
+      [ngClass]="{ whiteboard__addbutton__shelfMinimized: isShelfMinimized }"
       class="whiteboard__addbutton"
       (click)="btnPlusClicked($event)"
     >
       <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
     </button>
-    <ng-container *ngIf="!isShelfMinimized; else shelfMinimizedView">
-      <button class="whiteboard__shelf__button" (click)="toggleShelf()"
-        ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
-      ></button>
-    </ng-container>
-    <ng-template #shelfMinimizedView>
-      <button
-        class="whiteboard__shelf__minimized__button"
-        (click)="toggleShelf()"
-        ><mat-icon [svgIcon]="'arrow-down'"></mat-icon></button
-    ></ng-template>
+
+    <div
+      [ngClass]="{ whiteboard__shelf__minimized__button: isShelfMinimized }"
+      class="whiteboard__shelf__button"
+      (click)="toggleShelf()"
+      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
+    ></div>
+
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       [class.minimizedShelf]="isShelfMinimized"
