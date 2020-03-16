@@ -8,9 +8,8 @@
   <ng-container
     *ngIf="
       whiteboard.title ||
-        whiteboard.cards.length ||
-        whiteboard.shelfCards.length;
-      else emptyStateView
+      whiteboard.cards.length ||
+      whiteboard.shelfCards.length
     "
   >
     <campus-whiteboard-toolbar
@@ -22,7 +21,7 @@
       <h2
         *ngIf="!isTitleInputSelected"
         class="whiteboard__header__title"
-        (tap)="showTitleInput()"
+        (click)="showTitleInput()"
         >{{ whiteboard.title }}</h2
       >
       <input
@@ -95,6 +94,19 @@
         />
       </div>
     </div>
+    <campus-empty-state
+      class="whiteboard__empty"
+      *ngIf="!whiteboard.cards.length"
+      [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
+      [description]="
+        true
+          ? 'Sleep kaartjes uit de shelf naar het bord.'
+          : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
+      "
+      [svgIcon]="
+        true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+      "
+    ></campus-empty-state>
     <button
       mat-fab
       color="primary"
@@ -110,13 +122,4 @@
       [(isMinimized)]="isShelfMinimized"
     ></campus-shelf>
   </ng-container>
-  <ng-template #emptyStateView>
-    <campus-empty-state
-      title="Hier valt niets te zien!"
-      description="Voeg een kaartje toe om te beginnen."
-      image="https://images.unsplash.com/photo-1532630571098-79a3d222b00d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2038&q=80"
-      ctaLabel="Voeg een kaartje toe"
-      (clickCta)="addEmptyCard()"
-    ></campus-empty-state>
-  </ng-template>
 </div>

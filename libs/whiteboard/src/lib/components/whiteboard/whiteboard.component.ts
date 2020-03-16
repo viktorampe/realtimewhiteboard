@@ -4,7 +4,8 @@ import {
   ElementRef,
   Input,
   OnChanges,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
@@ -19,7 +20,8 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
-  styleUrls: ['./whiteboard.component.scss']
+  styleUrls: ['./whiteboard.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class WhiteboardComponent implements OnChanges {
   @ViewChild('titleInput', { static: false }) set titleInput(
