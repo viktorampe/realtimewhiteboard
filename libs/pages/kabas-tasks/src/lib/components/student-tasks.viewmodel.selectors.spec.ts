@@ -126,10 +126,9 @@ describe('student-tasks viewmodel selectors', () => {
     const start = new Date(2020, 1, 1);
     const end = new Date(2020, 2, 1);
     const lastUpdated = new Date(2020, 1, 15);
-    const mockDate = new MockDate(); // je kan date setten in de mockdate (anders gebruikt hij de gewonenew Date())
+    const mockDate = new MockDate();
 
     const task = getMockTask(lastUpdated);
-    //use getMockDate -> mockdate gebruiken en new Date() wordt dan gezet op de gewone mockdate -> is het gemakkelijkst!
     const projector = studentTasks.projector;
 
     const expected: StudentTaskInterface[] = [
@@ -159,15 +158,15 @@ describe('student-tasks viewmodel selectors', () => {
             ...task,
             results: [
               new ResultFixture({
-                eduContent: new EduContentFixture({ id: 1 })
+                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
               }),
               new ResultFixture({
-                eduContent: new EduContentFixture({ id: 2 })
+                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
               })
             ],
             taskEduContents: [
-              new TaskEduContentFixture(),
-              new TaskEduContentFixture()
+              new TaskEduContentFixture({ required: true }),
+              new TaskEduContentFixture({ required: true })
             ],
             learningAreaId: 1
           }
@@ -200,8 +199,9 @@ function getMockTask(lastUpdated) {
   const taskEduContents = [
     new TaskEduContentFixture({
       eduContentId: 1,
+
       eduContent: new EduContentFixture(
-        { id: 1 },
+        { type: 'exercise', id: 1 },
         {
           title: 'neuspeuteren',
           description: 'instructiefilmpje',
@@ -213,7 +213,8 @@ function getMockTask(lastUpdated) {
     new TaskEduContentFixture({
       eduContentId: 2,
       eduContent: new EduContentFixture(
-        { id: 2 },
+        { type: 'exercise', id: 2 },
+
         {
           title: 'nagelbijten',
           description: 'herhalingsoefening'
