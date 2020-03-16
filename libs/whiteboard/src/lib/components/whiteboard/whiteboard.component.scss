@@ -145,6 +145,8 @@
       darken(#e0e5ec, 5%)
     );
     box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+    box-shadow: 3px 3px 16px -1px rgba(#a3b1c6, 0.3), 9px 9px 16px #a3b1c6,
+      -1px -1px 6px -3px rgba(#a3b1c6, 0.2), -9px -9px 16px #ffffff;
   }
 
   .minimizedShelf {
