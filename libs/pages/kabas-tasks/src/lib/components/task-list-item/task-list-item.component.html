@@ -18,7 +18,7 @@
   <list-item-title
     data-cy="tli-title"
     class="manage-kabas-tasks-task-list-item__container__title"
-    (click)="actions[0].handler()"
+    (click)="onActionClick(actions[0])"
     campusClickStopPropagation
     mat-line
     >{{ title }}</list-item-title

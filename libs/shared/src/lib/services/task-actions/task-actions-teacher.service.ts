@@ -40,13 +40,15 @@ export class TaskActionsTeacherService
       label: 'Resulaten',
       icon: '',
       tooltip: 'Toon de resultaten voor de taak',
-      handler: this.taskOpener.openResultForTask.bind(this.taskOpener)
+      handler: this.taskOpener.openResultsForTask.bind(this.taskOpener)
     },
     openLearningPlanGoalMatrixForTask: {
       label: 'Doelenmatrix',
       icon: '',
       tooltip: 'Toon de doelenmatrix voor de taak',
-      handler: this.taskOpener.openLearningPlanGoalMatrix.bind(this.taskOpener)
+      handler: this.taskOpener.openLearningPlanGoalMatrixForTask.bind(
+        this.taskOpener
+      )
     }
   };
 

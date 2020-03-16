@@ -83,6 +83,7 @@ describe('TaskListItemComponent', () => {
 
   describe('inputs', () => {
     it('should pass action handlers', () => {
+      const spy = jest.spyOn(component, 'onActionClick');
       const actionDEs = fixture.debugElement.queryAll(
         By.css(
           '.manage-kabas-tasks-task-list-item__container__actions > .ui-button'
@@ -96,7 +97,7 @@ describe('TaskListItemComponent', () => {
         expect(actionDE.nativeElement.textContent).toBe(action.label);
 
         actionDE.nativeElement.click();
-        expect(action.handler).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith(action);
       });
     });
     it('should group and sort assignees by AssigneeType', () => {

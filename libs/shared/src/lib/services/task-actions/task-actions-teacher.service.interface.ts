@@ -10,8 +10,8 @@ export interface TeacherTaskOpenerInterface {
   openTask(task: TaskInterface);
   archiveTask(task: TaskWithAssigneesInterface);
   unarchiveTask(task: TaskWithAssigneesInterface);
-  openResultForTask(task: TaskInterface);
-  openLearningPlanGoalMatrix(task: TaskInterface);
+  openResultsForTask(task: TaskInterface);
+  openLearningPlanGoalMatrixForTask(task: TaskInterface);
 }
 
 export const TEACHER_TASK_OPENER_TOKEN = new InjectionToken<
