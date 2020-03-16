@@ -12,11 +12,11 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
+import { PermissionEnum } from '../../enums/permission.enum';
 import CardInterface from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
 import { UserInterface } from '../../models/User.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
-import { PeopleHttpServiceInterface } from '../../services/peopleservice/people-http.service';
 import { WhiteboardHttpService } from '../../services/whiteboardservice/whiteboard-http.service';
 
 @Component({
@@ -44,7 +44,6 @@ export class WhiteboardComponent implements OnChanges {
 
   public whiteboard$ = new BehaviorSubject<WhiteboardInterface>(null);
   public user$ = new BehaviorSubject<UserInterface>(null);
-  userId = '5';
 
   public titleFC: FormControl;
 
@@ -54,10 +53,7 @@ export class WhiteboardComponent implements OnChanges {
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
-  constructor(
-    private whiteboardHttpService: WhiteboardHttpService,
-    private peopleHttpService: PeopleHttpServiceInterface
-  ) {
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {
     this.initialiseForm();
     this.initialiseObservables();
   }
@@ -90,12 +86,7 @@ export class WhiteboardComponent implements OnChanges {
         this.titleFC.patchValue(whiteboardData.title);
         this.whiteboard$.next(whiteboardData);
       });
-    this.peopleHttpService
-      .getJson(this.userId)
-      .pipe(take(1))
-      .subscribe(peopleData => {
-        this.user$.next(peopleData);
-      });
+    this.user$.next({ permission: PermissionEnum.MANAGEWHITEBOARD });
   }
 
   private initialiseForm(): void {
@@ -196,8 +187,9 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDeleteCard(card: CardInterface, permanent: boolean = false) {
-    if (permanent) {
+  onDeleteCard(card: CardInterface) {
+    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
+      console.log('deleting card perminantly');
       this.updateWhiteboardSubject({
         cards: this.whiteboard$.value.cards.filter(c => c.id !== card.id),
         shelfCards: this.whiteboard$.value.shelfCards.filter(
@@ -206,6 +198,7 @@ export class WhiteboardComponent implements OnChanges {
       });
       this.saveWhiteboard();
     } else {
+      console.log('returning card to shelf');
       this.addCardToShelf(card);
       this.updateWhiteboardSubject({
         cards: this.whiteboard$.value.cards.filter(c => c !== card)
@@ -357,14 +350,19 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   saveWhiteboard() {
-    const whiteboard = { ...this.whiteboard$.value };
-    whiteboard.cards = whiteboard.shelfCards;
-    whiteboard.shelfCards = null;
-    whiteboard.cards.forEach(c => {
-      c.top = null;
-      c.left = null;
-    });
-    this.whiteboardHttpService.setJson(whiteboard).subscribe();
+    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
+      console.log('saving whiteboard...');
+      const whiteboard = { ...this.whiteboard$.value };
+      whiteboard.cards = whiteboard.shelfCards;
+      whiteboard.shelfCards = null;
+      whiteboard.cards.forEach(c => {
+        c.top = null;
+        c.left = null;
+      });
+      this.whiteboardHttpService.setJson(whiteboard).subscribe();
+    } else {
+      console.log('no permissin to save whiteboard');
+    }
   }
 
   onClickWhiteboard() {
