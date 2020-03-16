@@ -1,11 +1,12 @@
 import { InjectionToken } from '@angular/core';
 import { TaskInterface, TaskWithAssigneesInterface } from '@campus/dal';
-import { TaskActionInterface } from './task-action.interface';
+import { TaskActionInterface } from '../task-action.interface';
 
 export interface TaskActionsTeacherServiceInterface {
   taskActionDictionary: { [key: string]: TaskActionInterface };
   getActions(taskInstance: TaskInterface): TaskActionInterface[];
 }
+
 export interface TeacherTaskOpenerInterface {
   openTask(task: TaskInterface);
   archiveTask(task: TaskWithAssigneesInterface);

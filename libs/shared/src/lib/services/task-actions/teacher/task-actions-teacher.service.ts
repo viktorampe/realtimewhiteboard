@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
 import { TaskInterface } from '@campus/dal';
-import { TaskActionInterface } from './task-action.interface';
+import { TaskActionInterface } from '../task-action.interface';
 import {
   TaskActionsTeacherServiceInterface,
   TeacherTaskOpenerInterface,

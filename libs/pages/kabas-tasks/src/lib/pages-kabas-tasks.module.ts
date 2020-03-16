@@ -19,7 +19,10 @@ import {
   CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   CONTENT_TASK_MANAGER_TOKEN,
   SharedModule,
+  STUDENT_TASK_OPENER_TOKEN,
+  TaskActionsStudentService,
   TaskActionsTeacherService,
+  TASK_ACTIONS_STUDENT_SERVICE_TOKEN,
   TASK_ACTIONS_TEACHER_SERVICE_TOKEN,
   TEACHER_TASK_OPENER_TOKEN
 } from '@campus/shared';
@@ -37,6 +40,7 @@ import { StudentTaskContentListItemComponent } from './components/student-task-c
 import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
 import { StudentTaskListItemComponent } from './components/student-task-list-item/student-task-list-item.component';
 import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
+import { StudentTasksViewModel } from './components/student-tasks.viewmodel';
 import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PendingTaskGuard } from './guards/pending-task.guard';
@@ -94,6 +98,10 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
       useExisting: KabasTasksViewModel
     },
     {
+      provide: STUDENT_TASK_OPENER_TOKEN,
+      useExisting: StudentTasksViewModel
+    },
+    {
       provide: SEARCH_RESULT_ITEM_UPDATER_TOKEN,
       useExisting: KabasTasksViewModel
     },
@@ -104,6 +112,10 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     {
       provide: TASK_ACTIONS_TEACHER_SERVICE_TOKEN,
       useClass: TaskActionsTeacherService
+    },
+    {
+      provide: TASK_ACTIONS_STUDENT_SERVICE_TOKEN,
+      useClass: TaskActionsStudentService
     },
     ValidTaskInstanceGuard,
     PendingTaskGuard

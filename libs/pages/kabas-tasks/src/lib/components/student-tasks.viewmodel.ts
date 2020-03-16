@@ -16,7 +16,7 @@ import {
   ResultOpenerInterface,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN,
-  TaskOpenerInterface
+  StudentTaskOpenerInterface
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -31,7 +31,7 @@ export class StudentTasksViewModel
   implements
     ContentOpenerInterface,
     ResultOpenerInterface,
-    TaskOpenerInterface {
+    StudentTaskOpenerInterface {
   public studentTasks$: Observable<StudentTaskInterface[]>;
   public currentTask$: Observable<StudentTaskWithContentInterface>;
   public routeParams$: Observable<Params>;
