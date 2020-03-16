@@ -14,7 +14,7 @@ export class StudentTaskFixture implements StudentTaskInterface {
   isUrgent = false;
   dateGroupLabel = 'fooDateGroupLabel';
   dateLabel = 'fooDateLabel';
-  endDate = new Date(new Date().setDate(new Date().getDate() + 5));
+  endDate = new Date();
   actions = [];
 
   constructor(props: Partial<StudentTaskInterface> = {}) {

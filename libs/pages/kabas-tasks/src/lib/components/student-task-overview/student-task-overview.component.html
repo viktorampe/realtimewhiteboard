@@ -21,7 +21,7 @@
       <campus-section
         [mode]="sectionModes.CONTAINER"
         class="student-task-overview__main"
-        *ngIf="tasks.length; else noTasks"
+        *ngIf="taskCount$ | async as taskCount; else noTasks"
       >
         <section-title>{{
           (showFinishedTasks$ | async) ? 'Mijn afgewerkte taken' : 'Mijn taken'
