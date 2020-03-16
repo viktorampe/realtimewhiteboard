@@ -1,3 +1,4 @@
 export enum PermissionEnum {
-  MANAGEWHITEBOARD
+  MANAGEWHITEBOARD,
+  USEWHITEBOARD
 }

@@ -17,11 +17,11 @@ import { CardComponent } from './components/card/card.component';
 import { ColorListComponent } from './components/color-list/color-list.component';
 import { ImageToolbarComponent } from './components/image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { ShelfComponent } from './components/shelf/shelf.component';
 import { WhiteboardToolbarComponent } from './components/whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
 import { ImageDragDirective } from './directives/image-drag.directive';
-import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   imports: [

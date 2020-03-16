@@ -18,6 +18,7 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
+import { PermissionEnum } from '../../enums/permission.enum';
 import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
 import { WhiteboardFixture } from '../../models/whiteboard.fixture';
@@ -659,6 +660,9 @@ describe('WhiteboardComponent', () => {
 
   describe('onDeleteCard()', () => {
     it('should add card to shelf  when card was made by editorial office', () => {
+      component.user$.value.permission = <PermissionEnum>(
+        PermissionEnum.USEWHITEBOARD
+      );
       component.whiteboard$.value.shelfCards = [];
       const [card] = component.whiteboard$.value.cards;
       card.mode = ModeEnum.IDLE;
@@ -670,6 +674,9 @@ describe('WhiteboardComponent', () => {
     });
 
     it('should update mode to ShelfMode when card was made by editorial office', () => {
+      component.user$.value.permission = <PermissionEnum>(
+        PermissionEnum.USEWHITEBOARD
+      );
       const [card] = component.whiteboard$.value.cards;
       card.mode = <ModeEnum>ModeEnum.IDLE;
 
