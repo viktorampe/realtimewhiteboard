@@ -15,6 +15,7 @@ export {
 export { ClickPreventDefaultDirective } from './lib/directives/click-prevent-default.directive';
 export { ClickStopPropagationDirective } from './lib/directives/click-stop-propagation.directive';
 export * from './lib/forms';
+export * from './lib/functions';
 export { DateFunctions } from './lib/functions/date.functions';
 export { PrimitivePropertiesKeys } from './lib/types/generic.types';
 export { NestedPartial } from './lib/types/nestedpartial';
