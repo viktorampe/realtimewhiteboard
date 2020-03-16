@@ -1,3 +1,4 @@
+//file.only
 import {
   EduContentFixture,
   LearningAreaFixture,
@@ -13,13 +14,13 @@ import { HumanDateTimePipe } from '@campus/ui';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 import {
-  dateLabelRules,
-  isUrgent,
+  dateGroupLabelRules,
   studentTasks,
   studentTaskWithContent
 } from './student-tasks.viewmodel.selectors';
 
 describe('student-tasks viewmodel selectors', () => {
+  let dateMock = new MockDate();
   describe('studentTaskWithContent', () => {
     const projector = studentTaskWithContent.projector;
 
@@ -30,7 +31,7 @@ describe('student-tasks viewmodel selectors', () => {
     const endPastToday = new Date(2020, 2, 20);
     const assigner = new PersonFixture();
     const lastUpdated = new Date(2020, 1, 15);
-    const dateMock = new MockDate(today);
+    dateMock = new MockDate(today);
 
     const task = getMockTask(lastUpdated);
     const emptyTask = new TaskFixture({
@@ -168,7 +169,15 @@ describe('student-tasks viewmodel selectors', () => {
     const start = new Date(2020, 1, 1);
     const end = new Date(2020, 2, 1);
     const lastUpdated = new Date(2020, 1, 15);
-    const dateMock = new MockDate();
+
+    const date = new Date(dateMock.mockDate);
+    const pipe = new HumanDateTimePipe();
+    //     // woensdag 24 oktober 2018
+    // const dateMock = new MockDate(new Date(1540375469127));
+
+    beforeAll(() => {
+      dateMock = new MockDate();
+    });
 
     afterAll(() => {
       dateMock.returnRealDate();
@@ -191,7 +200,7 @@ describe('student-tasks viewmodel selectors', () => {
           isFinished: true,
           isUrgent: false,
           dateGroupLabel: 'vroeger',
-          dateLabel: '2020-3-1',
+          dateLabel: 'ingediend op 2020-3-1',
           endDate: end,
           actions: []
         }
@@ -242,7 +251,7 @@ describe('student-tasks viewmodel selectors', () => {
           isFinished: true,
           isUrgent: false,
           dateGroupLabel: 'vroeger',
-          dateLabel: '2019-4-1',
+          dateLabel: 'ingediend op 2019-4-1',
           endDate: new Date(2019, 3, 1),
           actions: []
         }
@@ -271,24 +280,148 @@ describe('student-tasks viewmodel selectors', () => {
       const res = projector(taskInstances);
       expect(res).toEqual(expected);
     });
-    it('should return the right day given the preset', () => {
-      const pipe = new HumanDateTimePipe();
 
-      expect(
-        pipe.transform(dateMock.mockDate, {
-          rules: dateLabelRules
-        })
-      ).toEqual('vandaag');
+    // it('should return the right date label given the preset', () => {
+    //   const pipe = new HumanDateTimePipe();
+    //   const date = new Date(dateMock.mockDate);
+    //   expect(
+    //     pipe.transform(date, {
+    //       rules: dateLabelRules
+    //     })
+    //   ).toEqual('vandaag');
+    //   expect(
+    //     pipe.transform(date.setDate(date.getDate() + 1), {
+    //       rules: dateLabelRules
+    //     })
+    //   ).toEqual('morgen');
+    //   expect(
+    //     pipe.transform(new Date(date.setDate(date.getDate() + 1)), {
+    //       rules: dateLabelRules
+    //     })
+    //   ).toEqual('overmorgen');
+    //   expect(
+    //     pipe.transform(new Date(date.setDate(date.getDate() + 1)), {
+    //       rules: dateLabelRules
+    //     })
+    //   ).toEqual('Donderdag');
+
+    //   expect(
+    //     pipe.transform(new Date(date.setDate(date.getDate() + 7)), {
+    //       rules: dateLabelRules
+    //     })
+    //   ).toEqual('volgende week');
+    // });
+
+    const testCases = [
+      {
+        it: 'should return vandaag',
+
+        date: date,
+        expected: 'vandaag'
+      },
+      {
+        it: 'should return morgen',
+
+        date: new Date(date.setDate(date.getDate() + 1)),
+        expected: 'morgen'
+      },
+      {
+        it: 'should return overmorgen',
+
+        date: new Date(date.setDate(date.getDate() + 2)),
+        expected: 'overmorgen'
+      },
+      {
+        it: 'should return deze week',
+
+        date: new Date(date.setDate(date.getDate() + 4)),
+        expected: 'deze week'
+      },
+      {
+        it: 'should return vorige week',
+
+        date: new Date(date.setDate(date.getDate() - 8)),
+        expected: 'vorige week'
+      },
+      {
+        it: 'should return volgende week',
+
+        date: new Date(date.setDate(date.getDate() + 7)),
+        expected: 'volgende week'
+      },
+      {
+        it: 'should return vroeger ',
+
+        date: new Date(date.setDate(date.getDate() - 14)),
+        expected: 'vroeger'
+      },
+      {
+        it: 'should return later',
+
+        date: new Date(date.setDate(date.getDate() + 14)),
+        expected: 'later'
+      }
+    ];
+    testCases.forEach(testCase => {
+      fit(testCase.it, () => {
+        const mockDates = new MockDate(testCase.date);
+        console.log(mockDates.mockDate);
+        console.log(date);
+        expect(
+          pipe.transform(mockDates.mockDate, {
+            rules: dateGroupLabelRules
+          })
+        ).toEqual(testCase.expected);
+
+        // restore everything to normal
+        mockDates.returnRealDate();
+      });
     });
-    it('should return true if its today or tomorrow', () => {
-      expect(isUrgent(new Date())).toBeTruthy(); //today
-      expect(
-        isUrgent(new Date(new Date().setDate(new Date().getDate() + 1)))
-      ).toBeTruthy(); //tomorrow
-      expect(
-        isUrgent(new Date(new Date().setDate(new Date().getDate() + 7)))
-      ).toBeFalsy(); // next week
-    });
+
+    //  it('should return the right date grouplabel given the preset', () => {
+    //   //alles in test cases steken
+    //   const pipe = new HumanDateTimePipe();
+    //   expect(
+    //     pipe.transform(new Date(date.setDate(date.getDate())), {
+    //       rules: dateGroupLabelRules
+    //     })
+    //   ).toEqual('vandaag');
+    //   expect(
+    //     pipe.transform(date, {
+    //       rules: dateGroupLabelRules
+    //     })
+    //   ).toEqual('deze week');
+    //   console.log(date);
+    //   expect(
+    //     pipe.transform(date.setDate(date.getDate() - 7), {
+    //       rules: dateGroupLabelRules
+    //     })
+    //   ).toEqual('vorige week');
+    //   expect(
+    //     pipe.transform(new Date(date.setDate(date.getDate() - 11)), {
+    //       rules: dateGroupLabelRules
+    //     })
+    //   ).toEqual('vroeger');
+    //   console.log(date);
+
+    //   console.log(new Date());
+
+    //   // expect(
+    //   //   pipe.transform(new Date(date.setDate(date.getDate() + 7)), {
+    //   //     rules: dateLabelRules
+    //   //   })
+    //   // ).toEqual('volgende week');
+    // });
+
+    // it('should return true if its today or tomorrow', () => {
+    //   expect(isUrgent(new Date())).toBeTruthy(); //today
+    //   expect(
+    //     isUrgent(new Date(new Date().setDate(new Date().getDate() + 1)))
+    //   ).toBeTruthy(); //tomorrow
+    //   expect(
+    //     isUrgent(new Date(new Date().setDate(new Date().getDate() + 7)))
+    //   ).toBeFalsy(); // next week
+    // });
   });
 });
 

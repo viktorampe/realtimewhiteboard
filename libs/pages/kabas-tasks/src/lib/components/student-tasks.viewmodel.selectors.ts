@@ -27,13 +27,13 @@ export const dateLabelRules = getHumanDateTimeRules([
 ]);
 
 export const dateGroupLabelRules = getHumanDateTimeRules([
-  humanDateTimeRulesEnum.THIS_WEEK,
-  humanDateTimeRulesEnum.PAST_WEEK,
-  humanDateTimeRulesEnum.EARLIER,
   humanDateTimeRulesEnum.TODAY,
   humanDateTimeRulesEnum.TOMORROW,
   humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+  humanDateTimeRulesEnum.THIS_WEEK,
+  humanDateTimeRulesEnum.PAST_WEEK,
   humanDateTimeRulesEnum.NEXT_WEEK,
+  humanDateTimeRulesEnum.EARLIER,
   humanDateTimeRulesEnum.LATER
 ]);
 
@@ -77,9 +77,12 @@ export const studentTasks = createSelector(
         dateGroupLabel: date.transform(te.end, {
           rules: dateGroupLabelRules
         }),
-        dateLabel: date.transform(te.end, {
-          rules: dateLabelRules
-        }),
+        dateLabel:
+          te.end < new Date()
+            ? 'ingediend op ' + te.end.toLocaleDateString('nl-BE')
+            : date.transform(te.end, {
+                rules: dateLabelRules
+              }),
         endDate: te.end,
         actions: [] // TaskActionService.getActions(taskInstance) (cant be done inside selector)
       } as StudentTaskInterface;
