@@ -67,7 +67,7 @@ export class TaskActionsTeacherService
         this.taskActionDictionary.openResultsForTask,
         this.taskActionDictionary.openLearningPlanGoalMatrixForTask
       ];
-    } else if (task.isPaperTask) {
+    } else {
       actions = [
         this.taskActionDictionary.openTask,
         task.archivedYear
