@@ -24,6 +24,9 @@ import {
 })
 export class EduContentSearchResultComponent extends ResultItemBase
   implements OnInit {
+  @HostBinding('class.app-educontentsearchresult--included')
+  public isInTask = false;
+
   @Input() data: EduContentSearchResultInterface;
 
   actions: ContentActionInterface[];
@@ -51,6 +54,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public update() {
     super.update();
+    this.isInTask = this.data.inTask;
     this.setupActions();
   }
 

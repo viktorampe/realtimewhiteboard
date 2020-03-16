@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { ResultStatus } from '@campus/dal';
-import { FileIconComponent } from '@campus/ui';
 
 @Component({
   selector: 'campus-student-task-content-list-item',
@@ -10,7 +9,7 @@ import { FileIconComponent } from '@campus/ui';
 export class StudentTaskContentListItemComponent {
   public resultStatuses = ResultStatus;
 
-  @Input() fileIcon: FileIconComponent;
+  @Input() fileIcon: string;
   @Input() title: string;
   @Input() description?: string;
   @Input() isFinished: boolean;

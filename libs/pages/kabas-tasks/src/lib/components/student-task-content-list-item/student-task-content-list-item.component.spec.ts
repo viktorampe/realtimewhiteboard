@@ -1,8 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
+import { HAMMER_LOADER } from '@angular/platform-browser';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { StudentTaskContentListItemComponent } from './student-task-content-list-item.component';
 
-describe('StudentTaskListItemContentComponent', () => {
+describe('StudentTaskContentListItemComponent', () => {
   let component: StudentTaskContentListItemComponent;
   let fixture: ComponentFixture<StudentTaskContentListItemComponent>;
 

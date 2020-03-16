@@ -18,7 +18,7 @@
   >
 
   <ng-container *ngIf="isFinished; else activeTask">
-    <ng-container *ngIf="status === resultStatuses.STATUS_COMPLETED">
+    <ng-container *ngIf="result === resultStatuses.STATUS_COMPLETED">
       <list-item-content class="student-task-content-list-item__score">
         <campus-rating [count]="score"></campus-rating>
       </list-item-content>
@@ -32,7 +32,7 @@
         svgIcon="check"
       ></mat-icon>
     </ng-container>
-    <ng-container *ngIf="status === resultStatuses.STATUS_OPENEND">
+    <ng-container *ngIf="result === resultStatuses.STATUS_OPENED">
       <list-item-content
         class="student-task-content-list-item__last-updated ui-caption"
         >niet ingediend</list-item-content
@@ -46,7 +46,7 @@
   </ng-container>
 
   <ng-template #activeTask>
-    <ng-container *ngIf="status === resultStatuses.STATUS_COMPLETED">
+    <ng-container *ngIf="result === resultStatuses.STATUS_COMPLETED">
       <list-item-content
         class="student-task-content-list-item__last-updated ui-caption"
         >ingediend op {{ lastUpdated }}</list-item-content
@@ -57,7 +57,7 @@
         svgIcon="check"
       ></mat-icon>
     </ng-container>
-    <ng-container *ngIf="status === resultStatuses.STATUS_OPENEND">
+    <ng-container *ngIf="result === resultStatuses.STATUS_OPENED">
       <list-item-content
         class="student-task-content-list-item__last-updated ui-caption"
         >gestart op {{ lastUpdated }}</list-item-content
