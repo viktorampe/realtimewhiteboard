@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockDate } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -37,7 +38,8 @@ describe('StudentTaskDetailComponent', () => {
         {
           provide: StudentTasksViewModel,
           useClass: MockStudentTasksViewModel
-        }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
       declarations: [StudentTaskDetailComponent]
     });
