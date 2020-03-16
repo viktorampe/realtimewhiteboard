@@ -7,8 +7,8 @@ export class StudentTaskWithContentFixture
   name = 'FooTask';
   description = 'Maak deze taak als voorbereiding op deze taak.';
   learningAreaName: 'Wiskunde';
-  startDate = new Date('1 january 2018');
-  endDate = new Date('20 january 2018');
+  start = new Date('1 january 2018');
+  end = new Date('20 january 2018');
   assigner = new PersonFixture({ firstName: 'Jan', name: 'Smit' });
   contents = [
     new StudentTaskContentFixture(),
