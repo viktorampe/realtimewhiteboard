@@ -34,6 +34,7 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule,
+  TaskActionInterface,
   TASK_ACTIONS_TEACHER_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -1104,6 +1105,22 @@ describe('ManageKabasTasksOverviewComponent', () => {
           hot('a', { a: expected })
         );
       });
+    });
+  });
+
+  describe('handleTaskAction()', () => {
+    it('should call the action handler with the task', () => {
+      const mockTaskAction: TaskActionInterface = {
+        label: '',
+        icon: '',
+        tooltip: '',
+        handler: jest.fn()
+      };
+      const mockTask = new TaskWithAssigneesFixture();
+
+      component.handleTaskAction(mockTaskAction, mockTask);
+
+      expect(mockTaskAction.handler).toHaveBeenCalledWith(mockTask);
     });
   });
 
