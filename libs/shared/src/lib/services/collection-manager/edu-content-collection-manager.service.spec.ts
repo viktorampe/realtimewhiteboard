@@ -17,6 +17,7 @@ import {
   HistoryInterface,
   HistoryReducer,
   HistoryTypesEnum,
+  LearningAreaFixture,
   TaskActions,
   TaskEduContentActions,
   TaskEduContentFixture,
@@ -65,6 +66,7 @@ describe('EduContentCollectionManagerService', () => {
     { id: 4 },
     { learningAreaId: 2 }
   );
+
   const selectedUserContent = new UserContentFixture({ id: 4 });
   const unlockedContents: UnlockedContentInterface[] = [
     new UnlockedContentFixture({
@@ -81,11 +83,12 @@ describe('EduContentCollectionManagerService', () => {
   const tasks: TaskInterface[] = [
     new TaskFixture({ id: 5, learningAreaId: 1 }),
     new TaskFixture({ id: 6, learningAreaId: 2 }),
-    new TaskFixture({ id: 7, learningAreaId: 2 })
+    new TaskFixture({ id: 7, learningAreaId: 2 }),
+    new TaskFixture({ id: 8, learningAreaId: 2, isPaperTask: true })
   ];
   const tasksCollection: ManageCollectionItemInterface[] = [
-    { id: 6, label: 'foo', icon: 'task' },
-    { id: 7, label: 'foo', icon: 'task' }
+    { id: 6, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/6' },
+    { id: 7, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/7' }
   ];
   const selectedTask = tasks[2];
   const taskEduContents: TaskEduContentInterface[] = [
@@ -210,7 +213,9 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'bundle' },
         bundlesCollection, // bundles[0] has different learningAreaId
         [7],
-        jasmine.arrayContaining([5, 6]) // order doesn't matter
+        jasmine.arrayContaining([5, 6]), // order doesn't matter
+        'bundels',
+        undefined
       );
     });
 
@@ -320,7 +325,45 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'task' },
         tasksCollection,
         [7],
-        jasmine.arrayContaining([6, 7]) // order doesn't matter
+        jasmine.arrayContaining([6, 7]), // order doesn't matter
+        'taken',
+        'Digitale taken voor foo'
+      );
+    });
+
+    it('should subscribe to collectionManager and only give paper task', () => {
+      const paperTaskcollection: ManageCollectionItemInterface[] = [
+        { id: 8, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/8' }
+      ];
+
+      const eduContents = new EduContentFixture(
+        { id: 4, type: 'paper-exercise' },
+        {
+          learningAreaId: 2,
+          learningArea: new LearningAreaFixture({
+            id: 2,
+            name: 'foo learning area name'
+          })
+        }
+      );
+
+      // create spies and mocks
+      const spy = jest
+        .spyOn(collectionManagerService, 'manageCollections')
+        .mockImplementation(() => of());
+
+      // subscribe to collectionManager changeEvent
+      service.manageTasksForContent(eduContents);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        '"foo" toevoegen aan je taken',
+        { id: 4, label: 'foo', icon: 'task' },
+        paperTaskcollection,
+        [7],
+        jasmine.arrayContaining([6, 7]), // order doesn't matter
+        'taken',
+        'Papieren taken voor foo learning area name'
       );
     });
 

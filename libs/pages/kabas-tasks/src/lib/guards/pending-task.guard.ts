@@ -10,14 +10,14 @@ import {
   DalState,
   EffectFeedback,
   EffectFeedbackActions,
-  Priority
+  Priority,
+  TaskStatusEnum
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { KabasTasksResolver } from '../components/kabas-tasks.resolver';
 import { getTaskWithAssignmentAndEduContents } from '../components/kabas-tasks.viewmodel.selectors';
-import { TaskStatusEnum } from '../interfaces/TaskWithAssignees.interface';
 
 @Injectable()
 export class PendingTaskGuard implements CanActivate {

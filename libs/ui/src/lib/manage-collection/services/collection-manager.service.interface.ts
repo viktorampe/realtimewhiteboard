@@ -13,6 +13,8 @@ export interface CollectionManagerServiceInterface {
     item: ManageCollectionItemInterface,
     linkableItems: ManageCollectionItemInterface[],
     linkedItemIds: number[],
-    recentItemIds: number[]
+    recentItemIds: number[],
+    collectionType: string, // e.g. 'taken' or 'bundels',
+    subtitle?: string
   ): Observable<ItemToggledInCollectionInterface>;
 }

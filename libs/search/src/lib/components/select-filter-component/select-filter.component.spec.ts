@@ -196,6 +196,41 @@ describe('SelectFilterComponentComponent', () => {
     component.selectControl.setValue(mockFilterCriteria.values.slice(0, 2));
   });
 
+  describe('reset', () => {
+    it('should clear the selection', () => {
+      mockFilterCriteria.values[0].selected = true;
+      mockFilterCriteria.values[1].selected = true;
+
+      component.reset();
+
+      expect(mockFilterCriteria.values.some(value => value.selected)).toBe(
+        false
+      );
+    });
+
+    it('should emit', () => {
+      mockFilterCriteria.values[0].selected = true;
+      mockFilterCriteria.values[1].selected = true;
+
+      const emitSpy = (component.filterSelectionChange.emit = jest.fn());
+
+      component.reset();
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).toHaveBeenCalledWith([mockFilterCriteria]);
+    });
+
+    it('should not emit', () => {
+      mockFilterCriteria.values[0].selected = true;
+      mockFilterCriteria.values[1].selected = true;
+
+      const emitSpy = (component.filterSelectionChange.emit = jest.fn());
+
+      component.reset(false);
+
+      expect(emitSpy).not.toHaveBeenCalled();
+    });
+  });
+
   function getOptionsForCriteria(
     criteria: SearchFilterCriteriaInterface = mockFilterCriteria
   ): DebugElement[] {

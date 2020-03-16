@@ -3,4 +3,5 @@ export interface ManageCollectionItemInterface {
   label: string;
   id: number;
   className?: string;
+  linkToItem?: string;
 }

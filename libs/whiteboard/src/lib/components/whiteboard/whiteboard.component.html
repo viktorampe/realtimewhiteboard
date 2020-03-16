@@ -36,6 +36,8 @@
       cdkDragBoundary=".whiteboard__workspace"
       [class.zoom]="card.mode === Mode.ZOOM"
       [class.onTop]="card.mode === Mode.SELECTED"
+      (cdkDragEnded)="onDragEnded($event, card)"
+      (cdkDragStarted)="onDragStarted(card)"
     >
       <campus-color-list
         class="whiteboard__color-list"
@@ -66,8 +68,8 @@
         [(mode)]="card.mode"
         [viewModeImage]="card.viewModeImage"
         (update)="updateCard($event, card)"
+        (remove)="removeImage(card)"
         (openFilePicker)="openFilePicker(filePicker)"
-        (cdkDragEnded)="onDragEnded($event, card)"
         (click)="onCardClicked($event, card)"
         (press)="onCardPressed(card)"
         (tap)="onCardTapped(card)"
@@ -81,6 +83,19 @@
       />
     </div>
   </div>
+  <campus-empty-state
+    class="whiteboard__empty"
+    *ngIf="!whiteboard.cards.length"
+    [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
+    [description]="
+      true
+        ? 'Sleep kaartjes uit de shelf naar het bord.'
+        : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
+    "
+    [svgIcon]="
+      true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+    "
+  ></campus-empty-state>
   <button
     mat-fab
     color="primary"
@@ -89,19 +104,11 @@
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
   </button>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard__savebutton"
-    (click)="saveWhiteboard()"
-  >
-    <mat-icon style="color: #FFFFFF;" [svgIcon]="'check'"></mat-icon>
-  </button>
 
   <campus-shelf
     (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
     [class.minimizedShelf]="isShelfMinimized"
-    [cards]="whiteboard.cards"
+    [cards]="whiteboard.shelfCards"
     [(isMinimized)]="isShelfMinimized"
   ></campus-shelf>
 </div>

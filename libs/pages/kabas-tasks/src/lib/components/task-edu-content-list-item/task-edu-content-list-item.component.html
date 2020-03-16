@@ -1,50 +1,42 @@
-<mat-icon
-  class="manage-kabas-tasks-task-edu-content-list-item__file-icon"
-  svgIcon="{{ fileIcon != 'ludo.zip' ? 'general-file' : 'exercise' }}"
-></mat-icon>
+<campus-list-item-content [contentRightSeparated]="true">
+  <mat-icon
+    list-item-icon
+    svgIcon="{{ fileIcon != 'ludo.zip' ? 'general-file' : 'exercise' }}"
+  ></mat-icon>
 
-<div
-  class="manage-kabas-tasks-task-edu-content-list-item__container"
-  [class.manage-kabas-tasks-task-edu-content-list-item__container--no-actions]="
-    !actions
-  "
->
-  <div
-    class="manage-kabas-tasks-task-edu-content-list-item__container__title"
-    >{{ title }}</div
-  >
-  <div
-    *ngIf="actions"
-    class="manage-kabas-tasks-task-edu-content-list-item__container__actions"
-    ><span
+  <list-item-title>{{ title }}</list-item-title>
+  <list-item-caption>{{ description }}</list-item-caption>
+  <list-item-actions *ngIf="actions"
+    ><campus-button
+      inline
       campusClickStopPropagation
       *ngFor="let action of actions"
       (click)="onActionClick(action)"
     >
       {{ action.label }}
-    </span></div
+    </campus-button></list-item-actions
   >
-</div>
-<div class="manage-kabas-tasks-task-edu-content-list-item__combined-container">
-  <div
+  >
+  <list-item-content
     *ngIf="level"
-    class="manage-kabas-tasks-task-edu-content-list-item__level"
+    class="manage-kabas-tasks-task-edu-content-list-item__level ui-caption"
   >
     {{ level }}
-  </div>
+  </list-item-content>
 
-  <div
+  <list-item-content
     *ngIf="!isPaperTask"
-    class="manage-kabas-tasks-task-edu-content-list-item__required"
+    class="manage-kabas-tasks-task-edu-content-list-item__required ui-caption"
     [class.manage-kabas-tasks-task-edu-content-list-item__required--no-diabolo]="
       !diaboloPhaseIcon
     "
   >
     {{ required ? 'moetje' : 'magje' }}
-  </div>
+  </list-item-content>
 
   <mat-icon
+    list-item-content
     class="manage-kabas-tasks-task-edu-content-list-item__diabolo"
     svgIcon="{{ diaboloPhaseIcon }}"
   ></mat-icon>
-</div>
+</campus-list-item-content>

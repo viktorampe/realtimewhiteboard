@@ -6,6 +6,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import {
   SearchFilterFactory,
   SearchModeInterface,
@@ -65,7 +66,7 @@ describe('ResultsListComponentComponent', () => {
     { id: 3, title: 'baz' }
   ];
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     // TestBed does not allow entryComponents, use overrideModule as workaround
     TestBed.configureTestingModule({
       imports: [UiModule, MatTooltipModule, ScrollingModule],
@@ -86,7 +87,7 @@ describe('ResultsListComponentComponent', () => {
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemComponent] }
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ResultsListComponent);
@@ -238,5 +239,17 @@ describe('ResultsListComponentComponent', () => {
         expect(component['checkForMoreResults']).toHaveBeenCalledTimes(1);
       });
     }));
+  });
+
+  describe('items', () => {
+    it('should contain the items in the result list', () => {
+      const resultItems = fixture.debugElement.queryAll(
+        By.directive(ResultItemComponent)
+      );
+
+      const items = component.items.toArray();
+      expect(items.length).toBe(3);
+      expect(items).toEqual(resultItems.map(rI => rI.componentInstance));
+    });
   });
 });

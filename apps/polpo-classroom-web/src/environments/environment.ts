@@ -76,6 +76,9 @@ export const environment: EnvironmentInterface = {
         FavoriteTypesEnum.EDUCONTENT,
         FavoriteTypesEnum.AREA
       ]
+    },
+    collectionManagement: {
+      useFilter: true
     }
   },
   sso: {

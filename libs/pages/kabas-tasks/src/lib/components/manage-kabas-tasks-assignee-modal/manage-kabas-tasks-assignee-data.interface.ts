@@ -1,4 +1,4 @@
-import { AssigneeInterface } from '../../interfaces/Assignee.interface';
+import { AssigneeInterface } from '@campus/dal';
 
 export interface ManageKabasTasksAssigneeDataInterface {
   title: string;

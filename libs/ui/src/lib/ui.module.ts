@@ -25,17 +25,32 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
 import { BeDateAdapter, UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import {
+  BackdropCollapseActionDirective,
+  BackdropComponent,
+  BackdropHeaderActionsDirective,
+  BackdropRevealActionDirective,
+  BackLayerContentDirective,
+  FrontLayerContentDirective,
+  FrontLayerHeaderDirective
+} from './backdrop/backdrop.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
+import { DenseDirective } from './button/directives/button-dense.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { FabDirective } from './button/directives/button-fab.directive';
+import { FlatDirective } from './button/directives/button-flat.directive';
+import { IconDirective } from './button/directives/button-icon.directive';
+import { InlineDirective } from './button/directives/button-inline.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
 import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
+import { CollapsibleContainerComponent } from './collapsible-container/collapsible-container.component';
 import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet.component';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
@@ -55,6 +70,14 @@ import { FolderDetailsDirective } from './folder/directives/folder-details.direc
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import {
+  ListItemActionsDirective,
+  ListItemCaptionDirective,
+  ListItemContentComponent,
+  ListItemContentDirective,
+  ListItemIconDirective,
+  ListItemTitleDirective
+} from './list-item-content/list-item-content.component';
+import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
@@ -68,11 +91,14 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
+import { ProgressComponent } from './progress/progress.component';
+import { RatingComponent } from './rating/rating.component';
 import {
-  SectionActions,
+  SectionActionsDirective,
   SectionComponent,
-  SectionContent,
-  SectionTitle
+  SectionContentDirective,
+  SectionFooterActionsDirective,
+  SectionTitleDirective
 } from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
@@ -80,6 +106,7 @@ import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
 import { ShellTopDirective } from './shell/directives/shell-top.directive';
 import { ShellComponent } from './shell/shell.component';
+import { SideSheetActionsDirective } from './side-sheet/directives/side-sheet-actions.directive';
 import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.directive';
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
@@ -94,6 +121,7 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+
 @NgModule({
   imports: [
     OverlayModule,
@@ -124,6 +152,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     FilterTextInputComponent,
     SideSheetComponent,
     SideSheetHeaderDirective,
+    SideSheetActionsDirective,
     SideSheetBodyDirective,
     SideSheetPageDirective,
     ShellComponent,
@@ -183,14 +212,37 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionFooterActionsDirective,
+    SectionTitleDirective,
+    ListItemContentComponent,
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective,
+    BackdropComponent,
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective,
+    ProgressComponent,
+    CollapsibleContainerComponent,
+    RatingComponent
   ],
   exports: [
     FilterTextInputComponent,
     SideSheetComponent,
     SideSheetHeaderDirective,
+    SideSheetActionsDirective,
     SideSheetBodyDirective,
     SideSheetPageDirective,
     ShellComponent,
@@ -252,9 +304,31 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionFooterActionsDirective,
+    SectionTitleDirective,
+    ListItemContentComponent,
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective,
+    BackdropComponent,
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective,
+    ProgressComponent,
+    CollapsibleContainerComponent,
+    RatingComponent
   ],
   providers: [
     {

@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  AssigneeInterface,
+  AssigneeTypesEnum,
   ClassGroupFixture,
   ClassGroupInterface,
-  EduContentBookInterface,
   EduContentFixture,
   EduContentTOCFixture,
   EduContentTOCInterface,
@@ -10,12 +11,16 @@ import {
   GroupInterface,
   LearningAreaFixture,
   LearningAreaInterface,
+  MethodYearsFixture,
+  MethodYearsInterface,
   PersonFixture,
   PersonInterface,
   TaskEduContentFixture,
   TaskEduContentInterface,
   TaskFixture,
-  TaskInterface
+  TaskInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import {
   SearchModeInterface,
@@ -29,14 +34,7 @@ import {
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../interfaces/Assignee.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
+import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -57,17 +55,19 @@ export class MockKabasTasksViewModel
   public paperTasksWithAssignments$: BehaviorSubject<
     TaskWithAssigneesInterface[]
   >;
-  public currentTask$: Observable<TaskWithAssigneesInterface>;
+  public currentTask$: Observable<TaskWithTaskEduContentInterface>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentTaskParams$: BehaviorSubject<CurrentTaskParams>;
   public selectableLearningAreas$: BehaviorSubject<LearningAreaInterface[]>;
   public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
   public groups$: BehaviorSubject<GroupInterface[]>;
   public students$: BehaviorSubject<PersonInterface[]>;
+  public methodYearsInArea$: BehaviorSubject<MethodYearsInterface[]>;
 
-  public searchBook$: BehaviorSubject<EduContentBookInterface>;
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
+
+  public updatedEduContentIds$: BehaviorSubject<number[]>;
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -134,6 +134,11 @@ export class MockKabasTasksViewModel
     this.currentToc$ = this.getCurrentToc();
     this.favoriteBookIdsForTask$ = new BehaviorSubject([1]);
     this.selectedBookTitle$ = new BehaviorSubject('foo 1');
+
+    this.methodYearsInArea$ = new BehaviorSubject<MethodYearsInterface[]>([
+      new MethodYearsFixture()
+    ]);
+    this.updatedEduContentIds$ = new BehaviorSubject([]);
   }
 
   public getCurrentToc() {
@@ -455,10 +460,10 @@ export class MockKabasTasksViewModel
     assignees: AssigneeInterface[]
   ) {}
 
-  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+  private getCurrentTask(): Observable<TaskWithTaskEduContentInterface> {
     return this.tasksWithAssignments$.pipe(
       filter(tasks => tasks.length > 0),
-      map(tasks => tasks[0])
+      map(tasks => tasks[0] as TaskWithTaskEduContentInterface)
     );
   }
 
@@ -500,4 +505,6 @@ export class MockKabasTasksViewModel
   }
 
   public updateSearchState(state: SearchStateInterface) {}
+
+  public updateSearchResultItem() {}
 }

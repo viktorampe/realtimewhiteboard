@@ -11,6 +11,7 @@
       [svgIcon]="'collapsible-sheet-back'"
       (click)="toggleCollapsed()"
       [@rotate]="collapsed"
+      data-cy="toggle-collabsible-sheet"
     ></mat-icon>
     <ng-content select="[main]"></ng-content>
   </div>

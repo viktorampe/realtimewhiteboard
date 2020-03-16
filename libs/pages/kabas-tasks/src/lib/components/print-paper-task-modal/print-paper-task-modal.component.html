@@ -6,6 +6,7 @@
   <div class="print-paper-tasks__container">
     <div
       *ngFor="let action of actions"
+      data-cy="modal-btn-print-paper"
       (click)="action.handler()"
       class="print-paper-tasks__container__link"
       [class.print-paper-tasks__container__link--disabled]="action.disabled"
@@ -27,6 +28,7 @@
     primary
     class="print-paper-tasks__actions__button"
     (click)="clickCancel()"
+    data-cy="modal-btn-print-cancel"
     >Annuleren</campus-button
   >
 </mat-dialog-actions>

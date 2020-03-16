@@ -53,6 +53,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @memberof SideSheetComponent
    */
   @Input() isOpenOnInit: boolean;
+  @Input() canClose = true;
 
   /**
    * Reference to the material drawer component.
@@ -103,6 +104,9 @@ export class SideSheetComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setupSubscriptions();
+    if (this.canClose === false) {
+      this.isOpenOnInit = true;
+    }
   }
 
   private setupSubscriptions(): void {
