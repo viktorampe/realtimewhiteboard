@@ -40,10 +40,13 @@ export const studentTaskWithContent = createSelector(
       resultByEducontentId
     );
 
+    const isFinished = end < new Date();
+
     return {
       name,
       description,
       learningAreaName,
+      isFinished,
       start,
       end,
       assigner,

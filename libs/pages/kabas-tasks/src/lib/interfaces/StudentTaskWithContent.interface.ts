@@ -7,6 +7,7 @@ export interface StudentTaskWithContentInterface {
   learningAreaName: string;
   start: Date;
   end: Date;
+  isFinished: boolean;
   assigner: PersonInterface;
   contents: StudentTaskContentInterface[];
 }
