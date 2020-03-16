@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { TaskInfoByLearningAreaPipe } from '../../pipes/task-info-by-learning-area.pipe';
@@ -53,19 +53,27 @@ describe('StudentTaskOverviewComponent', () => {
   });
 
   describe('Empty State', () => {
+    let viewmodelStudentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+
+    beforeEach(() => {
+      viewmodelStudentTasks$ = viewmodel.studentTasks$ as BehaviorSubject<
+        StudentTaskInterface[]
+      >;
+      viewmodelStudentTasks$.next([]);
+    });
+
     describe('inEmptyState$', () => {
       it('should emit true when there are no tasks', () => {
-        viewmodel.studentTasks$.next([]);
         expect(component.taskCount$).toBeObservable(hot('a', { a: 0 }));
       });
 
       it('should emit false when there are tasks', () => {
-        viewmodel.studentTasks$.next([new StudentTaskFixture()]);
+        viewmodelStudentTasks$.next([new StudentTaskFixture()]);
         expect(component.taskCount$).toBeObservable(hot('a', { a: 1 }));
       });
     });
+
     it('should show emtpy state for active tasks', () => {
-      component.taskCount$ = of(0);
       component.showFinishedTasks$.next(false);
       fixture.detectChanges();
 
@@ -86,7 +94,6 @@ describe('StudentTaskOverviewComponent', () => {
     });
 
     it('should show emtpy state for finished tasks', () => {
-      component.taskCount$ = of(0);
       component.showFinishedTasks$.next(true);
       fixture.detectChanges();
 
@@ -180,6 +187,15 @@ describe('StudentTaskOverviewComponent', () => {
   });
 
   describe('emptyStateData$', () => {
+    let viewmodelStudentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+
+    beforeEach(() => {
+      viewmodelStudentTasks$ = viewmodel.studentTasks$ as BehaviorSubject<
+        StudentTaskInterface[]
+      >;
+      viewmodelStudentTasks$.next([]);
+    });
+
     it('should stream the correct data for finished tasks', () => {
       component.showFinishedTasks$.next(false);
 
