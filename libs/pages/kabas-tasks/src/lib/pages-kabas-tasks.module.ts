@@ -90,8 +90,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
       provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
       useClass: ContentTaskActionsService
     },
-    PendingTaskGuard,
-    ValidTaskInstanceGuard
+    ValidTaskInstanceGuard,
+    PendingTaskGuard
   ],
   exports: [],
   entryComponents: [

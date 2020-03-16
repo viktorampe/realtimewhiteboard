@@ -1,3 +1,4 @@
+import { Params } from '@angular/router';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
@@ -12,6 +13,7 @@ export class MockStudentTasksViewModel
   public currentTask$ = new BehaviorSubject<StudentTaskWithContentInterface>(
     new StudentTaskWithContentFixture()
   );
+  public routeParams$: BehaviorSubject<Params>;
 
   private studentTasks = [
     new StudentTaskFixture({
@@ -26,7 +28,14 @@ export class MockStudentTasksViewModel
     this.studentTasks$ = new BehaviorSubject<StudentTaskInterface[]>(
       this.studentTasks
     );
+    this.routeParams$ = new BehaviorSubject<Params>({});
   }
 
-  public setupStreams() {}
+  public openEduContentAsExercise() {}
+  public openEduContentAsSolution() {}
+  public openEduContentFromResult() {}
+  public openEduContentAsStream() {}
+  public openEduContentAsDownload() {}
+  public openBoeke() {}
+  public previewEduContentAsImage() {}
 }
