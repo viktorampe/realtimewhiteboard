@@ -20,7 +20,12 @@ export class HumanDateTimePipe implements PipeTransform {
       value = new Date(value);
     }
 
-    const { referenceDate = new Date(), rules, locale = 'nl-BE' } = args;
+    const {
+      referenceDate = new Date(),
+      rules,
+      locale = 'nl-BE',
+      datePrefix
+    } = args;
 
     for (const rule of rules) {
       const valueMilliSeconds = value.getTime();
@@ -31,6 +36,8 @@ export class HumanDateTimePipe implements PipeTransform {
       }
     }
 
-    return value.toLocaleDateString(locale);
+    const prefix = datePrefix ? datePrefix + ' ' : '';
+
+    return prefix + value.toLocaleDateString(locale);
   }
 }
