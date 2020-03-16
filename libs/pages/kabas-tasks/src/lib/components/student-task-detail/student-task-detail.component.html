@@ -1,4 +1,4 @@
-<campus-backdrop title="TASK_NAME_HERE" static>
+<campus-backdrop *ngIf="task$ | async as task" [title]="task.name" static>
   <front-layer-content>
     <div class="student-task-detail__content">
       <ng-container
@@ -27,7 +27,16 @@
                 *ngFor="let requiredTaskContent of requiredTaskContents"
                 data-cy="required-task-content"
               >
-                merci Karl
+                <campus-student-task-content-list-item
+                  [fileIcon]="requiredTaskContent.icon"
+                  [title]="requiredTaskContent.name"
+                  [description]="requiredTaskContent.description"
+                  [result]="requiredTaskContent.status"
+                  [lastUpdated]="requiredTaskContent.lastUpdated"
+                  [score]="requiredTaskContent.score"
+                  [actions]="requiredTaskContent.actions"
+                  [isFinished]="task.isFinished"
+                ></campus-student-task-content-list-item>
               </mat-list-item>
             </mat-list>
           </section-content>
@@ -49,7 +58,16 @@
                 *ngFor="let optionalTaskContent of optionalTaskContents"
                 data-cy="optional-task-content"
               >
-                merci Karl
+                <campus-student-task-content-list-item
+                  [fileIcon]="optionalTaskContent.icon"
+                  [title]="optionalTaskContent.name"
+                  [description]="optionalTaskContent.description"
+                  [result]="optionalTaskContent.status"
+                  [lastUpdated]="optionalTaskContent.lastUpdated"
+                  [score]="optionalTaskContent.score"
+                  [actions]="optionalTaskContent.actions"
+                  [isFinished]="task.isFinished"
+                ></campus-student-task-content-list-item>
               </mat-list-item>
             </mat-list>
           </section-content>
