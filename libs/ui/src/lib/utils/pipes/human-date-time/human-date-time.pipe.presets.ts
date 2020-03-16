@@ -32,7 +32,6 @@ export enum humanDateTimeRulesEnum {
   'WEEKDAY',
   'THIS_WEEK',
   'NEXT_WEEK',
-  'DATE',
   'LATER',
   'EARLIER'
 }

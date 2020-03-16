@@ -1,4 +1,3 @@
-// file.only
 import {
   EduContentFixture,
   ResultFixture,
@@ -7,7 +6,6 @@ import {
   TaskFixture,
   TaskInstanceFixture
 } from '@campus/dal';
-import { MockDate } from '@campus/testing';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 import { LearningAreaFixture } from './../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
@@ -126,30 +124,29 @@ describe('student-tasks viewmodel selectors', () => {
     const start = new Date(2020, 1, 1);
     const end = new Date(2020, 2, 1);
     const lastUpdated = new Date(2020, 1, 15);
-    const mockDate = new MockDate();
 
     const task = getMockTask(lastUpdated);
     const projector = studentTasks.projector;
 
-    const expected: StudentTaskInterface[] = [
-      {
-        name: 'Huiswerk',
-        description: 'Super belangrijke herhalingsoefeningen',
-        learningAreaName: 'Frans',
-        learningAreaId: 1,
-        count: {
-          completedRequired: 0,
-          totalRequired: 0
-        },
-        isFinished: false,
-        isUrgent: false,
-        dateGroupLabel: 'vroeger',
-        dateLabel: '2020-3-1',
-        endDate: end,
-        actions: []
-      }
-    ];
     it('should return expected values given all expected values', () => {
+      const expected: StudentTaskInterface[] = [
+        {
+          name: 'Huiswerk',
+          description: 'Super belangrijke herhalingsoefeningen',
+          learningAreaName: 'Frans',
+          learningAreaId: 1,
+          count: {
+            completedRequired: 2,
+            totalRequired: 2
+          },
+          isFinished: false,
+          isUrgent: false,
+          dateGroupLabel: 'vroeger',
+          dateLabel: '2020-3-1',
+          endDate: end,
+          actions: []
+        }
+      ];
       const taskInstances = [
         new TaskInstanceFixture({
           start,
@@ -165,8 +162,14 @@ describe('student-tasks viewmodel selectors', () => {
               })
             ],
             taskEduContents: [
-              new TaskEduContentFixture({ required: true }),
-              new TaskEduContentFixture({ required: true })
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
+              }),
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
+              })
             ],
             learningAreaId: 1
           }
@@ -176,7 +179,49 @@ describe('student-tasks viewmodel selectors', () => {
       expect(res).toEqual(expected);
     });
 
-    it('should show isFinished=false if there are no results', () => {});
+    it('should show isFinished=false if date is before', () => {
+      const expected: StudentTaskInterface[] = [
+        {
+          name: 'Huiswerk',
+          description: 'Super belangrijke herhalingsoefeningen',
+          learningAreaName: 'Frans',
+          learningAreaId: 1,
+          count: {
+            completedRequired: 0,
+            totalRequired: 2
+          },
+          isFinished: false,
+          isUrgent: false,
+          dateGroupLabel: 'vroeger',
+          dateLabel: '2019-4-1',
+          endDate: new Date(2019, 3, 1),
+          actions: []
+        }
+      ];
+      const taskInstances = [
+        new TaskInstanceFixture({
+          start,
+          end: new Date(2019, 3, 1),
+          task: {
+            ...task,
+            results: [],
+            taskEduContents: [
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
+              }),
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
+              })
+            ],
+            learningAreaId: 1
+          }
+        })
+      ];
+      const res = projector(taskInstances);
+      expect(res).toEqual(expected);
+    });
   });
 });
 
