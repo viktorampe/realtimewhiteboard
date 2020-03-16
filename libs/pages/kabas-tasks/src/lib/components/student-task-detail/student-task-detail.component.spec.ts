@@ -186,7 +186,7 @@ describe('StudentTaskDetailComponent', () => {
       fixture.detectChanges();
 
       const finishByCE = fixture.debugElement.query(
-        By.css('[data-cy=task-finish-by]')
+        By.css('[data-cy=task-finished-on]')
       );
       const finishByText = finishByCE.nativeElement.textContent.trim();
 
