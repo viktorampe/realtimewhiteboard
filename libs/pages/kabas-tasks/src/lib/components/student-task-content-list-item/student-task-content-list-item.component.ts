@@ -13,7 +13,7 @@ export class StudentTaskContentListItemComponent implements OnInit {
   @Input() isFinished: boolean;
   @Input() lastUpdated: Date;
   @Input() score: number;
-  @Input() result: ResultStatus;
+  @Input() status: ResultStatus;
   @Input() actions: {
     label: string;
     handler: () => any; //prevents warning "Member handler is not callable in template"
