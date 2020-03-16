@@ -1,13 +1,17 @@
 import { MockDate } from './MockDate';
 
 describe('MockDate', () => {
-  it('should mock new Date()', () => {
+  it('should mock new Date()', async () => {
     const mock = new MockDate();
 
     const dateA = new Date();
+
+    // sleep for a second
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     const dateB = new Date();
 
-    expect(dateA).toBe(dateB);
+    expect(dateA).toEqual(dateB);
   });
 
   it('should mock new Date() with the provided date', () => {
@@ -17,7 +21,7 @@ describe('MockDate', () => {
 
     const dateA = new Date();
 
-    expect(dateA).toBe(defaultDate);
+    expect(dateA).toEqual(defaultDate);
   });
 
   it('should mock Date.now()', () => {

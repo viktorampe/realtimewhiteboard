@@ -184,6 +184,18 @@ describe('HumanDateTimePipe', () => {
       expect(pipe.transform(date)).toBe(expected);
     });
 
+    it('should show the text for dateformat - with prefix', () => {
+      date.setDate(date.getDate() - 7);
+
+      const expected = 'op ' + date.toLocaleDateString('nl-BE');
+      expect(
+        pipe.transform(date, {
+          rules: [],
+          datePrefix: 'op'
+        })
+      ).toBe(expected);
+    });
+
     it('should return an empty string when null date', () => {
       expect(pipe.transform(null)).toBe('');
     });

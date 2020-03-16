@@ -1,5 +1,10 @@
 import { Component, HostBinding } from '@angular/core';
-import { SectionModeEnum } from '@campus/ui';
+import {
+  getHumanDateTimeRules,
+  HumanDateTimeArgsInterface,
+  humanDateTimeRulesEnum,
+  SectionModeEnum
+} from '@campus/ui';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StudentTaskContentInterface } from '../../interfaces/StudentTaskContent.interface';
@@ -20,6 +25,17 @@ export class StudentTaskDetailComponent {
   public task$: Observable<StudentTaskWithContentInterface>;
   public requiredTaskContents$: Observable<StudentTaskContentInterface[]>;
   public optionalTaskContents$: Observable<StudentTaskContentInterface[]>;
+
+  public dateTimeArguments: HumanDateTimeArgsInterface = {
+    rules: getHumanDateTimeRules([
+      humanDateTimeRulesEnum.TODAY,
+      humanDateTimeRulesEnum.TOMORROW,
+      humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+      humanDateTimeRulesEnum.WEEKDAY,
+      humanDateTimeRulesEnum.NEXT_WEEK
+    ]),
+    datePrefix: 'op'
+  };
 
   constructor(private viewModel: StudentTasksViewModel) {
     this.task$ = this.viewModel.currentTask$;
