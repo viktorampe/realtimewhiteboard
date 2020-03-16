@@ -1,5 +1,3 @@
-// file.only
-
 import { ChangeDetectorRef, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
