@@ -34,9 +34,6 @@ export class StudentTaskOverviewComponent implements OnInit {
   studentTaskOverviewClass = true;
 
   // main section
-  private groupedByLearningArea$: Observable<TaskListSectionInterface[]>; // TODO: implement (see #3352)
-  private groupedByDate$: Observable<TaskListSectionInterface[]>; // TODO: implement (see #3352)
-
   public sectionTitle$: Observable<string>;
   public taskCount$: Observable<number>;
   public emptyStateData$: Observable<{
