@@ -123,12 +123,10 @@ describe('student-tasks viewmodel selectors', () => {
   });
 
   describe('studentTasks', () => {
-    const mockDate = new MockDate(); // je kan date setten in de mockdate (anders gebruikt hij de gewonenew Date())
     const start = new Date(2020, 1, 1);
     const end = new Date(2020, 2, 1);
-    const assigner = new PersonFixture();
     const lastUpdated = new Date(2020, 1, 15);
-    let yday = new MockDate(new Date());
+    const mockDate = new MockDate(); // je kan date setten in de mockdate (anders gebruikt hij de gewonenew Date())
 
     const task = getMockTask(lastUpdated);
     //use getMockDate -> mockdate gebruiken en new Date() wordt dan gezet op de gewone mockdate -> is het gemakkelijkst!
@@ -136,19 +134,19 @@ describe('student-tasks viewmodel selectors', () => {
 
     const expected: StudentTaskInterface[] = [
       {
-        name: 'neuspeuteren',
-        description: 'instructiefilmpje',
-        learningAreaName: 'wiskunde',
-        learningAreaId: 7,
+        name: 'Huiswerk',
+        description: 'Super belangrijke herhalingsoefeningen',
+        learningAreaName: 'Frans',
+        learningAreaId: 1,
         count: {
-          completedRequired: 2,
-          totalRequired: 2
+          completedRequired: 0,
+          totalRequired: 0
         },
-        isFinished: true,
-        isUrgent: true,
-        dateGroupLabel: 'morgen',
-        dateLabel: 'morgen',
-        endDate: new Date(),
+        isFinished: false,
+        isUrgent: false,
+        dateGroupLabel: 'vroeger',
+        dateLabel: '2020-3-1',
+        endDate: end,
         actions: []
       }
     ];
