@@ -75,8 +75,8 @@ $L6: #e40521;
 
     &__actions {
       position: absolute;
-      top: 36px;
-      right: 36px;
+      top: 24px;
+      right: 24px;
       z-index: 3;
 
       &__settingsbutton {
@@ -85,7 +85,9 @@ $L6: #e40521;
         align-items: center;
         width: 40px;
         height: 40px;
+        box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
         border-radius: 50%;
+        transition: box-shadow 300ms;
 
         background: linear-gradient(
           145deg,
@@ -94,6 +96,7 @@ $L6: #e40521;
         );
 
         &:active {
+          box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
           background: linear-gradient(
             145deg,
             darken(#e0e5ec, 5%),
