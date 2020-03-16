@@ -1,3 +1,13 @@
+import {
+  animate,
+  animateChild,
+  keyframes,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import {
   Component,
@@ -21,6 +31,59 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
+  animations: [
+    trigger('showHideCard', [
+      transition(':leave', [
+        style({ opacity: '1' }),
+        animate('150ms cubic-bezier(.43,0,.31,1)', style({ opacity: '0' }))
+      ])
+    ]),
+    trigger('showHideWhiteboardTools', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ transform: 'translateY(-100%)', offset: 0 }),
+            style({ transform: 'translateY(8px)', offset: 0.75 }),
+            style({ transform: 'translateY(-5px)', offset: 0.9 }),
+            style({ transform: 'translateY(0)', offset: 1 })
+          ])
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(-100%)' })
+        )
+      ])
+    ]),
+    trigger('showHideColorList', [
+      transition(':enter', [
+        query('@showHideColorSwatchOne', stagger(50, [animateChild()]), {
+          optional: true
+        })
+      ]),
+      transition(':leave', [
+        query('@showHideColorSwatchOne', stagger(-50, [animateChild()]), {
+          optional: true
+        })
+      ])
+    ]),
+    trigger('showHideToolbar', [
+      transition(':enter', [
+        query('@showHideToolbarTool', stagger(-50, [animateChild()]), {
+          optional: true
+        })
+      ]),
+      transition(':leave', [
+        query('@showHideToolbarTool', stagger(50, [animateChild()]), {
+          optional: true
+        })
+      ])
+    ])
+  ],
   encapsulation: ViewEncapsulation.None
 })
 export class WhiteboardComponent implements OnChanges {

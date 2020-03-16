@@ -6,6 +6,7 @@
   (click)="onClickWhiteboard()"
 >
   <campus-whiteboard-toolbar
+    @showHideWhiteboardTools
     *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
@@ -28,6 +29,7 @@
   </div>
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
     <div
+      @showHideCard
       class="whiteboard__workspace__container"
       *ngFor="let card of whiteboard.cards"
       cdkDrag
@@ -40,11 +42,14 @@
       (cdkDragStarted)="onDragStarted(card)"
     >
       <campus-color-list
+        @showHideColorList
         class="whiteboard__color-list"
+        [mode]="card.mode"
         (selectedColor)="changeColorForCard(card, $event)"
         *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
       ></campus-color-list>
       <campus-card-toolbar
+        @showHideToolbar
         *ngIf="
           card.mode === Mode.EDIT ||
           card.mode === Mode.SELECTED ||

@@ -1,10 +1,12 @@
 .whiteboard {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
 
   campus-whiteboard-toolbar {
     position: absolute;
+    top: 24px;
     z-index: 1;
     align-self: center;
   }
