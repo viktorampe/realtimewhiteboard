@@ -31,6 +31,11 @@ import {
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
+import {
+  TaskActionInterface,
+  TaskActionsTeacherServiceInterface,
+  TASK_ACTIONS_TEACHER_SERVICE_TOKEN
+} from '@campus/shared';
 import { ConfirmationModalComponent } from '@campus/ui';
 import {
   DateFunctions,
@@ -154,7 +159,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    @Inject(TASK_ACTIONS_TEACHER_SERVICE_TOKEN)
+    private taskActionsService: TaskActionsTeacherServiceInterface
   ) {}
 
   ngOnDestroy() {
@@ -184,7 +191,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     ]).pipe(
       map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
       map(tasks =>
-        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+        tasks.map(task => ({
+          ...task,
+          actions: this.taskActionsService.getActions(task)
+        }))
       )
     );
 
@@ -194,7 +204,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     ]).pipe(
       map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
       map(tasks =>
-        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+        tasks.map(task => ({
+          ...task,
+          actions: this.taskActionsService.getActions(task)
+        }))
       )
     );
 
@@ -337,22 +350,11 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     } as SearchFilterCriteriaInterface;
   }
 
-  private getActions(
+  handleTaskAction(
+    action: TaskActionInterface,
     task: TaskWithAssigneesInterface
-  ): { label: string; handler: Function }[] {
-    return [
-      {
-        label: 'Bekijken',
-        handler: () => this.router.navigate(['tasks', 'manage', task.id])
-      },
-      {
-        label: task && task.archivedYear ? 'Dearchiveren' : 'Archiveren',
-        handler: () =>
-          this.viewModel.startArchivingTasks([task], !task.archivedYear)
-      },
-      { label: 'Resultaten', handler: () => console.log('resultaten') },
-      { label: 'Doelenmatrix', handler: () => console.log('doelenmatrix') }
-    ];
+  ): void {
+    action.handler(task);
   }
 
   clickAddDigitalTask() {
