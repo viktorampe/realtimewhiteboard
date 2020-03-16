@@ -11,14 +11,14 @@
         [svgIcon]="'delete'"
       ></mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="multiSelectClicked($event)">
+    <div class="toolbar__tool" (click)="multiSelectClicked()">
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
       </mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="flipIconClicked($event)">
+    <div class="toolbar__tool" (click)="flipIconClicked()">
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="editIconClicked($event)">
+    <div class="toolbar__tool" (click)="editIconClicked()">
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>
   </div>
@@ -30,12 +30,12 @@
           [svgIcon]="'delete'"
         ></mat-icon>
       </div>
-      <div class="toolbar__tool" (click)="flipIconClicked($event)">
+      <div class="toolbar__tool" (click)="flipIconClicked()">
         <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
       </div>
       <div
         class="toolbar__tool toolbar__confirm"
-        (click)="confirmIconClicked($event)"
+        (click)="confirmIconClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__confirm__icon"
@@ -51,7 +51,7 @@
     <div
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
-      (click)="multiSelectClicked($event)"
+      (click)="multiSelectClicked()"
     >
       <mat-icon class="toolbar__tool__icon " [svgIcon]="'multiselect'">
       </mat-icon>
@@ -60,7 +60,7 @@
       <div
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
-        (click)="multiSelectSelectedClicked($event)"
+        (click)="multiSelectSelectedClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__select__icon"

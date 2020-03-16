@@ -21,8 +21,4 @@ export class WhiteboardToolbarComponent implements OnInit {
     event.srcEvent.stopPropagation();
     this.deleteCards.emit();
   }
-
-  stopEventPropagation(event) {
-    event.srcEvent.stopPropagation();
-  }
 }

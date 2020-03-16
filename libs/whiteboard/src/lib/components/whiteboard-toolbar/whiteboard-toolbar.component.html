@@ -1,14 +1,9 @@
 <div class="whiteboard__tools">
   <campus-color-list
-    (tap)="stopEventPropagation($event)"
     class="whiteboard__tools__tool"
     (selectedColor)="changeSelectedCardsColor($event)"
   ></campus-color-list>
-  <div
-    class="whiteboard__tools__tool"
-    id="delete"
-    (tap)="stopEventPropagation($event)"
-  >
+  <div class="whiteboard__tools__tool" id="delete">
     <mat-icon
       class="toolbar_icon"
       (tap)="btnDeleteClicked($event)"

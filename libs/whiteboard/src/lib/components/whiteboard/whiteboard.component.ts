@@ -103,7 +103,6 @@ export class WhiteboardComponent implements OnChanges {
   createCard(event: any) {
     if (event.target.className.includes('whiteboard__workspace')) {
       if (event.type === 'longpress') {
-        event.srcEvent.stopPropagation();
         const top =
           event.center.y -
           this.workspaceElementRef.nativeElement.getBoundingClientRect().top;
@@ -118,8 +117,7 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  btnPlusClicked(event) {
-    event.srcEvent.stopPropagation();
+  btnPlusClicked() {
     this.addEmptyCard();
   }
   //#endregion
@@ -363,8 +361,7 @@ export class WhiteboardComponent implements OnChanges {
       event.target.classList.contains('card') ||
       event.target.classList.contains('card-text') ||
       event.target.classList.contains('card-image') ||
-      event.target.classList.contains('card-image__image') ||
-      event.target.classList.contains('zoom')
+      event.target.classList.contains('card-image__image')
     ) {
       this.selectedCards = [];
       const cards = this.whiteboard$.value.cards;
