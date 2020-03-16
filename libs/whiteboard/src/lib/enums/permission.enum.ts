@@ -1,4 +1,3 @@
 export enum PermissionEnum {
-  REDACTIE,
-  TEACHER
+  MANAGEWHITEBOARD
 }

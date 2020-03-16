@@ -14,7 +14,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
+import { UserInterface } from '../../models/User.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
+import { PeopleHttpServiceInterface } from '../../services/peopleservice/people-http.service';
 import { WhiteboardHttpService } from '../../services/whiteboardservice/whiteboard-http.service';
 
 @Component({
@@ -41,6 +43,8 @@ export class WhiteboardComponent implements OnChanges {
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
   public whiteboard$ = new BehaviorSubject<WhiteboardInterface>(null);
+  public user$ = new BehaviorSubject<UserInterface>(null);
+  userId = '5';
 
   public titleFC: FormControl;
 
@@ -50,9 +54,12 @@ export class WhiteboardComponent implements OnChanges {
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
-  constructor(private whiteboardHttpService: WhiteboardHttpService) {
+  constructor(
+    private whiteboardHttpService: WhiteboardHttpService,
+    private peopleHttpService: PeopleHttpServiceInterface
+  ) {
     this.initialiseForm();
-    this.initialiseObservable();
+    this.initialiseObservables();
   }
 
   ngOnChanges() {
@@ -75,13 +82,19 @@ export class WhiteboardComponent implements OnChanges {
     });
   }
 
-  private initialiseObservable(): void {
+  private initialiseObservables(): void {
     this.whiteboardHttpService
       .getJson()
       .pipe(take(1))
       .subscribe(whiteboardData => {
         this.titleFC.patchValue(whiteboardData.title);
         this.whiteboard$.next(whiteboardData);
+      });
+    this.peopleHttpService
+      .getJson(this.userId)
+      .pipe(take(1))
+      .subscribe(peopleData => {
+        this.user$.next(peopleData);
       });
   }
 
