@@ -1,5 +1,4 @@
 import { Component, HostBinding } from '@angular/core';
-import { ResultStatus } from '@campus/dal';
 import {
   getHumanDateTimeRules,
   HumanDateTimeArgsInterface,
@@ -26,7 +25,6 @@ export class StudentTaskDetailComponent {
   public task$: Observable<StudentTaskWithContentInterface>;
   public requiredTaskContents$: Observable<StudentTaskContentInterface[]>;
   public optionalTaskContents$: Observable<StudentTaskContentInterface[]>;
-  public taskProgress$: Observable<{ total: number; finished: number }>;
 
   public dateTimeArguments: HumanDateTimeArgsInterface = {
     rules: getHumanDateTimeRules([
@@ -46,14 +44,6 @@ export class StudentTaskDetailComponent {
     );
     this.optionalTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => !content.required))
-    );
-    this.taskProgress$ = this.requiredTaskContents$.pipe(
-      map(contents => ({
-        total: contents.length,
-        finished: contents.filter(
-          content => content.status === ResultStatus.STATUS_COMPLETED
-        ).length
-      }))
     );
   }
 }

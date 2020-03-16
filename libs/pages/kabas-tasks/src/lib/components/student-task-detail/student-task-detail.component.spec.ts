@@ -113,19 +113,6 @@ describe('StudentTaskDetailComponent', () => {
         );
       });
     });
-
-    describe('taskProgress', () => {
-      it('should contain info from completed tasks', () => {
-        expect(component.taskProgress$).toBeObservable(
-          hot('a', {
-            a: {
-              total: 2,
-              finished: 1
-            }
-          })
-        );
-      });
-    });
   });
 
   describe('dateTimeArguments', () => {

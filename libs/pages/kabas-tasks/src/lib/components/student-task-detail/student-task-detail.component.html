@@ -14,9 +14,8 @@
           <section-actions>
             <campus-progress
               data-cy="task-progress"
-              *ngIf="taskProgress$ | async as progress"
-              [total]="progress.total"
-              [count]="progress.finished"
+              [total]="task.requiredContentCount"
+              [count]="task.requiredContentFinished"
               [showPercentage]="true"
               [diameter]="48"
               ><mat-icon completedProgressIcon svgIcon="check"></mat-icon>
