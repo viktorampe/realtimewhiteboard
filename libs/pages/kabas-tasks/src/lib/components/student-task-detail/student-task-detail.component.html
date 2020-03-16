@@ -4,7 +4,23 @@
       <section-title>Moetjes in deze taak</section-title>
 
       <section-content>
-        Moetjes in deze taak inhoud.
+        <mat-list>
+          <mat-list-item
+            *ngFor="let requiredTaskContent of requiredTaskContents$ | async"
+            data-cy="required-task-content"
+          >
+            <campus-student-task-content-list-item
+              [fileIcon]="requiredTaskContent.icon"
+              [title]="requiredTaskContent.name"
+              [description]="requiredTaskContent.description"
+              [status]="requiredTaskContent.status"
+              [lastUpdated]="requiredTaskContent.lastUpdated"
+              [score]="requiredTaskContent.score"
+              [actions]="requiredTaskContent.actions"
+              [isFinished]="false"
+            ></campus-student-task-content-list-item>
+          </mat-list-item>
+        </mat-list>
       </section-content>
     </campus-section>
 
