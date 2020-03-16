@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconRegistry } from '@angular/material';
-import { HAMMER_LOADER } from '@angular/platform-browser';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { StudentTaskContentListItemComponent } from './student-task-content-list-item.component';
 
@@ -12,26 +11,19 @@ describe('StudentTaskContentListItemComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [MatIconModule, UiModule],
       declarations: [StudentTaskContentListItemComponent],
-      providers: [
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
-        {
-          provide: HAMMER_LOADER,
-          useValue: () => new Promise(() => {})
-        }
-      ]
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
+  });
 
-    beforeEach(() => {
-      fixture = TestBed.createComponent(StudentTaskContentListItemComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(StudentTaskContentListItemComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });
