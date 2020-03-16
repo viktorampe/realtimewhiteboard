@@ -6,7 +6,8 @@ import {
   DalState,
   EduContent,
   getRouterStateParams,
-  ResultInterface
+  ResultInterface,
+  TaskInterface
 } from '@campus/dal';
 import {
   ContentOpenerInterface,
@@ -14,7 +15,8 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ResultOpenerInterface,
   ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
+  SCORM_EXERCISE_SERVICE_TOKEN,
+  TaskOpenerInterface
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -26,7 +28,10 @@ import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithCo
   providedIn: 'root'
 })
 export class StudentTasksViewModel
-  implements ContentOpenerInterface, ResultOpenerInterface {
+  implements
+    ContentOpenerInterface,
+    ResultOpenerInterface,
+    TaskOpenerInterface {
   public studentTasks$: Observable<StudentTaskInterface[]>;
   public currentTask$: Observable<StudentTaskWithContentInterface>;
   public routeParams$: Observable<Params>;
@@ -44,6 +49,10 @@ export class StudentTasksViewModel
 
   private setSourceStreams() {
     this.routeParams$ = this.store.pipe(select(getRouterStateParams));
+  }
+
+  openTask(task: TaskInterface) {
+    throw new Error('Method not implemented.');
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
