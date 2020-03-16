@@ -37,6 +37,8 @@ import { TaskListItemComponent } from './components/task-list-item/task-list-ite
 import { PendingTaskGuard } from './guards/pending-task.guard';
 import { ValidTaskInstanceGuard } from './guards/valid-task-instance.guard';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+import { StudentTaskListItemComponent } from './components/student-task-list-item/student-task-list-item.component';
+import { StudentTaskContentListItemComponent } from './components/student-task-content-list-item/student-task-content-list-item.component';
 
 @NgModule({
   imports: [
@@ -71,7 +73,9 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     PrintPaperTaskModalComponent,
     ManageTaskContentComponent,
     StudentTaskOverviewComponent,
-    StudentTaskDetailComponent
+    StudentTaskDetailComponent,
+    StudentTaskListItemComponent,
+    StudentTaskContentListItemComponent
   ],
   providers: [
     {
