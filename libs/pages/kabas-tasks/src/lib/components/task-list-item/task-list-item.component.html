@@ -25,7 +25,6 @@
   >
 
   <list-item-caption mat-line>{{ description }}</list-item-caption>
-
   <list-item-actions
     mat-line
     *ngIf="actions.length"
@@ -35,7 +34,7 @@
       inline
       campusClickStopPropagation
       *ngFor="let action of actions"
-      (click)="action.handler()"
+      (click)="onActionClick(action)"
       >{{ action.label }}</campus-button
     ></list-item-actions
   >

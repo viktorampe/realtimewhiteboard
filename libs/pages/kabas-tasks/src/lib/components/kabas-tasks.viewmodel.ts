@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material';
+import { Router } from '@angular/router';
 import {
   AssigneeInterface,
   AssigneeTypesEnum,
@@ -60,7 +61,8 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
+  SCORM_EXERCISE_SERVICE_TOKEN,
+  TeacherTaskOpenerInterface
 } from '@campus/shared';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -104,7 +106,8 @@ export class KabasTasksViewModel
     ContentOpenerInterface,
     ContentTaskManagerInterface,
     SearcherInterface,
-    SearchResultItemUpdaterInterface {
+    SearchResultItemUpdaterInterface,
+    TeacherTaskOpenerInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithTaskEduContentInterface>;
@@ -129,6 +132,7 @@ export class KabasTasksViewModel
 
   constructor(
     private store: Store<DalState>,
+    private router: Router,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject('uuid') private uuid: Function,
     @Inject(MAT_DATE_LOCALE) private dateLocale,
@@ -145,6 +149,26 @@ export class KabasTasksViewModel
     this.setupStreams();
   }
 
+  //#region  TEACHER TASK OPENER METHODS
+  openTask(task: TaskInterface) {
+    this.router.navigate(['tasks', 'manage', task.id]);
+  }
+  archiveTask(task: TaskWithAssigneesInterface) {
+    this.startArchivingTasks([task], !task.archivedYear);
+  }
+  unarchiveTask(task: TaskWithAssigneesInterface) {
+    this.startArchivingTasks([task], !task.archivedYear);
+  }
+  openResultForTask(task: TaskInterface) {
+    throw new Error('Method not implemented.');
+  }
+  openLearningPlanGoalMatrix(task: TaskInterface) {
+    throw new Error('Method not implemented.');
+  }
+
+  //#endregion
+
+  //#region CONTENT OPENER METHODS
   openEduContentAsExercise(eduContent: EduContent): void {
     this.currentTask$
       .pipe(
@@ -192,7 +216,9 @@ export class KabasTasksViewModel
   previewEduContentAsImage(eduContent: EduContent): void {
     this.openStaticContentService.open(eduContent, false, true);
   }
+  //#endregion
 
+  //#region CONTENT TASK MANAGER METHODS
   addEduContentToTask(eduContent: EduContent, index?: number): void {
     this.store.dispatch(
       new EduContentActions.UpsertEduContent({
@@ -225,6 +251,7 @@ export class KabasTasksViewModel
         this.deleteTaskEduContents(taskEduContentIds);
       });
   }
+  //#endregion
 
   public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],

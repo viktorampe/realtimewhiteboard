@@ -18,7 +18,10 @@ import {
   CONTENT_OPENER_TOKEN,
   CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   CONTENT_TASK_MANAGER_TOKEN,
-  SharedModule
+  SharedModule,
+  TaskActionsTeacherService,
+  TASK_ACTIONS_TEACHER_SERVICE_TOKEN,
+  TEACHER_TASK_OPENER_TOKEN
 } from '@campus/shared';
 import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
@@ -82,12 +85,20 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
       useExisting: KabasTasksViewModel
     },
     {
+      provide: TEACHER_TASK_OPENER_TOKEN,
+      useExisting: KabasTasksViewModel
+    },
+    {
       provide: SEARCH_RESULT_ITEM_UPDATER_TOKEN,
       useExisting: KabasTasksViewModel
     },
     {
       provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
       useClass: ContentTaskActionsService
+    },
+    {
+      provide: TASK_ACTIONS_TEACHER_SERVICE_TOKEN,
+      useClass: TaskActionsTeacherService
     },
     PendingTaskGuard
   ],

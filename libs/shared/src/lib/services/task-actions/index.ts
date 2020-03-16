@@ -1,1 +1,3 @@
-export * from './task-actions.service.interface';
+export * from './task-action.interface';
+export * from './task-actions-teacher.service';
+export * from './task-actions-teacher.service.interface';
