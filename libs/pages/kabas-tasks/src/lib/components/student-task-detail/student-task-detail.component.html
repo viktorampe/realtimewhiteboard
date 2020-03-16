@@ -7,11 +7,13 @@
         <campus-section
           [mode]="sectionModes.CONTAINER"
           *ngIf="requiredTaskContents.length"
+          data-cy="required-task-container"
         >
           <section-title>Moetjes in deze taak</section-title>
 
           <section-actions>
             <campus-progress
+              data-cy="task-progress"
               *ngIf="taskProgress$ | async as progress"
               [total]="progress.total"
               [count]="progress.finished"
@@ -49,6 +51,7 @@
         <campus-section
           [mode]="sectionModes.CONTAINER"
           *ngIf="optionalTaskContents.length"
+          data-cy="optional-task-container"
         >
           <section-title>Magjes in deze taak</section-title>
 

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ResultStatus } from '@campus/dal';
-import { FileIconComponent } from '@campus/ui';
 
 @Component({
   selector: 'campus-student-task-content-list-item',
@@ -8,7 +7,7 @@ import { FileIconComponent } from '@campus/ui';
   styleUrls: ['./student-task-content-list-item.component.scss']
 })
 export class StudentTaskContentListItemComponent implements OnInit {
-  @Input() fileIcon: FileIconComponent;
+  @Input() fileIcon: string;
   @Input() title: string;
   @Input() description?: string;
   @Input() isFinished: boolean;

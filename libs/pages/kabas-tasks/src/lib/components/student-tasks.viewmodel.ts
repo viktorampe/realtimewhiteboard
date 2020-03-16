@@ -40,7 +40,6 @@ export class StudentTasksViewModel
     private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.setSourceStreams();
-    // this.currentTask$ = of(new StudentTaskWithContentFixture()); // TODO set actual stream
   }
 
   private setSourceStreams() {
