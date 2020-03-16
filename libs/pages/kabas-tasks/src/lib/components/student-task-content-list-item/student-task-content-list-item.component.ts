@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ResultStatus } from '@campus/dal';
+import { FileIconComponent } from '@campus/ui';
 
 @Component({
   selector: 'campus-student-task-content-list-item',
@@ -6,6 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./student-task-content-list-item.component.scss']
 })
 export class StudentTaskContentListItemComponent implements OnInit {
+  @Input() fileIcon: FileIconComponent;
+  @Input() title: string;
+  @Input() description?: string;
+  @Input() isFinished: boolean;
+  @Input() lastUpdated: Date;
+  @Input() score: number;
+  @Input() result: ResultStatus;
+  @Input() actions: {
+    label: string;
+    handler: () => any; //prevents warning "Member handler is not callable in template"
+  }[];
+
   constructor() {}
 
   ngOnInit() {}

@@ -13,7 +13,7 @@ export class MockStudentTasksViewModel
   public currentTask$ = new BehaviorSubject<StudentTaskWithContentInterface>(
     new StudentTaskWithContentFixture()
   );
-  public routeParams$: BehaviorSubject<Params>;
+  public routeParams$ = new BehaviorSubject<Params>(null);
 
   private nextWeek: Date = new Date(Date.now() + 7 * 24 * 3600 * 1000);
   private studentTasks = [
@@ -33,7 +33,6 @@ export class MockStudentTasksViewModel
     this.studentTasks$ = new BehaviorSubject<StudentTaskInterface[]>(
       this.studentTasks
     );
-    this.routeParams$ = new BehaviorSubject<Params>({});
   }
 
   public openEduContentAsExercise() {}
@@ -43,4 +42,6 @@ export class MockStudentTasksViewModel
   public openEduContentAsDownload() {}
   public openBoeke() {}
   public previewEduContentAsImage() {}
+
+  public setupStreams() {}
 }
