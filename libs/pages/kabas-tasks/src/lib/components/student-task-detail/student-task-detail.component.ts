@@ -10,15 +10,11 @@ import { map } from 'rxjs/operators';
 import { StudentTaskContentInterface } from '../../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
-import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
 @Component({
   selector: 'campus-student-task-detail',
   templateUrl: './student-task-detail.component.html',
-  styleUrls: ['./student-task-detail.component.scss'],
-  providers: [
-    { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel }
-  ]
+  styleUrls: ['./student-task-detail.component.scss']
 })
 export class StudentTaskDetailComponent {
   sectionModes = SectionModeEnum;
@@ -37,7 +33,8 @@ export class StudentTaskDetailComponent {
       humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
       humanDateTimeRulesEnum.WEEKDAY,
       humanDateTimeRulesEnum.NEXT_WEEK
-    ])
+    ]),
+    datePrefix: 'op'
   };
 
   constructor(private viewModel: StudentTasksViewModel) {

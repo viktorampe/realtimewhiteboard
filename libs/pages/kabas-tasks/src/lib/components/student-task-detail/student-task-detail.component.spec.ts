@@ -113,7 +113,7 @@ describe('StudentTaskDetailComponent', () => {
       {
         it: 'yesterday',
         input: yesterday,
-        expected: yesterday.toLocaleDateString('nl-BE')
+        expected: 'op ' + yesterday.toLocaleDateString('nl-BE')
       },
       {
         it: 'today',
@@ -153,7 +153,7 @@ describe('StudentTaskDetailComponent', () => {
       {
         it: 'future',
         input: farFuture,
-        expected: farFuture.toLocaleDateString('nl-BE')
+        expected: 'op ' + farFuture.toLocaleDateString('nl-BE')
       }
     ];
 
@@ -161,17 +161,38 @@ describe('StudentTaskDetailComponent', () => {
       it(`should return the right date label - ${testCase.it}`, () => {
         viewModel.currentTask$.next({
           ...viewModel.currentTask$.value,
-          end: testCase.input
+          end: testCase.input,
+          isFinished: false
         });
         fixture.detectChanges();
 
         const finishByCE = fixture.debugElement.query(
           By.css('[data-cy=task-finish-by]')
         );
-        const finishByText = finishByCE.nativeElement.textContent;
+        const finishByText = finishByCE.nativeElement.textContent.trim();
 
-        expect(finishByText).toContain(testCase.expected);
+        expect(finishByText).toEqual(
+          'Deze taak moet ' + testCase.expected + ' af zijn.'
+        );
       });
+    });
+
+    it(`should show a regular date for finished tasks`, () => {
+      viewModel.currentTask$.next({
+        ...viewModel.currentTask$.value,
+        end: endNextWeek,
+        isFinished: true
+      });
+      fixture.detectChanges();
+
+      const finishByCE = fixture.debugElement.query(
+        By.css('[data-cy=task-finish-by]')
+      );
+      const finishByText = finishByCE.nativeElement.textContent.trim();
+
+      expect(finishByText).toEqual(
+        'Ingediend op ' + endNextWeek.toLocaleDateString('nl-BE') + '.'
+      );
     });
   });
 });
