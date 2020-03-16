@@ -57,7 +57,7 @@ describe('student-tasks viewmodel selectors', () => {
             name: 'nagelbijten',
             description: 'herhalingsoefening',
             icon: 'oefening',
-            status: ResultStatus.STATUS_COMPLETED,
+            status: ResultStatus.STATUS_INCOMPLETE,
             lastUpdated,
             score: 50,
             eduContentId: 2,
