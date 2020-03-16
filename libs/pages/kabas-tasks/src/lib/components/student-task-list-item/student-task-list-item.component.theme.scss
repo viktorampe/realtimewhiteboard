@@ -2,7 +2,7 @@
 
 @mixin pages-manage-kabas-tasks-student-task-list-item-theme() {
   $pages-manage-kabas-tasks__student-task-list-item__date-label-font-weight: bold !default;
-  $pages-manage-kabas-tasks__student-task-list-item__date-label-color: $pages-kabas-tasks-text-color--tertiary !default;
+  $pages-manage-kabas-tasks__student-task-list-item__date-label--urgent-color: $pages-kabas-tasks-text-color--tertiary !default;
 
   $pages-manage-kabas-tasks__student-task-list-item__stroke-color: $ui-stroke-color !default;
   $pages-manage-kabas-tasks__student-task-list-item-meta-padding: 8px !default;
@@ -24,7 +24,10 @@
       }
 
       &__date-label {
-        color: $pages-manage-kabas-tasks__student-task-list-item__date-label-color;
+        &--urgent {
+          color: $pages-manage-kabas-tasks__student-task-list-item__date-label--urgent-color;
+        }
+
         font-weight: $pages-manage-kabas-tasks__student-task-list-item__date-label-font-weight;
       }
     }

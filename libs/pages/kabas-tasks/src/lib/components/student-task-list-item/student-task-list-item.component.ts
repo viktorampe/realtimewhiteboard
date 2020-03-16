@@ -2,8 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  Input,
-  OnInit
+  Input
 } from '@angular/core';
 
 @Component({
@@ -12,13 +11,14 @@ import {
   styleUrls: ['./student-task-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StudentTaskListItemComponent implements OnInit {
+export class StudentTaskListItemComponent {
   @Input() title: string;
   @Input() description: string;
   @Input() learningAreaName: string;
   @Input() dateLabel: string;
-  @Input() finishedRequired: number;
+  @Input() completedRequired: number;
   @Input() totalRequired: number;
+  @Input() urgent: boolean;
   @Input() finished: boolean;
   @Input() actions: {
     label: string;
@@ -27,6 +27,4 @@ export class StudentTaskListItemComponent implements OnInit {
 
   @HostBinding('class.manage-kabas-tasks__student-task-list-item')
   studentTaskListItemClass = true;
-
-  ngOnInit() {}
 }

@@ -34,6 +34,9 @@
   <list-item-content
     data-cy="tli-date-label"
     class="manage-kabas-tasks-student-task-list-item__date-label ui-body-1"
+    [class.manage-kabas-tasks-student-task-list-item__date-label--urgent]="
+      urgent
+    "
   >
     {{ dateLabel }}
   </list-item-content>
@@ -44,11 +47,14 @@
     *ngIf="totalRequired && !finished"
   >
     <campus-progress
-      [count]="finishedRequired"
+      [count]="completedRequired"
       [diameter]="50"
       [total]="totalRequired"
       [showPercentage]="true"
     >
+      <completed-progress-icon
+        ><mat-icon svgIcon="check"></mat-icon
+      ></completed-progress-icon>
     </campus-progress>
   </list-item-content>
 </campus-list-item-content>

@@ -1,59 +1,24 @@
+// file.only
+
+import { ChangeDetectorRef, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatIconModule,
-  MatIconRegistry,
-  MatTooltipModule
-} from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
-import {
-  AssigneeFixture,
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '@campus/dal';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { TaskListItemComponent } from './task-list-item.component';
+import { StudentTaskListItemComponent } from './student-task-list-item.component';
 
-const mockAssignees: AssigneeInterface[] = [
-  new AssigneeFixture({
-    label: 'class_group_2',
-    type: AssigneeTypesEnum.CLASSGROUP
-  }),
-  new AssigneeFixture({
-    label: 'class_group_1',
-    type: AssigneeTypesEnum.CLASSGROUP
-  }),
-  new AssigneeFixture({
-    label: 'class_group_3',
-    type: AssigneeTypesEnum.CLASSGROUP
-  }),
-  new AssigneeFixture({
-    label: 'group_2',
-    type: AssigneeTypesEnum.GROUP
-  }),
-  new AssigneeFixture({
-    label: 'group_1',
-    type: AssigneeTypesEnum.GROUP
-  }),
-  new AssigneeFixture({
-    label: 'student_1',
-    type: AssigneeTypesEnum.STUDENT
-  }),
-  new AssigneeFixture({
-    label: 'student_2',
-    type: AssigneeTypesEnum.STUDENT
-  })
-];
-
-describe('TaskListItemComponent', () => {
-  let component: TaskListItemComponent;
-  let fixture: ComponentFixture<TaskListItemComponent>;
+describe('StudentTaskListItemComponent', () => {
+  let component: StudentTaskListItemComponent;
+  let fixture: ComponentFixture<StudentTaskListItemComponent>;
+  let cd: ChangeDetectorRef;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatIconModule, MatTooltipModule, UiModule],
-      declarations: [TaskListItemComponent],
+      imports: [NoopAnimationsModule, UiModule],
+      declarations: [StudentTaskListItemComponent],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
@@ -66,14 +31,18 @@ describe('TaskListItemComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TaskListItemComponent);
+    fixture = TestBed.createComponent(StudentTaskListItemComponent);
+    cd = fixture.componentRef.injector.get<ChangeDetectorRef>(
+      ChangeDetectorRef as Type<ChangeDetectorRef>
+    );
     component = fixture.componentInstance;
     component.title = 'foo';
     component.actions = [
       { label: 'Action1', handler: jest.fn() },
       { label: 'Action2', handler: jest.fn() }
     ];
-    component.assignees = mockAssignees;
+    component.urgent = false;
+    component.dateLabel = 'morgen';
     fixture.detectChanges();
   });
 
@@ -85,7 +54,7 @@ describe('TaskListItemComponent', () => {
     it('should pass action handlers', () => {
       const actionDEs = fixture.debugElement.queryAll(
         By.css(
-          '.manage-kabas-tasks-task-list-item__container__actions > .ui-button'
+          '.manage-kabas-tasks-student-task-list-item__container__actions > .ui-button'
         )
       );
 
@@ -99,23 +68,75 @@ describe('TaskListItemComponent', () => {
         expect(action.handler).toHaveBeenCalled();
       });
     });
-    it('should group and sort assignees by AssigneeType', () => {
-      expect(component.classGroups.map(cg => cg.label)).toEqual([
-        'class_group_1',
-        'class_group_2',
-        'class_group_3'
-      ]);
-      expect(component.groups).toEqual(['group_1', 'group_2']);
-      expect(component.students).toEqual(['student_1', 'student_2']);
-      expect(component.assignees.map(a => a.label)).toEqual([
-        'class_group_1',
-        'class_group_2',
-        'class_group_3',
-        'group_1',
-        'group_2',
-        'student_1',
-        'student_2'
-      ]);
+
+    describe('dateLabel', () => {
+      it('should not have the urgent class when component.urgent is false', () => {
+        component.urgent = false;
+        cd.detectChanges();
+
+        const dateLabelDE = fixture.debugElement.query(
+          By.css('[data-cy=tli-date-label]')
+        );
+
+        expect(
+          dateLabelDE.nativeElement.classList.contains(
+            'manage-kabas-tasks-student-task-list-item__date-label--urgent'
+          )
+        ).toBeFalsy();
+      });
+
+      it('should have the urgent class when component.urgent is true', () => {
+        component.urgent = true;
+        cd.detectChanges();
+
+        const dateLabelDE = fixture.debugElement.query(
+          By.css('[data-cy=tli-date-label]')
+        );
+
+        expect(
+          dateLabelDE.nativeElement.classList.contains(
+            'manage-kabas-tasks-student-task-list-item__date-label--urgent'
+          )
+        ).toBeTruthy();
+      });
+    });
+
+    describe('progress', () => {
+      it('should not show progress when totalRequired = 0', () => {
+        component.finished = false;
+        component.totalRequired = 0;
+        cd.detectChanges();
+
+        const progressDE = fixture.debugElement.query(
+          By.css('[data-cy=tli-progress]')
+        );
+
+        expect(progressDE).toBeFalsy();
+      });
+
+      it('should not show progress when finished = true', () => {
+        component.finished = true;
+        component.totalRequired = 5;
+        cd.detectChanges();
+
+        const progressDE = fixture.debugElement.query(
+          By.css('[data-cy=tli-progress]')
+        );
+
+        expect(progressDE).toBeFalsy();
+      });
+
+      it('should show progress when totalRequired > 0', () => {
+        component.finished = false;
+        component.totalRequired = 5;
+        cd.detectChanges();
+
+        const progressDE = fixture.debugElement.query(
+          By.css('[data-cy=tli-progress]')
+        );
+
+        expect(progressDE).toBeTruthy();
+      });
     });
   });
 });
