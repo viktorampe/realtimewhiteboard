@@ -123,6 +123,7 @@ import { IsMobileDirective } from './utils/directives/is-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { JoinPipe } from './utils/pipes/join/join.pipe';
+import { RangePipe } from './utils/pipes/range/range.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
@@ -242,7 +243,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ProgressComponent,
     CompletedProgressIconDirective,
     CollapsibleContainerComponent,
-    RatingComponent
+    RatingComponent,
+    RangePipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -335,7 +337,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ProgressComponent,
     CompletedProgressIconDirective,
     CollapsibleContainerComponent,
-    RatingComponent
+    RatingComponent,
+    RangePipe
   ],
   providers: [
     {
