@@ -1,8 +1,7 @@
-import { fakeAsync } from '@angular/core/testing';
 import { MockDate } from './MockDate';
 
 describe('MockDate', () => {
-  it('should mock new Date()', fakeAsync(() => {
+  it('should mock new Date()', async () => {
     const mock = new MockDate();
 
     const dateA = new Date();
