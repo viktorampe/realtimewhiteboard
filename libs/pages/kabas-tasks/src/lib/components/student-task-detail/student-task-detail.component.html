@@ -85,7 +85,27 @@
       <section-title>Over deze taak</section-title>
 
       <section-content>
-        Over deze taak inhoud.
+        <campus-person-badge [person]="task.assigner"></campus-person-badge>
+        <div data-cy="task-name" class="ui-title">{{ task.name }}</div>
+        <div data-cy="task-learning-area-name" class="ui-headline">{{
+          task.learningAreaName
+        }}</div>
+        <div
+          *ngIf="task.isFinished"
+          data-cy="task-finished-on"
+          class="ui-subheader"
+          >Ingediend op {{ task.end.toLocaleDateString('nl-BE') }}.
+        </div>
+        <div
+          *ngIf="!task.isFinished"
+          data-cy="task-finish-by"
+          class="ui-subheader"
+          >Deze taak moet
+          {{ task.end | humanDateTime: dateTimeArguments | lowercase }} af zijn.
+        </div>
+        <div data-cy="task-description" class="ui-caption"
+          >{{ task.description }}
+        </div>
       </section-content>
     </campus-section>
   </front-layer-content>

@@ -94,8 +94,8 @@ import { StudentTaskContentListItemComponent } from './components/student-task-c
       provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
       useClass: ContentTaskActionsService
     },
-    ValidTaskInstanceGuard,
-    PendingTaskGuard
+    PendingTaskGuard,
+    ValidTaskInstanceGuard
   ],
   exports: [],
   entryComponents: [
