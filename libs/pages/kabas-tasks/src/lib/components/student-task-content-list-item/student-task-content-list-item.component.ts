@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ResultStatus } from '@campus/dal';
 import { TaskActionInterface } from '@campus/shared';
 
@@ -18,8 +18,11 @@ export class StudentTaskContentListItemComponent {
   @Input() score: number;
   @Input() status: ResultStatus;
   @Input() actions: TaskActionInterface[];
+  @Input() isRequired: boolean;
 
-  public onActionClick(action) {
-    console.log(action);
+  @Output() clickAction = new EventEmitter<TaskActionInterface>();
+
+  public onActionClick(action: TaskActionInterface) {
+    this.clickAction.emit(action);
   }
 }

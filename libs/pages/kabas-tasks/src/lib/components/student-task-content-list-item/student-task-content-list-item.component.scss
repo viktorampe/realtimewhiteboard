@@ -4,19 +4,9 @@
   .student-task-content-list-item {
     &__last-updated {
       display: flex;
-      width: 170px;
 
       > div {
         flex: 1 1 auto;
-      }
-    }
-
-    &__status-icon {
-      &--completed {
-        color: green;
-      }
-      &--opened {
-        color: orange;
       }
     }
   }
