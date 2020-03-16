@@ -1,4 +1,5 @@
-import { PersonFixture } from '@campus/dal';
+import { Params } from '@angular/router';
+import { EduContent, PersonFixture, ResultInterface } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
@@ -19,6 +20,7 @@ export class MockStudentTasksViewModel
       })
     })
   );
+  public routeParams$ = new BehaviorSubject<Params>(null);
 
   private studentTasks = [
     new StudentTaskFixture({
@@ -34,6 +36,14 @@ export class MockStudentTasksViewModel
       this.studentTasks
     );
   }
+
+  openEduContentAsExercise(eduContent: EduContent): void {}
+  openEduContentAsSolution(eduContent: EduContent): void {}
+  openEduContentFromResult(result: ResultInterface): void {}
+  openEduContentAsStream(eduContent: EduContent): void {}
+  openEduContentAsDownload(eduContent: EduContent): void {}
+  openBoeke(eduContent: EduContent): void {}
+  previewEduContentAsImage(eduContent: EduContent): void {}
 
   public setupStreams() {}
 }
