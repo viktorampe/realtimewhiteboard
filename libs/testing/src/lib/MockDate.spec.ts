@@ -1,18 +1,18 @@
+import { fakeAsync, tick } from '@angular/core/testing';
 import { MockDate } from './MockDate';
 
 describe('MockDate', () => {
-  it('should mock new Date()', async () => {
+  it('should mock new Date()', fakeAsync(() => {
     const mock = new MockDate();
 
     const dateA = new Date();
 
-    // sleep for a second
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    tick(1000);
 
     const dateB = new Date();
 
     expect(dateA).toEqual(dateB);
-  });
+  }));
 
   it('should mock new Date() with the provided date', () => {
     const defaultDate = new Date(1000);
