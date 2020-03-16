@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Params } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -38,6 +38,7 @@ export class StudentTasksViewModel
 
   constructor(
     private store: Store<DalState>,
+    private router: Router,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
@@ -52,7 +53,7 @@ export class StudentTasksViewModel
   }
 
   openTask(task: TaskInterface) {
-    throw new Error('Method not implemented.');
+    this.router.navigate(['tasks', task.id]);
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
