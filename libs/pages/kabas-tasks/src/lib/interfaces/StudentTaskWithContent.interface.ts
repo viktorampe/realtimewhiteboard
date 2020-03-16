@@ -5,8 +5,8 @@ export interface StudentTaskWithContentInterface {
   name: string;
   description: string;
   learningAreaName: string;
-  startDate: Date;
-  endDate: Date;
+  start: Date;
+  end: Date;
   assigner: PersonInterface;
   contents: StudentTaskContentInterface[];
 }
