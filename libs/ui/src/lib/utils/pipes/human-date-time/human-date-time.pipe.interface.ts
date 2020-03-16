@@ -7,4 +7,5 @@ export interface HumanDateTimeArgsInterface {
   rules: HumanDateTimeRuleInterface[];
   referenceDate?: Date; // default -> now
   locale?: string; // default -> 'nl-BE'
+  datePrefix?: string;
 }
