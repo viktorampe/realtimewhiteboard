@@ -1,26 +1,18 @@
 //file.only
-import {
-  EduContentFixture,
-  LearningAreaFixture,
-  PersonFixture,
-  ResultFixture,
-  ResultStatus,
-  TaskEduContentFixture,
-  TaskFixture,
-  TaskInstanceFixture
-} from '@campus/dal';
+import { EduContentFixture, LearningAreaFixture, PersonFixture, ResultFixture, ResultStatus, TaskEduContentFixture, TaskFixture, TaskInstanceFixture } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { HumanDateTimePipe } from '@campus/ui';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
-import {
-  dateGroupLabelRules,
-  studentTasks,
-  studentTaskWithContent
-} from './student-tasks.viewmodel.selectors';
+import { dateGroupLabelRules, studentTasks, studentTaskWithContent } from './student-tasks.viewmodel.selectors';
 
 describe('student-tasks viewmodel selectors', () => {
   let dateMock = new MockDate();
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   describe('studentTaskWithContent', () => {
     const projector = studentTaskWithContent.projector;
 
@@ -42,9 +34,6 @@ describe('student-tasks viewmodel selectors', () => {
       taskEduContents: []
     });
 
-    afterAll(() => {
-      dateMock.returnRealDate();
-    });
 
     it('should return the correct value - no result', () => {
       const storeTaskInstance = new TaskInstanceFixture({
@@ -170,18 +159,8 @@ describe('student-tasks viewmodel selectors', () => {
     const end = new Date(2020, 2, 1);
     const lastUpdated = new Date(2020, 1, 15);
 
-    const date = new Date(dateMock.mockDate);
+    const date = new Date();
     const pipe = new HumanDateTimePipe();
-    //     // woensdag 24 oktober 2018
-    // const dateMock = new MockDate(new Date(1540375469127));
-
-    beforeAll(() => {
-      dateMock = new MockDate();
-    });
-
-    afterAll(() => {
-      dateMock.returnRealDate();
-    });
 
     const task = getMockTask(lastUpdated);
     const projector = studentTasks.projector;
@@ -315,67 +294,56 @@ describe('student-tasks viewmodel selectors', () => {
     const testCases = [
       {
         it: 'should return vandaag',
-
-        date: date,
+        date: new Date(date),
         expected: 'vandaag'
       },
       {
         it: 'should return morgen',
-
-        date: new Date(date.setDate(date.getDate() + 1)),
+        date: new Date(date).setDate(date.getDate() + 1),
         expected: 'morgen'
       },
       {
         it: 'should return overmorgen',
-
-        date: new Date(date.setDate(date.getDate() + 2)),
+        date: new Date(date).setDate(date.getDate() + 2),
         expected: 'overmorgen'
       },
       {
         it: 'should return deze week',
-
-        date: new Date(date.setDate(date.getDate() + 4)),
+        date: new Date(date).setDate(date.getDate() + 4),
         expected: 'deze week'
       },
       {
         it: 'should return vorige week',
-
-        date: new Date(date.setDate(date.getDate() - 8)),
+        date: new Date(date).setDate(date.getDate() - 7),
         expected: 'vorige week'
       },
       {
         it: 'should return volgende week',
-
-        date: new Date(date.setDate(date.getDate() + 7)),
+        date: new Date(date).setDate(date.getDate() + 7),
         expected: 'volgende week'
       },
       {
         it: 'should return vroeger ',
-
-        date: new Date(date.setDate(date.getDate() - 14)),
+        date: new Date(date).setDate(date.getDate() - 14),
         expected: 'vroeger'
       },
       {
         it: 'should return later',
-
-        date: new Date(date.setDate(date.getDate() + 14)),
+        date: new Date(date).setDate(date.getDate() + 15),
         expected: 'later'
       }
     ];
+
     testCases.forEach(testCase => {
-      fit(testCase.it, () => {
-        const mockDates = new MockDate(testCase.date);
-        console.log(mockDates.mockDate);
-        console.log(date);
+      it(testCase.it, () => {
+        const mockDate = new Date(testCase.date);
+
         expect(
-          pipe.transform(mockDates.mockDate, {
+          pipe.transform(mockDate, {
             rules: dateGroupLabelRules
           })
         ).toEqual(testCase.expected);
 
-        // restore everything to normal
-        mockDates.returnRealDate();
-      });
     });
 
     //  it('should return the right date grouplabel given the preset', () => {
