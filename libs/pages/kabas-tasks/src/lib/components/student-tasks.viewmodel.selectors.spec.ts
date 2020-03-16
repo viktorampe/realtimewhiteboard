@@ -1,5 +1,7 @@
 import {
   EduContentFixture,
+  LearningAreaFixture,
+  PersonFixture,
   ResultFixture,
   ResultStatus,
   TaskEduContentFixture,
@@ -8,8 +10,6 @@ import {
 } from '@campus/dal';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
-import { LearningAreaFixture } from './../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
-import { PersonFixture } from './../../../../../dal/src/lib/+fixtures/Person.fixture';
 import {
   studentTasks,
   studentTaskWithContent

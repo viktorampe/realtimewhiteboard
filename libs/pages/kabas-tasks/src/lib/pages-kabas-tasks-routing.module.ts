@@ -68,9 +68,9 @@ const routes: Routes = [
     path: '',
     resolve: { isResolved: StudentTaskOverviewResolver },
     data: {
-      //requiredPermissions: 'openTasks'
+      requiredPermissions: 'openTasks'
     },
-    //canActivate: [PermissionGuard],
+    canActivate: [PermissionGuard],
     children: [
       { path: '', component: StudentTaskOverviewComponent },
       {
