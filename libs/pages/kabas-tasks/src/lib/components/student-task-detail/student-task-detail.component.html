@@ -26,9 +26,18 @@
           <div data-cy="task-learning-area-name" class="ui-headline">{{
             task.learningAreaName
           }}</div>
-          <div data-cy="task-finish-by" class="ui-subheader"
+          <div
+            *ngIf="task.isFinished"
+            data-cy="task-finish-by"
+            class="ui-subheader"
+            >Ingediend op {{ task.end.toLocaleDateString('nl-BE') }}.
+          </div>
+          <div
+            *ngIf="!task.isFinished"
+            data-cy="task-finish-by"
+            class="ui-subheader"
             >Deze taak moet
-            {{ task.endDate | humanDateTime: dateTimeArguments | lowercase }} af
+            {{ task.end | humanDateTime: dateTimeArguments | lowercase }} af
             zijn.
           </div>
           <div data-cy="task-description" class="ui-caption"

@@ -161,7 +161,7 @@ describe('StudentTaskDetailComponent', () => {
       it(`should return the right date label - ${testCase.it}`, () => {
         viewModel.currentTask$.next({
           ...viewModel.currentTask$.value,
-          endDate: testCase.input
+          end: testCase.input
         });
         fixture.detectChanges();
 
