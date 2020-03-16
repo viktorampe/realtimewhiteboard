@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ResultStatus } from '@campus/dal';
+import { TaskActionInterface } from '@campus/shared';
 
 @Component({
   selector: 'campus-student-task-content-list-item',
@@ -16,10 +17,7 @@ export class StudentTaskContentListItemComponent {
   @Input() lastUpdated: Date;
   @Input() score: number;
   @Input() status: ResultStatus;
-  @Input() actions: {
-    label: string;
-    handler: () => any; //prevents warning "Member handler is not callable in template"
-  }[];
+  @Input() actions: TaskActionInterface[];
 
   public onActionClick(action) {
     console.log(action);

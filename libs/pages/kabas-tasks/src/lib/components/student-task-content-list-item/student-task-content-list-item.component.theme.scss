@@ -1,14 +1,7 @@
-:host {
-  flex: 1 1 auto;
-
+@mixin student-task-list-item-content() {
   .student-task-content-list-item {
     &__last-updated {
-      display: flex;
-      width: 170px;
-
-      > div {
-        flex: 1 1 auto;
-      }
+      width: 175px;
     }
 
     &__status-icon {
@@ -17,6 +10,9 @@
       }
       &--opened {
         color: orange;
+      }
+      &--incomplete {
+        color: red;
       }
     }
   }

@@ -9,6 +9,7 @@
 @import './components/manage-task-content/manage-task-content.theme';
 @import './components/student-task-overview/student-task-overview.component.theme.scss';
 @import './components/student-task-detail/student-task-detail.component.theme.scss';
+@import './components/student-task-content-list-item/student-task-content-list-item.component.theme.scss';
 
 // color palette
 $pages-kabas-tasks-text-color--primary: black !default;
@@ -88,4 +89,5 @@ $pages-kabas-tasks_link_label-height: 16px !default;
   @include manage-task-content-theme();
   @include student-task-overview-theme();
   @include student-task-detail-theme();
+  @include student-task-list-item-content();
 }
