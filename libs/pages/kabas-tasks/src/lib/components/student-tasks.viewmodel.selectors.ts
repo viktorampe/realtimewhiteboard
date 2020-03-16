@@ -65,8 +65,7 @@ export const studentTasks = createSelector(
             humanDateTimeRulesEnum.TOMORROW,
             humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
             humanDateTimeRulesEnum.WEEKDAY,
-            humanDateTimeRulesEnum.NEXT_WEEK,
-            humanDateTimeRulesEnum.DATE
+            humanDateTimeRulesEnum.NEXT_WEEK
           ])
         }),
         endDate: te.end,

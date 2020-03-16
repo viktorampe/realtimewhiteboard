@@ -153,7 +153,7 @@ describe('student-tasks viewmodel selectors', () => {
       }
     ];
     it('should return expected values given all expected values', () => {
-      const studentTasks = [
+      const taskInstances = [
         new TaskInstanceFixture({
           start,
           end,
@@ -175,7 +175,7 @@ describe('student-tasks viewmodel selectors', () => {
           }
         })
       ];
-      const res = projector(studentTasks);
+      const res = projector(taskInstances);
       expect(res).toEqual(expected);
     });
 
