@@ -4,7 +4,7 @@ import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
-import { StudentTasksViewModel } from './../student-tasks.viewmodel';
+import { StudentTasksViewModel } from '../student-tasks.viewmodel';
 
 interface TaskByLearningAreaInfoInterface {
   learningAreaId: number;
