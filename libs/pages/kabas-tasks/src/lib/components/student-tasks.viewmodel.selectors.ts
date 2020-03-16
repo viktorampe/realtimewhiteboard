@@ -21,7 +21,7 @@ import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithCo
 export const studentTasks = createSelector(
   [TaskInstanceQueries.getTaskStudentTaskInstances],
   getTaskStudentInstances => {
-    getTaskStudentInstances.map(te => {
+    return getTaskStudentInstances.map(te => {
       const date = new HumanDateTimePipe();
       const requiredIds = te.task.taskEduContents
         .filter(
