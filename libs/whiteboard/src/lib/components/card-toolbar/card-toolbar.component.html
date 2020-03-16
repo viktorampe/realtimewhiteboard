@@ -5,35 +5,60 @@
   "
 >
   <div class="toolbar" *ngIf="mode !== Mode.EDIT; else editModeView">
-    <div class="toolbar__tool toolbar__delete" (click)="deleteIconClicked()">
+    <div
+      [@showHideToolbarTool]="'select'"
+      class="toolbar__tool toolbar__delete"
+      (click)="deleteIconClicked()"
+    >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
         [svgIcon]="'delete'"
       ></mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="multiSelectClicked()">
+    <div
+      [@showHideToolbarTool]="'select'"
+      class="toolbar__tool"
+      (click)="multiSelectClicked()"
+    >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
       </mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="flipIconClicked()">
+    <div
+      [@showHideToolbarTool]="'select'"
+      class="toolbar__tool"
+      (click)="flipIconClicked()"
+    >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="editIconClicked()">
+    <div
+      [@showHideToolbarTool]="'select'"
+      class="toolbar__tool"
+      (click)="editIconClicked()"
+    >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>
   </div>
   <ng-template #editModeView>
     <div class="toolbar">
-      <div class="toolbar__tool toolbar__delete" (click)="deleteIconClicked()">
+      <div
+        [@showHideToolbarTool]="'edit'"
+        class="toolbar__tool toolbar__delete"
+        (click)="deleteIconClicked()"
+      >
         <mat-icon
           class="toolbar__tool__icon toolbar__delete__icon"
           [svgIcon]="'delete'"
         ></mat-icon>
       </div>
-      <div class="toolbar__tool" (click)="flipIconClicked()">
+      <div
+        [@showHideToolbarTool]="'edit'"
+        class="toolbar__tool"
+        (click)="flipIconClicked()"
+      >
         <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
       </div>
       <div
+        [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__confirm"
         (click)="confirmIconClicked()"
       >
@@ -49,6 +74,7 @@
 <ng-template #multiSelectView>
   <div class="toolbar toolbar_multiSelect">
     <div
+      [@showHideToolbarTool]="'multiSelect'"
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
       (click)="multiSelectClicked()"
@@ -58,6 +84,7 @@
     </div>
     <ng-template #notSelectView>
       <div
+        [@showHideToolbarTool]="'multiSelect'"
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
         (click)="multiSelectSelectedClicked()"

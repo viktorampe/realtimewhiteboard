@@ -44,12 +44,12 @@ $tool-bg-green-active: linear-gradient(
 
 .toolbar {
   position: absolute;
-  top: -48px;
   right: 8px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
 
+  transform: translateY(-48px);
   z-index: 1;
 
   &__tool {
