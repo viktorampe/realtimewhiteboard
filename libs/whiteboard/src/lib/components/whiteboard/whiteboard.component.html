@@ -43,6 +43,7 @@
       [class.onTop]="card.mode === Mode.SELECTED"
       (cdkDragEnded)="onDragEnded($event, card)"
       (cdkDragStarted)="onDragStarted(card)"
+      (tap)="onCardTapped(card)"
     >
       <campus-color-list
         class="whiteboard__color-list"
@@ -76,7 +77,6 @@
         (remove)="removeImage(card)"
         (openFilePicker)="openFilePicker(filePicker)"
         (press)="onCardPressed(card)"
-        (tap)="onCardTapped(card)"
       ></campus-card>
       <input
         (change)="onFilePickerImageSelected($event, card)"
