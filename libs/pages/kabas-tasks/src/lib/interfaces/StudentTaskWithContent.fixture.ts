@@ -16,6 +16,8 @@ export class StudentTaskWithContentFixture
     new StudentTaskContentFixture()
   ];
   isFinished = false;
+  requiredContentCount = 5;
+  requiredContentFinished = 3;
 
   constructor(props: Partial<StudentTaskWithContentInterface> = {}) {
     // overwrite defaults
