@@ -196,7 +196,7 @@ describe('student-tasks viewmodel selectors', () => {
           isFinished: true,
           isUrgent: false,
           dateGroupLabel: 'vroeger',
-          dateLabel: 'ingediend op 2020-3-1',
+          dateLabel: `ingediend op ${end.toLocaleDateString('nl-BE')}`,
           endDate: end,
           actions: []
         }
@@ -234,6 +234,7 @@ describe('student-tasks viewmodel selectors', () => {
     });
 
     it('should show isFinished=true if endDate is before today', () => {
+      const endDate = new Date(2019, 3, 1);
       const expected: StudentTaskInterface[] = [
         {
           name: 'Huiswerk',
@@ -247,8 +248,8 @@ describe('student-tasks viewmodel selectors', () => {
           isFinished: true,
           isUrgent: false,
           dateGroupLabel: 'vroeger',
-          dateLabel: 'ingediend op 2019-4-1',
-          endDate: new Date(2019, 3, 1),
+          dateLabel: `ingediend op ${endDate.toLocaleDateString('nl-BE')}`,
+          endDate: endDate,
           actions: []
         }
       ];
