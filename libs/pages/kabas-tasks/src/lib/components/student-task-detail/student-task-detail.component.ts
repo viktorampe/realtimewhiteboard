@@ -1,4 +1,11 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, Inject } from '@angular/core';
+import { EduContent } from '@campus/dal';
+import {
+  ContentOpenActionsServiceInterface,
+  ContentOpenActionsStudentService,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+  EduContentTypeEnum
+} from '@campus/shared';
 import {
   getHumanDateTimeRules,
   HumanDateTimeArgsInterface,
@@ -6,15 +13,23 @@ import {
   SectionModeEnum
 } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, share, tap } from 'rxjs/operators';
 import { StudentTaskContentInterface } from '../../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
+import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
 @Component({
   selector: 'campus-student-task-detail',
   templateUrl: './student-task-detail.component.html',
-  styleUrls: ['./student-task-detail.component.scss']
+  styleUrls: ['./student-task-detail.component.scss'],
+  providers: [
+    { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel },
+    {
+      provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentOpenActionsStudentService
+    }
+  ]
 })
 export class StudentTaskDetailComponent {
   sectionModes = SectionModeEnum;
@@ -37,8 +52,25 @@ export class StudentTaskDetailComponent {
     datePrefix: 'op'
   };
 
-  constructor(private viewModel: StudentTasksViewModel) {
-    this.task$ = this.viewModel.currentTask$;
+  constructor(
+    private viewModel: StudentTasksViewModel,
+    @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
+    private contentOpenActionsService: ContentOpenActionsServiceInterface
+  ) {
+    this.task$ = this.viewModel.currentTask$.pipe(
+      map(task => {
+        task.contents.forEach(content => {
+          content.actions = this.contentOpenActionsService.getActionsForTaskInstanceEduContent(
+            { type: EduContentTypeEnum.EXERCISE } as EduContent,
+            content,
+            task
+          );
+        });
+        return task;
+      }),
+      tap(task => console.log(task.contents)),
+      share()
+    );
     this.requiredTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => content.required))
     );
