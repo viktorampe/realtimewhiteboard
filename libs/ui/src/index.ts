@@ -45,10 +45,12 @@ export {
 export * from './lib/tokens';
 export { NavItem } from './lib/tree-nav/tree-nav.component';
 export * from './lib/ui.module';
+export * from './lib/utils/pipes/human-date-time/human-date-time.pipe';
 export {
   HumanDateTimeArgsInterface,
   HumanDateTimeRuleInterface
 } from './lib/utils/pipes/human-date-time/human-date-time.pipe.interface';
+export * from './lib/utils/pipes/human-date-time/human-date-time.pipe.presets';
 export {
   getHumanDateTimeRules,
   humanDateTimeRulesEnum

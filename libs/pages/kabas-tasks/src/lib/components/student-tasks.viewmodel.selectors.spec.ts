@@ -9,21 +9,33 @@ import {
   TaskInstanceFixture
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
+import { HumanDateTimePipe } from '@campus/ui';
+import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
-import { studentTaskWithContent } from './student-tasks.viewmodel.selectors';
+import {
+  dateGroupLabelRules,
+  dateLabelRules,
+  isUrgent,
+  studentTasks,
+  studentTaskWithContent
+} from './student-tasks.viewmodel.selectors';
 
 describe('student-tasks viewmodel selectors', () => {
+  const today = new Date(2020, 2, 16);
+  const dateMock = new MockDate(today);
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   describe('studentTaskWithContent', () => {
     const projector = studentTaskWithContent.projector;
 
     // objects to be used in both mock and expected
-    const today = new Date(2020, 2, 16);
     const start = new Date(2020, 1, 1);
     const end = new Date(2020, 2, 1);
     const endPastToday = new Date(2020, 2, 20);
     const assigner = new PersonFixture();
     const lastUpdated = new Date(2020, 1, 15);
-    const dateMock = new MockDate(today);
 
     const task = getMockTask(lastUpdated);
     const emptyTask = new TaskFixture({
@@ -32,10 +44,6 @@ describe('student-tasks viewmodel selectors', () => {
       learningArea: new LearningAreaFixture({ name: 'Frans' }),
       results: [],
       taskEduContents: []
-    });
-
-    afterAll(() => {
-      dateMock.returnRealDate();
     });
 
     it('should return the correct value - no result', () => {
@@ -162,55 +170,274 @@ describe('student-tasks viewmodel selectors', () => {
       expect(result).toEqual(expected);
     });
   });
-});
 
-function getMockTask(lastUpdated) {
-  const results = [
-    new ResultFixture({
-      eduContentId: 1,
-      score: 100,
-      status: ResultStatus.STATUS_COMPLETED,
-      lastUpdated
-    }),
-    new ResultFixture({
-      eduContentId: 2,
-      score: 50,
-      status: ResultStatus.STATUS_INCOMPLETE,
-      lastUpdated
-    })
-  ];
+  describe('studentTasks', () => {
+    const start = new Date(2020, 1, 1);
+    const end = new Date(2020, 2, 1);
+    const lastUpdated = new Date(2020, 1, 15);
 
-  const taskEduContents = [
-    new TaskEduContentFixture({
-      eduContentId: 1,
-      eduContent: new EduContentFixture(
-        { id: 1 },
+    const date = new Date();
+    const pipe = new HumanDateTimePipe();
+
+    const task = getMockTask(lastUpdated);
+    const projector = studentTasks.projector;
+
+    it('should return expected values', () => {
+      const expected: StudentTaskInterface[] = [
         {
-          title: 'neuspeuteren',
-          description: 'instructiefilmpje',
-          fileExt: 'mp4'
+          name: 'Huiswerk',
+          description: 'Super belangrijke herhalingsoefeningen',
+          learningAreaName: 'Frans',
+          learningAreaId: 1,
+          count: {
+            completedRequired: 2,
+            totalRequired: 2
+          },
+          isFinished: true,
+          isUrgent: false,
+          dateGroupLabel: 'vroeger',
+          dateLabel: `ingediend op ${end.toLocaleDateString('nl-BE')}`,
+          endDate: end,
+          actions: []
         }
-      ),
-      required: true
-    }),
-    new TaskEduContentFixture({
-      eduContentId: 2,
-      eduContent: new EduContentFixture(
-        { id: 2 },
-        {
-          title: 'nagelbijten',
-          description: 'herhalingsoefening'
-        }
-      ),
-      required: false
-    })
-  ];
+      ];
+      const taskInstances = [
+        new TaskInstanceFixture({
+          start,
+          end,
+          task: {
+            ...task,
+            results: [
+              new ResultFixture({
+                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
+              }),
+              new ResultFixture({
+                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
+              })
+            ],
+            taskEduContents: [
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
+              }),
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
+              })
+            ],
+            learningAreaId: 1
+          }
+        })
+      ];
+      const res = projector(taskInstances);
+      expect(res).toEqual(expected);
+    });
 
-  return new TaskFixture({
-    name: 'Huiswerk',
-    description: 'Super belangrijke herhalingsoefeningen',
-    learningArea: new LearningAreaFixture({ name: 'Frans' }),
-    results,
-    taskEduContents
+    it('should show isFinished=true if endDate is before today', () => {
+      const endDate = new Date(2019, 3, 1);
+      const expected: StudentTaskInterface[] = [
+        {
+          name: 'Huiswerk',
+          description: 'Super belangrijke herhalingsoefeningen',
+          learningAreaName: 'Frans',
+          learningAreaId: 1,
+          count: {
+            completedRequired: 0,
+            totalRequired: 2
+          },
+          isFinished: true,
+          isUrgent: false,
+          dateGroupLabel: 'vroeger',
+          dateLabel: `ingediend op ${endDate.toLocaleDateString('nl-BE')}`,
+          endDate: endDate,
+          actions: []
+        }
+      ];
+      const taskInstances = [
+        new TaskInstanceFixture({
+          start,
+          end: new Date(2019, 3, 1),
+          task: {
+            ...task,
+            results: [],
+            taskEduContents: [
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
+              }),
+              new TaskEduContentFixture({
+                required: true,
+                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
+              })
+            ],
+            learningAreaId: 1
+          }
+        })
+      ];
+      const res = projector(taskInstances);
+      expect(res).toEqual(expected);
+    });
+    describe('dateLabelRules', () => {
+      const testCases = [
+        {
+          it: 'should return vandaag',
+          date: new Date(date),
+          expected: 'vandaag'
+        },
+        {
+          it: 'should return morgen',
+          date: new Date(date).setDate(date.getDate() + 1),
+          expected: 'morgen'
+        },
+        {
+          it: 'should return overmorgen',
+          date: new Date(date).setDate(date.getDate() + 2),
+          expected: 'overmorgen'
+        },
+        {
+          it: 'should return vrijdag',
+          date: new Date(date).setDate(date.getDate() + 4),
+          expected: 'Vrijdag'
+        },
+        {
+          it: 'should return vorige week',
+          date: new Date(date).setDate(date.getDate() + 7),
+          expected: 'volgende week'
+        }
+      ];
+
+      testCases.forEach(testCase => {
+        it(testCase.it, () => {
+          const mockDate = new Date(testCase.date);
+
+          expect(
+            pipe.transform(mockDate, {
+              rules: dateLabelRules
+            })
+          ).toEqual(testCase.expected);
+        });
+      });
+    });
+    describe('groupLabelRules', () => {
+      const testCases = [
+        {
+          it: 'should return vandaag',
+          date: new Date(date),
+          expected: 'vandaag'
+        },
+        {
+          it: 'should return morgen',
+          date: new Date(date).setDate(date.getDate() + 1),
+          expected: 'morgen'
+        },
+        {
+          it: 'should return overmorgen',
+          date: new Date(date).setDate(date.getDate() + 2),
+          expected: 'overmorgen'
+        },
+        {
+          it: 'should return deze week',
+          date: new Date(date).setDate(date.getDate() + 4),
+          expected: 'deze week'
+        },
+        {
+          it: 'should return vorige week',
+          date: new Date(date).setDate(date.getDate() - 7),
+          expected: 'vorige week'
+        },
+        {
+          it: 'should return volgende week',
+          date: new Date(date).setDate(date.getDate() + 7),
+          expected: 'volgende week'
+        },
+        {
+          it: 'should return vroeger ',
+          date: new Date(date).setDate(date.getDate() - 14),
+          expected: 'vroeger'
+        },
+        {
+          it: 'should return later',
+          date: new Date(date).setDate(date.getDate() + 15),
+          expected: 'later'
+        }
+      ];
+
+      testCases.forEach(testCase => {
+        it(testCase.it, () => {
+          const mockDate = new Date(testCase.date);
+
+          expect(
+            pipe.transform(mockDate, {
+              rules: dateGroupLabelRules
+            })
+          ).toEqual(testCase.expected);
+        });
+      });
+    });
+
+    describe('isUrgent', () => {
+      it('should return true if its today or tomorrow', () => {
+        expect(isUrgent(new Date())).toBeTruthy(); //today
+        expect(
+          isUrgent(new Date(new Date().setDate(new Date().getDate() + 1)))
+        ).toBeTruthy(); //tomorrow
+        expect(
+          isUrgent(new Date(new Date().setDate(new Date().getDate() + 7)))
+        ).toBeFalsy(); // next week
+      });
+    });
   });
-}
+
+  function getMockTask(lastUpdated) {
+    const results = [
+      new ResultFixture({
+        eduContentId: 1,
+        score: 100,
+        status: ResultStatus.STATUS_COMPLETED,
+        lastUpdated
+      }),
+      new ResultFixture({
+        eduContentId: 2,
+        score: 50,
+        status: ResultStatus.STATUS_INCOMPLETE,
+        lastUpdated
+      })
+    ];
+
+    const taskEduContents = [
+      new TaskEduContentFixture({
+        eduContentId: 1,
+
+        eduContent: new EduContentFixture(
+          { type: 'exercise', id: 1 },
+          {
+            title: 'neuspeuteren',
+            description: 'instructiefilmpje',
+            fileExt: 'mp4'
+          }
+        ),
+        required: true
+      }),
+      new TaskEduContentFixture({
+        eduContentId: 2,
+        eduContent: new EduContentFixture(
+          { type: 'exercise', id: 2 },
+
+          {
+            title: 'nagelbijten',
+            description: 'herhalingsoefening'
+          }
+        ),
+        required: false
+      })
+    ];
+
+    return new TaskFixture({
+      name: 'Huiswerk',
+      description: 'Super belangrijke herhalingsoefeningen',
+      learningArea: new LearningAreaFixture({ name: 'Frans' }),
+      results,
+      taskEduContents
+    });
+  }
+});

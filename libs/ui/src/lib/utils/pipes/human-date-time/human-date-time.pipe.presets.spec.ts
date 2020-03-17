@@ -493,6 +493,43 @@ describe('HumanDateTimePipe rules', () => {
     });
   });
 
+  describe('PAST_WEEK', () => {
+    const referenceDate = new Date(2020, 2, 10, 9).getTime(); // tuesday at 9h00
+    const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.PAST_WEEK)[0];
+    const day = 24 * 60 * 60 * 1000;
+
+    const testCases = [
+      ...[-1, 0, 1, 2, 3, 4, 5].map(i => ({
+        should: 'match the condition',
+        date: referenceDate + (i - 7) * day,
+        expected: true
+      })),
+      {
+        should: 'not match the condition - yesterday (monday)',
+        date: referenceDate - 1 * day,
+        expected: false
+      },
+      {
+        should: 'not match the condition - in 2 weeks',
+        date: referenceDate - 14 * day,
+        expected: false
+      }
+    ];
+
+    testCases.forEach(testCase => {
+      const { should, date, expected } = testCase;
+
+      it('should ' + should, () => {
+        expect(rule.condition(date, referenceDate)).toBe(expected);
+      });
+    });
+
+    it('should return the correct value', () => {
+      expect(rule.value(referenceDate - 2 * day, referenceDate)).toBe(
+        'vorige week'
+      );
+    });
+  });
   describe('LATER', () => {
     const referenceDate = new Date().getTime();
     const rule = getHumanDateTimeRules(humanDateTimeRulesEnum.LATER)[0];
