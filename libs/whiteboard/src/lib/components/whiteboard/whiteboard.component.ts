@@ -380,6 +380,7 @@ export class WhiteboardComponent implements OnChanges {
     if (!!this.titleFC.value) {
       this.isTitleInputSelected = false;
       this.updateWhiteboardSubject({ title: this.titleFC.value });
+      this.saveWhiteboard();
     }
   }
 
