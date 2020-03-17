@@ -288,7 +288,7 @@ describe('student-tasks viewmodel selectors', () => {
           expected: 'overmorgen'
         },
         {
-          it: 'should return deze week',
+          it: 'should return vrijdag',
           date: new Date(date).setDate(date.getDate() + 4),
           expected: 'Vrijdag'
         },
