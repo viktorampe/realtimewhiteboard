@@ -22,8 +22,8 @@ import {
 } from './student-tasks.viewmodel.selectors';
 
 describe('student-tasks viewmodel selectors', () => {
-  let dateMock = new MockDate();
-
+  const today = new Date(2020, 2, 16);
+  const dateMock = new MockDate(today);
   afterAll(() => {
     dateMock.returnRealDate();
   });
@@ -32,13 +32,11 @@ describe('student-tasks viewmodel selectors', () => {
     const projector = studentTaskWithContent.projector;
 
     // objects to be used in both mock and expected
-    const today = new Date(2020, 2, 16);
     const start = new Date(2020, 1, 1);
     const end = new Date(2020, 2, 1);
     const endPastToday = new Date(2020, 2, 20);
     const assigner = new PersonFixture();
     const lastUpdated = new Date(2020, 1, 15);
-    dateMock = new MockDate(today);
 
     const task = getMockTask(lastUpdated);
     const emptyTask = new TaskFixture({
@@ -369,7 +367,9 @@ describe('student-tasks viewmodel selectors', () => {
           ).toEqual(testCase.expected);
         });
       });
+    });
 
+    describe('isUrgent', () => {
       it('should return true if its today or tomorrow', () => {
         expect(isUrgent(new Date())).toBeTruthy(); //today
         expect(
