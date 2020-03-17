@@ -23,6 +23,9 @@ export class StudentTaskContentListItemComponent {
   @Output() clickAction = new EventEmitter<ContentActionInterface>();
 
   public onActionClick(action: ContentActionInterface) {
+    if (!action) {
+      return;
+    }
     this.clickAction.emit(action);
   }
 }

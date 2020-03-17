@@ -1,7 +1,9 @@
 <campus-list-item-content [contentRightSeparated]="true">
   <mat-icon list-item-icon [svgIcon]="fileIcon"></mat-icon>
 
-  <list-item-title>{{ title }}</list-item-title>
+  <list-item-title (click)="onActionClick(actions[0])">{{
+    title
+  }}</list-item-title>
   <list-item-caption>{{ description }}</list-item-caption>
   <list-item-actions
     *ngIf="actions && status !== resultStatuses.STATUS_COMPLETED"
