@@ -24,7 +24,7 @@ import { WhiteboardFixture } from '../../models/whiteboard.fixture';
 import {
   WhiteboardHttpService,
   WhiteboardHttpServiceInterface
-} from '../../services/whiteboard-http.service';
+} from '../../services/whiteboardservice/whiteboard-http.service';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
 import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
@@ -650,31 +650,24 @@ describe('WhiteboardComponent', () => {
     });
 
     describe('onDeleteCard()', () => {
-      it('should add card to shelf  when card was made by editorial office', () => {
+      it('should remove card form workspace', () => {
         component.whiteboard$.value.shelfCards = [];
+        const cardArrayLengthBefore = component.whiteboard$.value.cards.length;
         const [card] = component.whiteboard$.value.cards;
         card.mode = ModeEnum.IDLE;
 
         component.onDeleteCard(card);
 
-        expect(component.whiteboard$.value.shelfCards).toContain(card);
+        const cardArrayLengthAfter = component.whiteboard$.value.cards.length;
+
+        expect(cardArrayLengthAfter).toBe(cardArrayLengthBefore - 1);
         expect(component.whiteboard$.value.cards).not.toContain(card);
-      });
-
-      it('should update mode to ShelfMode when card was made by editorial office', () => {
-        const [card] = component.whiteboard$.value.cards;
-        card.mode = <ModeEnum>ModeEnum.IDLE;
-
-        component.onDeleteCard(card);
-
-        expect(card.mode).toBe(ModeEnum.SHELF);
       });
     });
 
     describe('onFilesDropped()', () => {
       it('should not add a card if file type of dropped file is unsupported', () => {
         const cardsLengthBeforeAdd = component.whiteboard$.value.cards.length;
-
         const file = new File([''], 'dummy.jpg', {
           type: ''
         });
