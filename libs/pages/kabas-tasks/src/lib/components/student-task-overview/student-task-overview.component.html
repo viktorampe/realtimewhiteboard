@@ -14,11 +14,15 @@
             bordered
             *ngIf="showFinishedTasks$ | async; else showActiveTasks"
             (click)="showFinishedTasks$.next(false)"
+            data-cy="sto-filter-active"
             >Actieve taken</campus-button
           >
         </ng-container>
         <ng-template #showActiveTasks>
-          <campus-button bordered (click)="showFinishedTasks$.next(true)"
+          <campus-button
+            bordered
+            (click)="showFinishedTasks$.next(true)"
+            data-cy="sto-filter-finished"
             >Afgewerkte taken</campus-button
           >
         </ng-template>
@@ -31,6 +35,7 @@
           [ctaLabel]="emptyStateData.ctaLabel"
           [svgIcon]="emptyStateData.svgIcon"
           (clickCta)="emptyStateClick(emptyStateData.ctaLink)"
+          data-cy="sto-empty-state"
         ></campus-empty-state>
         <ng-template #filledState>
           <mat-list *ngFor="let section of taskListSections$ | async">
@@ -61,11 +66,15 @@
                 inline
                 *ngIf="showFinishedTasks$ | async; else actionForActiveTasks"
                 (click)="showFinishedTasks$.next(false)"
+                data-cy="sto-filter-active"
                 >Toon actieve taken</campus-button
               >
             </div>
             <ng-template #actionForActiveTasks>
-              <campus-button inline (click)="showFinishedTasks$.next(true)"
+              <campus-button
+                inline
+                (click)="showFinishedTasks$.next(true)"
+                data-cy="sto-filter-finished"
                 >Toon afgewerkte taken</campus-button
               >
             </ng-template>
@@ -78,11 +87,15 @@
                   else actionForGroupedByLearningArea
                 "
                 (click)="isGroupedByDate$.next(false)"
+                data-cy="sto-sort-by-learning-area"
                 >Groepeer per vak</campus-button
               >
             </div>
             <ng-template #actionForGroupedByLearningArea>
-              <campus-button inline (click)="isGroupedByDate$.next(true)"
+              <campus-button
+                inline
+                (click)="isGroupedByDate$.next(true)"
+                data-cy="sto-sort-by-date"
                 >Sorteer op datum</campus-button
               >
             </ng-template>
@@ -91,6 +104,7 @@
               ><campus-button
                 inline
                 (click)="scrollTo(taskInfo.learningAreaId)"
+                data-cy="sto-info-by-learning-area"
               >
                 {{ taskInfo | taskInfoByLearningArea }}</campus-button
               ></div
