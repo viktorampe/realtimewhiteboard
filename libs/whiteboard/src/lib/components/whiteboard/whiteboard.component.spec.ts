@@ -129,7 +129,7 @@ describe('WhiteboardComponent', () => {
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.whiteboard$.value.cards.length;
 
-    component.btnPlusClicked(new TouchEvent('tap'));
+    component.btnPlusClicked();
 
     expect(component.whiteboard$.value.cards.length).toBe(
       cardsSizeBeforeClicked + 1
