@@ -84,10 +84,8 @@ $color-yellow: #fadb48;
 :host.whiteboard__color-list .color-list {
   flex-direction: column;
   position: absolute;
-  left: -$swatch-size - 8px;
-  // 40 (colorlist width) + 8 (distance from card)
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateX(-$swatch-size) translateX(-8px) translateY(-50%);
 
   z-index: 1;
 

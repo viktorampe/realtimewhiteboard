@@ -100,5 +100,6 @@ export const icons = {
   'add-photo-alternate': 'assets/icons/material/add_photo_alternate.svg',
   multiselect: 'assets/icons/multiselect.svg',
   'multiselect-selected': 'assets/icons/multiselect-selected.svg',
-  'open-in-new': 'assets/icons/material/open_in_new.svg'
+  'open-in-new': 'assets/icons/material/open_in_new.svg',
+  'arrow-down': 'assets/icons/material/arrow_down.svg'
 };
