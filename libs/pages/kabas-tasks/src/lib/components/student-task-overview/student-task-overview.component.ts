@@ -281,4 +281,9 @@ export class StudentTaskOverviewComponent implements OnInit {
   private sortByString(a: string, b: string, order: SortOrder) {
     return a.localeCompare(b) * order;
   }
+
+  private addActions() {
+    // in taskActionStudentService getActions aanspreken en mappen aan de jusite task
+    return this.viewmodel.studentTasks$.pipe(map(st => {}));
+  }
 }
