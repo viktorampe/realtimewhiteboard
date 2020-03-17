@@ -27,6 +27,17 @@
     />
   </div>
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
+    <div class="whiteboard__workspace__zoom">
+      <mat-icon
+        class="whiteboard__workspace__zoom__button"
+        [svgIcon]="'plus'"
+      ></mat-icon>
+
+      <mat-icon
+        class="whiteboard__workspace__zoom__button"
+        [svgIcon]="'plus'"
+      ></mat-icon>
+    </div>
     <div
       class="whiteboard__workspace__container"
       *ngFor="let card of whiteboard.cards"
