@@ -163,17 +163,24 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
   //#region WORKSPACE INTERACTIONS
-
-  onDblClick(event: MouseEvent) {
-    if (
-      (event.target as HTMLElement).className.includes('whiteboard__workspace')
-    ) {
-      this.addEmptyCard({ top: event.offsetY, left: event.offsetX });
+  createCard(event: any) {
+    if (event.target.className.includes('whiteboard__workspace')) {
+      if (event.type === 'longpress') {
+        const top =
+          event.center.y -
+          this.workspaceElementRef.nativeElement.getBoundingClientRect().top;
+        const left = event.center.x;
+        this.addEmptyCard({ top, left });
+      }
+      if (event.type === 'dblclick') {
+        const top = event.offsetY;
+        const left = event.offsetX;
+        this.addEmptyCard({ top, left });
+      }
     }
   }
 
-  btnPlusClicked(event) {
-    event.stopPropagation();
+  btnPlusClicked() {
     this.addEmptyCard();
   }
   //#endregion
@@ -282,12 +289,6 @@ export class WhiteboardComponent implements OnChanges {
         this.updateCard({ mode: ModeEnum.SELECTED }, card);
         this.selectedCards = [];
       }
-    }
-  }
-
-  onCardClicked(event: MouseEvent, card: CardInterface) {
-    if (card.mode !== ModeEnum.IDLE) {
-      event.stopPropagation();
     }
   }
 
@@ -417,28 +418,37 @@ export class WhiteboardComponent implements OnChanges {
     this.whiteboardHttpService.setJson(whiteboard).subscribe();
   }
 
-  onClickWhiteboard() {
-    this.selectedCards = [];
-    const cards = this.whiteboard$.value.cards;
-    const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
+  onClickWhiteboard(event) {
+    if (
+      event.target.classList.contains('whiteboard__workspace') ||
+      event.target.classList.contains('card') ||
+      event.target.classList.contains('card-text') ||
+      event.target.classList.contains('card-image') ||
+      event.target.classList.contains('card-image__image')
+    ) {
+      this.selectedCards = [];
+      const cards = this.whiteboard$.value.cards;
+      const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
 
-    if (cardInEditMode) {
-      this.updateCard(
-        { description: cardInEditMode.description },
-        cardInEditMode
+      if (cardInEditMode) {
+        this.updateCard(
+          { description: cardInEditMode.description },
+          cardInEditMode
+        );
+        this.updateViewMode(cardInEditMode);
+        this.saveWhiteboard();
+      }
+      const nonIdleUploadCards = cards.filter(
+        c =>
+          c.mode !== ModeEnum.UPLOAD &&
+          c.mode !== ModeEnum.IDLE &&
+          c.mode !== ModeEnum.ZOOM
       );
-      this.updateViewMode(cardInEditMode);
-      this.saveWhiteboard();
-    }
-
-    const nonIdleUploadCards = cards.filter(
-      c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
-    );
-
-    if (nonIdleUploadCards.length) {
-      nonIdleUploadCards.forEach(c =>
-        this.updateCard({ mode: ModeEnum.IDLE }, c)
-      );
+      if (nonIdleUploadCards.length) {
+        nonIdleUploadCards.forEach(c =>
+          this.updateCard({ mode: ModeEnum.IDLE }, c)
+        );
+      }
     }
   }
 
