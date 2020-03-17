@@ -10,6 +10,8 @@ export interface StudentTaskWithContentInterface {
   isFinished: boolean;
   assigner: PersonInterface;
   contents: StudentTaskContentInterface[];
-  requiredContentCount: number;
-  requiredContentFinished: number;
+  count: {
+    finishedRequired: number;
+    totalRequired: number;
+  };
 }

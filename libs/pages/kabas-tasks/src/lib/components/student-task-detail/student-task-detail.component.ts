@@ -1,4 +1,5 @@
 import { Component, HostBinding } from '@angular/core';
+import { ContentActionInterface } from '@campus/shared';
 import {
   getHumanDateTimeRules,
   HumanDateTimeArgsInterface,
@@ -48,5 +49,13 @@ export class StudentTaskDetailComponent {
     this.optionalTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => !content.required))
     );
+  }
+
+  public handleAction(
+    action: ContentActionInterface,
+    taskEduContent: StudentTaskContentInterface
+  ) {
+    // TODO we need eduContent here...
+    // action.handler(eduContent);
   }
 }

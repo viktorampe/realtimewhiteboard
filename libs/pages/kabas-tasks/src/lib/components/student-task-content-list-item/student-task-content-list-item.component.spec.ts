@@ -29,7 +29,7 @@ describe('StudentTaskContentListItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fdescribe('Result info: ', () => {
+  describe('Result info: ', () => {
     const testCases = [
       {
         finished: true,
