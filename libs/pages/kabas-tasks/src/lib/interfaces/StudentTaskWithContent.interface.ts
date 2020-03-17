@@ -11,7 +11,7 @@ export interface StudentTaskWithContentInterface {
   assigner: PersonInterface;
   contents: StudentTaskContentInterface[];
   count: {
-    finishedRequired: number;
+    completedRequired: number;
     totalRequired: number;
   };
 }

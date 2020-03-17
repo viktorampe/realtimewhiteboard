@@ -21,7 +21,7 @@ export class StudentTaskWithContentFixture
   ];
   isFinished = false;
   count = {
-    finishedRequired: 1,
+    completedRequired: 1,
     totalRequired: 3
   };
 
