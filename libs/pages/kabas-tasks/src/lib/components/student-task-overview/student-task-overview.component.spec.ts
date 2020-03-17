@@ -1,3 +1,5 @@
+// file.only
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -12,6 +14,7 @@ import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { TaskInfoByLearningAreaPipe } from '../../pipes/task-info-by-learning-area.pipe';
+import { StudentTaskListItemComponent } from '../student-task-list-item/student-task-list-item.component';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 import { StudentTaskOverviewComponent } from './student-task-overview.component';
@@ -25,7 +28,11 @@ describe('StudentTaskOverviewComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule, RouterTestingModule],
-      declarations: [StudentTaskOverviewComponent, TaskInfoByLearningAreaPipe],
+      declarations: [
+        StudentTaskListItemComponent,
+        StudentTaskOverviewComponent,
+        TaskInfoByLearningAreaPipe
+      ],
       providers: [
         { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel },
