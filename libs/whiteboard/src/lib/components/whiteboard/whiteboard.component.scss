@@ -105,7 +105,7 @@ $defaultColor: #a3b1c6;
   }
 
   .plusMinimized {
-    bottom: 20px !important;
+    bottom: 35px !important;
   }
 
   &__shelf__button {
@@ -131,7 +131,9 @@ $defaultColor: #a3b1c6;
         lighten(#e0e5ec, 5%),
         darken(#e0e5ec, 5%)
       );
-      box-shadow: 3px 3px 6px #fff, -3px -3px 6px #a3b1c6;
+      box-shadow: inset 1px 1px 6px darken(#e0e5ec, 20%),
+        inset -1px -1px 6px lighten(#e0e5ec, 20%),
+        1px 1px 2px darken(#a3b1c6, 5%), -1px -1px 2px #ffffff;
     }
   }
 
@@ -162,6 +164,6 @@ $defaultColor: #a3b1c6;
   }
 
   .minimizedShelf {
-    height: 20px;
+    height: 36px;
   }
 }
