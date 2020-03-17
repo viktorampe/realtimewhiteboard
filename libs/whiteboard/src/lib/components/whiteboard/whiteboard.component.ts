@@ -219,7 +219,9 @@ export class WhiteboardComponent implements OnChanges {
     };
 
     // add a 'copy' ( card with a different reference ) to the shelf
-    this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
+    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
+      this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
+    }
 
     // Update whiteboardsubject
     this.updateWhiteboardSubject({
@@ -250,9 +252,8 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDeleteCard(card: CardInterface) {
-    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
-      console.log('deleting card perminantly');
+  onDeleteCard(card: CardInterface, permanent: boolean = false) {
+    if (permanent) {
       this.updateWhiteboardSubject({
         cards: this.whiteboard$.value.cards.filter(c => c.id !== card.id),
         shelfCards: this.whiteboard$.value.shelfCards.filter(
@@ -261,8 +262,6 @@ export class WhiteboardComponent implements OnChanges {
       });
       this.saveWhiteboard();
     } else {
-      console.log('returning card to shelf');
-      this.addCardToShelf(card);
       this.updateWhiteboardSubject({
         cards: this.whiteboard$.value.cards.filter(c => c !== card)
       });
