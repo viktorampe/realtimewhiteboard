@@ -1,67 +1,111 @@
-<campus-backdrop title="TASK_NAME_HERE" static>
+<campus-backdrop *ngIf="task$ | async as task" [title]="task.name" static>
   <front-layer-content>
-    <div *ngIf="task$ | async as task">
-      <campus-section [mode]="sectionModes.CONTAINER">
-        <section-title>Moetjes in deze taak</section-title>
+    <div class="student-task-detail__content">
+      <ng-container
+        *ngIf="requiredTaskContents$ | async as requiredTaskContents"
+      >
+        <campus-section
+          [mode]="sectionModes.CONTAINER"
+          *ngIf="requiredTaskContents.length"
+          data-cy="required-task-container"
+        >
+          <section-title>Moetjes in deze taak</section-title>
 
-        <section-content>
-          <mat-list>
-            <mat-list-item
-              *ngFor="let requiredTaskContent of requiredTaskContents$ | async"
-              data-cy="required-task-content"
-            >
-              <campus-student-task-content-list-item
-                [fileIcon]="requiredTaskContent.icon"
-                [title]="requiredTaskContent.name"
-                [description]="requiredTaskContent.description"
-                [status]="requiredTaskContent.status"
-                [lastUpdated]="requiredTaskContent.lastUpdated"
-                [score]="requiredTaskContent.score"
-                [actions]="requiredTaskContent.actions"
-                [isFinished]="task.isFinished"
-                [isRequired]="true"
-              ></campus-student-task-content-list-item>
-            </mat-list-item>
-          </mat-list>
-        </section-content>
-      </campus-section>
+          <section-actions>
+            <campus-progress
+              data-cy="task-progress"
+              [total]="task.requiredContentCount"
+              [count]="task.requiredContentFinished"
+              [showPercentage]="true"
+              [diameter]="48"
+              ><mat-icon completedProgressIcon svgIcon="check"></mat-icon>
+            </campus-progress>
+          </section-actions>
 
-      <campus-section [mode]="sectionModes.CONTAINER">
-        <section-title>Magjes in deze taak</section-title>
+          <section-content>
+            <mat-list>
+              <mat-list-item
+                *ngFor="let requiredTaskContent of requiredTaskContents"
+                data-cy="required-task-content"
+              >
+                <campus-student-task-content-list-item
+                  [fileIcon]="requiredTaskContent.icon"
+                  [title]="requiredTaskContent.name"
+                  [description]="requiredTaskContent.description"
+                  [status]="requiredTaskContent.status"
+                  [lastUpdated]="requiredTaskContent.lastUpdated"
+                  [score]="requiredTaskContent.score"
+                  [actions]="requiredTaskContent.actions"
+                  [isFinished]="task.isFinished"
+                ></campus-student-task-content-list-item>
+              </mat-list-item>
+            </mat-list>
+          </section-content>
+        </campus-section>
+      </ng-container>
 
-        <section-content>
-          Magjes in deze taak inhoud.
-        </section-content>
-      </campus-section>
+      <ng-container
+        *ngIf="optionalTaskContents$ | async as optionalTaskContents"
+      >
+        <campus-section
+          [mode]="sectionModes.CONTAINER"
+          *ngIf="optionalTaskContents.length"
+          data-cy="optional-task-container"
+        >
+          <section-title>Magjes in deze taak</section-title>
 
-      <campus-section [mode]="sectionModes.CONTAINER">
-        <section-title>Over deze taak</section-title>
-
-        <section-content>
-          <campus-person-badge [person]="task.assigner"></campus-person-badge>
-          <div data-cy="task-name" class="ui-title">{{ task.name }}</div>
-          <div data-cy="task-learning-area-name" class="ui-headline">{{
-            task.learningAreaName
-          }}</div>
-          <div
-            *ngIf="task.isFinished"
-            data-cy="task-finished-on"
-            class="ui-subheader"
-            >Ingediend op {{ task.end.toLocaleDateString('nl-BE') }}.
-          </div>
-          <div
-            *ngIf="!task.isFinished"
-            data-cy="task-finish-by"
-            class="ui-subheader"
-            >Deze taak moet
-            {{ task.end | humanDateTime: dateTimeArguments | lowercase }} af
-            zijn.
-          </div>
-          <div data-cy="task-description" class="ui-caption"
-            >{{ task.description }}
-          </div>
-        </section-content>
-      </campus-section>
+          <section-content>
+            <mat-list>
+              <mat-list-item
+                *ngFor="let optionalTaskContent of optionalTaskContents"
+                data-cy="optional-task-content"
+              >
+                <campus-student-task-content-list-item
+                  [fileIcon]="optionalTaskContent.icon"
+                  [title]="optionalTaskContent.name"
+                  [description]="optionalTaskContent.description"
+                  [status]="optionalTaskContent.status"
+                  [lastUpdated]="optionalTaskContent.lastUpdated"
+                  [score]="optionalTaskContent.score"
+                  [actions]="optionalTaskContent.actions"
+                  [isFinished]="task.isFinished"
+                ></campus-student-task-content-list-item>
+              </mat-list-item>
+            </mat-list>
+          </section-content>
+        </campus-section>
+      </ng-container>
     </div>
+
+    <campus-section
+      [mode]="sectionModes.CONTAINER"
+      class="student-task-detail__side"
+    >
+      <section-title>Over deze taak</section-title>
+
+      <section-content>
+        <campus-person-badge [person]="task.assigner"></campus-person-badge>
+        <div data-cy="task-name" class="ui-title">{{ task.name }}</div>
+        <div data-cy="task-learning-area-name" class="ui-headline">{{
+          task.learningAreaName
+        }}</div>
+        <div
+          *ngIf="task.isFinished"
+          data-cy="task-finished-on"
+          class="ui-subheader"
+          >Ingediend op {{ task.end.toLocaleDateString('nl-BE') }}.
+        </div>
+        <div
+          *ngIf="!task.isFinished"
+          data-cy="task-finish-by"
+          class="ui-subheader"
+          >Deze taak moet
+          {{ task.end | humanDateTime: dateTimeArguments | lowercase }} af zijn.
+        </div>
+        <div data-cy="task-description" class="ui-caption"
+          >{{ task.description }}
+        </div>
+      </section-content>
+    </campus-section>
   </front-layer-content>
 </campus-backdrop>

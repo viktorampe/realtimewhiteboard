@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ResultStatus } from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -68,7 +69,8 @@ describe('StudentTaskDetailComponent', () => {
     const mockContents = [
       new StudentTaskContentFixture({
         name: 'Required 1',
-        required: true
+        required: true,
+        status: ResultStatus.STATUS_COMPLETED
       }),
       new StudentTaskContentFixture({
         name: 'Required 2',
@@ -76,7 +78,8 @@ describe('StudentTaskDetailComponent', () => {
       }),
       new StudentTaskContentFixture({
         name: 'Optional 1',
-        required: false
+        required: false,
+        status: ResultStatus.STATUS_COMPLETED
       }),
       new StudentTaskContentFixture({
         name: 'Optional 2',

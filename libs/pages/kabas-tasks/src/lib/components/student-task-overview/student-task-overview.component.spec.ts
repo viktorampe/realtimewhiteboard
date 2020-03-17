@@ -8,11 +8,13 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
-import { StudentTasksViewModel } from './../student-tasks.viewmodel';
-import { MockStudentTasksViewModel } from './../student-tasks.viewmodel.mock';
+import { TaskInfoByLearningAreaPipe } from '../../pipes/task-info-by-learning-area.pipe';
+import { StudentTaskListItemComponent } from '../student-task-list-item/student-task-list-item.component';
+import { StudentTasksViewModel } from '../student-tasks.viewmodel';
+import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 import { StudentTaskOverviewComponent } from './student-task-overview.component';
 
 describe('StudentTaskOverviewComponent', () => {
@@ -24,7 +26,11 @@ describe('StudentTaskOverviewComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule, RouterTestingModule],
-      declarations: [StudentTaskOverviewComponent],
+      declarations: [
+        StudentTaskListItemComponent,
+        StudentTaskOverviewComponent,
+        TaskInfoByLearningAreaPipe
+      ],
       providers: [
         { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel },
@@ -48,15 +54,34 @@ describe('StudentTaskOverviewComponent', () => {
   describe('practice page redirect', () => {
     it('should navigate to free practice when empty-state cta is clicked', async () => {
       jest.spyOn(router, 'navigate');
-      component.emptyStateClick();
+      component.emptyStateClick('foo');
 
-      expect(router.navigate).toHaveBeenCalledWith(['practice']);
+      expect(router.navigate).toHaveBeenCalledWith(['foo']);
     });
   });
 
   describe('Empty State', () => {
+    let viewmodelStudentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+
+    beforeEach(() => {
+      viewmodelStudentTasks$ = viewmodel.studentTasks$ as BehaviorSubject<
+        StudentTaskInterface[]
+      >;
+      viewmodelStudentTasks$.next([]);
+    });
+
+    describe('inEmptyState$', () => {
+      it('should emit true when there are no tasks', () => {
+        expect(component.taskCount$).toBeObservable(hot('a', { a: 0 }));
+      });
+
+      it('should emit false when there are tasks', () => {
+        viewmodelStudentTasks$.next([new StudentTaskFixture()]);
+        expect(component.taskCount$).toBeObservable(hot('a', { a: 1 }));
+      });
+    });
+
     it('should show emtpy state for active tasks', () => {
-      component.taskCount$ = of(0);
       component.showFinishedTasks$.next(false);
       fixture.detectChanges();
 
@@ -77,7 +102,6 @@ describe('StudentTaskOverviewComponent', () => {
     });
 
     it('should show emtpy state for finished tasks', () => {
-      component.taskCount$ = of(0);
       component.showFinishedTasks$.next(true);
       fixture.detectChanges();
 
@@ -97,6 +121,130 @@ describe('StudentTaskOverviewComponent', () => {
       // No cta in finished tasks
       const ctaDE = emptyState.query(By.css('.ui-empty-state__cta .ui-button'));
       expect(ctaDE).toBeNull();
+    });
+  });
+
+  describe('sectionTitle$', () => {
+    let viewmodelStudentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+
+    beforeEach(() => {
+      viewmodelStudentTasks$ = viewmodel.studentTasks$ as BehaviorSubject<
+        StudentTaskInterface[]
+      >;
+    });
+
+    it('should display the correct section title when there are no active tasks', () => {
+      component.showFinishedTasks$.next(false);
+      viewmodelStudentTasks$.next([]);
+
+      expect(component.sectionTitle$).toBeObservable(
+        hot('a', {
+          a: 'Er staan geen taken voor je klaar'
+        })
+      );
+    });
+
+    it('should display the correct section title when there are no finished tasks', () => {
+      component.showFinishedTasks$.next(true);
+      viewmodelStudentTasks$.next([]);
+
+      expect(component.sectionTitle$).toBeObservable(
+        hot('a', {
+          a: 'Je hebt geen afgewerkte taken'
+        })
+      );
+    });
+
+    it('should display the correct section title when there are active tasks', () => {
+      component.showFinishedTasks$.next(false);
+
+      viewmodelStudentTasks$.next([
+        new StudentTaskFixture({ isFinished: false })
+      ]);
+
+      expect(component.sectionTitle$).toBeObservable(
+        hot('a', {
+          a: '1 taak staat voor je klaar'
+        })
+      );
+
+      viewmodelStudentTasks$.next([
+        new StudentTaskFixture({ isFinished: false }),
+        new StudentTaskFixture({ isFinished: false })
+      ]);
+
+      expect(component.sectionTitle$).toBeObservable(
+        hot('b', {
+          b: '2 taken staan voor je klaar'
+        })
+      );
+    });
+
+    it('should display the correct section title when there are finished tasks', () => {
+      component.showFinishedTasks$.next(true);
+      viewmodelStudentTasks$.next([
+        new StudentTaskFixture({ isFinished: true })
+      ]);
+
+      expect(component.sectionTitle$).toBeObservable(
+        hot('a', {
+          a: 'Deze taken heb je gemaakt'
+        })
+      );
+    });
+  });
+
+  describe('emptyStateData$', () => {
+    let viewmodelStudentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+
+    beforeEach(() => {
+      viewmodelStudentTasks$ = viewmodel.studentTasks$ as BehaviorSubject<
+        StudentTaskInterface[]
+      >;
+      viewmodelStudentTasks$.next([]);
+    });
+
+    it('should stream the correct data for finished tasks', () => {
+      component.showFinishedTasks$.next(false);
+
+      expect(component.emptyStateData$).toBeObservable(
+        hot('a', {
+          a: {
+            title: 'Je bent helemaal mee',
+            description:
+              'Er staan geen taken voor je klaar. Je kan altijd vrij oefenen.',
+            ctaLabel: 'Naar vrij oefenen',
+            ctaLink: 'practice',
+            svgIcon: 'empty-state-all-done'
+          }
+        })
+      );
+    });
+
+    it('should stream the correct data for active tasks', () => {
+      component.showFinishedTasks$.next(true);
+
+      expect(component.emptyStateData$).toBeObservable(
+        hot('a', {
+          a: {
+            title: 'Hier is niets te zien',
+            description: 'Je hebt nog geen afgewerkte taken.',
+            svgIcon: 'empty-state-all-done'
+          }
+        })
+      );
+    });
+  });
+
+  describe('scrollTo()', () => {
+    it('should scroll to the provided target', () => {
+      const scrollSpy = jest
+        .spyOn(document, 'getElementById')
+        .mockReturnValue({ scrollIntoView: jest.fn() } as any);
+
+      component.scrollTo(1);
+
+      expect(scrollSpy).toHaveBeenCalledWith('1');
     });
   });
 
@@ -134,13 +282,13 @@ describe('StudentTaskOverviewComponent', () => {
       });
 
       it('should emit the correct amount of tasks - active', () => {
-        component.setShowFinishedTasks(false);
+        component.showFinishedTasks$.next(false);
 
         expect(component.taskCount$).toBeObservable(hot('a', { a: 2 }));
       });
 
       it('should emit the correct amount of tasks - finished', () => {
-        component.setShowFinishedTasks(true);
+        component.showFinishedTasks$.next(true);
 
         expect(component.taskCount$).toBeObservable(hot('a', { a: 3 }));
       });
@@ -160,7 +308,7 @@ describe('StudentTaskOverviewComponent', () => {
       });
 
       it('should emit the learningAreaInfo - active', () => {
-        component.setShowFinishedTasks(false);
+        component.showFinishedTasks$.next(false);
 
         const expected = [
           {
@@ -183,7 +331,7 @@ describe('StudentTaskOverviewComponent', () => {
       });
 
       it('should emit the learningAreaInfo - finished', () => {
-        component.setShowFinishedTasks(true);
+        component.showFinishedTasks$.next(true);
 
         const expected = [
           {
@@ -219,7 +367,7 @@ describe('StudentTaskOverviewComponent', () => {
 
         beforeEach(() => {
           viewmodelStudentTasks$.next(mockTasks);
-          component.setShowFinishedTasks(false);
+          component.showFinishedTasks$.next(false);
         });
 
         it('should emit the correct sections, grouped by date', () => {
@@ -274,7 +422,7 @@ describe('StudentTaskOverviewComponent', () => {
 
         beforeEach(() => {
           viewmodelStudentTasks$.next(mockTasks);
-          component.setShowFinishedTasks(true);
+          component.showFinishedTasks$.next(true);
         });
 
         it('should emit the correct sections, grouped by date', () => {
