@@ -28,13 +28,18 @@ export class MockStudentTasksViewModel
   );
   public routeParams$ = new BehaviorSubject<Params>(null);
 
+  private nextWeek: Date = new Date(Date.now() + 7 * 24 * 3600 * 1000);
   private studentTasks = [
     new StudentTaskFixture({
       isFinished: true,
-      endDate: new Date(2019, 8, 31)
+      endDate: this.nextWeek
     }),
-    new StudentTaskFixture(),
-    new StudentTaskFixture()
+    new StudentTaskFixture({
+      endDate: this.nextWeek
+    }),
+    new StudentTaskFixture({
+      endDate: this.nextWeek
+    })
   ];
 
   constructor() {
