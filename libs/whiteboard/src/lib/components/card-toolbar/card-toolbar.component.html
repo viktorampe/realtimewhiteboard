@@ -8,7 +8,7 @@
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool toolbar__delete"
-      (click)="deleteIconClicked()"
+      (tap)="deleteIconClicked()"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -18,7 +18,7 @@
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
-      (click)="multiSelectClicked()"
+      (tap)="multiSelectClicked()"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
       </mat-icon>
@@ -26,14 +26,14 @@
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
-      (click)="flipIconClicked()"
+      (tap)="flipIconClicked()"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
-      (click)="editIconClicked()"
+      (tap)="editIconClicked()"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>
@@ -43,7 +43,7 @@
       <div
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__delete"
-        (click)="deleteIconClicked()"
+        (tap)="deleteIconClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__delete__icon"
@@ -53,14 +53,14 @@
       <div
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool"
-        (click)="flipIconClicked()"
+        (tap)="flipIconClicked()"
       >
         <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
       </div>
       <div
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__confirm"
-        (click)="confirmIconClicked()"
+        (tap)="confirmIconClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__confirm__icon"
@@ -77,7 +77,7 @@
       [@showHideToolbarTool]="'multiSelect'"
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
-      (click)="multiSelectClicked()"
+      (tap)="multiSelectClicked()"
     >
       <mat-icon class="toolbar__tool__icon " [svgIcon]="'multiselect'">
       </mat-icon>
@@ -87,7 +87,7 @@
         [@showHideToolbarTool]="'multiSelect'"
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
-        (click)="multiSelectSelectedClicked()"
+        (tap)="multiSelectSelectedClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__select__icon"
