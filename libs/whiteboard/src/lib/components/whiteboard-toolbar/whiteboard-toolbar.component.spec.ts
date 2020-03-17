@@ -35,7 +35,8 @@ describe('WhiteboardToolbarComponent', () => {
 
   it('should emit when delete is clicked', () => {
     spyOn(component.deleteCards, 'emit');
-    component.btnDeleteClicked(new MouseEvent(''));
+
+    component.btnDeleteClicked();
     expect(component.deleteCards.emit).toHaveBeenCalledTimes(1);
   });
 });
