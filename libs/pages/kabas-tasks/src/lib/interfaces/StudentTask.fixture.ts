@@ -7,7 +7,7 @@ export class StudentTaskFixture implements StudentTaskInterface {
   learningAreaName = 'fooLearningarea';
   learningAreaId = 1;
   count = {
-    finishedRequired: 2,
+    completedRequired: 2,
     totalRequired: 3
   };
   isFinished = false;
