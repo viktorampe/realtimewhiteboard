@@ -13,7 +13,7 @@ export class HumanDateTimePipe implements PipeTransform {
   transform(
     value: Date | number | string,
     args: HumanDateTimeArgsInterface = humanDateTimeDefaultArgs
-  ): String {
+  ): string {
     if (!value) return '';
 
     if (!(value instanceof Date)) {
