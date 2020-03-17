@@ -259,20 +259,10 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDeleteCard(card: CardInterface, permanent: boolean = false) {
-    if (permanent) {
-      this.updateWhiteboardSubject({
-        cards: this.whiteboard$.value.cards.filter(c => c.id !== card.id),
-        shelfCards: this.whiteboard$.value.shelfCards.filter(
-          sc => sc.id !== card.id
-        )
-      });
-      this.saveWhiteboard();
-    } else {
-      this.updateWhiteboardSubject({
-        cards: this.whiteboard$.value.cards.filter(c => c !== card)
-      });
-    }
+  onDeleteCard(card: CardInterface) {
+    this.updateWhiteboardSubject({
+      cards: this.whiteboard$.value.cards.filter(c => c !== card)
+    });
   }
 
   onCardTapped(card: CardInterface) {
