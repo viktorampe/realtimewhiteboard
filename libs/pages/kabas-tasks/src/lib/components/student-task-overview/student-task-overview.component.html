@@ -1,4 +1,4 @@
-<campus-backdrop title="Mijn taken" [static]="true">
+<campus-backdrop [title]="'Mijn taken'" [static]="true">
   <backdrop-reveal-action>
     <mat-icon svgIcon="tasks"></mat-icon>
   </backdrop-reveal-action>
@@ -108,16 +108,18 @@
                 >Sorteer op datum</campus-button
               >
             </ng-template>
-            <hr />
-            <div *ngFor="let taskInfo of tasksByLearningAreaInfo$ | async"
-              ><campus-button
-                inline
-                (click)="scrollTo(taskInfo.learningAreaId)"
-                data-cy="sto-info-by-learning-area"
+            <div *ngIf="!isGroupedByDate$.value">
+              <hr />
+              <div *ngFor="let taskInfo of tasksByLearningAreaInfo$ | async"
+                ><campus-button
+                  inline
+                  (click)="scrollTo(taskInfo.learningAreaId)"
+                  data-cy="sto-info-by-learning-area"
+                >
+                  {{ taskInfo | taskInfoByLearningArea }}</campus-button
+                ></div
               >
-                {{ taskInfo | taskInfoByLearningArea }}</campus-button
-              ></div
-            >
+            </div>
           </section-content>
         </campus-section>
       </section-content>
