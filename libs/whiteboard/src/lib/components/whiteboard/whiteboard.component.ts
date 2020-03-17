@@ -583,4 +583,10 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   //#endregion
+
+  //#region shelf actions
+  toggleShelf() {
+    this.isShelfMinimized = !this.isShelfMinimized;
+  }
+  //#endregion
 }

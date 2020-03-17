@@ -91,6 +91,29 @@
         style="display: none;"
       />
     </div>
+    <button
+      mat-fab
+      color="primary"
+      [class.plusMinimized]="isShelfMinimized"
+      class="whiteboard__addbutton"
+      (tap)="btnPlusClicked()"
+    >
+      <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
+    </button>
+
+    <div
+      [class.shelfMinimized]="isShelfMinimized"
+      class="whiteboard__shelf__button"
+      (tap)="toggleShelf()"
+      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
+    ></div>
+
+    <campus-shelf
+      (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
+      [class.minimizedShelf]="isShelfMinimized"
+      [cards]="whiteboard.shelfCards"
+      [(isMinimized)]="isShelfMinimized"
+    ></campus-shelf>
   </div>
   <campus-empty-state
     class="whiteboard__empty"
@@ -105,18 +128,4 @@
       true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard__addbutton"
-    (tap)="btnPlusClicked()"
-  >
-    <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
-  </button>
-  <campus-shelf
-    (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
-    [class.minimizedShelf]="isShelfMinimized"
-    [cards]="whiteboard.shelfCards"
-    [(isMinimized)]="isShelfMinimized"
-  ></campus-shelf>
 </div>
