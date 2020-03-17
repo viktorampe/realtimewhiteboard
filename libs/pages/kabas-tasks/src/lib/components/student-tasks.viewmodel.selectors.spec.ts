@@ -1,4 +1,3 @@
-//file.only
 import {
   EduContentFixture,
   LearningAreaFixture,
