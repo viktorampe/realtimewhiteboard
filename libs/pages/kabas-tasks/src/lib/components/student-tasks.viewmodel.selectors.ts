@@ -15,6 +15,7 @@ import {
 } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
+import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskContentInterface } from '../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
@@ -63,7 +64,7 @@ export const studentTasks = createSelector(
         requiredIds.includes(res.eduContent.id)
       );
 
-      return {
+      const result: StudentTaskInterface = {
         name: tsInstance.task.name,
         description: tsInstance.task.description,
         learningAreaName: tsInstance.task.learningArea.name,
@@ -86,6 +87,7 @@ export const studentTasks = createSelector(
         endDate: tsInstance.end,
         actions: [] // TaskActionService.getActions(taskInstance) (cant be done inside selector)
       };
+      return result;
     });
   }
 );
