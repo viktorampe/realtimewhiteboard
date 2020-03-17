@@ -7,7 +7,7 @@ export class StudentTaskContentFixture implements StudentTaskContentInterface {
   description = 'Oefening op delen door nul';
   icon = 'exercise';
   status = ResultStatus.STATUS_INCOMPLETE;
-  lastUpdated = new Date('2 january 2018');
+  lastUpdated = new Date(Date.now() - 1 * 24 * 3600 * 1000);
   score = 0;
   eduContentId = 1;
   actions = [];
