@@ -1,0 +1,23 @@
+@mixin pages-manage-kabas-tasks-student-task-list-item-theme() {
+  $pages-manage-kabas-tasks__student-task-list-item__date-label-font-weight: bold !default;
+  $pages-manage-kabas-tasks__student-task-list-item__date-label--urgent-color: $pages-kabas-tasks-text-color--tertiary !default;
+
+  .manage-kabas-tasks__student-task-list-item {
+    .manage-kabas-tasks-student-task-list-item {
+      &__learning-area,
+      &__date-label {
+        // TODO: can probably remove this once the page styling comes in
+        // it needs a height in order to show the right borders for contentRightSeparated
+        height: 24px;
+      }
+
+      &__date-label {
+        &--urgent {
+          color: $pages-manage-kabas-tasks__student-task-list-item__date-label--urgent-color;
+        }
+
+        font-weight: $pages-manage-kabas-tasks__student-task-list-item__date-label-font-weight;
+      }
+    }
+  }
+}
