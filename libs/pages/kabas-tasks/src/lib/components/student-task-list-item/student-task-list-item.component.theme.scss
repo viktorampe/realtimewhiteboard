@@ -8,17 +8,8 @@
   .manage-kabas-tasks__student-task-list-item {
     .manage-kabas-tasks-student-task-list-item {
       &__learning-area,
-      &__date-label:not(:last-child) {
-        padding: 0;
-        &:after {
-          margin: auto
-            $pages-manage-kabas-tasks__student-task-list-item-meta-padding;
-          border-right: solid 1px
-            $pages-manage-kabas-tasks__student-task-list-item__stroke-color;
-          content: '';
-          display: block;
-          height: 24px;
-        }
+      &__date-label {
+        height: 24px;
       }
 
       &__date-label {
