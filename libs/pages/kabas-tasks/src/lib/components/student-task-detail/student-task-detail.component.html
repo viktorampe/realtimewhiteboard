@@ -37,6 +37,7 @@
                   [score]="requiredTaskContent.score"
                   [actions]="requiredTaskContent.actions"
                   [isFinished]="task.isFinished"
+                  [isRequired]="true"
                 ></campus-student-task-content-list-item>
               </mat-list-item>
             </mat-list>
@@ -69,6 +70,7 @@
                   [score]="optionalTaskContent.score"
                   [actions]="optionalTaskContent.actions"
                   [isFinished]="task.isFinished"
+                  [isRequired]="false"
                 ></campus-student-task-content-list-item>
               </mat-list-item>
             </mat-list>
