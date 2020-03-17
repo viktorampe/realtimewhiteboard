@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import { Params } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContent,
   getRouterStateParams,
-  ResultInterface
+  ResultInterface,
+  TaskInterface
 } from '@campus/dal';
 import {
   ContentOpenerInterface,
@@ -14,7 +15,8 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ResultOpenerInterface,
   ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
+  SCORM_EXERCISE_SERVICE_TOKEN,
+  StudentTaskOpenerInterface
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -26,13 +28,17 @@ import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithCo
   providedIn: 'root'
 })
 export class StudentTasksViewModel
-  implements ContentOpenerInterface, ResultOpenerInterface {
+  implements
+    ContentOpenerInterface,
+    ResultOpenerInterface,
+    StudentTaskOpenerInterface {
   public studentTasks$: Observable<StudentTaskInterface[]>;
   public currentTask$: Observable<StudentTaskWithContentInterface>;
   public routeParams$: Observable<Params>;
 
   constructor(
     private store: Store<DalState>,
+    private router: Router,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
@@ -44,6 +50,10 @@ export class StudentTasksViewModel
 
   private setSourceStreams() {
     this.routeParams$ = this.store.pipe(select(getRouterStateParams));
+  }
+
+  openTask(task: TaskInterface) {
+    this.router.navigate(['tasks', task.id]);
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {

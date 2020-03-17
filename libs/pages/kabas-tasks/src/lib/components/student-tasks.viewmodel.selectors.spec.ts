@@ -87,7 +87,9 @@ describe('student-tasks viewmodel selectors', () => {
             eduContentId: 2,
             actions: []
           }
-        ]
+        ],
+        requiredContentCount: 1,
+        requiredContentFinished: 1
       };
 
       expect(result).toEqual(expected);
@@ -111,7 +113,9 @@ describe('student-tasks viewmodel selectors', () => {
         end: endPastToday,
         isFinished: false,
         assigner,
-        contents: []
+        contents: [],
+        requiredContentCount: 0,
+        requiredContentFinished: 0
       };
 
       expect(result).toEqual(expected);
@@ -159,7 +163,9 @@ describe('student-tasks viewmodel selectors', () => {
             eduContentId: 2,
             actions: []
           }
-        ]
+        ],
+        requiredContentCount: 1,
+        requiredContentFinished: 0
       };
       expect(result).toEqual(expected);
     });

@@ -2,6 +2,7 @@ import {
   EduContent,
   Result,
   ResultInterface,
+  ResultStatus,
   TaskEduContentInterface,
   TaskInstanceInterface,
   TaskInstanceQueries
@@ -112,6 +113,12 @@ export const studentTaskWithContent = createSelector(
       resultByEducontentId
     );
 
+    const requiredContent = contents.filter(content => content.required);
+    const requiredContentCount = requiredContent.length;
+    const requiredContentFinished = requiredContent.filter(
+      content => content.status === ResultStatus.STATUS_COMPLETED
+    ).length;
+
     const isFinished = end < new Date();
 
     return {
@@ -122,7 +129,9 @@ export const studentTaskWithContent = createSelector(
       start,
       end,
       assigner,
-      contents
+      contents,
+      requiredContentCount,
+      requiredContentFinished
     };
   }
 );

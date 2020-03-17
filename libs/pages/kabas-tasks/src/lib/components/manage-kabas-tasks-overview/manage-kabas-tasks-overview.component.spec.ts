@@ -18,7 +18,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   AssigneeTypesEnum,
-  TaskFixture,
   TaskStatusEnum,
   TaskWithAssigneesFixture,
   TaskWithAssigneesInterface
@@ -34,7 +33,9 @@ import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
-  SharedModule
+  SharedModule,
+  TaskActionInterface,
+  TASK_ACTIONS_TEACHER_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import {
@@ -54,7 +55,6 @@ import {
   ManageKabasTasksOverviewComponent,
   TaskSortEnum
 } from './manage-kabas-tasks-overview.component';
-
 describe('ManageKabasTasksOverviewComponent', () => {
   let component: ManageKabasTasksOverviewComponent;
   let fixture: ComponentFixture<ManageKabasTasksOverviewComponent>;
@@ -110,6 +110,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
+        },
+        {
+          provide: TASK_ACTIONS_TEACHER_SERVICE_TOKEN,
+          useValue: { getActions: () => [] }
         }
       ],
       declarations: [ManageKabasTasksOverviewComponent, TaskListItemComponent]
@@ -908,29 +912,6 @@ describe('ManageKabasTasksOverviewComponent', () => {
     });
   });
 
-  describe('getActions()', () => {
-    const mockTask = new TaskFixture({ id: 666 }) as TaskWithAssigneesInterface;
-    let actions: { label: string; handler: Function }[];
-
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
-
-    beforeAll(() => {
-      actions = component['getActions'](mockTask);
-    });
-
-    it('first action should navigate to task-detail', () => {
-      actions[0].handler();
-      expect(router.navigate).toHaveBeenCalledTimes(1);
-      expect(router.navigate).toHaveBeenCalledWith([
-        'tasks',
-        'manage',
-        mockTask.id
-      ]);
-    });
-  });
-
   describe('click handlers', () => {
     describe('clickNewTask', () => {
       it('should navigate to the correct route', () => {
@@ -1124,6 +1105,22 @@ describe('ManageKabasTasksOverviewComponent', () => {
           hot('a', { a: expected })
         );
       });
+    });
+  });
+
+  describe('handleTaskAction()', () => {
+    it('should call the action handler with the task', () => {
+      const mockTaskAction: TaskActionInterface = {
+        label: '',
+        icon: '',
+        tooltip: '',
+        handler: jest.fn()
+      };
+      const mockTask = new TaskWithAssigneesFixture();
+
+      component.handleTaskAction(mockTaskAction, mockTask);
+
+      expect(mockTaskAction.handler).toHaveBeenCalledWith(mockTask);
     });
   });
 

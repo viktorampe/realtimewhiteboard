@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentFixture,
   getRouterStateParams,
-  ResultFixture
+  ResultFixture,
+  TaskFixture
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
@@ -23,10 +26,11 @@ describe('KabasTaskViewModel', () => {
   let store: MockStore<DalState>;
   let scormExerciseService: ScormExerciseServiceInterface;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  let router: Router;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [RouterTestingModule],
       providers: [
         StudentTasksViewModel,
         provideMockStore(),
@@ -53,11 +57,22 @@ describe('KabasTaskViewModel', () => {
     store = TestBed.get(Store);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    router = TestBed.get(Router);
   });
 
   describe('creation', () => {
     it('should be defined', () => {
       expect(studentTasksViewModel).toBeDefined();
+    });
+  });
+
+  describe('open task action handlers', () => {
+    it('openTask() should navigate to the task detail', () => {
+      const mockTask = new TaskFixture({ id: 666 });
+      const spy = jest.spyOn(router, 'navigate');
+
+      studentTasksViewModel.openTask(mockTask);
+      expect(spy).toHaveBeenCalledWith(['tasks', 666]);
     });
   });
 

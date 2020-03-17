@@ -2,11 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ResultStatus } from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { StudentTaskContentFixture } from '../../interfaces/StudentTaskContent.fixture';
+import { StudentTaskContentListItemComponent } from '../student-task-content-list-item/student-task-content-list-item.component';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 import { StudentTaskDetailComponent } from './student-task-detail.component';
@@ -41,7 +43,10 @@ describe('StudentTaskDetailComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
-      declarations: [StudentTaskDetailComponent]
+      declarations: [
+        StudentTaskDetailComponent,
+        StudentTaskContentListItemComponent
+      ]
     });
   });
 
@@ -64,7 +69,8 @@ describe('StudentTaskDetailComponent', () => {
     const mockContents = [
       new StudentTaskContentFixture({
         name: 'Required 1',
-        required: true
+        required: true,
+        status: ResultStatus.STATUS_COMPLETED
       }),
       new StudentTaskContentFixture({
         name: 'Required 2',
@@ -72,7 +78,8 @@ describe('StudentTaskDetailComponent', () => {
       }),
       new StudentTaskContentFixture({
         name: 'Optional 1',
-        required: false
+        required: false,
+        status: ResultStatus.STATUS_COMPLETED
       }),
       new StudentTaskContentFixture({
         name: 'Optional 2',
