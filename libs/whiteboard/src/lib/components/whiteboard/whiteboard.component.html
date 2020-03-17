@@ -3,7 +3,7 @@
   class="whiteboard"
   (filesDroppedEvent)="onFilesDropped($event)"
   campusImageDrag
-  (click)="onClickWhiteboard()"
+  (tap)="onClickWhiteboard($event)"
 >
   <campus-whiteboard-toolbar
     @showHideWhiteboardTools
@@ -27,7 +27,12 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
-  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
+  <div
+    class="whiteboard__workspace"
+    (dblclick)="createCard($event)"
+    (longpress)="createCard($event)"
+    #workspace
+  >
     <div
       @showHideCard
       class="whiteboard__workspace__container"
@@ -40,6 +45,7 @@
       [class.onTop]="card.mode === Mode.SELECTED"
       (cdkDragEnded)="onDragEnded($event, card)"
       (cdkDragStarted)="onDragStarted(card)"
+      (tap)="onCardTapped(card)"
     >
       <campus-color-list
         @showHideColorList
@@ -75,9 +81,7 @@
         (update)="updateCard($event, card)"
         (remove)="removeImage(card)"
         (openFilePicker)="openFilePicker(filePicker)"
-        (click)="onCardClicked($event, card)"
         (press)="onCardPressed(card)"
-        (tap)="onCardTapped(card)"
       ></campus-card>
       <input
         (change)="onFilePickerImageSelected($event, card)"
@@ -105,11 +109,10 @@
     mat-fab
     color="primary"
     class="whiteboard__addbutton"
-    (click)="btnPlusClicked($event)"
+    (tap)="btnPlusClicked()"
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
   </button>
-
   <campus-shelf
     (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
     [class.minimizedShelf]="isShelfMinimized"

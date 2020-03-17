@@ -17,12 +17,7 @@ export class WhiteboardToolbarComponent implements OnInit {
     this.changeSelectedColor.emit(color);
   }
 
-  btnDeleteClicked(event: MouseEvent) {
-    event.stopPropagation();
+  btnDeleteClicked() {
     this.deleteCards.emit();
-  }
-
-  stopEventPropagation(event: Event) {
-    event.stopPropagation();
   }
 }
