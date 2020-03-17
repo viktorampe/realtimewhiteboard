@@ -18,14 +18,13 @@
   <list-item-title
     data-cy="tli-title"
     class="manage-kabas-tasks-task-list-item__container__title"
-    (click)="actions[0].handler()"
+    (click)="onActionClick(actions[0])"
     campusClickStopPropagation
     mat-line
     >{{ title }}</list-item-title
   >
 
   <list-item-caption mat-line>{{ description }}</list-item-caption>
-
   <list-item-actions
     mat-line
     *ngIf="actions.length"
@@ -35,7 +34,7 @@
       inline
       campusClickStopPropagation
       *ngFor="let action of actions"
-      (click)="action.handler()"
+      (click)="onActionClick(action)"
       >{{ action.label }}</campus-button
     ></list-item-actions
   >
