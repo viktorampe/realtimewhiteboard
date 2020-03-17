@@ -7,6 +7,7 @@
   justify-content: center;
   position: relative;
   outline: none;
+  user-select: none;
 }
 
 :host.ui-button--circle {
