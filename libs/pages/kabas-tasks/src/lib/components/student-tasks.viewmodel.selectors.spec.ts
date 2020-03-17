@@ -1,10 +1,25 @@
 //file.only
-import { EduContentFixture, LearningAreaFixture, PersonFixture, ResultFixture, ResultStatus, TaskEduContentFixture, TaskFixture, TaskInstanceFixture } from '@campus/dal';
+import {
+  EduContentFixture,
+  LearningAreaFixture,
+  PersonFixture,
+  ResultFixture,
+  ResultStatus,
+  TaskEduContentFixture,
+  TaskFixture,
+  TaskInstanceFixture
+} from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { HumanDateTimePipe } from '@campus/ui';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
-import { dateGroupLabelRules, studentTasks, studentTaskWithContent } from './student-tasks.viewmodel.selectors';
+import {
+  dateGroupLabelRules,
+  dateLabelRules,
+  isUrgent,
+  studentTasks,
+  studentTaskWithContent
+} from './student-tasks.viewmodel.selectors';
 
 describe('student-tasks viewmodel selectors', () => {
   let dateMock = new MockDate();
@@ -33,7 +48,6 @@ describe('student-tasks viewmodel selectors', () => {
       results: [],
       taskEduContents: []
     });
-
 
     it('should return the correct value - no result', () => {
       const storeTaskInstance = new TaskInstanceFixture({
@@ -259,189 +273,165 @@ describe('student-tasks viewmodel selectors', () => {
       const res = projector(taskInstances);
       expect(res).toEqual(expected);
     });
+    describe('dateLabelRules', () => {
+      const testCases = [
+        {
+          it: 'should return vandaag',
+          date: new Date(date),
+          expected: 'vandaag'
+        },
+        {
+          it: 'should return morgen',
+          date: new Date(date).setDate(date.getDate() + 1),
+          expected: 'morgen'
+        },
+        {
+          it: 'should return overmorgen',
+          date: new Date(date).setDate(date.getDate() + 2),
+          expected: 'overmorgen'
+        },
+        {
+          it: 'should return deze week',
+          date: new Date(date).setDate(date.getDate() + 4),
+          expected: 'Vrijdag'
+        },
+        {
+          it: 'should return vorige week',
+          date: new Date(date).setDate(date.getDate() + 7),
+          expected: 'volgende week'
+        }
+      ];
 
-    // it('should return the right date label given the preset', () => {
-    //   const pipe = new HumanDateTimePipe();
-    //   const date = new Date(dateMock.mockDate);
-    //   expect(
-    //     pipe.transform(date, {
-    //       rules: dateLabelRules
-    //     })
-    //   ).toEqual('vandaag');
-    //   expect(
-    //     pipe.transform(date.setDate(date.getDate() + 1), {
-    //       rules: dateLabelRules
-    //     })
-    //   ).toEqual('morgen');
-    //   expect(
-    //     pipe.transform(new Date(date.setDate(date.getDate() + 1)), {
-    //       rules: dateLabelRules
-    //     })
-    //   ).toEqual('overmorgen');
-    //   expect(
-    //     pipe.transform(new Date(date.setDate(date.getDate() + 1)), {
-    //       rules: dateLabelRules
-    //     })
-    //   ).toEqual('Donderdag');
+      testCases.forEach(testCase => {
+        it(testCase.it, () => {
+          const mockDate = new Date(testCase.date);
 
-    //   expect(
-    //     pipe.transform(new Date(date.setDate(date.getDate() + 7)), {
-    //       rules: dateLabelRules
-    //     })
-    //   ).toEqual('volgende week');
-    // });
+          expect(
+            pipe.transform(mockDate, {
+              rules: dateLabelRules
+            })
+          ).toEqual(testCase.expected);
+        });
+      });
+    });
+    describe('groupLabelRules', () => {
+      const testCases = [
+        {
+          it: 'should return vandaag',
+          date: new Date(date),
+          expected: 'vandaag'
+        },
+        {
+          it: 'should return morgen',
+          date: new Date(date).setDate(date.getDate() + 1),
+          expected: 'morgen'
+        },
+        {
+          it: 'should return overmorgen',
+          date: new Date(date).setDate(date.getDate() + 2),
+          expected: 'overmorgen'
+        },
+        {
+          it: 'should return deze week',
+          date: new Date(date).setDate(date.getDate() + 4),
+          expected: 'deze week'
+        },
+        {
+          it: 'should return vorige week',
+          date: new Date(date).setDate(date.getDate() - 7),
+          expected: 'vorige week'
+        },
+        {
+          it: 'should return volgende week',
+          date: new Date(date).setDate(date.getDate() + 7),
+          expected: 'volgende week'
+        },
+        {
+          it: 'should return vroeger ',
+          date: new Date(date).setDate(date.getDate() - 14),
+          expected: 'vroeger'
+        },
+        {
+          it: 'should return later',
+          date: new Date(date).setDate(date.getDate() + 15),
+          expected: 'later'
+        }
+      ];
 
-    const testCases = [
-      {
-        it: 'should return vandaag',
-        date: new Date(date),
-        expected: 'vandaag'
-      },
-      {
-        it: 'should return morgen',
-        date: new Date(date).setDate(date.getDate() + 1),
-        expected: 'morgen'
-      },
-      {
-        it: 'should return overmorgen',
-        date: new Date(date).setDate(date.getDate() + 2),
-        expected: 'overmorgen'
-      },
-      {
-        it: 'should return deze week',
-        date: new Date(date).setDate(date.getDate() + 4),
-        expected: 'deze week'
-      },
-      {
-        it: 'should return vorige week',
-        date: new Date(date).setDate(date.getDate() - 7),
-        expected: 'vorige week'
-      },
-      {
-        it: 'should return volgende week',
-        date: new Date(date).setDate(date.getDate() + 7),
-        expected: 'volgende week'
-      },
-      {
-        it: 'should return vroeger ',
-        date: new Date(date).setDate(date.getDate() - 14),
-        expected: 'vroeger'
-      },
-      {
-        it: 'should return later',
-        date: new Date(date).setDate(date.getDate() + 15),
-        expected: 'later'
-      }
+      testCases.forEach(testCase => {
+        it(testCase.it, () => {
+          const mockDate = new Date(testCase.date);
+
+          expect(
+            pipe.transform(mockDate, {
+              rules: dateGroupLabelRules
+            })
+          ).toEqual(testCase.expected);
+        });
+      });
+
+      it('should return true if its today or tomorrow', () => {
+        expect(isUrgent(new Date())).toBeTruthy(); //today
+        expect(
+          isUrgent(new Date(new Date().setDate(new Date().getDate() + 1)))
+        ).toBeTruthy(); //tomorrow
+        expect(
+          isUrgent(new Date(new Date().setDate(new Date().getDate() + 7)))
+        ).toBeFalsy(); // next week
+      });
+    });
+  });
+
+  function getMockTask(lastUpdated) {
+    const results = [
+      new ResultFixture({
+        eduContentId: 1,
+        score: 100,
+        status: ResultStatus.STATUS_COMPLETED,
+        lastUpdated
+      }),
+      new ResultFixture({
+        eduContentId: 2,
+        score: 50,
+        status: ResultStatus.STATUS_INCOMPLETE,
+        lastUpdated
+      })
     ];
 
-    testCases.forEach(testCase => {
-      it(testCase.it, () => {
-        const mockDate = new Date(testCase.date);
+    const taskEduContents = [
+      new TaskEduContentFixture({
+        eduContentId: 1,
 
-        expect(
-          pipe.transform(mockDate, {
-            rules: dateGroupLabelRules
-          })
-        ).toEqual(testCase.expected);
+        eduContent: new EduContentFixture(
+          { type: 'exercise', id: 1 },
+          {
+            title: 'neuspeuteren',
+            description: 'instructiefilmpje',
+            fileExt: 'mp4'
+          }
+        ),
+        required: true
+      }),
+      new TaskEduContentFixture({
+        eduContentId: 2,
+        eduContent: new EduContentFixture(
+          { type: 'exercise', id: 2 },
 
+          {
+            title: 'nagelbijten',
+            description: 'herhalingsoefening'
+          }
+        ),
+        required: false
+      })
+    ];
+
+    return new TaskFixture({
+      name: 'Huiswerk',
+      description: 'Super belangrijke herhalingsoefeningen',
+      learningArea: new LearningAreaFixture({ name: 'Frans' }),
+      results,
+      taskEduContents
     });
-
-    //  it('should return the right date grouplabel given the preset', () => {
-    //   //alles in test cases steken
-    //   const pipe = new HumanDateTimePipe();
-    //   expect(
-    //     pipe.transform(new Date(date.setDate(date.getDate())), {
-    //       rules: dateGroupLabelRules
-    //     })
-    //   ).toEqual('vandaag');
-    //   expect(
-    //     pipe.transform(date, {
-    //       rules: dateGroupLabelRules
-    //     })
-    //   ).toEqual('deze week');
-    //   console.log(date);
-    //   expect(
-    //     pipe.transform(date.setDate(date.getDate() - 7), {
-    //       rules: dateGroupLabelRules
-    //     })
-    //   ).toEqual('vorige week');
-    //   expect(
-    //     pipe.transform(new Date(date.setDate(date.getDate() - 11)), {
-    //       rules: dateGroupLabelRules
-    //     })
-    //   ).toEqual('vroeger');
-    //   console.log(date);
-
-    //   console.log(new Date());
-
-    //   // expect(
-    //   //   pipe.transform(new Date(date.setDate(date.getDate() + 7)), {
-    //   //     rules: dateLabelRules
-    //   //   })
-    //   // ).toEqual('volgende week');
-    // });
-
-    // it('should return true if its today or tomorrow', () => {
-    //   expect(isUrgent(new Date())).toBeTruthy(); //today
-    //   expect(
-    //     isUrgent(new Date(new Date().setDate(new Date().getDate() + 1)))
-    //   ).toBeTruthy(); //tomorrow
-    //   expect(
-    //     isUrgent(new Date(new Date().setDate(new Date().getDate() + 7)))
-    //   ).toBeFalsy(); // next week
-    // });
-  });
+  }
 });
-
-function getMockTask(lastUpdated) {
-  const results = [
-    new ResultFixture({
-      eduContentId: 1,
-      score: 100,
-      status: ResultStatus.STATUS_COMPLETED,
-      lastUpdated
-    }),
-    new ResultFixture({
-      eduContentId: 2,
-      score: 50,
-      status: ResultStatus.STATUS_INCOMPLETE,
-      lastUpdated
-    })
-  ];
-
-  const taskEduContents = [
-    new TaskEduContentFixture({
-      eduContentId: 1,
-
-      eduContent: new EduContentFixture(
-        { type: 'exercise', id: 1 },
-        {
-          title: 'neuspeuteren',
-          description: 'instructiefilmpje',
-          fileExt: 'mp4'
-        }
-      ),
-      required: true
-    }),
-    new TaskEduContentFixture({
-      eduContentId: 2,
-      eduContent: new EduContentFixture(
-        { type: 'exercise', id: 2 },
-
-        {
-          title: 'nagelbijten',
-          description: 'herhalingsoefening'
-        }
-      ),
-      required: false
-    })
-  ];
-
-  return new TaskFixture({
-    name: 'Huiswerk',
-    description: 'Super belangrijke herhalingsoefeningen',
-    learningArea: new LearningAreaFixture({ name: 'Frans' }),
-    results,
-    taskEduContents
-  });
-}
