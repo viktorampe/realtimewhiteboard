@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
+import { studentTasks } from './student-tasks.viewmodel.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -46,10 +47,15 @@ export class StudentTasksViewModel
     private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.setSourceStreams();
+    this.setPresentationStreams();
   }
 
   private setSourceStreams() {
     this.routeParams$ = this.store.pipe(select(getRouterStateParams));
+  }
+
+  private setPresentationStreams() {
+    this.studentTasks$ = this.store.pipe(select(studentTasks));
   }
 
   openTask(task: TaskInterface) {
