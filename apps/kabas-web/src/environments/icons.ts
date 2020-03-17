@@ -101,5 +101,5 @@ export const icons = {
   multiselect: 'assets/icons/multiselect.svg',
   'multiselect-selected': 'assets/icons/multiselect-selected.svg',
   'open-in-new': 'assets/icons/material/open_in_new.svg',
-  remove: 'assets/icons/remove.svg'
+  remove: 'assets/icons/material/remove.svg'
 };
