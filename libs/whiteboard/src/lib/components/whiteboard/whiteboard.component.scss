@@ -1,3 +1,11 @@
+$default-color: #e0e5ec;
+$zoom-background: #e0e5ec;
+
+$shadow-color-dark: #a3b1c6;
+$shadow-color-light: #ffffff;
+
+$gradient-angle: 135deg;
+
 .whiteboard {
   position: relative;
   display: flex;
@@ -38,17 +46,36 @@
 
     &__zoom {
       position: absolute;
+      display: flex;
+      background-color: $zoom-background;
       right: 30px;
       top: 30px;
       height: 36px;
       width: 72px;
-      display: flex;
+      border-radius: 12px;
+      box-shadow: 3px 3px 16px -1px rgba($default-color, 0.3),
+        9px 9px 16px $shadow-color-dark,
+        -1px -1px 6px -3px rgba($default-color, 0.2),
+        -9px -9px 16px $shadow-color-light;
+      background: linear-gradient(
+        $gradient-angle,
+        lighten($default-color, 5%),
+        darken($default-color, 5%)
+      );
+
+      &__separator {
+        width: 1px;
+        align-self: stretch;
+        margin: 8px 0;
+        box-shadow: -1px 0px 1px $shadow-color-dark,
+          1px 0px 1px $shadow-color-light;
+      }
 
       &__button {
+        color: rgba(0, 0, 0, 0.54);
         padding: 6px;
         height: 100%;
         width: 100%;
-        border-radius: 12px;
       }
     }
 
