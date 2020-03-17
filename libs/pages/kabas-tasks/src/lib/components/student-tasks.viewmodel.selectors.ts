@@ -15,7 +15,6 @@ import {
 } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
-import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskContentInterface } from '../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
@@ -51,42 +50,42 @@ export function isUrgent(endDate: Date) {
 
 export const studentTasks = createSelector(
   [TaskInstanceQueries.getTaskStudentTaskInstances],
-  getTaskStudentInstances => {
-    return getTaskStudentInstances.map(te => {
+  taskStudentInstances => {
+    return taskStudentInstances.map(tsInstance => {
       const date = new HumanDateTimePipe();
-      const requiredIds = te.task.taskEduContents
+      const requiredIds = tsInstance.task.taskEduContents
         .filter(
           tec =>
             tec.required && tec.eduContent.type === EduContentTypeEnum.EXERCISE
         )
-        .map(e => e.eduContent.id);
-      const completedRequired = te.task.results.filter(res =>
+        .map(requiredTecs => requiredTecs.eduContent.id);
+      const completedRequired = tsInstance.task.results.filter(res =>
         requiredIds.includes(res.eduContent.id)
       );
 
       return {
-        name: te.task.name,
-        description: te.task.description,
-        learningAreaName: te.task.learningArea.name,
-        learningAreaId: te.task.learningArea.id,
+        name: tsInstance.task.name,
+        description: tsInstance.task.description,
+        learningAreaName: tsInstance.task.learningArea.name,
+        learningAreaId: tsInstance.task.learningArea.id,
         count: {
           completedRequired: completedRequired.length,
           totalRequired: requiredIds.length
         },
-        isFinished: te.end < new Date(),
-        isUrgent: isUrgent(te.end),
-        dateGroupLabel: date.transform(te.end, {
+        isFinished: tsInstance.end < new Date(),
+        isUrgent: isUrgent(tsInstance.end),
+        dateGroupLabel: date.transform(tsInstance.end, {
           rules: dateGroupLabelRules
         }),
         dateLabel:
-          te.end < new Date()
-            ? 'ingediend op ' + te.end.toLocaleDateString('nl-BE')
-            : date.transform(te.end, {
+          tsInstance.end < new Date()
+            ? 'ingediend op ' + tsInstance.end.toLocaleDateString('nl-BE')
+            : date.transform(tsInstance.end, {
                 rules: dateLabelRules
               }),
-        endDate: te.end,
+        endDate: tsInstance.end,
         actions: [] // TaskActionService.getActions(taskInstance) (cant be done inside selector)
-      } as StudentTaskInterface;
+      };
     });
   }
 );
