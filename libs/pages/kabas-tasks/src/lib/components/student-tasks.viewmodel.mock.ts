@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
-import { EduContent, PersonFixture, ResultInterface } from '@campus/dal';
+import {
+  EduContent,
+  PersonFixture,
+  ResultInterface,
+  TaskInterface
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
@@ -27,12 +32,16 @@ export class MockStudentTasksViewModel
   );
   public routeParams$ = new BehaviorSubject<Params>(null);
 
+  private nextWeek: Date = new Date(Date.now() + 7 * 24 * 3600 * 1000);
   private studentTasks = [
     new StudentTaskFixture({
       learningAreaId: 1,
       learningAreaName: 'aardrijkskunde',
       isFinished: true,
-      endDate: new Date(2019, 8, 31)
+      endDate: this.nextWeek
+    }),
+    new StudentTaskFixture({
+      endDate: this.nextWeek
     }),
     new StudentTaskFixture({
       learningAreaId: 1,
@@ -71,7 +80,8 @@ export class MockStudentTasksViewModel
     new StudentTaskFixture({
       learningAreaId: 2,
       learningAreaName: 'wiskunde',
-      isUrgent: true
+      isUrgent: true,
+      endDate: this.nextWeek
     })
   ];
 
@@ -80,6 +90,8 @@ export class MockStudentTasksViewModel
       this.studentTasks
     );
   }
+
+  openTask(task: TaskInterface): void {}
 
   openEduContentAsExercise(eduContent: EduContent): void {}
   openEduContentAsSolution(eduContent: EduContent): void {}

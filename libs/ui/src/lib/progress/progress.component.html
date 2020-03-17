@@ -53,6 +53,8 @@
     data-cy="ui-progress-completed-icon"
     [@explodeIcon]
     *ngIf="form === forms.CIRCULAR && completedIcon && percentage === 100"
-    ><ng-content select="completed-progress-icon"></ng-content
+    ><ng-content
+      select="[campusCompletedProgressIcon], [completedProgressIcon], completed-progress-icon"
+    ></ng-content
   ></div>
 </div>
