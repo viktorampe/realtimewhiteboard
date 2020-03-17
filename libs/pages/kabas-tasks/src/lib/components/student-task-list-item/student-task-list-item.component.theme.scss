@@ -6,6 +6,8 @@
     .manage-kabas-tasks-student-task-list-item {
       &__learning-area,
       &__date-label {
+        // TODO: can probably remove this once the page styling comes in
+        // it needs a height in order to show the right borders for contentRightSeparated
         height: 24px;
       }
 

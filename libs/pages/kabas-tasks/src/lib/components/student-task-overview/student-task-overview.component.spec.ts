@@ -1,5 +1,3 @@
-// file.only
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
