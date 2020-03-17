@@ -1,5 +1,3 @@
-@import 'libs/ui/src/lib/breakpoints.scss';
-
 @mixin pages-manage-kabas-tasks-student-task-list-item-theme() {
   $pages-manage-kabas-tasks__student-task-list-item__date-label-font-weight: bold !default;
   $pages-manage-kabas-tasks__student-task-list-item__date-label--urgent-color: $pages-kabas-tasks-text-color--tertiary !default;

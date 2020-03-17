@@ -1,9 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   HostBinding,
-  Input
+  Input,
+  Output
 } from '@angular/core';
+import { TaskActionInterface } from '@campus/shared';
 
 @Component({
   selector: 'campus-student-task-list-item',
@@ -20,11 +23,13 @@ export class StudentTaskListItemComponent {
   @Input() totalRequired: number;
   @Input() urgent: boolean;
   @Input() finished: boolean;
-  @Input() actions: {
-    label: string;
-    handler: () => any; //prevents warning "Member handler is not callable in template"
-  }[];
+  @Input() actions: TaskActionInterface[];
+  @Output() clickAction = new EventEmitter<TaskActionInterface>();
 
   @HostBinding('class.manage-kabas-tasks__student-task-list-item')
   studentTaskListItemClass = true;
+
+  onActionClick(action: TaskActionInterface) {
+    this.clickAction.emit(action);
+  }
 }

@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Type } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { StudentTaskListItemComponent } from './student-task-list-item.component';
 
 describe('StudentTaskListItemComponent', () => {
@@ -13,7 +14,7 @@ describe('StudentTaskListItemComponent', () => {
   let fixture: ComponentFixture<StudentTaskListItemComponent>;
   let cd: ChangeDetectorRef;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, UiModule],
       declarations: [StudentTaskListItemComponent],
@@ -26,7 +27,7 @@ describe('StudentTaskListItemComponent', () => {
         }
       ]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StudentTaskListItemComponent);
@@ -50,6 +51,7 @@ describe('StudentTaskListItemComponent', () => {
 
   describe('inputs', () => {
     it('should pass action handlers', () => {
+      const spy = jest.spyOn(component, 'onActionClick');
       const actionDEs = fixture.debugElement.queryAll(
         By.css(
           '.manage-kabas-tasks-student-task-list-item__container__actions > .ui-button'
@@ -63,7 +65,7 @@ describe('StudentTaskListItemComponent', () => {
         expect(actionDE.nativeElement.textContent).toBe(action.label);
 
         actionDE.nativeElement.click();
-        expect(action.handler).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith(action);
       });
     });
 
