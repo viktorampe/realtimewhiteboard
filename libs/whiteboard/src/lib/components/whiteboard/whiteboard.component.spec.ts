@@ -18,7 +18,6 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
-import { PermissionEnum } from '../../enums/permission.enum';
 import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
 import { WhiteboardFixture } from '../../models/whiteboard.fixture';
@@ -651,30 +650,28 @@ describe('WhiteboardComponent', () => {
     });
 
     describe('onDeleteCard()', () => {
-      it('should add card to shelf when card was made by editorial office', () => {
-        component.user$.value.permission = <PermissionEnum>(
-          PermissionEnum.MANAGEWHITEBOARD
-        );
+      it('should remove card form workspace', () => {
+        component.whiteboard$.value.shelfCards = [];
+        const cardArrayLengthBefore = component.whiteboard$.value.cards.length;
+        const [card] = component.whiteboard$.value.cards;
+        card.mode = ModeEnum.IDLE;
+
+        component.onDeleteCard(card);
+
+        const cardArrayLengthAfter = component.whiteboard$.value.cards.length;
+
+        expect(cardArrayLengthAfter).toBe(cardArrayLengthBefore - 1);
+        expect(component.whiteboard$.value.cards).not.toContain(card);
+      });
+
+      it('should remove card from shelf on permanent delete', () => {
         component.whiteboard$.value.shelfCards = [];
         const [card] = component.whiteboard$.value.cards;
         card.mode = ModeEnum.IDLE;
 
         component.onDeleteCard(card);
 
-        expect(component.whiteboard$.value.shelfCards).toContain(card);
-        expect(component.whiteboard$.value.cards).not.toContain(card);
-      });
-
-      it('should update mode to ShelfMode when card was made by editorial office', () => {
-        component.user$.value.permission = <PermissionEnum>(
-          PermissionEnum.MANAGEWHITEBOARD
-        );
-        const [card] = component.whiteboard$.value.cards;
-        card.mode = <ModeEnum>ModeEnum.IDLE;
-
-        component.onDeleteCard(card);
-
-        expect(card.mode).toBe(ModeEnum.SHELF);
+        expect(component.whiteboard$.value.shelfCards).not.toContain(card);
       });
     });
 
