@@ -1,3 +1,5 @@
+$defaultColor: #a3b1c6;
+
 .whiteboard {
   position: relative;
   display: flex;
@@ -102,7 +104,7 @@
     z-index: 1;
   }
 
-  &__addbutton__shelfMinimized {
+  .plusMinimized {
     bottom: 20px !important;
   }
 
@@ -120,10 +122,20 @@
     z-index: 1;
     left: 50%;
     bottom: 115px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:active {
+      background: linear-gradient(
+        -145deg,
+        lighten(#e0e5ec, 5%),
+        darken(#e0e5ec, 5%)
+      );
+      box-shadow: 3px 3px 6px #fff, -3px -3px 6px #a3b1c6;
+    }
   }
 
-  &__shelf__minimized__button {
+  .shelfMinimized {
     bottom: 30px !important;
   }
 
@@ -144,9 +156,9 @@
       lighten(#e0e5ec, 5%),
       darken(#e0e5ec, 5%)
     );
-    box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
-    box-shadow: 3px 3px 16px -1px rgba(#a3b1c6, 0.3), 9px 9px 16px #a3b1c6,
-      -1px -1px 6px -3px rgba(#a3b1c6, 0.2), -9px -9px 16px #ffffff;
+    //$defaultColor -> #a3b1c6 (for the rgba() values)
+    box-shadow: 3px 3px 16px -1px rgba($defaultColor, 0.3), 9px 9px 16px #a3b1c6,
+      -1px -1px 6px -3px rgba($defaultColor, 0.2), -9px -9px 16px #ffffff;
   }
 
   .minimizedShelf {
