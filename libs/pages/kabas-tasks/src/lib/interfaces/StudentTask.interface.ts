@@ -5,7 +5,7 @@ export interface StudentTaskInterface {
   learningAreaName: string;
   learningAreaId: number; //use as anchor
   count: {
-    finishedRequired: number;
+    completedRequired: number;
     totalRequired: number;
   };
   isFinished: boolean;

@@ -25,13 +25,13 @@ export enum humanDateTimeRulesEnum {
   'PAST_HOURS',
   'PAST_DAYS',
   'PAST_WEEKDAY',
+  'PAST_WEEK',
   'TODAY',
   'TOMORROW',
   'DAY_AFTER_TOMORROW',
   'WEEKDAY',
   'THIS_WEEK',
   'NEXT_WEEK',
-  'DATE',
   'LATER',
   'EARLIER'
 }
@@ -90,6 +90,17 @@ const humanDateTimeRules: {
       const dayOfWeek = new Date(date).getDay();
       return weekdays[dayOfWeek];
     }
+  },
+  [humanDateTimeRulesEnum.PAST_WEEK]: {
+    condition: (date, referenceDate) => {
+      const midnightDate = midnight(date);
+      const previousWeekStartDate = startOfWeek(referenceDate) - week;
+      return (
+        midnightDate >= previousWeekStartDate &&
+        midnightDate < previousWeekStartDate + week
+      );
+    },
+    value: (date, referenceDate) => 'vorige week'
   },
   [humanDateTimeRulesEnum.TODAY]: {
     condition: (date, referenceDate) =>

@@ -7,16 +7,89 @@ import {
   TaskInstanceInterface,
   TaskInstanceQueries
 } from '@campus/dal';
+import { EduContentTypeEnum } from '@campus/shared';
+import {
+  getHumanDateTimeRules,
+  HumanDateTimePipe,
+  humanDateTimeRulesEnum
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
+import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskContentInterface } from '../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 
-export const studentTasks$ = createSelector(
-  // TODO Replace with relevaton DAL selectors
-  // only done this to scaffold this selector
+export const dateLabelRules = getHumanDateTimeRules([
+  humanDateTimeRulesEnum.TODAY,
+  humanDateTimeRulesEnum.TOMORROW,
+  humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+  humanDateTimeRulesEnum.WEEKDAY,
+  humanDateTimeRulesEnum.NEXT_WEEK
+]);
+
+export const dateGroupLabelRules = getHumanDateTimeRules([
+  humanDateTimeRulesEnum.TODAY,
+  humanDateTimeRulesEnum.TOMORROW,
+  humanDateTimeRulesEnum.DAY_AFTER_TOMORROW,
+  humanDateTimeRulesEnum.THIS_WEEK,
+  humanDateTimeRulesEnum.PAST_WEEK,
+  humanDateTimeRulesEnum.NEXT_WEEK,
+  humanDateTimeRulesEnum.EARLIER,
+  humanDateTimeRulesEnum.LATER
+]);
+
+export const isUrgentRules = getHumanDateTimeRules([
+  humanDateTimeRulesEnum.TODAY,
+  humanDateTimeRulesEnum.TOMORROW
+]);
+
+export function isUrgent(endDate: Date) {
+  return isUrgentRules.some(rule =>
+    rule.condition(endDate.getTime(), new Date().getTime())
+  );
+}
+
+export const studentTasks = createSelector(
   [TaskInstanceQueries.getTaskStudentTaskInstances],
-  getTaskStudentInstances => {}
+  taskStudentInstances => {
+    return taskStudentInstances.map(tsInstance => {
+      const date = new HumanDateTimePipe();
+      const requiredIds = tsInstance.task.taskEduContents
+        .filter(
+          tec =>
+            tec.required && tec.eduContent.type === EduContentTypeEnum.EXERCISE
+        )
+        .map(requiredTecs => requiredTecs.eduContent.id);
+      const completedRequired = tsInstance.task.results.filter(res =>
+        requiredIds.includes(res.eduContent.id)
+      );
+
+      const result: StudentTaskInterface = {
+        name: tsInstance.task.name,
+        description: tsInstance.task.description,
+        learningAreaName: tsInstance.task.learningArea.name,
+        learningAreaId: tsInstance.task.learningArea.id,
+        count: {
+          completedRequired: completedRequired.length,
+          totalRequired: requiredIds.length
+        },
+        isFinished: tsInstance.end < new Date(),
+        isUrgent: isUrgent(tsInstance.end),
+        dateGroupLabel: date.transform(tsInstance.end, {
+          rules: dateGroupLabelRules
+        }),
+        dateLabel:
+          tsInstance.end < new Date()
+            ? 'ingediend op ' + tsInstance.end.toLocaleDateString('nl-BE')
+            : date.transform(tsInstance.end, {
+                rules: dateLabelRules
+              }),
+        endDate: tsInstance.end,
+        actions: [] // TaskActionService.getActions(taskInstance) (cant be done inside selector)
+      };
+      return result;
+    });
+  }
 );
 
 export const studentTaskWithContent = createSelector(
