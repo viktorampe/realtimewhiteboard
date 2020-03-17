@@ -13,10 +13,14 @@ import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentFixture } from '../interfaces/StudentTaskWithContent.fixture';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from './student-tasks.viewmodel';
-@Injectable({ providedIn: 'root' })
+
+@Injectable({
+  providedIn: 'root'
+})
 export class MockStudentTasksViewModel
   implements ViewModelInterface<StudentTasksViewModel> {
   public studentTasks$: BehaviorSubject<StudentTaskInterface[]>;
+
   public currentTask$ = new BehaviorSubject<StudentTaskWithContentInterface>(
     new StudentTaskWithContentFixture({
       assigner: new PersonFixture({
@@ -31,6 +35,8 @@ export class MockStudentTasksViewModel
   private nextWeek: Date = new Date(Date.now() + 7 * 24 * 3600 * 1000);
   private studentTasks = [
     new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde',
       isFinished: true,
       endDate: this.nextWeek
     }),
@@ -38,6 +44,43 @@ export class MockStudentTasksViewModel
       endDate: this.nextWeek
     }),
     new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde',
+      isUrgent: true
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 1,
+      learningAreaName: 'aardrijkskunde',
+      isUrgent: true
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 2,
+      learningAreaName: 'wiskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 2,
+      learningAreaName: 'wiskunde'
+    }),
+    new StudentTaskFixture({
+      learningAreaId: 2,
+      learningAreaName: 'wiskunde',
+      isUrgent: true,
       endDate: this.nextWeek
     })
   ];

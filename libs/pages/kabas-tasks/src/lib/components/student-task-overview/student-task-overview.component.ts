@@ -2,11 +2,11 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
 
-interface TaskByLearningAreaInfoInterface {
+export interface TaskByLearningAreaInfoInterface {
   learningAreaId: number;
   learningAreaName: string;
   taskCount: number;
@@ -15,7 +15,7 @@ interface TaskByLearningAreaInfoInterface {
 
 interface TaskListSectionInterface {
   label: string;
-  learningAreaId?: number;
+  learningAreaId: number;
   items: StudentTaskInterface[];
 }
 
@@ -30,33 +30,49 @@ enum SortOrder {
   styleUrls: ['./student-task-overview.component.scss']
 })
 export class StudentTaskOverviewComponent implements OnInit {
-  public taskCount$: Observable<number>;
-  public tasksByLearningAreaInfo$: Observable<
-    TaskByLearningAreaInfoInterface[]
-  >;
-  public taskListSections$: Observable<TaskListSectionInterface[]>;
-  public showFinishedTasks$ = new BehaviorSubject<boolean>(false);
-  public isGroupedByDate$ = new BehaviorSubject<boolean>(false);
-
-  public sectionModes: typeof SectionModeEnum = SectionModeEnum;
-
   @HostBinding('class.student-task-overview')
   studentTaskOverviewClass = true;
 
+  // main section
+  public sectionTitle$: Observable<string>;
+  public taskCount$: Observable<number>;
+  public emptyStateData$: Observable<{
+    svgIcon: string;
+    title?: string;
+    description: string;
+    ctaLabel?: string;
+    ctaLink?: string;
+  }>;
+
+  public taskListSections$: Observable<TaskListSectionInterface[]>;
+
+  // side section
+  public showFinishedTasks$ = new BehaviorSubject<boolean>(false);
+  public isGroupedByDate$ = new BehaviorSubject<boolean>(false);
+  public tasksByLearningAreaInfo$: Observable<
+    TaskByLearningAreaInfoInterface[]
+  >;
+  public sectionModes: typeof SectionModeEnum = SectionModeEnum;
+
   constructor(
-    private router: Router,
-    private viewmodel: StudentTasksViewModel
-  ) {
+    private viewmodel: StudentTasksViewModel,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
     this.setupStreams();
   }
 
-  ngOnInit() {}
-
-  public emptyStateClick() {
-    this.router.navigate(['practice']);
+  scrollTo(target: number) {
+    document.getElementById('' + target).scrollIntoView({
+      block: 'start',
+      inline: 'nearest',
+      behavior: 'smooth'
+    });
   }
-  public setShowFinishedTasks(value: boolean) {
-    this.showFinishedTasks$.next(value);
+
+  emptyStateClick(url: string) {
+    this.router.navigate([url]);
   }
 
   private setupStreams() {
@@ -147,6 +163,56 @@ export class StudentTaskOverviewComponent implements OnInit {
             return activeTasksGroupedByLearningArea$;
           }
         }
+      })
+    );
+
+    this.sectionTitle$ = combineLatest([
+      this.taskCount$,
+      this.showFinishedTasks$
+    ]).pipe(
+      map(([taskCount, showFinishedTasks]) => {
+        let title = '';
+
+        if (taskCount === 0) {
+          if (showFinishedTasks) {
+            title = 'Je hebt geen afgewerkte taken';
+          } else {
+            title = 'Er staan geen taken voor je klaar';
+          }
+        } else {
+          if (showFinishedTasks) {
+            title = 'Deze taken heb je gemaakt';
+          } else {
+            title = `${taskCount} ${
+              taskCount === 1 ? 'taak staat' : 'taken staan'
+            } voor je klaar`;
+          }
+        }
+        return title;
+      })
+    );
+
+    this.emptyStateData$ = combineLatest([
+      this.taskCount$,
+      this.showFinishedTasks$
+    ]).pipe(
+      filter(([taskCount, showFinishedTasks]) => taskCount === 0),
+      map(([taskCount, showFinishedTasks]) => {
+        console.log('here', taskCount, showFinishedTasks);
+        return showFinishedTasks
+          ? {
+              title: 'Hier is niets te zien',
+              description: 'Je hebt nog geen afgewerkte taken.',
+              svgIcon: 'empty-state-all-done' // TODO: use correct icon
+            }
+          : {
+              title: 'Je bent helemaal mee',
+              description:
+                'Er staan geen taken voor je klaar. Je kan altijd vrij oefenen.',
+              ctaLabel: 'Naar vrij oefenen',
+              ctaLink: 'practice',
+              svgIcon: 'empty-state-all-done' // TODO: use correct icon
+            };
       })
     );
   }
