@@ -1,59 +1,72 @@
-<div
-  class="pages-home__container campus-page"
-  *ngIf="favoritesWithEduContent$ | async as favorites"
-  [class.no-favorites]="favorites.length === 0"
+<campus-backdrop
+  *ngIf="(favoritesWithEduContent$ | async)?.length === 0; else hasFavorites"
+  [title]="'Wat wil je doen, ' + (displayName$ | async) + '?'"
+  static
 >
-  <div *ngIf="favorites.length" class="pages-home__container__favorites">
+  <front-layer-content>
+    <ng-container *ngTemplateOutlet="hasFavorites"></ng-container>
+  </front-layer-content>
+</campus-backdrop>
+
+<ng-template #hasFavorites>
+  <div
+    class="pages-home__container campus-page"
+    *ngIf="favoritesWithEduContent$ | async as favorites"
+    [class.no-favorites]="favorites.length === 0"
+  >
+    <div *ngIf="favorites.length" class="pages-home__container__favorites">
+      <campus-page-header
+        [title]="
+          'Welkom ' +
+          (displayName$ | async) +
+          ', dit zijn je veel gebruikte methodes:'
+        "
+      >
+      </campus-page-header>
+      <div class="pages-home__favorite-list">
+        <campus-method-favorite-tile
+          class="pages-home__favorite-list__favorite"
+          *ngFor="let favoriteMethod of favorites"
+          [name]="favoriteMethod.favorite.name"
+          [logoUrl]="favoriteMethod.logoUrl"
+          [eduContent]="favoriteMethod.eduContent"
+          [bookId]="favoriteMethod.bookId"
+          (clickOpenBoeke)="clickOpenBoeke($event)"
+        >
+        </campus-method-favorite-tile>
+      </div>
+    </div>
+
     <campus-page-header
-      [title]="
-        'Welkom ' +
-        (displayName$ | async) +
-        ', dit zijn je veel gebruikte methodes:'
-      "
+      *ngIf="favorites.length"
+      [title]="'Wat wil je doen, ' + (displayName$ | async) + '?'"
     >
     </campus-page-header>
-    <div class="pages-home__favorite-list">
-      <campus-method-favorite-tile
-        class="pages-home__favorite-list__favorite"
-        *ngFor="let favoriteMethod of favorites"
-        [name]="favoriteMethod.favorite.name"
-        [logoUrl]="favoriteMethod.logoUrl"
-        [eduContent]="favoriteMethod.eduContent"
-        [bookId]="favoriteMethod.bookId"
-        (clickOpenBoeke)="clickOpenBoeke($event)"
-      >
-      </campus-method-favorite-tile>
-    </div>
-  </div>
 
-  <campus-page-header
-    [title]="'Wat wil je doen, ' + (displayName$ | async) + '?'"
-  >
-  </campus-page-header>
-
-  <div class="pages-home__container__shortcuts__list">
-    <div
-      *ngFor="let navItem of dashboardNavItems$ | async"
-      class="pages-home__container__shortcuts__list__shortcut"
-      [ngClass]="
-        'pages-home__container__shortcuts__list__shortcut--' + navItem.icon
-      "
-    >
-      <mat-icon [svgIcon]="navItem.icon"> </mat-icon>
-      <h2>{{ navItem.title }}</h2>
-
+    <div class="pages-home__container__shortcuts__list">
       <div
-        class="pages-home__container__shortcuts__list__shortcut__description"
+        *ngFor="let navItem of dashboardNavItems$ | async"
+        class="pages-home__container__shortcuts__list__shortcut"
+        [ngClass]="
+          'pages-home__container__shortcuts__list__shortcut--' + navItem.icon
+        "
       >
-        {{ navItem.description }}
-      </div>
+        <mat-icon [svgIcon]="navItem.icon"> </mat-icon>
+        <h2>{{ navItem.title }}</h2>
 
-      <a
-        [routerLink]="[navItem.link]"
-        class="pages-home__container__shortcuts__list__shortcut__link"
-      >
-        Open
-      </a>
+        <div
+          class="pages-home__container__shortcuts__list__shortcut__description"
+        >
+          {{ navItem.description }}
+        </div>
+
+        <a
+          [routerLink]="[navItem.link]"
+          class="pages-home__container__shortcuts__list__shortcut__link"
+        >
+          Open
+        </a>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>
