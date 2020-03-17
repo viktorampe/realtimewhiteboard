@@ -91,15 +91,14 @@
         style="display: none;"
       />
     </div>
-    <button
-      mat-fab
-      color="primary"
-      [class.plusMinimized]="isShelfMinimized"
+
+    <div
       class="whiteboard__addbutton"
-      (tap)="btnPlusClicked()"
+      [class.plusMinimized]="isShelfMinimized"
+      (tap)="btnPlusClicked($event)"
     >
-      <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
-    </button>
+      <mat-icon [svgIcon]="'plus'"></mat-icon>
+    </div>
 
     <div
       [class.shelfMinimized]="isShelfMinimized"
