@@ -3,19 +3,6 @@
     <mat-icon svgIcon="tasks"></mat-icon>
   </backdrop-reveal-action>
   <front-layer-content class="student-task-overview">
-    <div style="width: 100%">
-      <campus-student-task-list-item
-        title="Overhoring 1"
-        description="Maak deze taak als voorbereiding op deze taak."
-        [completedRequired]="4"
-        [totalRequired]="7"
-        dateLabel="morgen"
-        [urgent]="true"
-        learningAreaName="Wiskunde"
-        [actions]="[{ label: 'Openen' }]"
-      >
-      </campus-student-task-list-item>
-    </div>
     <campus-section
       [mode]="sectionModes.CONTAINER"
       class="student-task-overview__main"
@@ -56,10 +43,19 @@
               section.label
             }}</h1>
             <mat-list-item *ngFor="let studentTask of section.items">
-              <!-- TODO: use ListItemContentComponent -->
-              {{ studentTask.name }}
-              {{ studentTask.description }}
-              <campus-button inline>openen</campus-button>
+              <!-- TODO: add actions -->
+              <campus-student-task-list-item
+                [title]="studentTask.name"
+                [description]="studentTask.description"
+                [learningAreaName]="studentTask.learningAreaName"
+                [dateLabel]="studentTask.dateLabel"
+                [completedRequired]="studentTask.count.finishedRequired"
+                [totalRequired]="studentTask.count.totalRequired"
+                [urgent]="studentTask.isUrgent"
+                [finished]="studentTask.finished"
+                [actions]="[]"
+              >
+              </campus-student-task-list-item>
             </mat-list-item>
             <mat-list-item></mat-list-item>
           </mat-list>
