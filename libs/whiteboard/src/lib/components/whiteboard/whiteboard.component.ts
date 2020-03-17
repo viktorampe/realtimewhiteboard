@@ -1,3 +1,13 @@
+import {
+  animate,
+  animateChild,
+  keyframes,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import {
   Component,
@@ -21,6 +31,59 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
+  animations: [
+    trigger('showHideCard', [
+      transition(':leave', [
+        style({ opacity: '1' }),
+        animate('150ms cubic-bezier(.43,0,.31,1)', style({ opacity: '0' }))
+      ])
+    ]),
+    trigger('showHideWhiteboardTools', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ transform: 'translateY(-100%)', offset: 0 }),
+            style({ transform: 'translateY(8px)', offset: 0.75 }),
+            style({ transform: 'translateY(-5px)', offset: 0.9 }),
+            style({ transform: 'translateY(0)', offset: 1 })
+          ])
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(-100%)' })
+        )
+      ])
+    ]),
+    trigger('showHideColorList', [
+      transition(':enter', [
+        query('@showHideColorSwatchOne', stagger(50, [animateChild()]), {
+          optional: true
+        })
+      ]),
+      transition(':leave', [
+        query('@showHideColorSwatchOne', stagger(-50, [animateChild()]), {
+          optional: true
+        })
+      ])
+    ]),
+    trigger('showHideToolbar', [
+      transition(':enter', [
+        query('@showHideToolbarTool', stagger(-50, [animateChild()]), {
+          optional: true
+        })
+      ]),
+      transition(':leave', [
+        query('@showHideToolbarTool', stagger(50, [animateChild()]), {
+          optional: true
+        })
+      ])
+    ])
+  ],
   encapsulation: ViewEncapsulation.None
 })
 export class WhiteboardComponent implements OnChanges {
@@ -100,17 +163,24 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
   //#region WORKSPACE INTERACTIONS
-
-  onDblClick(event: MouseEvent) {
-    if (
-      (event.target as HTMLElement).className.includes('whiteboard__workspace')
-    ) {
-      this.addEmptyCard({ top: event.offsetY, left: event.offsetX });
+  createCard(event: any) {
+    if (event.target.className.includes('whiteboard__workspace')) {
+      if (event.type === 'longpress') {
+        const top =
+          event.center.y -
+          this.workspaceElementRef.nativeElement.getBoundingClientRect().top;
+        const left = event.center.x;
+        this.addEmptyCard({ top, left });
+      }
+      if (event.type === 'dblclick') {
+        const top = event.offsetY;
+        const left = event.offsetX;
+        this.addEmptyCard({ top, left });
+      }
     }
   }
 
-  btnPlusClicked(event) {
-    event.stopPropagation();
+  btnPlusClicked() {
     this.addEmptyCard();
   }
   //#endregion
@@ -219,12 +289,6 @@ export class WhiteboardComponent implements OnChanges {
         this.updateCard({ mode: ModeEnum.SELECTED }, card);
         this.selectedCards = [];
       }
-    }
-  }
-
-  onCardClicked(event: MouseEvent, card: CardInterface) {
-    if (card.mode !== ModeEnum.IDLE) {
-      event.stopPropagation();
     }
   }
 
@@ -354,28 +418,37 @@ export class WhiteboardComponent implements OnChanges {
     this.whiteboardHttpService.setJson(whiteboard).subscribe();
   }
 
-  onClickWhiteboard() {
-    this.selectedCards = [];
-    const cards = this.whiteboard$.value.cards;
-    const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
+  onClickWhiteboard(event) {
+    if (
+      event.target.classList.contains('whiteboard__workspace') ||
+      event.target.classList.contains('card') ||
+      event.target.classList.contains('card-text') ||
+      event.target.classList.contains('card-image') ||
+      event.target.classList.contains('card-image__image')
+    ) {
+      this.selectedCards = [];
+      const cards = this.whiteboard$.value.cards;
+      const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
 
-    if (cardInEditMode) {
-      this.updateCard(
-        { description: cardInEditMode.description },
-        cardInEditMode
+      if (cardInEditMode) {
+        this.updateCard(
+          { description: cardInEditMode.description },
+          cardInEditMode
+        );
+        this.updateViewMode(cardInEditMode);
+        this.saveWhiteboard();
+      }
+      const nonIdleUploadCards = cards.filter(
+        c =>
+          c.mode !== ModeEnum.UPLOAD &&
+          c.mode !== ModeEnum.IDLE &&
+          c.mode !== ModeEnum.ZOOM
       );
-      this.updateViewMode(cardInEditMode);
-      this.saveWhiteboard();
-    }
-
-    const nonIdleUploadCards = cards.filter(
-      c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
-    );
-
-    if (nonIdleUploadCards.length) {
-      nonIdleUploadCards.forEach(c =>
-        this.updateCard({ mode: ModeEnum.IDLE }, c)
-      );
+      if (nonIdleUploadCards.length) {
+        nonIdleUploadCards.forEach(c =>
+          this.updateCard({ mode: ModeEnum.IDLE }, c)
+        );
+      }
     }
   }
 

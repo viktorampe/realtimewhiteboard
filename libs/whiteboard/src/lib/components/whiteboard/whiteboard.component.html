@@ -3,9 +3,10 @@
   class="whiteboard"
   (filesDroppedEvent)="onFilesDropped($event)"
   campusImageDrag
-  (click)="onClickWhiteboard()"
+  (tap)="onClickWhiteboard($event)"
 >
   <campus-whiteboard-toolbar
+    @showHideWhiteboardTools
     *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
@@ -26,7 +27,12 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
-  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
+  <div
+    class="whiteboard__workspace"
+    (dblclick)="createCard($event)"
+    (longpress)="createCard($event)"
+    #workspace
+  >
     <div class="whiteboard__workspace__zoom">
       <mat-icon
         class="whiteboard__workspace__zoom__button"
@@ -39,6 +45,7 @@
       ></mat-icon>
     </div>
     <div
+      @showHideCard
       class="whiteboard__workspace__container"
       *ngFor="let card of whiteboard.cards"
       cdkDrag
@@ -49,13 +56,17 @@
       [class.onTop]="card.mode === Mode.SELECTED"
       (cdkDragEnded)="onDragEnded($event, card)"
       (cdkDragStarted)="onDragStarted(card)"
+      (tap)="onCardTapped(card)"
     >
       <campus-color-list
+        @showHideColorList
         class="whiteboard__color-list"
+        [mode]="card.mode"
         (selectedColor)="changeColorForCard(card, $event)"
         *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
       ></campus-color-list>
       <campus-card-toolbar
+        @showHideToolbar
         *ngIf="
           card.mode === Mode.EDIT ||
           card.mode === Mode.SELECTED ||
@@ -81,9 +92,7 @@
         (update)="updateCard($event, card)"
         (remove)="removeImage(card)"
         (openFilePicker)="openFilePicker(filePicker)"
-        (click)="onCardClicked($event, card)"
         (press)="onCardPressed(card)"
-        (tap)="onCardTapped(card)"
       ></campus-card>
       <input
         (change)="onFilePickerImageSelected($event, card)"
@@ -111,11 +120,10 @@
     mat-fab
     color="primary"
     class="whiteboard__addbutton"
-    (click)="btnPlusClicked($event)"
+    (tap)="btnPlusClicked()"
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
   </button>
-
   <campus-shelf
     (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
     [class.minimizedShelf]="isShelfMinimized"

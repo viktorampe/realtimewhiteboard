@@ -1,10 +1,53 @@
+import {
+  animate,
+  keyframes,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-toolbar',
   templateUrl: './card-toolbar.component.html',
-  styleUrls: ['./card-toolbar.component.scss']
+  styleUrls: ['./card-toolbar.component.scss'],
+  animations: [
+    trigger('showHideToolbarTool', [
+      transition(':enter', [
+        style({ transform: 'scale(0) translateY(0px)' }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ transform: 'translateY(48px) scale(0)', offset: 0 }),
+            style({ transform: 'translateY(10px)', offset: 0.65 }),
+            style({ transform: 'translateY(-6px)', offset: 0.8 }),
+            style({ transform: 'translateY(4px)', offset: 0.85 }),
+            style({ transform: 'translateY(-2px)', offset: 0.9 }),
+            style({ transform: 'translateY(0) scale(1)', offset: 1 })
+          ])
+        )
+      ]),
+      transition('multiSelect => void', [
+        style({
+          transform: 'translateY(0) scale(1)'
+        }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(48px) scale(0)' })
+        )
+      ]),
+      transition(':leave', [
+        style({
+          transform: 'translateY(0) scale(1)'
+        }),
+        animate(
+          '150ms 450ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(48px) scale(0)' })
+        )
+      ])
+    ])
+  ]
 })
 export class CardToolbarComponent implements OnInit {
   @Input() mode: ModeEnum;
@@ -28,28 +71,23 @@ export class CardToolbarComponent implements OnInit {
     this.clickDeleteIcon.emit();
   }
 
-  editIconClicked(event: MouseEvent) {
+  editIconClicked() {
     this.clickEditIcon.emit();
-    event.stopPropagation();
   }
 
-  confirmIconClicked(event: MouseEvent) {
+  confirmIconClicked() {
     this.clickConfirmIcon.emit();
-    event.stopPropagation();
   }
 
-  flipIconClicked(event: MouseEvent) {
+  flipIconClicked() {
     this.clickFlipIcon.emit();
-    event.stopPropagation();
   }
 
-  multiSelectClicked(event: MouseEvent) {
+  multiSelectClicked() {
     this.clickMultiSelectIcon.emit();
-    event.stopPropagation();
   }
 
-  multiSelectSelectedClicked(event: MouseEvent) {
+  multiSelectSelectedClicked() {
     this.clickMultiSelectSelectedIcon.emit();
-    event.stopPropagation();
   }
 }
