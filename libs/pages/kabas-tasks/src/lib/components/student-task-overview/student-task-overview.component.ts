@@ -1,5 +1,9 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  TaskActionsStudentServiceInterface,
+  TASK_ACTIONS_STUDENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
@@ -56,7 +60,9 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   constructor(
     private viewmodel: StudentTasksViewModel,
-    private router: Router
+    private router: Router,
+    @Inject(TASK_ACTIONS_STUDENT_SERVICE_TOKEN)
+    private taskActionStudentService: TaskActionsStudentServiceInterface
   ) {}
 
   ngOnInit() {
@@ -76,13 +82,14 @@ export class StudentTaskOverviewComponent implements OnInit {
   }
 
   private setupStreams() {
+    const studentTasksWithActions$ = this.addActions();
     // intermediate streams
-    const finishedTasks$ = this.viewmodel.studentTasks$.pipe(
+    const finishedTasks$ = studentTasksWithActions$.pipe(
       map(studentTasks => studentTasks.filter(sT => sT.isFinished)),
       shareReplay(1)
     );
 
-    const activeTasks$ = this.viewmodel.studentTasks$.pipe(
+    const activeTasks$ = studentTasksWithActions$.pipe(
       map(studentTasks => studentTasks.filter(sT => !sT.isFinished)),
       shareReplay(1)
     );
@@ -283,7 +290,13 @@ export class StudentTaskOverviewComponent implements OnInit {
   }
 
   private addActions() {
-    // in taskActionStudentService getActions aanspreken en mappen aan de jusite task
-    return this.viewmodel.studentTasks$.pipe(map(st => {}));
+    return this.viewmodel.studentTasks$.pipe(
+      map(studentTasks => {
+        studentTasks.forEach(studentTask => {
+          studentTask.actions = this.taskActionStudentService.getActions();
+        });
+        return studentTasks;
+      })
+    );
   }
 }
