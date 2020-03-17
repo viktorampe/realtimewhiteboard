@@ -43,10 +43,19 @@
               section.label
             }}</h1>
             <mat-list-item *ngFor="let studentTask of section.items">
-              <!-- TODO: use ListItemContentComponent -->
-              {{ studentTask.name }}
-              {{ studentTask.description }}
-              <campus-button inline>openen</campus-button>
+              <!-- TODO: add actions -->
+              <campus-student-task-list-item
+                [title]="studentTask.name"
+                [description]="studentTask.description"
+                [learningAreaName]="studentTask.learningAreaName"
+                [dateLabel]="studentTask.dateLabel"
+                [completedRequired]="studentTask.count.finishedRequired"
+                [totalRequired]="studentTask.count.totalRequired"
+                [urgent]="studentTask.isUrgent"
+                [finished]="studentTask.finished"
+                [actions]="[]"
+              >
+              </campus-student-task-list-item>
             </mat-list-item>
             <mat-list-item></mat-list-item>
           </mat-list>
