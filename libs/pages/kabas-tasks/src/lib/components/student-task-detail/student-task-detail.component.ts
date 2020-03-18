@@ -79,7 +79,6 @@ export class StudentTaskDetailComponent {
     action: ContentActionInterface,
     taskEduContent: StudentTaskContentInterface
   ) {
-    // TODO we need eduContent here...
-    // action.handler(eduContent);
+    action.handler(taskEduContent.eduContent);
   }
 }
