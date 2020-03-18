@@ -1,10 +1,14 @@
+$defaultColor: #a3b1c6;
+
 .whiteboard {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
 
   campus-whiteboard-toolbar {
     position: absolute;
+    top: 24px;
     z-index: 1;
     align-self: center;
   }
@@ -66,35 +70,122 @@
     }
   }
 
-  &__addbutton {
+  &__empty {
     position: absolute;
+    align-self: center;
+
+    pointer-events: none;
+
+    width: 100%;
+
+    .ui-empty-state__image {
+      max-width: 300px;
+    }
+
+    .ui-empty-state__title,
+    .ui-empty-state__description {
+      font-family: 'Open Sans', sans-serif;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .ui-empty-state__title {
+      font-size: 64px;
+    }
+
+    .ui-empty-state__description {
+      font-size: 32px;
+    }
+  }
+
+  &__addbutton {
+    position: absolute !important;
     right: 40px;
     bottom: 107px;
-    z-index: 1;
+
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 3;
+
+    background: #ffffff;
+    box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 18px #ffffff;
+
+    &:active {
+      box-shadow: inset 1px 1px 6px darken(#ffffff, 20%),
+        inset -1px -1px 6px lighten(#ffffff, 20%),
+        1px 1px 2px darken(#a3b1c6, 5%), -1px -1px 2px #ffffff;
+    }
+
+    mat-icon {
+      color: #d9328a;
+    }
+
+    &.plusMinimized {
+      bottom: 35px !important;
+    }
+  }
+
+  &__shelf__button {
+    width: 48px;
+    height: 32px;
+    background: linear-gradient(
+      145deg,
+      lighten(#e0e5ec, 5%),
+      darken(#e0e5ec, 5%)
+    );
+    box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+    border-radius: 12px;
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: 115px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:active {
+      background: linear-gradient(
+        -145deg,
+        lighten(#e0e5ec, 5%),
+        darken(#e0e5ec, 5%)
+      );
+      box-shadow: inset 1px 1px 6px darken(#e0e5ec, 20%),
+        inset -1px -1px 6px lighten(#e0e5ec, 20%),
+        1px 1px 2px darken(#a3b1c6, 5%), -1px -1px 2px #ffffff;
+    }
+    &.shelfMinimized {
+      bottom: 46px !important;
+    }
   }
 
   campus-shelf {
     position: absolute;
-    bottom: 0;
-    width: 100%;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    z-index: 2;
+    width: auto;
+    overflow-y: hidden;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0px 160px;
-
-    // OLD DESIGN
-    min-height: 136px;
-    background-color: white;
-    box-shadow: 0px -3px 15px #00000024;
-
-    // NEW DESIGN
-    // overflow: visible !important;
-    // height: 68px;
-    // background: linear-gradient(#f8f4ff 0%, #e0d1ff 100%);
-    // box-shadow: 0px -1px 1px #23033e52;
+    border-radius: 24px;
+    height: auto;
+    background: linear-gradient(
+      145deg,
+      lighten(#e0e5ec, 5%),
+      darken(#e0e5ec, 5%)
+    );
+    //$defaultColor -> #a3b1c6 (for the rgba() values)
+    box-shadow: 3px 3px 16px -1px rgba($defaultColor, 0.3), 9px 9px 16px #a3b1c6,
+      -1px -1px 6px -3px rgba($defaultColor, 0.2), -9px -9px 16px #ffffff;
   }
 
   .minimizedShelf {
-    height: 20px;
+    height: 36px;
   }
 }

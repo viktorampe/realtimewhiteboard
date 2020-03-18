@@ -52,28 +52,28 @@
     &__text {
       width: 100%;
       height: 100%;
+    }
+  }
+}
+
+:host.whiteboard__card .card {
+  &__content {
+    &__text {
       padding: 20px;
     }
   }
 }
 
 :host.shelf__card .card {
-  // NEW DESIGN
-  // position: relative;
-  height: 77px;
-  width: 116px;
+  height: 60px;
+  width: 89px;
 
   border-left: 12px solid;
-
   // OLD DESIGN
   opacity: 0.54;
 
   // OLD DESIGN
   &:hover {
     opacity: 1;
-  }
-
-  &__content {
-    width: 104px;
   }
 }
