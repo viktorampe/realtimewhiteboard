@@ -3,7 +3,6 @@
 $ui-list-item-content-spacing--horizontal: 16px !default;
 $ui-list-item-content-spacing--vertical: 4px !default;
 
-$ui-list-item-content-color--primary: $ui-primary-font-color !default;
 $ui-list-item-content-stroke-color: $ui-stroke-color !default;
 
 $ui-list-item-content_icon-color: $ui-primary-color-accent !default;
@@ -40,7 +39,6 @@ $ui-list-item-content-separator-height--3-line: 48px !default;
 
     &__title {
       display: inline-block;
-      color: $ui-list-item-content-color--primary;
       font-weight: bold;
       text-overflow: ellipsis;
       white-space: nowrap;

@@ -39,9 +39,9 @@
         ></campus-empty-state>
         <ng-template #filledState>
           <mat-list *ngFor="let section of taskListSections$ | async">
-            <h1 matSubheader [id]="section.learningAreaId">{{
+            <h4 matSubheader [id]="section.learningAreaId">{{
               section.label
-            }}</h1>
+            }}</h4>
             <mat-list-item
               *ngFor="let studentTask of section.items"
               class="ui-list-item-3-line"
