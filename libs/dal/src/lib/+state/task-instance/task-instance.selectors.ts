@@ -169,8 +169,8 @@ export const getTaskStudentTaskInstances = createSelector(
         ...ti,
         task: {
           ...tasksById[ti.taskId],
-          results: resultsByTaskId[ti.taskId],
-          taskEduContents: taskEduContentByTaskId[ti.taskId],
+          results: resultsByTaskId[ti.taskId] || [],
+          taskEduContents: taskEduContentByTaskId[ti.taskId] || [],
           learningArea: learningAreaById[tasksById[ti.taskId].learningAreaId]
         }
       };
