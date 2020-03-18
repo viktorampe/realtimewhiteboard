@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TaskInterface } from '@campus/dal';
+import { TASK_ACTIONS_STUDENT_SERVICE_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -33,6 +35,12 @@ describe('StudentTaskOverviewComponent', () => {
       ],
       providers: [
         { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
+        {
+          provide: TASK_ACTIONS_STUDENT_SERVICE_TOKEN,
+          useValue: {
+            getActions: (task: TaskInterface) => []
+          }
+        },
         { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]

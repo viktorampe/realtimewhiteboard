@@ -1,5 +1,10 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  TaskActionInterface,
+  TaskActionsStudentServiceInterface,
+  TASK_ACTIONS_STUDENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
@@ -56,14 +61,16 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   constructor(
     private viewmodel: StudentTasksViewModel,
-    private router: Router
+    private router: Router,
+    @Inject(TASK_ACTIONS_STUDENT_SERVICE_TOKEN)
+    private taskActionStudentService: TaskActionsStudentServiceInterface
   ) {}
 
   ngOnInit() {
     this.setupStreams();
   }
 
-  scrollTo(target: number) {
+  public scrollTo(target: number) {
     document.getElementById('' + target).scrollIntoView({
       block: 'start',
       inline: 'nearest',
@@ -71,18 +78,30 @@ export class StudentTaskOverviewComponent implements OnInit {
     });
   }
 
-  emptyStateClick(url: string) {
+  public emptyStateClick(url: string) {
     this.router.navigate([url]);
+  }
+
+  public handleAction(
+    action: TaskActionInterface,
+    studentTask: StudentTaskInterface
+  ) {
+    action.handler(studentTask.task);
   }
 
   private setupStreams() {
     // intermediate streams
-    const finishedTasks$ = this.viewmodel.studentTasks$.pipe(
+    const studentTasksWithActions$ = this.viewmodel.studentTasks$.pipe(
+      map(studentTasks => this.addActions(studentTasks)),
+      shareReplay(1)
+    );
+
+    const finishedTasks$ = studentTasksWithActions$.pipe(
       map(studentTasks => studentTasks.filter(sT => sT.isFinished)),
       shareReplay(1)
     );
 
-    const activeTasks$ = this.viewmodel.studentTasks$.pipe(
+    const activeTasks$ = studentTasksWithActions$.pipe(
       map(studentTasks => studentTasks.filter(sT => !sT.isFinished)),
       shareReplay(1)
     );
@@ -283,5 +302,12 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   private sortByString(a: string, b: string, order: SortOrder) {
     return a.localeCompare(b) * order;
+  }
+
+  private addActions(studentTasks: StudentTaskInterface[]) {
+    return studentTasks.map(sT => ({
+      ...sT,
+      actions: this.taskActionStudentService.getActions(sT)
+    }));
   }
 }
