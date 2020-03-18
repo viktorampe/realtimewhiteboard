@@ -123,6 +123,7 @@ $L6: #e40521;
       &__zoom {
         margin-left: 24px;
         display: flex;
+        align-items: center;
         background-color: $zoom-background;
         border-radius: 12px;
         box-shadow: 3px 3px 16px -1px rgba($defaultColor, 0.3),
