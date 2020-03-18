@@ -4,5 +4,5 @@ export interface TaskActionInterface {
   label: string;
   icon: string;
   tooltip: string;
-  handler(task: TaskInterface): void;
+  handler(task: TaskInterface | number): void;
 }

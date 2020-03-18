@@ -8,7 +8,7 @@ export interface TaskActionsStudentServiceInterface {
 }
 
 export interface StudentTaskOpenerInterface {
-  openTask(task: TaskInterface);
+  openTask(task: TaskInterface | number);
 }
 
 export const STUDENT_TASK_OPENER_TOKEN = new InjectionToken<
