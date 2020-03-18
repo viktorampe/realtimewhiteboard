@@ -56,25 +56,24 @@ export class StudentTaskDetailComponent {
     private contentOpenActionsService: ContentOpenActionsServiceInterface
   ) {
     this.task$ = this.viewModel.currentTask$.pipe(
-      map(
-        task => ({
-          ...task,
-          contents: task.contents.map(content => ({
-            ...content,
-            actions: this.contentOpenActionsService.getActionsForTaskInstanceEduContent(
-              content.eduContent,
-              content,
-              task
-            )
-          }))
-        }),
-        shareReplay(1)
-      )
+      map(task => ({
+        ...task,
+        contents: task.contents.map(content => ({
+          ...content,
+          actions: this.contentOpenActionsService.getActionsForTaskInstanceEduContent(
+            content.eduContent,
+            content,
+            task
+          )
+        }))
+      })),
+      shareReplay(1)
     );
 
     this.requiredTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => content.required))
     );
+
     this.optionalTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => !content.required))
     );

@@ -31,6 +31,9 @@ describe('StudentTaskDetailComponent', () => {
   const dateMock = new MockDate(today);
 
   const actions = [{ foo: 'bar' }];
+  const getActionsForTaskInstanceEduContent = jest
+    .fn()
+    .mockReturnValue(actions);
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -55,11 +58,7 @@ describe('StudentTaskDetailComponent', () => {
         providers: [
           {
             provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
-            useValue: {
-              getActionsForTaskInstanceEduContent: jest
-                .fn()
-                .mockReturnValue(actions)
-            }
+            useValue: { getActionsForTaskInstanceEduContent }
           }
         ]
       }
@@ -75,6 +74,11 @@ describe('StudentTaskDetailComponent', () => {
     fixture = TestBed.createComponent(StudentTaskDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    // using a shared actionService
+    // needs to happen after initial vm emit
+    // or the initial emit is also counted in the spy
+    getActionsForTaskInstanceEduContent.mockClear();
   });
 
   it('should create', () => {
@@ -133,6 +137,24 @@ describe('StudentTaskDetailComponent', () => {
             ]
           })
         );
+      });
+    });
+
+    describe('actions', () => {
+      it('should add the correct actions', () => {
+        expect(getActionsForTaskInstanceEduContent).toHaveBeenCalledTimes(
+          mockContents.length
+        );
+
+        mockContents.forEach(content =>
+          expect(getActionsForTaskInstanceEduContent).toHaveBeenCalledWith(
+            content.eduContent,
+            content,
+            viewModel.currentTask$.value
+          )
+        );
+
+        // the returned actions are tested in the requiredTaskContents and optionalTaskContents streams
       });
     });
   });
