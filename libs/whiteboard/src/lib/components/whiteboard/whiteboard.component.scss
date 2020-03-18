@@ -84,6 +84,7 @@ $L6: #e40521;
 
     &__actions {
       position: absolute;
+      display: flex;
       top: 24px;
       right: 24px;
       z-index: 3;
@@ -120,6 +121,7 @@ $L6: #e40521;
       }
 
       &__zoom {
+        margin-left: 24px;
         display: flex;
         background-color: $zoom-background;
         border-radius: 12px;
