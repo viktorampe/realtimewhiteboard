@@ -1,8 +1,11 @@
+// file.only
+
 import { Dictionary } from '@ngrx/entity';
 import { TaskInstanceQueries } from '.';
 import {
   EduContentFixture,
   LearningAreaFixture,
+  PersonFixture,
   ResultFixture,
   TaskEduContentFixture,
   TaskFixture
@@ -11,6 +14,7 @@ import { TaskInstanceFixture } from '../../+fixtures/TaskInstance.fixture';
 import {
   EduContent,
   LearningAreaInterface,
+  PersonInterface,
   ResultInterface,
   TaskEduContentInterface,
   TaskInstanceInterface,
@@ -172,9 +176,10 @@ describe('TaskInstance Selectors', () => {
     let taskEduContentByTask: Dictionary<TaskEduContentInterface[]>;
     let eduContentDict: Dictionary<EduContent>;
     let learningAreaDict: Dictionary<LearningAreaInterface>;
+    let linkedPersonsDict: Dictionary<PersonInterface>;
 
     beforeEach(() => {
-      taskInstance = new TaskInstanceFixture({ taskId: 1 });
+      taskInstance = new TaskInstanceFixture({ taskId: 1, assignerId: 1 });
 
       taskDict = {
         1: new TaskFixture({ id: 1 }),
@@ -214,6 +219,11 @@ describe('TaskInstance Selectors', () => {
         1: new LearningAreaFixture({ id: 1 }),
         2: new LearningAreaFixture({ id: 2 })
       };
+
+      linkedPersonsDict = {
+        1: new PersonFixture({ id: 1 }),
+        2: new PersonFixture({ id: 2 })
+      };
     });
 
     it('should combine all related data', () => {
@@ -224,11 +234,13 @@ describe('TaskInstance Selectors', () => {
         taskEduContentByTask,
         eduContentDict,
         learningAreaDict,
+        linkedPersonsDict,
         {} // props -> not used in this selector
       );
 
       const expected = jasmine.objectContaining({
         id: 1,
+        assigner: linkedPersonsDict[1],
         task: jasmine.objectContaining({
           id: 1,
           taskEduContents: [
