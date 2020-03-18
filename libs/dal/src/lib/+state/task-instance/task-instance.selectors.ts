@@ -185,6 +185,17 @@ export const getTaskStudentTaskInstances = createSelector(
   }
 );
 
+export const getTaskByTaskInstanceId = createSelector(
+  [getById, TaskQueries.getAllEntities],
+  (
+    taskInstance: TaskInstanceInterface,
+    taskDictionary: Dictionary<TaskInterface>,
+    props: { id: number }
+  ) => {
+    return taskDictionary[taskInstance.taskId];
+  }
+);
+
 function asTaskInstance(item: TaskInstanceInterface): TaskInstance {
   if (item) {
     return Object.assign<TaskInstance, TaskInstanceInterface>(

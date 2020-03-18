@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TaskQueries } from '@campus/dal';
+import { TaskInstanceQueries, TaskQueries } from '@campus/dal';
 import { PermissionGuard } from '@campus/guards';
 import { KabasTasksResolver } from './components/kabas-tasks.resolver';
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
@@ -78,7 +78,7 @@ const routes: Routes = [
         resolve: { isResolved: StudentTaskDetailResolver },
         runGuardsAndResolvers: 'always',
         data: {
-          selector: TaskQueries.getById,
+          selector: TaskInstanceQueries.getTaskByTaskInstanceId,
           displayProperty: 'name'
         },
         canActivate: [ValidTaskInstanceGuard],
