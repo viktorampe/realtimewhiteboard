@@ -58,6 +58,11 @@ describe('StudentTaskOverviewComponent', () => {
     router = TestBed.get(Router);
     viewmodel = TestBed.get(StudentTasksViewModel);
     fixture.detectChanges();
+
+    // using a shared actionService
+    // needs to happen after initial vm emit
+    // or the initial emit is also counted in the spy
+    getActions.mockClear();
   });
 
   it('should create', () => {
@@ -279,6 +284,31 @@ describe('StudentTaskOverviewComponent', () => {
       viewmodelStudentTasks$ = viewmodel.studentTasks$ as BehaviorSubject<
         StudentTaskInterface[]
       >;
+    });
+
+    describe('actions', () => {
+      const mockTasks = [
+        new StudentTaskFixture({ ...vorigeWeekVrijdag }),
+        new StudentTaskFixture({ ...gisteren }),
+        new StudentTaskFixture({ ...volgendeWeekDonderdag }),
+        new StudentTaskFixture({ ...volgendeWeekDonderdag }),
+        new StudentTaskFixture({ ...vorigeWeekVrijdag })
+      ];
+
+      beforeEach(() => {
+        viewmodelStudentTasks$.next(mockTasks);
+      });
+
+      it('should add the correct actions', () => {
+        expect(getActions).toHaveBeenCalledTimes(mockTasks.length);
+
+        mockTasks.forEach(task =>
+          expect(getActions).toHaveBeenCalledWith(task)
+        );
+
+        // the returned actions are tested in the taskListSections$
+        // since they were added in getPresets to `wiskunde` and `frans`
+      });
     });
 
     describe('taskCount$', () => {
