@@ -1,6 +1,12 @@
 :host {
   width: 100%;
-  .student-task-list-item__learning-area {
-    text-transform: lowercase;
+  .student-task-list-item {
+    &__container__title {
+      cursor: pointer;
+    }
+    &__learning-area,
+    &__date-label {
+      text-transform: lowercase;
+    }
   }
 }

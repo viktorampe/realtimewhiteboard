@@ -4,7 +4,6 @@
     class="student-task-list-item__container__title"
     (click)="onActionClick(actions[0])"
     campusClickStopPropagation
-    mat-line
     >{{ title }}</list-item-title
   >
 
@@ -42,12 +41,12 @@
   <list-item-content
     data-cy="tli-progress"
     class="student-task-list-item__progress"
-    *ngIf="!finished"
+    *ngIf="totalRequired && !finished"
   >
     <campus-progress
-      [count]="completedRequired || 100"
+      [count]="completedRequired"
       [diameter]="48"
-      [total]="totalRequired || 100"
+      [total]="totalRequired"
       [showPercentage]="true"
     >
       <completed-progress-icon
