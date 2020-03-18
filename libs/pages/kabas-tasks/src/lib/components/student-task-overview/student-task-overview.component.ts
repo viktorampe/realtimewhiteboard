@@ -4,7 +4,6 @@ import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
-import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 import { StudentTasksViewModel } from './../student-tasks.viewmodel';
 
 export interface TaskByLearningAreaInfoInterface {
@@ -29,9 +28,7 @@ enum SortOrder {
   selector: 'campus-student-task-overview',
   templateUrl: './student-task-overview.component.html',
   styleUrls: ['./student-task-overview.component.scss'],
-  providers: [
-    { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel }
-  ]
+  providers: []
 })
 export class StudentTaskOverviewComponent implements OnInit {
   @HostBinding('class.student-task-overview')

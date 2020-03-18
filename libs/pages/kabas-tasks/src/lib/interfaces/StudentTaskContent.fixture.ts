@@ -1,8 +1,4 @@
-import {
-  EduContentFixture,
-  EduContentInterface,
-  ResultStatus
-} from '@campus/dal';
+import { EduContentFixture, ResultStatus } from '@campus/dal';
 import { StudentTaskContentInterface } from './StudentTaskContent.interface';
 
 export class StudentTaskContentFixture implements StudentTaskContentInterface {
@@ -17,11 +13,8 @@ export class StudentTaskContentFixture implements StudentTaskContentInterface {
   eduContent = new EduContentFixture();
   actions = [];
 
-  constructor(
-    props: Partial<StudentTaskContentInterface> = {},
-    eduContent?: Partial<EduContentInterface>
-  ) {
+  constructor(props: Partial<StudentTaskContentInterface> = {}) {
     // overwrite defaults
-    Object.assign(this, props, eduContent);
+    Object.assign(this, props);
   }
 }
