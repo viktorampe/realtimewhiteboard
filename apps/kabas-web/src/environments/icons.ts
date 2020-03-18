@@ -59,6 +59,8 @@ export const icons = {
   'task:pending': 'assets/icons/tasks/assignment.svg',
   'task:finished': 'assets/icons/tasks/assignment_done.svg',
   'task:paper': 'assets/icons/tasks/assignment_paper.svg',
+  'sort:date': 'assets/icons/material/sort-date.svg',
+  'sort:learning-area': 'assets/icons/learning_area.svg',
   photolibrary: 'assets/icons/photo_library.svg',
   print: 'assets/icons/printer.svg',
   preview: 'assets/icons/material/monitor_eye.svg',

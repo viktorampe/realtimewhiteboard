@@ -9,5 +9,9 @@
   &__aside {
     width: 500px;
     margin-left: 24px;
+
+    &--hidden {
+      visibility: hidden;
+    }
   }
 }

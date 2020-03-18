@@ -26,7 +26,7 @@ export class StudentTaskListItemComponent {
   @Input() actions: TaskActionInterface[];
   @Output() clickAction = new EventEmitter<TaskActionInterface>();
 
-  @HostBinding('class.manage-kabas-tasks__student-task-list-item')
+  @HostBinding('class.student-task-list-item')
   studentTaskListItemClass = true;
 
   onActionClick(action: TaskActionInterface) {

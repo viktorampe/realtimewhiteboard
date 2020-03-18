@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ResultStatus } from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
@@ -31,7 +32,7 @@ describe('StudentTaskDetailComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, UiModule],
+      imports: [NoopAnimationsModule, UiModule, RouterTestingModule],
       providers: [
         {
           provide: ENVIRONMENT_UI_TOKEN,

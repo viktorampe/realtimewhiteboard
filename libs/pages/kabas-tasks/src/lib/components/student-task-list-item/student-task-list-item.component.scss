@@ -1,6 +1,6 @@
-.manage-kabas-tasks-student-task-list-item {
-  &__learning-area {
-    width: 160px;
+:host {
+  width: 100%;
+  .student-task-list-item__learning-area {
     text-transform: lowercase;
   }
 }

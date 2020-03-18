@@ -1,22 +1,30 @@
-@mixin pages-manage-kabas-tasks-student-task-list-item-theme() {
-  $pages-manage-kabas-tasks__student-task-list-item__date-label-font-weight: bold !default;
-  $pages-manage-kabas-tasks__student-task-list-item__date-label--urgent-color: $pages-kabas-tasks-text-color--tertiary !default;
+@mixin student-task-list-item-theme() {
+  $student-task-list-item__date-label-font-weight: bold !default;
+  $student-task-list-item__date-label--urgent-color: $ui-color-danger !default;
 
-  .manage-kabas-tasks__student-task-list-item {
-    .manage-kabas-tasks-student-task-list-item {
+  $student-task-list-item__stroke-color: $ui-stroke-color !default;
+  $student-task-list-item-meta-padding: 8px !default;
+
+  .student-task-list-item {
+    .student-task-list-item {
       &__learning-area,
       &__date-label {
-        // TODO: can probably remove this once the page styling comes in
-        // it needs a height in order to show the right borders for contentRightSeparated
-        height: 24px;
+        padding: 0;
+        &:after {
+          margin: auto $student-task-list-item-meta-padding;
+          border-right: solid 1px $student-task-list-item__stroke-color;
+          content: '';
+          display: block;
+          height: 24px;
+        }
       }
 
       &__date-label {
         &--urgent {
-          color: $pages-manage-kabas-tasks__student-task-list-item__date-label--urgent-color;
+          color: $student-task-list-item__date-label--urgent-color;
         }
 
-        font-weight: $pages-manage-kabas-tasks__student-task-list-item__date-label-font-weight;
+        font-weight: $student-task-list-item__date-label-font-weight;
       }
     }
   }
