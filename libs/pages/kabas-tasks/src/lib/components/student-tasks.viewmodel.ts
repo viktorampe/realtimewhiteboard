@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import { Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContent,
-  getRouterStateParams,
+  getRouterState,
   ResultInterface,
+  RouterStateUrl,
   TaskInterface
 } from '@campus/dal';
 import {
@@ -18,12 +19,27 @@ import {
   SCORM_EXERCISE_SERVICE_TOKEN,
   StudentTaskOpenerInterface
 } from '@campus/shared';
+import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  shareReplay,
+  switchMap,
+  take
+} from 'rxjs/operators';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithContent.interface';
-import { studentTasks } from './student-tasks.viewmodel.selectors';
+import {
+  studentTasks,
+  studentTaskWithContent
+} from './student-tasks.viewmodel.selectors';
+
+export interface CurrentTaskParams {
+  id?: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +51,9 @@ export class StudentTasksViewModel
     StudentTaskOpenerInterface {
   public studentTasks$: Observable<StudentTaskInterface[]>;
   public currentTask$: Observable<StudentTaskWithContentInterface>;
-  public routeParams$: Observable<Params>;
+
+  private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
+  private currentTaskParams$: Observable<CurrentTaskParams>;
 
   constructor(
     private store: Store<DalState>,
@@ -51,11 +69,32 @@ export class StudentTasksViewModel
   }
 
   private setSourceStreams() {
-    this.routeParams$ = this.store.pipe(select(getRouterStateParams));
+    this.routerState$ = this.store.pipe(select(getRouterState));
   }
 
   private setPresentationStreams() {
     this.studentTasks$ = this.store.pipe(select(studentTasks));
+    this.currentTaskParams$ = this.routerState$.pipe(
+      filter(routerState => !!routerState),
+      map(
+        (
+          routerState: RouterReducerState<RouterStateUrl>
+        ): CurrentTaskParams => ({
+          id: +routerState.state.params.id || undefined
+        })
+      ),
+      distinctUntilChanged((a, b) => a.id === b.id),
+      shareReplay(1)
+    );
+
+    this.currentTask$ = this.currentTaskParams$.pipe(
+      filter(params => !!params.id),
+      switchMap(params => {
+        return this.store.pipe(
+          select(studentTaskWithContent, { id: params.id })
+        );
+      })
+    );
   }
 
   openTask(task: TaskInterface) {
@@ -63,10 +102,10 @@ export class StudentTasksViewModel
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
-    this.routeParams$
+    this.currentTaskParams$
       .pipe(
         take(1),
-        map(params => params.task)
+        map(params => params.id)
       )
       .subscribe(taskId => {
         this.scormExerciseService.startExerciseFromTask(

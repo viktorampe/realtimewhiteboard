@@ -8,6 +8,7 @@ import {
   TaskFixture,
   TaskInstanceFixture
 } from '@campus/dal';
+import { EduContentTypeEnum } from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { HumanDateTimePipe } from '@campus/ui';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
@@ -74,6 +75,14 @@ describe('student-tasks viewmodel selectors', () => {
             lastUpdated,
             score: 100,
             eduContentId: 1,
+            eduContent: new EduContentFixture(
+              { type: EduContentTypeEnum.EXERCISE },
+              {
+                description: 'instructiefilmpje',
+                fileExt: 'mp4',
+                title: 'neuspeuteren'
+              }
+            ),
             actions: []
           },
           {
@@ -85,11 +94,21 @@ describe('student-tasks viewmodel selectors', () => {
             lastUpdated,
             score: 50,
             eduContentId: 2,
+            eduContent: new EduContentFixture(
+              { id: 2, type: EduContentTypeEnum.EXERCISE },
+              {
+                description: 'herhalingsoefening',
+                fileExt: 'oefening',
+                title: 'nagelbijten'
+              }
+            ),
             actions: []
           }
         ],
-        requiredContentCount: 1,
-        requiredContentFinished: 1
+        count: {
+          totalRequired: 1,
+          completedRequired: 1
+        }
       };
 
       expect(result).toEqual(expected);
@@ -114,8 +133,10 @@ describe('student-tasks viewmodel selectors', () => {
         isFinished: false,
         assigner,
         contents: [],
-        requiredContentCount: 0,
-        requiredContentFinished: 0
+        count: {
+          totalRequired: 0,
+          completedRequired: 0
+        }
       };
 
       expect(result).toEqual(expected);
@@ -150,6 +171,14 @@ describe('student-tasks viewmodel selectors', () => {
             lastUpdated: undefined,
             score: undefined,
             eduContentId: 1,
+            eduContent: new EduContentFixture(
+              { type: EduContentTypeEnum.EXERCISE },
+              {
+                description: 'instructiefilmpje',
+                fileExt: 'mp4',
+                title: 'neuspeuteren'
+              }
+            ),
             actions: []
           },
           {
@@ -161,11 +190,21 @@ describe('student-tasks viewmodel selectors', () => {
             lastUpdated: undefined,
             score: undefined,
             eduContentId: 2,
+            eduContent: new EduContentFixture(
+              { id: 2, type: EduContentTypeEnum.EXERCISE },
+              {
+                description: 'herhalingsoefening',
+                fileExt: 'oefening',
+                title: 'nagelbijten'
+              }
+            ),
             actions: []
           }
         ],
-        requiredContentCount: 1,
-        requiredContentFinished: 0
+        count: {
+          totalRequired: 1,
+          completedRequired: 0
+        }
       };
       expect(result).toEqual(expected);
     });

@@ -1,4 +1,4 @@
-import { ResultStatus } from '@campus/dal';
+import { EduContent, ResultStatus } from '@campus/dal';
 import { ContentActionInterface } from '@campus/shared';
 
 export interface StudentTaskContentInterface {
@@ -10,5 +10,6 @@ export interface StudentTaskContentInterface {
   lastUpdated: Date;
   score: number;
   eduContentId: number;
+  eduContent: EduContent;
   actions: ContentActionInterface[];
 }

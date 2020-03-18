@@ -4,6 +4,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   EduContent,
   LearningAreaInterface,
+  PersonInterface,
   ResultInterface,
   TaskEduContentInterface,
   TaskInterface
@@ -12,6 +13,7 @@ import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
 import { EduContentQueries } from '../edu-content';
 import { LearningAreaQueries } from '../learning-area';
+import { LinkedPersonQueries } from '../linked-person';
 import { ResultQueries } from '../result';
 import { TaskQueries } from '../task';
 import { TaskEduContentQueries } from '../task-edu-content';
@@ -122,7 +124,8 @@ export const getTaskInstanceWithTaskById = createSelector(
     ResultQueries.getResultsByTask,
     TaskEduContentQueries.getAllGroupedByTaskId,
     EduContentQueries.getAllEntities,
-    LearningAreaQueries.getAllEntities
+    LearningAreaQueries.getAllEntities,
+    LinkedPersonQueries.getAllEntities
   ],
   (
     taskInstance: TaskInstance,
@@ -131,17 +134,21 @@ export const getTaskInstanceWithTaskById = createSelector(
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     eduContentDict: Dictionary<EduContent>,
     learningAreaDict: Dictionary<LearningAreaInterface>,
+    linkedPersons: Dictionary<PersonInterface>,
     props: { id: number }
   ) => {
     return {
       ...taskInstance,
+      assigner: linkedPersons[taskInstance.assignerId],
       task: {
         ...taskDict[taskInstance.taskId],
-        results: resultsByTask[taskInstance.taskId],
-        taskEduContents: taskEduContentByTask[taskInstance.taskId].map(tE => ({
-          ...tE,
-          eduContent: eduContentDict[tE.eduContentId]
-        })),
+        results: resultsByTask[taskInstance.taskId] || [],
+        taskEduContents: (taskEduContentByTask[taskInstance.taskId] || []).map(
+          tE => ({
+            ...tE,
+            eduContent: eduContentDict[tE.eduContentId]
+          })
+        ),
         learningArea:
           learningAreaDict[taskDict[taskInstance.taskId].learningAreaId]
       }

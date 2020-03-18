@@ -16,12 +16,8 @@
     ></list-item-actions
   >
 
-  <list-item-content
-    *ngIf="
-      isFinished && (isRequired || status === resultStatuses.STATUS_COMPLETED)
-    "
-    class="student-task-content-list-item__score"
-    ><campus-rating [count]="score"></campus-rating
+  <list-item-content class="student-task-content-list-item__score"
+    ><campus-rating [count]="2"></campus-rating
   ></list-item-content>
 
   <list-item-content

@@ -155,11 +155,7 @@ describe('StudentTaskContentListItemComponent', () => {
             if (testCase.finished) {
               expect(lastUpdatedDE.query(By.directive(MatIcon))).toBeNull();
             } else {
-              if (testCase.status === ResultStatus.STATUS_COMPLETED) {
-              } else if (testCase.status === ResultStatus.STATUS_OPENED) {
-              } else {
-                expect(lastUpdatedDE).toBeNull();
-              }
+              expect(lastUpdatedDE).toBeNull();
             }
           }
         });

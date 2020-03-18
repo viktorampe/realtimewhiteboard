@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ResultStatus } from '@campus/dal';
+import { CONTENT_OPEN_ACTIONS_SERVICE_TOKEN } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -30,6 +31,11 @@ describe('StudentTaskDetailComponent', () => {
   const farFuture = new Date(2020, 3, 20);
   const dateMock = new MockDate(today);
 
+  const actions = [{ foo: 'bar' }];
+  const getActionsForTaskInstanceEduContent = jest
+    .fn()
+    .mockReturnValue(actions);
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, UiModule, RouterTestingModule],
@@ -48,6 +54,15 @@ describe('StudentTaskDetailComponent', () => {
         StudentTaskDetailComponent,
         StudentTaskContentListItemComponent
       ]
+    }).overrideComponent(StudentTaskDetailComponent, {
+      set: {
+        providers: [
+          {
+            provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+            useValue: { getActionsForTaskInstanceEduContent }
+          }
+        ]
+      }
     });
   });
 
@@ -60,6 +75,11 @@ describe('StudentTaskDetailComponent', () => {
     fixture = TestBed.createComponent(StudentTaskDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    // using a shared actionService
+    // needs to happen after initial vm emit
+    // or the initial emit is also counted in the spy
+    getActionsForTaskInstanceEduContent.mockClear();
   });
 
   it('should create', () => {
@@ -99,7 +119,10 @@ describe('StudentTaskDetailComponent', () => {
       it('should contain only required task contents', () => {
         expect(component.requiredTaskContents$).toBeObservable(
           hot('a', {
-            a: [mockContents[0], mockContents[1]]
+            a: [
+              { ...mockContents[0], actions },
+              { ...mockContents[1], actions }
+            ]
           })
         );
       });
@@ -109,9 +132,30 @@ describe('StudentTaskDetailComponent', () => {
       it('should contain only optional task contents', () => {
         expect(component.optionalTaskContents$).toBeObservable(
           hot('a', {
-            a: [mockContents[2], mockContents[3]]
+            a: [
+              { ...mockContents[2], actions },
+              { ...mockContents[3], actions }
+            ]
           })
         );
+      });
+    });
+
+    describe('actions', () => {
+      it('should add the correct actions', () => {
+        expect(getActionsForTaskInstanceEduContent).toHaveBeenCalledTimes(
+          mockContents.length
+        );
+
+        mockContents.forEach(content =>
+          expect(getActionsForTaskInstanceEduContent).toHaveBeenCalledWith(
+            content.eduContent,
+            content,
+            viewModel.currentTask$.value
+          )
+        );
+
+        // the returned actions are tested in the requiredTaskContents and optionalTaskContents streams
       });
     });
   });
