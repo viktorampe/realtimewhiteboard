@@ -115,8 +115,8 @@ export const studentTaskWithContent = createSelector(
     );
 
     const requiredContent = contents.filter(content => content.required);
-    const requiredContentCount = requiredContent.length;
-    const requiredContentFinished = requiredContent.filter(
+    const totalRequired = requiredContent.length;
+    const completedRequired = requiredContent.filter(
       content => content.status === ResultStatus.STATUS_COMPLETED
     ).length;
 
@@ -131,8 +131,10 @@ export const studentTaskWithContent = createSelector(
       end,
       assigner,
       contents,
-      requiredContentCount,
-      requiredContentFinished
+      count: {
+        totalRequired,
+        completedRequired
+      }
     };
   }
 );

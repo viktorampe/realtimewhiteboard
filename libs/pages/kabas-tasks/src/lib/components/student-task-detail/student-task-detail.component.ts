@@ -1,5 +1,6 @@
 import { Component, HostBinding, Inject } from '@angular/core';
 import {
+  ContentActionInterface,
   ContentOpenActionsServiceInterface,
   ContentOpenActionsStudentService,
   CONTENT_OPEN_ACTIONS_SERVICE_TOKEN
@@ -15,14 +16,12 @@ import { map, shareReplay } from 'rxjs/operators';
 import { StudentTaskContentInterface } from '../../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
-import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
 @Component({
   selector: 'campus-student-task-detail',
   templateUrl: './student-task-detail.component.html',
   styleUrls: ['./student-task-detail.component.scss'],
   providers: [
-    { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel },
     {
       provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
       useClass: ContentOpenActionsStudentService
@@ -74,5 +73,13 @@ export class StudentTaskDetailComponent {
     this.optionalTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => !content.required))
     );
+  }
+
+  public handleAction(
+    action: ContentActionInterface,
+    taskEduContent: StudentTaskContentInterface
+  ) {
+    // TODO we need eduContent here...
+    // action.handler(eduContent);
   }
 }
