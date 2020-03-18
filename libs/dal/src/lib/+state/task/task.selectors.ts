@@ -2,7 +2,6 @@ import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   EduContent,
-  EduContentInterface,
   FavoriteInterface,
   LearningAreaInterface,
   TaskEduContentInterface,
@@ -151,13 +150,6 @@ function asTask(item: TaskInterface): Task {
   }
 }
 
-function toEduContent(eduContent: EduContentInterface) {
-  return Object.assign<EduContent, EduContentInterface>(
-    new EduContent(),
-    eduContent
-  );
-}
-
 function addTaskDates(
   taskWithAssignees: TaskWithAssigneesInterface
 ): TaskWithAssigneesInterface {
@@ -201,7 +193,7 @@ function mapToTaskWithAssigneeInterface(
       .sort((a, b) => a.index - b.index)
       .map(tEdu => ({
         ...tEdu,
-        eduContent: toEduContent(tEdu.eduContent)
+        eduContent: EduContent.toEduContent(tEdu.eduContent)
       })),
     assignees: assigneesByTask[task.id] || [],
     isFavorite: favoriteTaskIds.includes(task.id)
