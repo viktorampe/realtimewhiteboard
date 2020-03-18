@@ -27,6 +27,11 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
+  <div class="whiteboard__workspace__actions">
+    <div color="primary" class="whiteboard__workspace__actions__settingsbutton">
+      <mat-icon [svgIcon]="'settings'"></mat-icon>
+    </div>
+  </div>
   <div
     class="whiteboard__workspace"
     (dblclick)="createCard($event)"
