@@ -27,6 +27,11 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
+  <div class="whiteboard__workspace__actions">
+    <div color="primary" class="whiteboard__workspace__actions__settingsbutton">
+      <mat-icon [svgIcon]="'settings'"></mat-icon>
+    </div>
+  </div>
   <div
     class="whiteboard__workspace"
     (dblclick)="createCard($event)"
@@ -102,6 +107,28 @@
         style="display: none;"
       />
     </div>
+
+    <div
+      class="whiteboard__addbutton"
+      [class.plusMinimized]="isShelfMinimized"
+      (tap)="btnPlusClicked($event)"
+    >
+      <mat-icon [svgIcon]="'plus'"></mat-icon>
+    </div>
+
+    <div
+      [class.shelfMinimized]="isShelfMinimized"
+      class="whiteboard__shelf__button"
+      (tap)="toggleShelf()"
+      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
+    ></div>
+
+    <campus-shelf
+      (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
+      [class.minimizedShelf]="isShelfMinimized"
+      [cards]="whiteboard.shelfCards"
+      [(isMinimized)]="isShelfMinimized"
+    ></campus-shelf>
   </div>
   <campus-empty-state
     class="whiteboard__empty"
@@ -116,18 +143,4 @@
       true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard__addbutton"
-    (tap)="btnPlusClicked()"
-  >
-    <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
-  </button>
-  <campus-shelf
-    (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
-    [class.minimizedShelf]="isShelfMinimized"
-    [cards]="whiteboard.shelfCards"
-    [(isMinimized)]="isShelfMinimized"
-  ></campus-shelf>
 </div>

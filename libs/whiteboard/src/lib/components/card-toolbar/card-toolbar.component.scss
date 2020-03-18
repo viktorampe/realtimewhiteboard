@@ -79,11 +79,11 @@ $tool-bg-green-active: linear-gradient(
   }
 
   &__delete {
-    background: none;
+    background: $tool-white;
     box-shadow: $delete-shadow, $tool-shadow;
 
     &:active {
-      background: none;
+      background: $tool-white;
       box-shadow: $delete-shadow, box-shadow-active-inset($workspace-background),
         $tool-shadow-active;
     }
