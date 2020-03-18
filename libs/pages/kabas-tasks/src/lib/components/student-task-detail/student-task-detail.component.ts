@@ -11,7 +11,7 @@ import {
   SectionModeEnum
 } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { StudentTaskContentInterface } from '../../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
@@ -66,7 +66,7 @@ export class StudentTaskDetailComponent {
         });
         return task;
       }),
-      share()
+      shareReplay(1)
     );
     this.requiredTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => content.required))
