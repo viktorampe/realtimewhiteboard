@@ -144,7 +144,7 @@ function toStudentTaskContent(
   resultByEduContentId: Dictionary<Result>
 ): StudentTaskContentInterface[] {
   return taskEduContents.map(taskEduContent => {
-    const eduContent = taskEduContent.eduContent as EduContent;
+    const eduContent = EduContent.toEduContent(taskEduContent.eduContent);
     const result =
       resultByEduContentId[taskEduContent.eduContentId] ||
       ({} as Partial<ResultInterface>);
@@ -168,7 +168,8 @@ function toStudentTaskContent(
       lastUpdated,
       score,
       eduContentId,
-      actions
+      actions,
+      eduContent
     };
   });
 }

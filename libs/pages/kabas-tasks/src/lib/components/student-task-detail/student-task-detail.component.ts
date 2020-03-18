@@ -1,5 +1,10 @@
-import { Component, HostBinding } from '@angular/core';
-import { ContentActionInterface } from '@campus/shared';
+import { Component, HostBinding, Inject } from '@angular/core';
+import {
+  ContentActionInterface,
+  ContentOpenActionsServiceInterface,
+  ContentOpenActionsStudentService,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN
+} from '@campus/shared';
 import {
   getHumanDateTimeRules,
   HumanDateTimeArgsInterface,
@@ -7,7 +12,7 @@ import {
   SectionModeEnum
 } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { StudentTaskContentInterface } from '../../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
@@ -17,14 +22,14 @@ import { StudentTasksViewModel } from '../student-tasks.viewmodel';
   templateUrl: './student-task-detail.component.html',
   styleUrls: ['./student-task-detail.component.scss'],
   providers: [
-    // { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel }
+    {
+      provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentOpenActionsStudentService
+    }
   ]
 })
 export class StudentTaskDetailComponent {
   sectionModes = SectionModeEnum;
-
-  @HostBinding('class.student-task-detail')
-  studentTaskDetailClass = true;
 
   public task$: Observable<StudentTaskWithContentInterface>;
   public requiredTaskContents$: Observable<StudentTaskContentInterface[]>;
@@ -41,11 +46,33 @@ export class StudentTaskDetailComponent {
     datePrefix: 'op'
   };
 
-  constructor(private viewModel: StudentTasksViewModel) {
-    this.task$ = this.viewModel.currentTask$;
+  @HostBinding('class.student-task-detail')
+  studentTaskDetailClass = true;
+
+  constructor(
+    private viewModel: StudentTasksViewModel,
+    @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
+    private contentOpenActionsService: ContentOpenActionsServiceInterface
+  ) {
+    this.task$ = this.viewModel.currentTask$.pipe(
+      map(task => ({
+        ...task,
+        contents: task.contents.map(content => ({
+          ...content,
+          actions: this.contentOpenActionsService.getActionsForTaskInstanceEduContent(
+            content.eduContent,
+            content,
+            task
+          )
+        }))
+      })),
+      shareReplay(1)
+    );
+
     this.requiredTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => content.required))
     );
+
     this.optionalTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => !content.required))
     );
@@ -55,7 +82,6 @@ export class StudentTaskDetailComponent {
     action: ContentActionInterface,
     taskEduContent: StudentTaskContentInterface
   ) {
-    // TODO we need eduContent here...
-    // action.handler(eduContent);
+    action.handler(taskEduContent.eduContent);
   }
 }

@@ -1,4 +1,4 @@
-import { ResultStatus } from '@campus/dal';
+import { EduContentFixture, ResultStatus } from '@campus/dal';
 import { StudentTaskContentInterface } from './StudentTaskContent.interface';
 
 export class StudentTaskContentFixture implements StudentTaskContentInterface {
@@ -10,6 +10,7 @@ export class StudentTaskContentFixture implements StudentTaskContentInterface {
   lastUpdated = new Date(Date.now() - 1 * 24 * 3600 * 1000);
   score = 0;
   eduContentId = 1;
+  eduContent = new EduContentFixture();
   actions = [];
 
   constructor(props: Partial<StudentTaskContentInterface> = {}) {
