@@ -77,6 +77,10 @@ const routes: Routes = [
         path: ':id',
         resolve: { isResolved: StudentTaskDetailResolver },
         runGuardsAndResolvers: 'always',
+        data: {
+          selector: TaskQueries.getById,
+          displayProperty: 'name'
+        },
         canActivate: [ValidTaskInstanceGuard],
         children: [{ path: '', component: StudentTaskDetailComponent }]
       }
