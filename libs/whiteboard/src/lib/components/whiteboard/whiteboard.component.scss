@@ -1,5 +1,11 @@
-$defaultColor: #008ecf;
+$zoom-background: #e0e5ec;
+
 $shadow-color-dark: #a3b1c6;
+$shadow-color-light: #ffffff;
+
+$gradient-angle: 135deg;
+
+$defaultColor: #d9328a;
 $L1: #d9328a;
 $L2: #00b3c4;
 $L3: #afcb27;
@@ -78,6 +84,7 @@ $L6: #e40521;
 
     &__actions {
       position: absolute;
+      display: flex;
       top: 24px;
       right: 24px;
       z-index: 3;
@@ -110,6 +117,38 @@ $L6: #e40521;
 
         mat-icon {
           color: rgba(0, 0, 0, 0.57);
+        }
+      }
+
+      &__zoom {
+        margin-left: 24px;
+        display: flex;
+        align-items: center;
+        background-color: $zoom-background;
+        border-radius: 12px;
+        box-shadow: 3px 3px 16px -1px rgba($defaultColor, 0.3),
+          9px 9px 16px $shadow-color-dark,
+          -1px -1px 6px -3px rgba($defaultColor, 0.2),
+          -9px -9px 16px $shadow-color-light;
+        background: linear-gradient(
+          $gradient-angle,
+          lighten($zoom-background, 5%),
+          darken($zoom-background, 5%)
+        );
+
+        &__separator {
+          width: 1px;
+          align-self: stretch;
+          margin: 8px 0;
+          box-shadow: -1px 0px 1px $shadow-color-dark,
+            1px 0px 1px $shadow-color-light;
+        }
+
+        &__button {
+          color: rgba(0, 0, 0, 0.54);
+          padding: 6px;
+          height: 36px;
+          width: 36px;
         }
       }
     }
