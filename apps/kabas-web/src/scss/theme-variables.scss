@@ -213,8 +213,8 @@ $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
 // search filters,
-$filters-active-background-color: $color-gray-2 !default;
-$filters-hover-background-color: #f5f5f5 !default; // material button hover default
+$filters-hover-background-color: inherit;
+$filters-active-background-color: inherit;
 
 $search-filter-height: 50px;
 $ui-form-field-height: 50px;
@@ -275,7 +275,7 @@ $pages-practice-book-lessons__filters-padding-left: $kabas-page-horizontal-paddi
 $pages-practice-book-lessons__filters-border-color: $secondary-bg-color;
 $pages-practice-book-lessons__filters-box-shadow-color: $color-gray-5;
 
-//manage kabas tasks overview filters
+// manage kabas tasks > overview filters
 $manage-kabas-tasks-overview_filterbar-margin-top: 15px;
 $manage-kabas-tasks-overview_filterbar-margin-left: 45px;
 $manage-kabas-tasks-overview_filterbar-filter-width: 150px;
@@ -287,9 +287,11 @@ $manage-kabas-tasks-overview__filters-margin-bottom: 10px;
 $pages-kabas-tasks-filters-hover-foreground-color: $color-black-1;
 $manage-kabas-tasks-overview_filterbar-archive-toggle: $color-gray-4;
 $manage-kabas-tasks-overview_filterbar-border-bottom: $color-gray-1;
-
-$filters-hover-background-color: inherit;
-$filters-active-background-color: inherit;
+// manage kabas tasks > list item
+$pages-manage-kabas-tasks__task-list-item__status-color: $color-lila-1;
+$pages-manage-kabas-tasks__task-list-item__archived-color: $color-green-1;
+$pages-manage-kabas-tasks__task-edu-content-list-item__border-color: $color-gray-2;
+$pages-manage-kabas-tasks__task-edu-content-list-item-icon-color: $primary-color-accent !default;
 
 // search > results list
 $search-results-list__info-height: auto;
@@ -338,6 +340,10 @@ $pages-kabas-tasks-border-color--primary: $color-gray-2;
 $pages-kabas-tasks-text-color--secondary: $primary-font-color-2;
 $pages-kabas-tasks-background-color--secondary: $secondary-bg-color;
 $pages-kabas-tasks_filter--hover-background-color: $color-gray-7;
+// kabas-tasks > list item
+$pages-kabas-tasks__student-task-content-list-item__status-icon-color--completed: $color-green-1;
+$pages-kabas-tasks__student-task-content-list-item__status-icon-color--opened: $color-orange-1;
+$pages-kabas-tasks__student-task-content-list-item__status-icon-color--incomplete: $color-red-1;
 
 // practice
 $pages-practice-text-color--primary: $primary-font-color;
@@ -368,10 +374,3 @@ $pages-settings_form__title-margin-bottom: 32px;
 $pages-settings-profile__form-box-shadow: $pages-settings_container-box-shadow;
 $pages-settings-profile__form-color: $color-gray-4;
 $pages-settings-profile__form-width: 500px;
-
-// tasks
-$pages-manage-kabas-tasks__task-list-item__status-color: $color-lila-1;
-$pages-manage-kabas-tasks__task-list-item__archived-color: $color-green-1;
-
-$pages-manage-kabas-tasks__task-edu-content-list-item__border-color: $color-gray-2;
-$pages-manage-kabas-tasks__task-edu-content-list-item-icon-color: $primary-color-accent !default;
