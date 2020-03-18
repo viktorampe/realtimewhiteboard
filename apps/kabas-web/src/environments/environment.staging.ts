@@ -11,7 +11,7 @@ export const environment = {
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'https://teacher.staging.lk2020.be/logout'
+    url: 'https://teacher.staging.lk2020.be/login'
   },
   login: {
     url: 'https://teacher.staging.lk2020.be/login',
