@@ -37,7 +37,7 @@ export class TaskActionsTeacherService
       handler: this.taskOpener.unarchiveTask.bind(this.taskOpener)
     },
     openResultsForTask: {
-      label: 'Resulaten',
+      label: 'Resultaten',
       icon: '',
       tooltip: 'Toon de resultaten voor de taak',
       handler: this.taskOpener.openResultsForTask.bind(this.taskOpener)

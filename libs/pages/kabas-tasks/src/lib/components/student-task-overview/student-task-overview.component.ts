@@ -1,6 +1,7 @@
 import { Component, HostBinding, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  TaskActionInterface,
   TaskActionsStudentServiceInterface,
   TASK_ACTIONS_STUDENT_SERVICE_TOKEN
 } from '@campus/shared';
@@ -69,7 +70,7 @@ export class StudentTaskOverviewComponent implements OnInit {
     this.setupStreams();
   }
 
-  scrollTo(target: number) {
+  public scrollTo(target: number) {
     document.getElementById('' + target).scrollIntoView({
       block: 'start',
       inline: 'nearest',
@@ -77,8 +78,15 @@ export class StudentTaskOverviewComponent implements OnInit {
     });
   }
 
-  emptyStateClick(url: string) {
+  public emptyStateClick(url: string) {
     this.router.navigate([url]);
+  }
+
+  public handleAction(
+    action: TaskActionInterface,
+    studentTask: StudentTaskInterface
+  ) {
+    action.handler(studentTask.task);
   }
 
   private setupStreams() {
@@ -295,11 +303,14 @@ export class StudentTaskOverviewComponent implements OnInit {
   private addActions() {
     return this.viewmodel.studentTasks$.pipe(
       map(studentTasks => {
-        studentTasks.forEach(studentTask => {
-          studentTask.actions = this.taskActionStudentService.getActions();
+        return studentTasks.map(studentTask => {
+          studentTask.actions = this.taskActionStudentService.getActions(
+            studentTask.task
+          );
+          return studentTask;
         });
-        return studentTasks;
-      })
+      }),
+      shareReplay(1)
     );
   }
 }

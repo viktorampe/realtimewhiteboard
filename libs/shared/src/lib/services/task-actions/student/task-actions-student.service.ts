@@ -19,7 +19,7 @@ export class TaskActionsStudentService
     [key: string]: TaskActionInterface;
   } = {
     openTask: {
-      label: 'Bekijken',
+      label: 'Openen',
       icon: 'exercise:open',
       tooltip: 'Open de taak',
       handler: this.taskOpener.openTask.bind(this.taskOpener)
