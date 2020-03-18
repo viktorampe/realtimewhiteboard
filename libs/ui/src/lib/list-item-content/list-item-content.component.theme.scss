@@ -14,6 +14,10 @@ $ui-list-item-content-3-line-height: $ui-list-item-3-line-height !default;
 $ui-list-item-content-2-line-height: $ui-list-item-2-line-height !default;
 $ui-list-item-content-default-height: $ui-list-item-default-height !default;
 
+$ui-list-item-content-separator-height: 24px !default;
+$ui-list-item-content-separator-height--2-line: 32px !default;
+$ui-list-item-content-separator-height--3-line: 48px !default;
+
 @mixin ui-list-item-content() {
   .ui-list-item {
     &__icon {
@@ -86,9 +90,15 @@ $ui-list-item-content-default-height: $ui-list-item-default-height !default;
         content: '';
         pointer-events: none;
         border-left: 1px solid $ui-list-item-content-stroke-color;
-        height: 100%;
         margin-left: $ui-list-item-content-spacing--horizontal;
         margin-right: $ui-list-item-content-spacing--horizontal;
+        height: $ui-list-item-content-separator-height;
+      }
+      .ui-list-item-3-line &--separated > *:after {
+        height: $ui-list-item-content-separator-height--3-line;
+      }
+      .ui-list-item-2-line &--seperated > *:after {
+        height: $ui-list-item-content-separator-height--2-line;
       }
     }
   }

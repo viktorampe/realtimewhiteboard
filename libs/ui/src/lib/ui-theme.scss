@@ -16,8 +16,9 @@ $ui-color-base: #000 !default;
 $ui-opacity-high-emphasis: 0.87 !default;
 $ui-opacity-medium-emphasis: 0.54 !default;
 $ui-opacity-low-emphasis: 0.38 !default;
+$ui-opacity-extra-low-emphasis: 0.12 !default;
 
-$ui-stroke-color: rgba($ui-color-base, $ui-opacity-low-emphasis) !default;
+$ui-stroke-color: rgba($ui-color-base, $ui-opacity-extra-low-emphasis) !default;
 $ui-icon-color: rgba($ui-color-base, $ui-opacity-medium-emphasis) !default;
 $ui-icon-color--active: rgba(
   $ui-color-base,
