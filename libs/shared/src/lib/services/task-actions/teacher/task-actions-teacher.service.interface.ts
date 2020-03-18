@@ -4,7 +4,7 @@ import { TaskActionInterface } from '../task-action.interface';
 
 export interface TaskActionsTeacherServiceInterface {
   taskActionDictionary: { [key: string]: TaskActionInterface };
-  getActions(taskInstance: TaskInterface): TaskActionInterface[];
+  getActions(task: TaskInterface): TaskActionInterface[];
 }
 
 export interface TeacherTaskOpenerInterface {

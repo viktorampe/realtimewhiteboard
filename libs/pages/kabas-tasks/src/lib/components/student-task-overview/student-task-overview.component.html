@@ -46,7 +46,6 @@
               *ngFor="let studentTask of section.items"
               class="ui-list-item-3-line"
             >
-              <!-- TODO: add actions -->
               <campus-student-task-list-item
                 [title]="studentTask.name"
                 [description]="studentTask.description"
@@ -56,7 +55,8 @@
                 [totalRequired]="studentTask.count.totalRequired"
                 [urgent]="studentTask.isUrgent"
                 [finished]="studentTask.isFinished"
-                [actions]="[]"
+                [actions]="studentTask.actions"
+                (clickAction)="handleAction($event, studentTask)"
               >
               </campus-student-task-list-item>
             </mat-list-item>

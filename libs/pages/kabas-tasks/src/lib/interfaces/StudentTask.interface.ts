@@ -1,5 +1,7 @@
+import { TaskInterface } from '@campus/dal';
 import { ContentActionInterface } from '@campus/shared';
 export interface StudentTaskInterface {
+  task: TaskInterface;
   name: string;
   description: string;
   learningAreaName: string;
