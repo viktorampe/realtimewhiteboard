@@ -61,7 +61,7 @@ export const studentTasks = createSelector(
         )
         .map(requiredTecs => requiredTecs.eduContent.id);
       const completedRequired = tsInstance.task.results.filter(res =>
-        requiredIds.includes(res.eduContent.id)
+        requiredIds.includes(res.eduContentId)
       );
 
       const result: StudentTaskInterface = {

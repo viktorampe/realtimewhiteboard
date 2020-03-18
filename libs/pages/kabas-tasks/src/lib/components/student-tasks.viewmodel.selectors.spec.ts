@@ -197,8 +197,8 @@ describe('student-tasks viewmodel selectors', () => {
           learningAreaName: 'Frans',
           learningAreaId: 1,
           count: {
-            completedRequired: 2,
-            totalRequired: 2
+            completedRequired: 1,
+            totalRequired: 1
           },
           isFinished: true,
           isUrgent: false,
@@ -212,28 +212,7 @@ describe('student-tasks viewmodel selectors', () => {
         new TaskInstanceFixture({
           start,
           end,
-          task: {
-            ...task,
-            results: [
-              new ResultFixture({
-                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
-              }),
-              new ResultFixture({
-                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
-              })
-            ],
-            taskEduContents: [
-              new TaskEduContentFixture({
-                required: true,
-                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
-              }),
-              new TaskEduContentFixture({
-                required: true,
-                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
-              })
-            ],
-            learningAreaId: 1
-          }
+          task
         })
       ];
       const res = projector(taskInstances);
@@ -250,8 +229,8 @@ describe('student-tasks viewmodel selectors', () => {
           learningAreaName: 'Frans',
           learningAreaId: 1,
           count: {
-            completedRequired: 0,
-            totalRequired: 2
+            completedRequired: 1,
+            totalRequired: 1
           },
           isFinished: true,
           isUrgent: false,
@@ -265,26 +244,13 @@ describe('student-tasks viewmodel selectors', () => {
         new TaskInstanceFixture({
           start,
           end: new Date(2019, 3, 1),
-          task: {
-            ...task,
-            results: [],
-            taskEduContents: [
-              new TaskEduContentFixture({
-                required: true,
-                eduContent: new EduContentFixture({ id: 1, type: 'exercise' })
-              }),
-              new TaskEduContentFixture({
-                required: true,
-                eduContent: new EduContentFixture({ id: 2, type: 'exercise' })
-              })
-            ],
-            learningAreaId: 1
-          }
+          task
         })
       ];
       const res = projector(taskInstances);
       expect(res).toEqual(expected);
     });
+
     describe('dateLabelRules', () => {
       const testCases = [
         {
