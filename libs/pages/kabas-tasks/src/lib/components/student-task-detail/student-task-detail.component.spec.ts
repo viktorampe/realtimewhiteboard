@@ -3,6 +3,7 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ResultStatus } from '@campus/dal';
+import { CONTENT_OPEN_ACTIONS_SERVICE_TOKEN } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -47,6 +48,15 @@ describe('StudentTaskDetailComponent', () => {
         StudentTaskDetailComponent,
         StudentTaskContentListItemComponent
       ]
+    }).overrideComponent(StudentTaskDetailComponent, {
+      set: {
+        providers: [
+          {
+            provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+            useValue: { getActionsForTaskInstanceEduContent: jest.fn() }
+          }
+        ]
+      }
     });
   });
 
