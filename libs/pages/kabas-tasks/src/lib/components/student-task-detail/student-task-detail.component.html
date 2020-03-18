@@ -14,8 +14,8 @@
           <section-actions>
             <campus-progress
               data-cy="task-progress"
-              [total]="task.requiredContentCount"
-              [count]="task.requiredContentFinished"
+              [total]="task.count.totalRequired"
+              [count]="task.count.completedRequired"
               [showPercentage]="true"
               [diameter]="48"
               ><mat-icon completedProgressIcon svgIcon="check"></mat-icon>
@@ -37,6 +37,8 @@
                   [score]="requiredTaskContent.score"
                   [actions]="requiredTaskContent.actions"
                   [isFinished]="task.isFinished"
+                  [isRequired]="true"
+                  (clickAction)="handleAction($event, requiredTaskContent)"
                 ></campus-student-task-content-list-item>
               </mat-list-item>
             </mat-list>
@@ -69,6 +71,8 @@
                   [score]="optionalTaskContent.score"
                   [actions]="optionalTaskContent.actions"
                   [isFinished]="task.isFinished"
+                  [isRequired]="false"
+                  (clickAction)="handleAction($event, optionalTaskContent)"
                 ></campus-student-task-content-list-item>
               </mat-list-item>
             </mat-list>

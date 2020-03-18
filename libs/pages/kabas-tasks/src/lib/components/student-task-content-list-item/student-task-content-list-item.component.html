@@ -1,1 +1,74 @@
-<p>student-task-content-list-item works!</p>
+<campus-list-item-content [contentRightSeparated]="true">
+  <mat-icon list-item-icon [svgIcon]="fileIcon"></mat-icon>
+
+  <list-item-title (click)="onActionClick(actions[0])">{{
+    title
+  }}</list-item-title>
+  <list-item-caption>{{ description }}</list-item-caption>
+  <list-item-actions
+    *ngIf="actions && status !== resultStatuses.STATUS_COMPLETED"
+    ><campus-button
+      inline
+      campusClickStopPropagation
+      *ngFor="let action of actions"
+      (click)="onActionClick(action)"
+      >{{ action.label }}</campus-button
+    ></list-item-actions
+  >
+
+  <list-item-content
+    *ngIf="
+      isFinished && (isRequired || status === resultStatuses.STATUS_COMPLETED)
+    "
+    class="student-task-content-list-item__score"
+    ><campus-rating [count]="score"></campus-rating
+  ></list-item-content>
+
+  <list-item-content
+    *ngIf="isFinished; else activeTask"
+    class="student-task-content-list-item__last-updated ui-caption"
+  >
+    <ng-container
+      *ngIf="status === resultStatuses.STATUS_COMPLETED; else notCompleted"
+    >
+      <div>ingediend op {{ lastUpdated.toLocaleDateString('nl-BE') }}</div>
+      <mat-icon
+        class="student-task-content-list-item__status-icon--completed"
+        svgIcon="check"
+      ></mat-icon>
+    </ng-container>
+    <ng-template #notCompleted>
+      <ng-container *ngIf="isRequired">
+        <div>niet ingediend</div>
+        <mat-icon
+          class="student-task-content-list-item__status-icon--incomplete"
+          svgIcon="cancel"
+        ></mat-icon>
+      </ng-container>
+    </ng-template>
+  </list-item-content>
+
+  <ng-template #activeTask>
+    <list-item-content
+      *ngIf="status === resultStatuses.STATUS_COMPLETED"
+      class="student-task-content-list-item__last-updated ui-caption"
+    >
+      <div>ingediend op {{ lastUpdated.toLocaleDateString('nl-BE') }}</div>
+      <mat-icon
+        class="student-task-content-list-item__status-icon--completed"
+        svgIcon="check"
+      ></mat-icon>
+    </list-item-content>
+
+    <list-item-content
+      *ngIf="status === resultStatuses.STATUS_OPENED"
+      class="student-task-content-list-item__last-updated ui-caption"
+    >
+      <div>gestart op {{ lastUpdated.toLocaleDateString('nl-BE') }}</div>
+      <mat-icon
+        class="student-task-content-list-item__status-icon--opened"
+        svgIcon="hourglass"
+      ></mat-icon>
+    </list-item-content>
+  </ng-template>
+</campus-list-item-content>
