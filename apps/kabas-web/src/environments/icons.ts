@@ -11,6 +11,7 @@ export const icons = {
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   methods: 'assets/icons/methods.svg', //Temp icon
+  task: 'assets/icons/tasks/assignment.svg',
   tasks: 'assets/icons/tasks/assignment.svg',
   results: 'assets/icons/results.svg', //Temp icon
   differentiate: 'assets/icons/differentiate.svg', //Temp icon
