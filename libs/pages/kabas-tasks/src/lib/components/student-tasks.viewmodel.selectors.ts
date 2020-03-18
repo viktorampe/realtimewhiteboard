@@ -7,7 +7,6 @@ import {
   TaskInstanceInterface,
   TaskInstanceQueries
 } from '@campus/dal';
-import { EduContentTypeEnum } from '@campus/shared';
 import {
   getHumanDateTimeRules,
   HumanDateTimePipe,
@@ -55,13 +54,10 @@ export const studentTasks = createSelector(
     return taskStudentInstances.map(tsInstance => {
       const date = new HumanDateTimePipe();
       const requiredIds = tsInstance.task.taskEduContents
-        .filter(
-          tec =>
-            tec.required && tec.eduContent.type === EduContentTypeEnum.EXERCISE
-        )
-        .map(requiredTecs => requiredTecs.eduContent.id);
-      const completedRequired = tsInstance.task.results.filter(res =>
-        requiredIds.includes(res.eduContentId)
+        .filter(tec => tec.required)
+        .map(requiredTecs => requiredTecs.eduContentId);
+      const completedRequired = tsInstance.task.results.filter(
+        res => requiredIds.includes(res.eduContentId) && isCompleted(res)
       );
 
       const result: StudentTaskInterface = {
@@ -117,9 +113,7 @@ export const studentTaskWithContent = createSelector(
 
     const requiredContent = contents.filter(content => content.required);
     const totalRequired = requiredContent.length;
-    const completedRequired = requiredContent.filter(
-      content => content.status === ResultStatus.STATUS_COMPLETED
-    ).length;
+    const completedRequired = requiredContent.filter(isCompleted).length;
 
     const isFinished = end < new Date();
 
@@ -173,4 +167,13 @@ function toStudentTaskContent(
       eduContent
     };
   });
+}
+
+function isCompleted(result: { status: ResultStatus }) {
+  const completedStatusArray = [
+    ResultStatus.STATUS_COMPLETED,
+    ResultStatus.STATUS_OPENED
+  ];
+
+  return completedStatusArray.includes(result.status);
 }
