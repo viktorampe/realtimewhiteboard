@@ -82,8 +82,12 @@ export class StudentTaskOverviewComponent implements OnInit {
   }
 
   private setupStreams() {
-    const studentTasksWithActions$ = this.addActions();
     // intermediate streams
+    const studentTasksWithActions$ = this.viewmodel.studentTasks$.pipe(
+      map(studentTasks => this.addActions(studentTasks)),
+      shareReplay(1)
+    );
+
     const finishedTasks$ = studentTasksWithActions$.pipe(
       map(studentTasks => studentTasks.filter(sT => sT.isFinished)),
       shareReplay(1)
@@ -292,14 +296,10 @@ export class StudentTaskOverviewComponent implements OnInit {
     return a.localeCompare(b) * order;
   }
 
-  private addActions() {
-    return this.viewmodel.studentTasks$.pipe(
-      map(studentTasks => {
-        studentTasks.forEach(studentTask => {
-          studentTask.actions = this.taskActionStudentService.getActions();
-        });
-        return studentTasks;
-      })
-    );
+  private addActions(studentTasks: StudentTaskInterface[]) {
+    return studentTasks.map(sT => ({
+      ...sT,
+      actions: this.taskActionStudentService.getActions(sT)
+    }));
   }
 }
