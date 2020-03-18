@@ -1,13 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ResultStatus } from '@campus/dal';
-import { TaskActionInterface } from '@campus/shared';
+import { ContentActionInterface } from '@campus/shared';
 
 @Component({
   selector: 'campus-student-task-content-list-item',
   templateUrl: './student-task-content-list-item.component.html',
   styleUrls: ['./student-task-content-list-item.component.scss']
 })
-export class StudentTaskContentListItemComponent implements OnInit {
+export class StudentTaskContentListItemComponent {
+  public resultStatuses = ResultStatus;
+
   @Input() fileIcon: string;
   @Input() title: string;
   @Input() description?: string;
@@ -15,9 +17,15 @@ export class StudentTaskContentListItemComponent implements OnInit {
   @Input() lastUpdated: Date;
   @Input() score: number;
   @Input() status: ResultStatus;
-  @Input() actions: TaskActionInterface[];
+  @Input() actions: ContentActionInterface[];
+  @Input() isRequired: boolean;
 
-  constructor() {}
+  @Output() clickAction = new EventEmitter<ContentActionInterface>();
 
-  ngOnInit() {}
+  public onActionClick(action: ContentActionInterface) {
+    if (!action) {
+      return;
+    }
+    this.clickAction.emit(action);
+  }
 }
