@@ -1,10 +1,8 @@
 import { Component, HostBinding, Inject } from '@angular/core';
-import { EduContent } from '@campus/dal';
 import {
   ContentOpenActionsServiceInterface,
   ContentOpenActionsStudentService,
-  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
-  EduContentTypeEnum
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN
 } from '@campus/shared';
 import {
   getHumanDateTimeRules,
@@ -13,7 +11,7 @@ import {
   SectionModeEnum
 } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { map, share, tap } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 import { StudentTaskContentInterface } from '../../interfaces/StudentTaskContent.interface';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 import { StudentTasksViewModel } from '../student-tasks.viewmodel';
@@ -61,14 +59,13 @@ export class StudentTaskDetailComponent {
       map(task => {
         task.contents.forEach(content => {
           content.actions = this.contentOpenActionsService.getActionsForTaskInstanceEduContent(
-            { type: EduContentTypeEnum.EXERCISE } as EduContent,
+            content.eduContent,
             content,
             task
           );
         });
         return task;
       }),
-      tap(task => console.log(task.contents)),
       share()
     );
     this.requiredTaskContents$ = this.task$.pipe(
