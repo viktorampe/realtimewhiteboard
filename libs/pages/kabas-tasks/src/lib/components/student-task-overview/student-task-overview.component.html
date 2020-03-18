@@ -43,7 +43,6 @@
               section.label
             }}</h1>
             <mat-list-item *ngFor="let studentTask of section.items">
-              <!-- TODO: add actions -->
               <campus-student-task-list-item
                 [title]="studentTask.name"
                 [description]="studentTask.description"
@@ -54,6 +53,7 @@
                 [urgent]="studentTask.isUrgent"
                 [finished]="studentTask.isFinished"
                 [actions]="studentTask.actions"
+                (clickAction)="handleAction($event, studentTask)"
               >
               </campus-student-task-list-item>
             </mat-list-item>

@@ -191,6 +191,7 @@ describe('student-tasks viewmodel selectors', () => {
     it('should return expected values', () => {
       const expected: StudentTaskInterface[] = [
         {
+          task: task,
           name: 'Huiswerk',
           description: 'Super belangrijke herhalingsoefeningen',
           learningAreaName: 'Frans',
@@ -243,6 +244,7 @@ describe('student-tasks viewmodel selectors', () => {
       const endDate = new Date(2019, 3, 1);
       const expected: StudentTaskInterface[] = [
         {
+          task,
           name: 'Huiswerk',
           description: 'Super belangrijke herhalingsoefeningen',
           learningAreaName: 'Frans',
