@@ -2,7 +2,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { StudentTasksViewModel } from './../student-tasks.viewmodel';
 
@@ -196,9 +196,12 @@ export class StudentTaskOverviewComponent implements OnInit {
       this.taskCount$,
       this.showFinishedTasks$
     ]).pipe(
-      filter(([taskCount, showFinishedTasks]) => taskCount === 0),
       map(([taskCount, showFinishedTasks]) => {
-        console.log('here', taskCount, showFinishedTasks);
+        if (taskCount > 0) {
+          // return undefined (hides the CTA)
+          return;
+        }
+
         return showFinishedTasks
           ? {
               title: 'Hier is niets te zien',
