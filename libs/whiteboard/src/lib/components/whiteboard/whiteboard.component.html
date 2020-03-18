@@ -31,6 +31,17 @@
     <div color="primary" class="whiteboard__workspace__actions__settingsbutton">
       <mat-icon [svgIcon]="'settings'"></mat-icon>
     </div>
+    <div class="whiteboard__workspace__actions__zoom">
+      <mat-icon
+        class="whiteboard__workspace__actions__zoom__button"
+        [svgIcon]="'remove'"
+      ></mat-icon>
+      <div class="whiteboard__workspace__actions__zoom__separator"></div>
+      <mat-icon
+        class="whiteboard__workspace__actions__zoom__button"
+        [svgIcon]="'plus'"
+      ></mat-icon>
+    </div>
   </div>
   <div
     class="whiteboard__workspace"
@@ -38,17 +49,6 @@
     (longpress)="createCard($event)"
     #workspace
   >
-    <div class="whiteboard__workspace__zoom">
-      <mat-icon
-        class="whiteboard__workspace__zoom__button"
-        [svgIcon]="'remove'"
-      ></mat-icon>
-      <div class="whiteboard__workspace__zoom__separator"></div>
-      <mat-icon
-        class="whiteboard__workspace__zoom__button"
-        [svgIcon]="'plus'"
-      ></mat-icon>
-    </div>
     <div
       @showHideCard
       class="whiteboard__workspace__container"
