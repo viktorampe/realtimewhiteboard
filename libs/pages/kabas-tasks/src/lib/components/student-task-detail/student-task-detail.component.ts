@@ -32,9 +32,6 @@ import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 export class StudentTaskDetailComponent {
   sectionModes = SectionModeEnum;
 
-  @HostBinding('class.student-task-detail')
-  studentTaskDetailClass = true;
-
   public task$: Observable<StudentTaskWithContentInterface>;
   public requiredTaskContents$: Observable<StudentTaskContentInterface[]>;
   public optionalTaskContents$: Observable<StudentTaskContentInterface[]>;
@@ -50,24 +47,31 @@ export class StudentTaskDetailComponent {
     datePrefix: 'op'
   };
 
+  @HostBinding('class.student-task-detail')
+  studentTaskDetailClass = true;
+
   constructor(
     private viewModel: StudentTasksViewModel,
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
     private contentOpenActionsService: ContentOpenActionsServiceInterface
   ) {
     this.task$ = this.viewModel.currentTask$.pipe(
-      map(task => {
-        task.contents.forEach(content => {
-          content.actions = this.contentOpenActionsService.getActionsForTaskInstanceEduContent(
-            content.eduContent,
-            content,
-            task
-          );
-        });
-        return task;
-      }),
-      shareReplay(1)
+      map(
+        task => ({
+          ...task,
+          contents: task.contents.map(content => ({
+            ...content,
+            actions: this.contentOpenActionsService.getActionsForTaskInstanceEduContent(
+              content.eduContent,
+              content,
+              task
+            )
+          }))
+        }),
+        shareReplay(1)
+      )
     );
+
     this.requiredTaskContents$ = this.task$.pipe(
       map(task => task.contents.filter(content => content.required))
     );
