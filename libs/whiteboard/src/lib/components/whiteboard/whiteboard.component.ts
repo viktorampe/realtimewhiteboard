@@ -194,9 +194,9 @@ export class WhiteboardComponent implements OnChanges {
     // update card
     Object.assign(card, updates);
     // sync shelfcard
-    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
+    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.find(
       shelfcard => shelfcard.id === card.id
-    )[0];
+    );
     if (shelfCard) {
       Object.assign(shelfCard, updates, { mode: ModeEnum.SHELF });
     }
@@ -241,11 +241,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addCardToShelf(card: CardInterface) {
-    if (
-      !this.whiteboard$.value.shelfCards
-        .map(shelfcard => shelfcard.id)
-        .includes(card.id)
-    ) {
+    if (!this.whiteboard$.value.shelfCards.find(sc => sc.id === card.id)) {
       this.updateCard({ mode: ModeEnum.SHELF }, card);
       this.updateWhiteboardSubject({
         shelfCards: [...this.whiteboard$.value.shelfCards, card]
