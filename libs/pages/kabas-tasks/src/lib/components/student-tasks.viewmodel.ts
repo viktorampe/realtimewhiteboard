@@ -96,8 +96,8 @@ export class StudentTasksViewModel
     );
   }
 
-  openTask(taskInstanceId: number) {
-    this.router.navigate(['tasks', taskInstanceId]);
+  openTask(prop: { taskInstanceId: number }) {
+    this.router.navigate(['tasks', prop.taskInstanceId]);
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
