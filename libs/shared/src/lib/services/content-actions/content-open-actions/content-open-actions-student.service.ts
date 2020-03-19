@@ -1,5 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
-import { EduContent } from '@campus/dal';
+import {
+  EduContent,
+  ResultInterface,
+  ResultStatus,
+  TaskInstanceInterface
+} from '@campus/dal';
 import { EduContentTypeEnum } from '../../../enums';
 import { ContentActionInterface } from '../content-action.interface';
 import {
@@ -23,6 +28,14 @@ export class ContentOpenActionsStudentService
   } = {
     openEduContentAsExercise: {
       label: 'Openen',
+      icon: 'exercise:open',
+      tooltip: 'Open oefening',
+      handler: this.contentOpener.openEduContentAsExercise.bind(
+        this.contentOpener
+      )
+    },
+    continueEduContentAsExercise: {
+      label: 'Verder werken',
       icon: 'exercise:open',
       tooltip: 'Open oefening',
       handler: this.contentOpener.openEduContentAsExercise.bind(
@@ -69,6 +82,26 @@ export class ContentOpenActionsStudentService
    * @memberof ContentOpenActionsStudentService
    */
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[] {
+    return this.getEduContentActions(eduContent);
+  }
+
+  getActionsForTaskInstanceEduContent(
+    eduContent: EduContent,
+    result: Pick<ResultInterface, 'status'>,
+    taskInstance: Pick<TaskInstanceInterface, 'end'>
+  ): ContentActionInterface[] {
+    if (eduContent.type === EduContentTypeEnum.EXERCISE) {
+      if (taskInstance.end < new Date()) {
+        return [this.contentActionDictionary.openEduContentAsSolution];
+      } else if (result && result.status === ResultStatus.STATUS_COMPLETED) {
+        return [];
+      } else if (result && result.status === ResultStatus.STATUS_INCOMPLETE) {
+        return [this.contentActionDictionary.continueEduContentAsExercise];
+      }
+
+      return [this.contentActionDictionary.openEduContentAsExercise];
+    }
+
     return this.getEduContentActions(eduContent);
   }
 

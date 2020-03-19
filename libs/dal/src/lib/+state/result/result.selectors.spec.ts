@@ -212,6 +212,23 @@ describe('Result Selectors', () => {
       });
     });
   });
+
+  describe('getResultsByTask', () => {
+    const projector = ResultQueries.getResultsByTask.projector;
+
+    it('should group the results by taskId', () => {
+      // note: the mockdata includes results without taskId
+      const mockResults = getMockTaskResults();
+
+      const result = projector(mockResults);
+
+      const expected = {
+        1: [mockResults[0], mockResults[1], mockResults[3]],
+        2: [mockResults[2]]
+      };
+      expect(result).toEqual(expected);
+    });
+  });
 });
 
 function getMockTaskResults(): ResultInterface[] {

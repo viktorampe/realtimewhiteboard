@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
@@ -15,7 +16,11 @@ import {
   MatSlideToggleChange
 } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import {
+  AssigneeTypesEnum,
+  LearningAreaInterface,
+  TaskWithAssigneesInterface
+} from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
   DateFilterComponent,
@@ -26,24 +31,27 @@ import {
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
+import {
+  TaskActionInterface,
+  TaskActionsTeacherServiceInterface,
+  TASK_ACTIONS_TEACHER_SERVICE_TOKEN
+} from '@campus/shared';
 import { ConfirmationModalComponent } from '@campus/ui';
 import {
   DateFunctions,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, shareReplay, take } from 'rxjs/operators';
-import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { Source } from '../../interfaces/Source.type';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 export interface FilterStateInterface {
   searchTerm?: string;
   learningArea?: number[];
   dateInterval?: { gte?: Date; lte?: Date };
-  assignee?: { id: number; type: AssigneeTypesEnum }[];
+  assignee?: { id: number; type: AssigneeTypesEnum; relationId: number }[];
   status?: string[];
   isArchived?: boolean;
 }
@@ -61,7 +69,10 @@ export enum TaskSortEnum {
   styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ManageKabasTasksOverviewComponent implements OnInit {
+export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
+  public showDigitalFilters = false;
+  public showPaperFilters = false;
+  public title = 'Digitale taken beheren';
   public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
@@ -81,8 +92,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         type: RadioOptionValueType.FilterCriteriaValue,
         contents: {
           data: {
-            gte: new Date(new Date().getFullYear(), 8, 1),
-            lte: new Date(new Date().getFullYear() + 1, 5, 30)
+            gte: DateFunctions.getSchoolYearBoundaries(new Date()).start,
+            lte: DateFunctions.getSchoolYearBoundaries(new Date()).end
           }
         }
       }
@@ -136,7 +147,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     DateFilterComponent
   >;
 
-  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
+  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.STARTDATE);
+  private subscriptions = new Subscription();
 
   @ViewChild('digitalSorting', { static: true })
   private digitalSorting: MatSelect;
@@ -147,8 +159,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    @Inject(TASK_ACTIONS_TEACHER_SERVICE_TOKEN)
+    private taskActionsService: TaskActionsTeacherServiceInterface
   ) {}
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
@@ -159,13 +177,24 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       shareReplay(1)
     );
 
+    this.subscriptions.add(
+      this.currentTab$.subscribe(currentTab => {
+        this.title = `${
+          currentTab === 0 ? 'Digitale' : 'Papieren'
+        } taken beheren`;
+      })
+    );
+
     this.tasksWithAssignments$ = combineLatest([
       this.digitalFilteredTasks$,
       this.currentSortMode$
     ]).pipe(
       map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
       map(tasks =>
-        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+        tasks.map(task => ({
+          ...task,
+          actions: this.taskActionsService.getActions(task)
+        }))
       )
     );
 
@@ -175,7 +204,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     ]).pipe(
       map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
       map(tasks =>
-        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+        tasks.map(task => ({
+          ...task,
+          actions: this.taskActionsService.getActions(task)
+        }))
       )
     );
 
@@ -214,21 +246,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             status: 'pending',
-            icon: 'filter:pending'
+            icon: 'task:pending'
           },
           visible: true
         },
         {
           data: {
             status: 'active',
-            icon: 'filter:active'
+            icon: 'task:active'
           },
           visible: true
         },
         {
           data: {
             status: 'finished',
-            icon: 'filter:finished'
+            icon: 'task:finished'
           },
           visible: true
         }
@@ -243,13 +275,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         assigns.push({
           type: ass.type,
           id: ass.id,
+          relationId: ass.relationId,
           label: ass.label
         });
       });
     });
     const identifiers = [];
     const values = assigns.reduce((acc, assignee) => {
-      const identifier = `${assignee.type}-${assignee.id}`;
+      const identifier = `${assignee.type}-${assignee.relationId}`;
       if (identifiers.includes(identifier)) {
         return acc;
       }
@@ -259,7 +292,11 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             label: assignee.label,
-            identifier: { type: assignee.type, id: assignee.id }
+            identifier: {
+              type: assignee.type,
+              id: assignee.id,
+              relationId: assignee.relationId
+            }
           },
           visible: true
         } as SearchFilterCriteriaValuesInterface
@@ -313,22 +350,11 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } as SearchFilterCriteriaInterface;
   }
 
-  private getActions(
+  handleTaskAction(
+    action: TaskActionInterface,
     task: TaskWithAssigneesInterface
-  ): { label: string; handler: Function }[] {
-    return [
-      {
-        label: 'Bekijken',
-        handler: () => this.router.navigate(['tasks', 'manage', task.id])
-      },
-      {
-        label: task && task.archivedYear ? 'Dearchiveren' : 'Archiveren',
-        handler: () =>
-          this.viewModel.startArchivingTasks([task], !task.archivedYear)
-      },
-      { label: 'Resultaten', handler: () => console.log('resultaten') },
-      { label: 'Doelenmatrix', handler: () => console.log('doelenmatrix') }
-    ];
+  ): void {
+    action.handler(task);
   }
 
   clickAddDigitalTask() {
@@ -373,12 +399,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickNewTask() {
-    const { tab: currentTab } = this.route.snapshot.queryParams;
-    if (!currentTab || +currentTab === 0) {
-      this.navigateToNew('digital');
-    } else {
-      this.navigateToNew('paper');
-    }
+    this.currentTab$.pipe(take(1)).subscribe(currentTab => {
+      if (!currentTab || +currentTab === 0) {
+        this.navigateToNew('digital');
+      } else {
+        this.navigateToNew('paper');
+      }
+    });
   }
 
   private navigateToNew(type: Source = 'digital') {
@@ -387,9 +414,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     });
   }
 
-  clickResetFilters(mode?: string) {
+  clickResetFilters(mode?: Source) {
     // visually clear selections
-    this.clearFilters();
+    this.clearFilters(mode);
   }
 
   clickToggleFavorite(task: TaskWithAssigneesInterface) {
@@ -418,7 +445,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     const filterValues: FilterStateInterface = { isArchived: data.checked };
 
     // when archived is active, the status filter should be reset and disabled
-    this.clearButtonToggleFilters();
+    this.buttonToggleFilters.forEach(bTF => bTF.reset(false));
     this.isArchivedFilterActive = data.checked;
 
     if (type === 'digital') this.updateDigitalFilterState(filterValues);
@@ -449,6 +476,24 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.currentSortMode$.next(sortMode);
   }
 
+  public toggleFilters() {
+    this.currentTab$.pipe(take(1)).subscribe(currentTab => {
+      if (!currentTab || +currentTab === 0) {
+        this.toggleDigitalFilters();
+      } else {
+        this.togglePaperFilters();
+      }
+    });
+  }
+  private toggleDigitalFilters() {
+    this.showPaperFilters = false;
+    this.showDigitalFilters = !this.showDigitalFilters;
+  }
+  private togglePaperFilters() {
+    this.showDigitalFilters = false;
+    this.showPaperFilters = !this.showPaperFilters;
+  }
+
   private mapSearchFilterCriteriaToFilterState(
     filterCriteria: SearchFilterCriteriaInterface[],
     filterName: string
@@ -470,10 +515,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } else if (filterName === 'assignee') {
       updatedFilter[filterName] = criterium.values
         .filter(value => value.selected)
-        .map(selectedValue => ({
-          id: selectedValue.data.identifier.id,
-          type: selectedValue.data.identifier.type
-        }));
+        .map(selectedValue => selectedValue.data.identifier);
     } else if (filterName === 'status') {
       updatedFilter[filterName] = criterium.values
         .filter(value => value.selected)
@@ -552,128 +594,109 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     filterState: FilterStateInterface,
     tasks: TaskWithAssigneesInterface[]
   ): TaskWithAssigneesInterface[] {
-    if (tasks.length === 0) return [];
-
-    let filteredTasks = [...tasks];
-
-    // apply filters ...
-
-    // filter on learning areas
-    if (filterState.learningArea && filterState.learningArea.length) {
-      filteredTasks = this.filterOnLearningAreas(
-        filterState.learningArea,
-        filteredTasks
-      );
-    }
-
-    // filter on search term
-    if (filterState.searchTerm) {
-      filteredTasks = this.filterOnTerm(filterState.searchTerm, filteredTasks);
-    }
-
-    // filter on status
-    if (filterState.status && filterState.status.length) {
-      filteredTasks = this.filterOnStatus(filterState.status, filteredTasks);
-    }
-
-    // filter on assignees
-    if (filterState.assignee && filterState.assignee.length) {
-      filteredTasks = this.filterOnAssignees(
-        filterState.assignee,
-        filteredTasks
-      );
-    }
-
-    // filter on date interval
-    if (filterState.dateInterval) {
-      filteredTasks = this.filterOnDateInterval(
-        filterState.dateInterval.gte,
-        filterState.dateInterval.lte,
-        filteredTasks
-      );
-    }
-
-    // filter on archived
-    filteredTasks = this.filterOnArchived(
-      filteredTasks,
-      !!filterState.isArchived
+    const filteredTasks = [...tasks].filter(
+      task =>
+        this.filterOnArchived(filterState, task) &&
+        this.filterOnStatus(filterState, task) &&
+        this.filterOnLearningArea(filterState, task) &&
+        this.filterOnDateInterval(filterState, task) &&
+        this.filterOnAssignees(filterState, task) &&
+        this.filterOnTerm(filterState, task)
     );
 
     return filteredTasks;
   }
 
-  private filterOnLearningAreas(
-    learningAreas: number[],
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return tasks.filter(task => {
-      return learningAreas.includes(task.learningAreaId);
-    });
+  private filterOnLearningArea(
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return (
+      !filterState.learningArea ||
+      !filterState.learningArea.length ||
+      filterState.learningArea.includes(task.learningAreaId)
+    );
   }
 
   private filterOnTerm(
-    term: string,
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return this.filterService.filter(tasks, {
-      name: term
-    });
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return (
+      !filterState.searchTerm ||
+      this.filterService.matchFilters(task, {
+        name: filterState.searchTerm
+      })
+    );
   }
 
   private filterOnStatus(
-    status: string[],
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return tasks.filter(task => status.includes(task.status));
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return (
+      !filterState.status ||
+      !filterState.status.length ||
+      filterState.status.includes(task.status)
+    );
   }
 
   private filterOnAssignees(
-    assignees: { id: number; type: AssigneeTypesEnum }[],
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    const assigneeIdsByTypeMap = assignees.reduce((acc, cur) => {
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    if (!filterState.assignee || !filterState.assignee.length) {
+      return true;
+    }
+
+    if (!task.assignees || !task.assignees.length) {
+      return false;
+    }
+
+    const assigneeIdsByTypeMap = task.assignees.reduce((acc, cur) => {
       if (!acc[cur.type]) acc[cur.type] = [];
-      acc[cur.type].push(cur.id);
+      acc[cur.type].push(cur.relationId);
 
       return acc;
     }, {});
 
-    return tasks.filter(task =>
-      task.assignees.some(
-        taskAssignee =>
-          assigneeIdsByTypeMap[taskAssignee.type] &&
-          assigneeIdsByTypeMap[taskAssignee.type].includes(taskAssignee.id)
-      )
+    return filterState.assignee.some(
+      assignee =>
+        assigneeIdsByTypeMap[assignee.type] &&
+        assigneeIdsByTypeMap[assignee.type].includes(assignee.relationId)
     );
   }
 
   private filterOnDateInterval(
-    gte: Date,
-    lte: Date,
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return tasks.filter(task => {
-      if (gte && lte) {
-        return task.startDate <= lte && task.endDate >= gte;
-      }
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    if (!filterState.dateInterval) {
+      return true;
+    }
 
-      if (gte) {
-        return task.endDate >= gte;
-      }
+    const { lte, gte } = filterState.dateInterval;
 
-      if (lte) {
-        return task.startDate <= lte;
-      }
-    });
+    if (gte && lte) {
+      return task.startDate <= lte && task.endDate >= gte;
+    }
+
+    if (gte) {
+      return task.endDate >= gte;
+    }
+
+    if (lte) {
+      return task.startDate <= lte;
+    }
+
+    return true;
   }
 
   private filterOnArchived(
-    tasks: TaskWithAssigneesInterface[],
-    archived?: boolean
-  ): TaskWithAssigneesInterface[] {
-    return archived
-      ? tasks.filter(task => !!task.archivedYear)
-      : tasks.filter(task => !task.archivedYear);
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return !!task.archivedYear === !!filterState.isArchived;
   }
 
   private getCurrentTab(): Observable<number> {
@@ -696,6 +719,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.clearListSelections();
     this.clearFilters();
     this.resetSorting();
+    this.showPaperFilters = this.showDigitalFilters = false;
   }
 
   /**
@@ -705,34 +729,23 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
    * @private
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private clearFilters(): void {
-    if (this.searchTermFilters)
-      this.searchTermFilters.forEach(searchTermFilter => {
-        searchTermFilter.currentValue = '';
-        searchTermFilter.valueChange.next('');
-      });
-    if (this.selectFilters)
-      this.selectFilters.forEach(selectFilter =>
-        selectFilter.selectControl.reset()
-      );
-    this.clearButtonToggleFilters();
+  private clearFilters(mode?: Source): void {
+    [
+      ...this.searchTermFilters.toArray(),
+      ...this.buttonToggleFilters.toArray(),
+      ...this.selectFilters.toArray(),
+      ...this.dateFilters.toArray()
+    ].forEach(searchFilter => {
+      searchFilter.reset(false);
+    });
+
     if (this.slideToggleFilters)
       this.slideToggleFilters.forEach(slideToggleFilter => {
         slideToggleFilter.checked = false;
-        slideToggleFilter.change.emit({
-          checked: false,
-          source: slideToggleFilter
-        });
       });
-    if (this.dateFilters)
-      this.dateFilters.forEach(dateFilter => dateFilter.reset());
-  }
 
-  private clearButtonToggleFilters(): void {
-    if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(buttonToggleFilter =>
-        buttonToggleFilter.toggleControl.reset()
-      );
+    if (!mode || mode === 'digital') this.digitalFilterState$.next({});
+    if (!mode || mode === 'paper') this.paperFilterState$.next({});
   }
 
   /**
@@ -750,7 +763,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   private resetSorting() {
-    this.setSortMode(TaskSortEnum.NAME);
+    this.setSortMode(TaskSortEnum.STARTDATE);
     this.digitalSorting.value = undefined;
     this.paperSorting.value = undefined;
   }
@@ -767,7 +780,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
       case TaskSortEnum.FAVORITE:
-        return tasks.sort(this.nameComparer).sort(this.favoriteComparer);
+        return tasks.sort(
+          (a, b) => this.favoriteComparer(a, b) || this.nameComparer(a, b)
+        );
     }
     // no sortMode -> no sorting
     return tasks;
@@ -778,34 +793,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const lA = a.learningArea.name.localeCompare(
-        b.learningArea.name,
-        'be-nl',
-        {
-          sensitivity: 'base'
-        }
-      );
-      return (
-        lA ||
-        a.name.localeCompare(b.name, 'be-nl', {
-          sensitivity: 'base'
-        })
-      );
-    });
+    return tasks.sort(
+      (a, b) =>
+        this.nameComparer(a.learningArea, b.learningArea) ||
+        this.nameComparer(a, b)
+    );
   }
 
   private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const taskA = a.startDate;
-      const taskB = b.startDate;
-
-      // undefined dates at the front of the list
-      if (!taskA) return -1;
-      if (!taskB) return 1;
-
-      return taskA.getTime() - taskB.getTime();
-    });
+    return tasks.sort(
+      (a, b) => this.startDateComparer(a, b) || this.nameComparer(a, b)
+    );
   }
 
   private favoriteComparer(a, b): number {
@@ -816,5 +814,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     return a.name.localeCompare(b.name, 'nl-BE', {
       sensitivity: 'base'
     });
+  }
+
+  private startDateComparer(a, b): number {
+    // undefined dates at the front of the list
+    const timeA = (a.startDate && a.startDate.getTime()) || 0;
+    const timeB = (b.startDate && b.startDate.getTime()) || 0;
+
+    return timeA - timeB;
   }
 }

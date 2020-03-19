@@ -55,7 +55,7 @@
       </mat-form-field>
 
       <campus-button
-        campusPrimary
+        bordered
         (click)="submit()"
         [class.ui-button--disabled]="!loginForm.valid"
         >Aanmelden</campus-button
@@ -70,7 +70,8 @@
 
       <ng-container *ngFor="let preset of loginPresets">
         <campus-button
-          campusPrimary
+          class="pages-login__form--presets__preset"
+          bordered
           (click)="login(preset.username, preset.password)"
         >
           {{ preset.label }}

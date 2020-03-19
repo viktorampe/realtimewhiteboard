@@ -6,7 +6,12 @@ import { KabasTasksResolver } from './components/kabas-tasks.resolver';
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
+import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
+import { StudentTaskDetailResolver } from './components/student-task-detail/student-task-detail.resolver';
+import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
+import { StudentTaskOverviewResolver } from './components/student-task-overview/student-task-overview.resolver';
 import { PendingTaskGuard } from './guards/pending-task.guard';
+import { ValidTaskInstanceGuard } from './guards/valid-task-instance.guard';
 
 const routes: Routes = [
   {
@@ -61,8 +66,25 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'manage',
-    pathMatch: 'full'
+    resolve: { isResolved: StudentTaskOverviewResolver },
+    data: {
+      requiredPermissions: 'openTasks'
+    },
+    canActivate: [PermissionGuard],
+    children: [
+      { path: '', component: StudentTaskOverviewComponent },
+      {
+        path: ':id',
+        resolve: { isResolved: StudentTaskDetailResolver },
+        runGuardsAndResolvers: 'always',
+        data: {
+          selector: TaskQueries.getById,
+          displayProperty: 'name'
+        },
+        canActivate: [ValidTaskInstanceGuard],
+        children: [{ path: '', component: StudentTaskDetailComponent }]
+      }
+    ]
   }
 ];
 

@@ -1,48 +1,27 @@
-<!-- <h1 class="mat-h1">Typography test</h1>
-<div class="container">
-  <campus-multi-check-box-table
-    selectAllForColumnEnabled="true"
-    [rowHeaderColumns]="rowHeaderColumns"
-    [itemColumns]="itemColumns"
-    [items]="items"
-    (selectAllForColumnChanged)="log($event)"
-    (checkBoxChanged)="clickCheckBox($event)"
-  ></campus-multi-check-box-table>
-</div>
-
-<div class="container">
-  <campus-method-favorite-tile
-    [name]="'Mol en beer'"
-    [logoUrl]="'molenbeer.svg'"
-    [eduContent]="null"
-    [bookId]="34"
-  >
-  </campus-method-favorite-tile>
-</div> -->
-
-<!-- <campus-editor-timeline></campus-editor-timeline> -->
-<button (click)="changeMode(sectionModes.STATIC)">make section static</button>
-<button (click)="changeMode(sectionModes.EDITABLE)"
-  >make section editable</button
->
-<button (click)="changeMode(sectionModes.EDITING)">make section editing</button>
-
-<campus-section
-  [(mode)]="sectionMode"
-  (actionClick)="handleTriggerActionClick($event)"
->
-  <section-title>I'm a the title of this section</section-title>
-  <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
-  <section-content>
-    Cool text
-    <hr />
-
-    <p *ngIf="sectionMode === sectionModes.STATIC">{{ staticText }}</p>
-    <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
-
-    <div *ngIf="sectionMode === sectionModes.EDITING">
-      <input #input type="text" placeholder="edit me" [value]="editableText" />
-      <p> <button (click)="save($event, input)">Save</button></p>
+<campus-backdrop [title]="backHeaderTitle" [static]="true">
+  <front-layer-header>Subtitle</front-layer-header>
+  <front-layer-content>
+    <div>
+      <campus-rating [total]="5" [count]="3"></campus-rating>
     </div>
-  </section-content>
-</campus-section>
+    <p>
+      <campus-progress
+        [count]="countProgress"
+        [total]="30"
+        [diameter]="50"
+        [showPercentage]="true"
+      >
+        <completed-progress-icon
+          ><mat-icon svgIcon="check"></mat-icon
+        ></completed-progress-icon>
+      </campus-progress>
+    </p>
+    <campus-button
+      bordered
+      flat
+      (click)="clickResetProgress()"
+      [disabled]="countProgress < 30"
+      >reset</campus-button
+    >
+  </front-layer-content>
+</campus-backdrop>

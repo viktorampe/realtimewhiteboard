@@ -1,0 +1,24 @@
+@mixin student-task-list-item-content() {
+  $pages-kabas-tasks__student-task-content-list-item__last-updated-width: 175px !default;
+  $pages-kabas-tasks__student-task-content-list-item__status-icon-color--completed: $pages-kabas-tasks-color--accent !default;
+  $pages-kabas-tasks__student-task-content-list-item__status-icon-color--opened: $pages-kabas-tasks-color--warning !default;
+  $pages-kabas-tasks__student-task-content-list-item__status-icon-color--incomplete: $pages-kabas-tasks-color--danger !default;
+
+  .student-task-content-list-item {
+    &__last-updated {
+      width: $pages-kabas-tasks__student-task-content-list-item__last-updated-width;
+    }
+
+    &__status-icon {
+      &--completed {
+        color: $pages-kabas-tasks__student-task-content-list-item__status-icon-color--completed;
+      }
+      &--opened {
+        color: $pages-kabas-tasks__student-task-content-list-item__status-icon-color--opened;
+      }
+      &--incomplete {
+        color: $pages-kabas-tasks__student-task-content-list-item__status-icon-color--incomplete;
+      }
+    }
+  }
+}

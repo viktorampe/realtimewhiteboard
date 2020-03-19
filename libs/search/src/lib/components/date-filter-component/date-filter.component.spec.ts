@@ -187,6 +187,11 @@ describe('DateFilterComponent', () => {
         it('should set criteria values to an empty array', () => {
           expect(component.criteria.values).toEqual([]);
         });
+
+        it('should clear the custom date range', () => {
+          expect(component.startDate.value).toBe(null);
+          expect(component.endDate.value).toBe(null);
+        });
       });
 
       describe('range option', () => {
@@ -537,6 +542,46 @@ describe('DateFilterComponent', () => {
           'date-filter-component__menu-panel__date-range__day--in-range-single'
         );
       });
+    });
+  });
+
+  describe('reset', () => {
+    it('should clear the selection', () => {
+      component.dateSelection.setValue(expectedOptions[0].value);
+      fixture.detectChanges();
+
+      component.reset();
+
+      expect(component.dateSelection.value).toEqual({});
+    });
+
+    it('should clear criteria values', () => {
+      component.dateSelection.setValue(expectedOptions[0].value);
+      fixture.detectChanges();
+
+      component.reset();
+
+      expect(component.criteria.values).toEqual([]);
+    });
+
+    it('should emit', () => {
+      component.dateSelection.setValue(expectedOptions[0].value);
+      fixture.detectChanges();
+      const emitSpy = (component.filterSelectionChange.emit = jest.fn());
+
+      component.reset();
+
+      expect(emitSpy).toHaveBeenCalledWith([mockCriteria]);
+    });
+
+    it('should not emit', () => {
+      component.dateSelection.setValue(expectedOptions[0].value);
+      fixture.detectChanges();
+      const emitSpy = (component.filterSelectionChange.emit = jest.fn());
+
+      component.reset(false);
+
+      expect(emitSpy).not.toHaveBeenCalled();
     });
   });
 });

@@ -1,5 +1,6 @@
 export const icons = {
   book: 'assets/icons/book.svg',
+  bookshelf: 'assets/icons/material/bookshelf.svg',
   warning: 'assets/icons/material/baseline-warning-24px.svg',
   menu: 'assets/icons/material/menu.svg',
   favorite: 'assets/icons/material/favorite.svg',
@@ -10,7 +11,8 @@ export const icons = {
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   methods: 'assets/icons/methods.svg', //Temp icon
-  tasks: 'assets/icons/tasks.svg', //Temp icon
+  task: 'assets/icons/tasks/assignment.svg',
+  tasks: 'assets/icons/tasks/assignment.svg',
   results: 'assets/icons/results.svg', //Temp icon
   differentiate: 'assets/icons/differentiate.svg', //Temp icon
   'select-all': 'assets/icons/done_all.svg',
@@ -22,9 +24,9 @@ export const icons = {
   notifications: 'assets/icons/alerts.svg',
   settings: 'assets/icons/settings.svg',
   account: 'assets/icons/account-circle.svg',
-  cancel: 'assets/icons/cancel.svg',
+  cancel: 'assets/icons/material/cancel.svg',
   delete: 'assets/icons/material/delete.svg',
-  add: 'assets/icons/material/add-circle-outline.svg',
+  add: 'assets/icons/material/add.svg',
   edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
@@ -34,7 +36,7 @@ export const icons = {
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',
   boardbook: 'assets/icons/boardbook.svg',
-  'reset-filters': 'assets/icons/material/reset.svg',
+  'reset-filters': 'assets/icons/material/filter-remove.svg',
   'general-file': 'assets/icons/general-file.svg',
   method: 'assets/icons/methods.svg',
   'drag-handle': 'assets/icons/drag-handle.svg',
@@ -46,6 +48,7 @@ export const icons = {
   'arrow-back': 'assets/icons/material/arrow-back.svg',
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
+  lock: 'assets/icons/material/lock.svg',
   file: 'assets/icons/general-file.svg',
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
@@ -53,16 +56,14 @@ export const icons = {
   toggle: 'assets/icons/toggle.svg',
   flip: 'assets/icons/material/flip_camera.svg',
   archive: 'assets/icons/archive.svg',
-  'filter:active': 'assets/icons/play_circle_outline-24px.svg',
-  'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',
-  'filter:finished': 'assets/icons/not_interested-24px.svg',
   'task:archived': 'assets/icons/archive.svg',
-  'task:active': 'assets/icons/task-active.svg',
-  'task:pending': 'assets/icons/task-pending.svg',
-  'task:finished': 'assets/icons/task-finished.svg',
-  'task:paper': 'assets/icons/task-paper.svg',
+  'task:active': 'assets/icons/tasks/assignment_started.svg',
+  'task:pending': 'assets/icons/tasks/assignment.svg',
+  'task:finished': 'assets/icons/tasks/assignment_done.svg',
+  'task:paper': 'assets/icons/tasks/assignment_paper.svg',
   photolibrary: 'assets/icons/photo_library.svg',
   print: 'assets/icons/printer.svg',
+  preview: 'assets/icons/material/monitor_eye.svg',
   'edu-content:required': 'assets/icons/star.svg', //TODO placeholder
   'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
@@ -72,6 +73,9 @@ export const icons = {
   'add-photo-alternate': 'assets/icons/material/add_photo_alternate.svg',
   multiselect: 'assets/icons/multiselect.svg',
   'multiselect-selected': 'assets/icons/multiselect-selected.svg',
+  'open-in-new': 'assets/icons/material/open_in_new.svg',
+  'rating-star': 'assets/icons/rating-star.svg',
+  hourglass: 'assets/icons/material/hourglass_empty.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
@@ -88,5 +92,10 @@ export const icons = {
   'educontent-product-type:video': 'assets/icons/general-file.svg',
   'educontent-product-type:presentatie': 'assets/icons/general-file.svg',
   'educontent-product-type:applicatie': 'assets/icons/general-file.svg',
-  'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg'
+  'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg',
+
+  //empty-states
+  'empty-state-all-done': 'assets/empty-states/all-done.svg',
+  'empty-state-no-educontent': 'assets/empty-states/no-educontent.svg',
+  'empty-state-no-users': 'assets/empty-states/no-users.svg'
 };

@@ -1,0 +1,11 @@
+@mixin student-task-detail-theme() {
+  .student-task-detail {
+    front-layer-content {
+      display: flex;
+    }
+
+    .ui-progress {
+      cursor: auto;
+    }
+  }
+}

@@ -1,7 +1,22 @@
 import { groupArrayByKey } from '@campus/utils';
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  EduContent,
+  LearningAreaInterface,
+  PersonInterface,
+  ResultInterface,
+  TaskEduContentInterface,
+  TaskInterface
+} from '../../+models';
 import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
+import { EduContentQueries } from '../edu-content';
+import { LearningAreaQueries } from '../learning-area';
+import { LinkedPersonQueries } from '../linked-person';
+import { ResultQueries } from '../result';
+import { TaskQueries } from '../task';
+import { TaskEduContentQueries } from '../task-edu-content';
 import {
   NAME,
   selectAll,
@@ -99,6 +114,74 @@ export const getActiveTaskIds = createSelector(
         []
       )
     );
+  }
+);
+
+export const getTaskInstanceWithTaskById = createSelector(
+  [
+    getById,
+    TaskQueries.getAllEntities,
+    ResultQueries.getResultsByTask,
+    TaskEduContentQueries.getAllGroupedByTaskId,
+    EduContentQueries.getAllEntities,
+    LearningAreaQueries.getAllEntities,
+    LinkedPersonQueries.getAllEntities
+  ],
+  (
+    taskInstance: TaskInstance,
+    taskDict: Dictionary<TaskInterface>,
+    resultsByTask: Dictionary<ResultInterface[]>,
+    taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
+    eduContentDict: Dictionary<EduContent>,
+    learningAreaDict: Dictionary<LearningAreaInterface>,
+    linkedPersons: Dictionary<PersonInterface>,
+    props: { id: number }
+  ) => {
+    return {
+      ...taskInstance,
+      assigner: linkedPersons[taskInstance.assignerId],
+      task: {
+        ...taskDict[taskInstance.taskId],
+        results: resultsByTask[taskInstance.taskId] || [],
+        taskEduContents: (taskEduContentByTask[taskInstance.taskId] || []).map(
+          tE => ({
+            ...tE,
+            eduContent: eduContentDict[tE.eduContentId]
+          })
+        ),
+        learningArea:
+          learningAreaDict[taskDict[taskInstance.taskId].learningAreaId]
+      }
+    };
+  }
+);
+
+export const getTaskStudentTaskInstances = createSelector(
+  [
+    getAll,
+    TaskQueries.getAllEntities,
+    ResultQueries.getResultsByTask,
+    TaskEduContentQueries.getAllGroupedByTaskId,
+    LearningAreaQueries.getAllEntities
+  ],
+  (
+    taskInstances: TaskInstanceInterface[],
+    tasksById: Dictionary<TaskInterface>,
+    resultsByTaskId: Dictionary<ResultInterface[]>,
+    taskEduContentByTaskId: Dictionary<TaskEduContentInterface[]>,
+    learningAreaById: Dictionary<LearningAreaInterface>
+  ) => {
+    return taskInstances.map(ti => {
+      return {
+        ...ti,
+        task: {
+          ...tasksById[ti.taskId],
+          results: resultsByTaskId[ti.taskId] || [],
+          taskEduContents: taskEduContentByTaskId[ti.taskId] || [],
+          learningArea: learningAreaById[tasksById[ti.taskId].learningAreaId]
+        }
+      };
+    });
   }
 );
 

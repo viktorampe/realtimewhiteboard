@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { DalState, PersonInterface, UserQueries } from '@campus/dal';
 import {
-  EnvironmentUIInterface,
-  ENVIRONMENT_UI_TOKEN,
   NavigationItemServiceInterface,
   NAVIGATION_ITEM_SERVICE_TOKEN
 } from '@campus/shared';
-import { NavItem } from '@campus/ui';
+import {
+  EnvironmentUIInterface,
+  ENVIRONMENT_UI_TOKEN,
+  NavItem
+} from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

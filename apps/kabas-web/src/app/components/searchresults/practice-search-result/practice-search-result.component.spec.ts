@@ -10,8 +10,7 @@ import {
   DiaboloPhaseFixture,
   EduContentFixture,
   EduContentMetadataFixture,
-  MethodLevelFixture,
-  Result
+  MethodLevelFixture
 } from '@campus/dal';
 import {
   ContentActionInterface,
@@ -19,7 +18,13 @@ import {
   EduContentSearchResultInterface
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
+import {
+  FileIconComponent,
+  ListItemActionsDirective,
+  ListItemCaptionDirective,
+  ListItemTitleDirective,
+  UiModule
+} from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { PracticeSearchResultComponent } from './practice-search-result.component';
 
@@ -107,7 +112,7 @@ describe('PracticeSearchResultComponent', () => {
   describe('template', () => {
     it('should set file icon label to the eduContent fileExtension', () => {
       const extensionDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__extension')
+        By.directive(FileIconComponent)
       );
 
       expect(extensionDE.componentInstance.label).toBe(
@@ -117,7 +122,7 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should clear the file icon label if the eduContent is an exercise', () => {
       const extensionDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__extension')
+        By.directive(FileIconComponent)
       );
 
       component.data = {
@@ -142,11 +147,11 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should show the title and description of the eduContent', () => {
       const titleDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__content__header')
+        By.directive(ListItemTitleDirective)
       );
 
       const descriptionDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__content__body__description')
+        By.directive(ListItemCaptionDirective)
       );
 
       expect(titleDE.nativeElement.textContent).toContain(mockEduContent.name);
@@ -158,7 +163,7 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should not show the methodLevel icon', () => {
       const methodLevelDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__content__header__level')
+        By.css('.app-practice-searchresult__method-level__icon')
       );
 
       expect(methodLevelDE).toBeNull();
@@ -172,7 +177,7 @@ describe('PracticeSearchResultComponent', () => {
       fixture.detectChanges();
 
       const methodLevelIconDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__content__header__level .mat-icon')
+        By.css('.app-practice-searchresult__method-level__icon')
       );
 
       expect(methodLevelIconDE.componentInstance.svgIcon).toBe('foo');
@@ -186,38 +191,10 @@ describe('PracticeSearchResultComponent', () => {
       fixture.detectChanges();
 
       const methodLevelDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__content__header__level')
+        By.css('.app-practice-searchresult__method-level')
       );
 
       expect(methodLevelDE.nativeElement.textContent).toContain('bar');
-    });
-
-    it('should show empty stars when no result is available', () => {
-      const starsDE = fixture.debugElement.queryAll(
-        By.css('.app-practice-searchresult__stars__star')
-      );
-
-      expect(starsDE.length).toBe(3);
-      expect(starsDE[0].componentInstance.svgIcon).toBe('star-outline');
-      expect(starsDE[1].componentInstance.svgIcon).toBe('star-outline');
-      expect(starsDE[2].componentInstance.svgIcon).toBe('star-outline');
-    });
-
-    it('should show the stars when a result is available', () => {
-      component.data = {
-        ...component.data,
-        result: { stars: 2 } as Result
-      };
-      fixture.detectChanges();
-
-      const starsDE = fixture.debugElement.queryAll(
-        By.css('.app-practice-searchresult__stars .mat-icon')
-      );
-
-      expect(starsDE.length).toBe(3);
-      expect(starsDE[0].componentInstance.svgIcon).toBe('star');
-      expect(starsDE[1].componentInstance.svgIcon).toBe('star');
-      expect(starsDE[2].componentInstance.svgIcon).toBe('star-outline');
     });
 
     it('should not show the stars when a searchresult is not an exercise', () => {
@@ -232,9 +209,9 @@ describe('PracticeSearchResultComponent', () => {
     });
 
     it('should show the possible actions for the eduContent', () => {
-      const actionDEs = fixture.debugElement.queryAll(
-        By.css('.app-practice-searchresult__content__action')
-      );
+      const actionDEs = fixture.debugElement
+        .query(By.directive(ListItemActionsDirective))
+        .queryAll(By.css('.ui-button--inline'));
 
       expect(actionDEs.length).toBe(mockActions.length);
       actionDEs.forEach((actionDE, index) => {

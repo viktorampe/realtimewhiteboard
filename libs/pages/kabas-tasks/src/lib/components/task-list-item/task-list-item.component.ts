@@ -7,10 +7,8 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { AssigneeInterface, AssigneeTypesEnum } from '@campus/dal';
+import { TaskActionInterface } from '@campus/shared';
 
 export type Status = 'pending' | 'active' | 'finished' | 'paper';
 
@@ -28,6 +26,7 @@ export class TaskListItemComponent implements OnInit {
   private _assignees: AssigneeInterface[];
 
   @Input() title: string;
+  @Input() description: string;
   @Input() learningArea: string;
   @Input() archived: boolean;
   @Input() icon: string;
@@ -36,10 +35,7 @@ export class TaskListItemComponent implements OnInit {
   @Input() endDate: Date;
   @Input() status: Status;
   @Input() isFavorite: boolean;
-  @Input() actions: {
-    label: string;
-    handler: () => any; //prevents warning "Member handler is not callable in template"
-  }[];
+  @Input() actions: TaskActionInterface[];
   @Input()
   set assignees(assignees: AssigneeInterface[]) {
     this._assignees = assignees.sort(this.sortByType);
@@ -58,6 +54,7 @@ export class TaskListItemComponent implements OnInit {
   }
 
   @Output() clickToggleFavorite = new EventEmitter();
+  @Output() clickAction = new EventEmitter<TaskActionInterface>();
 
   @HostBinding('class.manage-kabas-tasks__task-list-item')
   taskListItemClass = true;
@@ -82,5 +79,9 @@ export class TaskListItemComponent implements OnInit {
 
   toggleFavorite() {
     this.clickToggleFavorite.emit();
+  }
+
+  onActionClick(action: TaskActionInterface) {
+    this.clickAction.emit(action);
   }
 }

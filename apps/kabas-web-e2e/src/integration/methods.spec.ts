@@ -52,7 +52,7 @@ describe('Methods', () => {
         .contains(setup.kabasMethodsPages.expected.method.year)
         .click()
         .location('pathname')
-        .should('be', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
+        .should('eq', `/${appPaths.methods}/${setup.kabasMethodsPages.book}`);
     });
   });
 
@@ -92,8 +92,8 @@ describe('Methods', () => {
         .click()
         .location('pathname')
         .should(
-          'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}`
+          'eq',
+          `/${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}`
         );
     });
   });
@@ -119,12 +119,12 @@ describe('Methods', () => {
           setup.kabasMethodsPages.expected.lessons.count +
             setup.kabasMethodsPages.expected.chapters.count
         )
-        .first()
+        .contains('Les 1')
         .click()
         .location('pathname')
         .should(
-          'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}`
+          'eq',
+          `/${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}`
         );
     });
     it('should show search results', () => {
@@ -168,12 +168,12 @@ describe('Methods', () => {
           setup.kabasMethodsPages.expected.lessons.count +
             setup.kabasMethodsPages.expected.chapters.count
         )
-        .last()
+        .contains('Les 2')
         .click()
         .location('pathname')
         .should(
-          'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lessonLast}`
+          'eq',
+          `/${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lessonLast}`
         );
     });
     it('should show search results', () => {
@@ -282,9 +282,11 @@ describe('Methods', () => {
         .click()
         .location('pathname')
         .should(
-          'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
+          'eq',
+          `/${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}`
         );
+
+      cy.location('search').should('eq', '?tab=1');
     });
 
     it('should keep the tab selected from chapter to lesson', () => {
@@ -297,13 +299,15 @@ describe('Methods', () => {
         .click();
 
       dataCy('lesson-link')
-        .first()
+        .contains('Les 1')
         .click()
         .location('pathname')
         .should(
-          'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}?tab=1`
+          'eq',
+          `/${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}`
         );
+
+      cy.location('search').should('eq', '?tab=1');
     });
   });
 });

@@ -1,5 +1,9 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
-import { EduContent } from '@campus/dal';
+import {
+  EduContent,
+  ResultInterface,
+  TaskInstanceInterface
+} from '@campus/dal';
 import { EduContentTypeEnum } from '../../../enums';
 import { ContentActionInterface } from '../content-action.interface';
 import {
@@ -60,7 +64,7 @@ export class ContentOpenActionsService
       handler: this.contentOpener.openBoeke.bind(this.contentOpener)
     },
     previewEduContentAsImage: {
-      label: 'Bekijken',
+      label: 'Voorbeeld',
       icon: 'exercise:open',
       tooltip: 'Bekijk lesmateriaal',
       handler: this.contentOpener.previewEduContentAsImage.bind(
@@ -79,6 +83,14 @@ export class ContentOpenActionsService
 
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[] {
     return this.getEduContentActions(eduContent);
+  }
+
+  getActionsForTaskInstanceEduContent(
+    eduContent: EduContent,
+    result: ResultInterface,
+    taskInstance: Partial<TaskInstanceInterface>
+  ): ContentActionInterface[] {
+    throw new Error('Method not implemented.');
   }
 
   private getEduContentActions(

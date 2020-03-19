@@ -28,6 +28,7 @@ import {
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import {
+  ENVIRONMENT_UI_TOKEN,
   MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   UiModule
@@ -66,7 +67,8 @@ describe('MethodComponent', () => {
         },
         { provide: MethodViewModel, useClass: MockMethodViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
-        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} }
       ]
     });
   });
@@ -151,6 +153,14 @@ describe('MethodComponent', () => {
     );
   });
 
+  describe('clickBack', () => {
+    it('should navigate back to the methods overview when clickBack is called', fakeAsync(() => {
+      component.clickBack();
+      tick();
+
+      expect(router.navigate).toHaveBeenCalledWith(['methods']);
+    }));
+  });
   describe('clickOpenChapter', () => {
     it('should navigate to the chapter when clickOpenChapter is called', fakeAsync(() => {
       component.clickOpenChapter(3);

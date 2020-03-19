@@ -116,6 +116,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     >[]
   >;
   public isCurrentBoekeFavorite$: Observable<boolean>;
+  public methodWithYear$: Observable<string>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -128,7 +129,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     Dictionary<LearningPlanGoalProgressInterface[]>
   >;
   private currentLessons$: Observable<EduContentTOCInterface[]>;
-  private methodWithYear$: Observable<string>;
   private currentChapterTitle$: Observable<string>;
   private currentLessonTitle$: Observable<string>;
 

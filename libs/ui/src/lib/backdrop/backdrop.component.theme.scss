@@ -1,0 +1,96 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+@mixin ui-backdrop {
+  $ui-backdrop-background: $ui-secondary-bg-color !default;
+
+  $ui-backdrop__vertical-padding: 8px !default;
+  $ui-backdrop__horizontal-padding: 16px !default;
+  $ui-backdrop__header-height: 56px !default;
+  $ui-backdrop__header__title-margin-horizontal: 32px !default;
+  $ui-backdrop__header-horizontal-padding: 40px !default;
+  $ui-backdrop__header-icon-color: $ui-icon-color !default;
+
+  $ui-backdrop__front-layer-background-color: $ui-primary-bg-color !default;
+  $ui-backdrop__front-layer-border-radius: 16px 16px 0 0 !default;
+
+  $ui-backdrop__front-layer__scrim-color: rgba(
+    $ui-backdrop__front-layer-background-color,
+    0.85
+  ) !default;
+  $ui-backdrop__front-layer__header-height: 64px !default;
+  $ui-backdrop__front-layer__header-border: 1px solid $ui-tertiary-border-color !default;
+  $ui-backdrop__front-layer__header-margin-bottom: 24px !default;
+
+  .ui-backdrop {
+    background-image: $ui-backdrop-background;
+
+    &__back-layer {
+      &__content {
+        padding: 0 $ui-backdrop__horizontal-padding;
+      }
+    }
+
+    &__header {
+      padding: 0 $ui-backdrop__header-horizontal-padding;
+      height: $ui-backdrop__header-height;
+
+      h1 {
+        margin: 0 $ui-backdrop__header__title-margin-horizontal;
+      }
+
+      backdrop-reveal-action,
+      backdrop-collapse-action {
+        display: flex;
+        .mat-icon {
+          color: $ui-backdrop__header-icon-color;
+        }
+      }
+
+      backdrop-header-actions {
+        .ui-button--inline {
+          color: white;
+          &:after {
+            border-color: white;
+          }
+          &:hover {
+            color: white;
+          }
+        }
+      }
+    }
+
+    &__front-layer {
+      @include elevation(2);
+      background: $ui-backdrop__front-layer-background-color;
+      padding: $ui-backdrop__vertical-padding $ui-backdrop__horizontal-padding;
+      border-radius: $ui-backdrop__front-layer-border-radius;
+
+      &__header {
+        height: $ui-backdrop__front-layer__header-height;
+        border-bottom: $ui-backdrop__front-layer__header-border;
+        margin-bottom: $ui-backdrop__front-layer__header-margin-bottom;
+      }
+    }
+    &--dropped {
+      .ui-backdrop__front-layer__content:before {
+        background: $ui-backdrop__front-layer__scrim-color;
+        border-radius: $ui-backdrop__front-layer-border-radius;
+      }
+
+      .ui-backdrop__front-layer__header
+        + .ui-backdrop__front-layer__content:before {
+        top: $ui-backdrop__front-layer__header-height +
+          $ui-backdrop__vertical-padding !important;
+        border-radius: 0;
+      }
+    }
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    .ui-backdrop {
+      &__front-layer {
+        padding: 0;
+      }
+    }
+  }
+}

@@ -1,4 +1,8 @@
 .manage-kabas-tasks-overview {
+  &__container {
+    position: relative;
+  }
+
   &__filterbar__filters {
     display: flex;
     flex-wrap: wrap;

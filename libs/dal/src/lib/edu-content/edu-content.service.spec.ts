@@ -18,6 +18,9 @@ describe('EduContentService', () => {
     searchTerm: 'search the term',
     sort: 'sort string',
     from: 83,
+    filterCriteriaOptions: new Map<string, number | string | boolean>([
+      ['taskAllowed', true]
+    ]),
     filterCriteriaSelections: new Map<string, (number | string)[]>([
       ['key here', [3, 3, 'klsdk', 5, '3lde', 5, 0]]
     ])
@@ -26,6 +29,7 @@ describe('EduContentService', () => {
     searchTerm: 'search the term',
     sort: 'sort string',
     from: 83,
+    filterCriteriaOptions: { taskAllowed: true },
     filterCriteriaSelections: { 'key here': [3, 3, 'klsdk', 5, '3lde', 5, 0] }
   };
   configureTestSuite(() => {

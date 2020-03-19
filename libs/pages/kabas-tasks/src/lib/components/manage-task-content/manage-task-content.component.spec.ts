@@ -1,12 +1,13 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TaskEduContentFixture } from '@campus/dal';
+import { TaskEduContentFixture, TaskWithAssigneesInterface } from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -20,12 +21,14 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
+import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageTaskContentComponent } from './manage-task-content.component';
@@ -38,7 +41,7 @@ describe('ManageTaskContentComponent', () => {
   let searchComponent;
   let viewModel: MockKabasTasksViewModel;
 
-  let currentTask: TaskWithAssigneesInterface;
+  let currentTask: TaskWithTaskEduContentInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
   let taskEduContents: TaskEduContentWithEduContentInterface[];
 
@@ -49,7 +52,9 @@ describe('ManageTaskContentComponent', () => {
         NoopAnimationsModule,
         SearchTestModule,
         SharedModule,
-        RouterTestingModule
+        RouterTestingModule,
+        DragDropModule,
+        CommonModule
       ],
       declarations: [ManageTaskContentComponent],
       providers: [
@@ -61,12 +66,11 @@ describe('ManageTaskContentComponent', () => {
         { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
+
         {
-          provide: Router,
-          useValue: {
-            navigate: () => {},
-            url: '/foo'
-          }
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
@@ -84,7 +88,12 @@ describe('ManageTaskContentComponent', () => {
     searchComponent = TestBed.get(SearchComponent);
     component.searchComponent = searchComponent;
 
-    [currentTask, ...restOfTasks] = viewModel.tasksWithAssignments$.value;
+    let firstTask: TaskWithAssigneesInterface;
+    [firstTask, ...restOfTasks] = viewModel.tasksWithAssignments$.value;
+    currentTask = {
+      ...firstTask,
+      taskEduContents: firstTask.taskEduContents as TaskEduContentWithEduContentInterface[]
+    };
     taskEduContents = currentTask.taskEduContents;
 
     fixture.detectChanges();
@@ -105,12 +114,13 @@ describe('ManageTaskContentComponent', () => {
   });
 
   describe('search', () => {
-    let mockSearchState;
+    let mockSearchState: SearchStateInterface;
 
     beforeEach(() => {
       mockSearchState = {
-        searchTerm: 'breuken'
-      } as SearchStateInterface;
+        searchTerm: 'breuken',
+        filterCriteriaSelections: new Map<string, (number | string)[]>()
+      };
     });
 
     it('should reset search filters when clearSearchFilters is called', () => {
@@ -132,10 +142,38 @@ describe('ManageTaskContentComponent', () => {
     it('should send searchstate to viewmodel on change', () => {
       jest.spyOn(viewModel, 'updateSearchState');
 
+      mockSearchState.filterCriteriaSelections.set('eduContentTOC', [1]);
+
       component.onSearchStateChange(mockSearchState);
 
       expect(viewModel.updateSearchState).toHaveBeenCalledTimes(1);
       expect(viewModel.updateSearchState).toHaveBeenCalledWith(mockSearchState);
+
+      expect(component.hasSearchResults).toEqual(true);
+    });
+
+    it('should not send searchstate to viewmodel, no chapter selected', () => {
+      jest.spyOn(viewModel, 'updateSearchState');
+
+      component.onSearchStateChange(mockSearchState);
+
+      expect(viewModel.updateSearchState).toHaveBeenCalledTimes(0);
+
+      expect(component.hasSearchResults).toEqual(false);
+    });
+
+    it('should hide the search component', () => {
+      const getSearchDE = () =>
+        fixture.debugElement.query(By.directive(SearchComponent));
+
+      let searchDE = getSearchDE();
+      expect(searchDE).toBeNull();
+
+      component.hasSearchResults = true;
+      fixture.detectChanges();
+
+      searchDE = getSearchDE();
+      expect(searchDE).toBeNull();
     });
   });
 
@@ -171,7 +209,7 @@ describe('ManageTaskContentComponent', () => {
       jest.spyOn(router, 'navigate');
       component.ngOnInit();
 
-      expect(router.navigate).toHaveBeenCalledWith(['/foo'], {
+      expect(router.navigate).toHaveBeenCalledWith(['/?book=1'], {
         queryParams: { book: 1 }
       });
     });
