@@ -73,7 +73,7 @@ describe('KabasTaskViewModel', () => {
     it('openTask() should navigate to the task detail', () => {
       const spy = jest.spyOn(router, 'navigate');
 
-      studentTasksViewModel.openTask(666);
+      studentTasksViewModel.openTask({ taskInstanceId: 666 });
       expect(spy).toHaveBeenCalledWith(['tasks', 666]);
     });
   });
