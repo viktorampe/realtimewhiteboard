@@ -1,7 +1,6 @@
-import { TaskInterface } from '@campus/dal';
-import { ContentActionInterface } from '@campus/shared';
+import { TaskActionInterface } from '@campus/shared';
+
 export interface StudentTaskInterface {
-  task: TaskInterface;
   taskInstanceId: number;
   name: string;
   description: string;
@@ -16,5 +15,5 @@ export interface StudentTaskInterface {
   dateGroupLabel: string;
   dateLabel: string;
   endDate: Date;
-  actions: ContentActionInterface[];
+  actions: TaskActionInterface[];
 }

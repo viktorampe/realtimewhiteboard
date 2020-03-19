@@ -86,7 +86,7 @@ export class StudentTaskOverviewComponent implements OnInit {
     action: TaskActionInterface,
     studentTask: StudentTaskInterface
   ) {
-    action.handler(studentTask.taskInstanceId);
+    action.handler({ taskInstanceId: studentTask.taskInstanceId });
   }
 
   private setupStreams() {

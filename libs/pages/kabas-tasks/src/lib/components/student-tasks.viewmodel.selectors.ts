@@ -65,7 +65,6 @@ export const studentTasks = createSelector(
       );
 
       const result: StudentTaskInterface = {
-        task: { ...tsInstance.task },
         taskInstanceId: tsInstance.id,
         name: tsInstance.task.name,
         description: tsInstance.task.description,
