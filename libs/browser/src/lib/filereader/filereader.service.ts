@@ -2,9 +2,13 @@ import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FileReaderServiceInterface } from './filereader.service.interface';
 
+export function _fileReader() {
+  return new FileReader();
+}
+
 export const FILE_READER = new InjectionToken<FileReader>('FileReaderToken', {
   providedIn: 'root',
-  factory: () => new FileReader()
+  factory: _fileReader
 });
 
 export enum FileReaderError {
@@ -19,7 +23,7 @@ export class FileReaderService implements FileReaderServiceInterface {
   loaded$ = new BehaviorSubject<string | ArrayBuffer>(null);
   error$ = new BehaviorSubject<FileReaderError>(null);
 
-  constructor(@Inject(FILE_READER) private fileReader: FileReader) {
+  constructor(@Inject(FILE_READER) private fileReader) {
     this.setEventHandlers();
   }
 

@@ -31,7 +31,7 @@ import {
 })
 export class CollapsibleContainerComponent {
   @HostBinding('class.ui-collapsible-container')
-  private uiCollapsibleContainerClass = true;
+  public uiCollapsibleContainerClass = true;
 
   @HostBinding('class.ui-collapsible-container--open')
   @Input()
