@@ -99,8 +99,8 @@ export const icons = {
   // whiteboard icons
   'delete-forever': 'assets/icons/whiteboard/image-delete.svg',
   'add-photo-alternate': 'assets/icons/whiteboard/image-edit.svg',
-  multiselect: 'assets/icons/multiselect.svg',
-  'multiselect-selected': 'assets/icons/multiselect-selected.svg',
+  multiselect: 'assets/icons/whiteboard/multiselect.svg',
+  'multiselect-selected': 'assets/icons/whiteboard/multiselect-selected.svg',
   'open-in-new': 'assets/icons/material/open_in_new.svg',
   remove: 'assets/icons/material/remove.svg',
   'arrow-down': 'assets/icons/material/arrow_down.svg'
