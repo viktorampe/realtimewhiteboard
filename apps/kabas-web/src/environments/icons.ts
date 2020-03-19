@@ -96,7 +96,7 @@ export const icons = {
   'empty-state-whiteboard-empty': 'assets/empty-states/whiteboard-empty.svg',
   'empty-state-whiteboard-drop': 'assets/empty-states/whiteboard-drop.svg',
 
-  // whiteboard
+  // whiteboard icons
   'delete-forever': 'assets/icons/material/delete_forever.svg',
   'add-photo-alternate': 'assets/icons/material/add_photo_alternate.svg',
   multiselect: 'assets/icons/multiselect.svg',
