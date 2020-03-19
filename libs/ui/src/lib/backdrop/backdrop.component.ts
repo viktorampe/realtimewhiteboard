@@ -191,6 +191,7 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
   private setupHeights() {
     this.delta = this.calculateDelta();
     this.maxDelta = this.calculateMaxDelta();
+    console.log(this.maxDelta);
 
     if (this.delta > this.maxDelta) {
       this.delta = this.maxDelta - this.getFooterHeight();
@@ -214,10 +215,31 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  public getBacklayerTop() {
+    return this.backLayerElement.nativeElement.offsetTop;
+  }
+  public getBacklayerHeight() {
+    return this.backHeaderElement.nativeElement.offsetHeight;
+  }
+  public getFrontlayerTop() {
+    return this.frontLayerElement.nativeElement.offsetTop;
+  }
+
+  public getDropTranslation(): BackDropTranslationInterface {
+    return {
+      value: this.dropped ? 'dropped' : 'covered',
+      params: {
+        translateY: `-${this.delta}px`
+      }
+    };
+  }
+
+  /**
+   * Private methods
+   */
   private getHeaderBottomOffset(): number {
-    const backdropLayerTop = this.backLayerElement.nativeElement.offsetTop;
-    const backdropHeaderHeight = this.backHeaderElement.nativeElement
-      .offsetHeight;
+    const backdropLayerTop = this.getBacklayerTop();
+    const backdropHeaderHeight = this.getBacklayerHeight();
     return backdropLayerTop + backdropHeaderHeight;
   }
   private getFooterHeight(): number {
@@ -230,7 +252,7 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
     );
   }
   private calculateDelta(): number {
-    const frontLayerTop = this.frontLayerElement.nativeElement.offsetTop;
+    const frontLayerTop = this.getFrontlayerTop();
     return frontLayerTop - this.getHeaderBottomOffset();
   }
   private calculateMaxDelta(): number {
@@ -239,13 +261,5 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
       this.getSafeMargin() -
       this.getHeaderBottomOffset()
     );
-  }
-  private getDropTranslation(): BackDropTranslationInterface {
-    return {
-      value: this.dropped ? 'dropped' : 'covered',
-      params: {
-        translateY: `-${this.delta}px`
-      }
-    };
   }
 }

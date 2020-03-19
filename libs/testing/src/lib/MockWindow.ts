@@ -15,4 +15,12 @@ export class MockWindow {
     handler();
     return timeout;
   };
+  resizeTo = (width, height) => {
+    Object.assign(this, {
+      innerWidth: width,
+      innerHeight: height,
+      outerWidth: width,
+      outerHeight: height
+    });
+  };
 }
