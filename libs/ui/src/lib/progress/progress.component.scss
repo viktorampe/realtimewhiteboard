@@ -1,0 +1,29 @@
+.ui-progress {
+  &__container {
+    position: relative;
+
+    > .mat-progress-spinner {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      ~ .ui-progress__label {
+        transform: scale(1);
+        opacity: 1;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+      }
+    }
+  }
+
+  &__circular__ghost {
+    opacity: 0.2;
+    z-index: -1;
+  }
+}

@@ -21,7 +21,13 @@ import {
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { UiModule } from '@campus/ui';
+import {
+  EnvironmentCollectionManagementFeatureInterface,
+  EnvironmentUIInterface,
+  ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+  ENVIRONMENT_UI_TOKEN,
+  UiModule
+} from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
@@ -71,17 +77,11 @@ import {
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
-  ENVIRONMENT_UI_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
-import { EnvironmentUIInterface } from './interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
-import {
-  ContentTaskActionsService,
-  CONTENT_TASK_ACTIONS_SERVICE_TOKEN
-} from './services';
 import { EduContentCollectionManagerService } from './services/collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './services/collection-manager/edu-content-collection-manager.service.interface';
 import { ContentOpenActionsService } from './services/content-actions/content-open-actions/content-open-actions.service';
@@ -177,10 +177,6 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
       provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
       useClass: ContentOpenActionsService
     },
-    {
-      provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
-      useClass: ContentTaskActionsService
-    },
     AlertToNotificationItemPipe
   ],
   entryComponents: [
@@ -204,6 +200,7 @@ export class SharedModule {
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentGlobalSearch: EnvironmentGlobalSearchFeatureInterface,
     environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface,
+    environmentCollectionManagementFeature: EnvironmentCollectionManagementFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
@@ -237,6 +234,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
           useValue: environmentFavoritesFeature
+        },
+        {
+          provide: ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+          useValue: environmentCollectionManagementFeature
         },
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,

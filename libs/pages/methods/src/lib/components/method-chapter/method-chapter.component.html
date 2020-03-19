@@ -30,74 +30,87 @@
   </ng-container>
 </campus-page-bar>
 
-<div class="method-chapter">
-  <campus-collapsible-sheet>
-    <div aside>
-      <mat-nav-list *ngIf="currentMethodParams$ | async as params">
-        <div class="method-chapter__list-header" matSubheader
-          >Kies een hoofdstuk</div
-        >
-        <mat-list-item
-          data-cy="lesson-link"
-          *ngFor="let toc of lessonsForChapter$ | async"
-          (click)="clickOpenToc(toc.id, toc.depth)"
-          class="method-chapter__lesson-link"
-          [ngClass]="'method-chapter__lesson-link--depth-' + toc.depth"
-          [class.method-chapter__lesson-link--selected]="
-            toc.id === (params.lesson ? params.lesson : params.chapter)
-          "
-        >
-          <span class="method-chapter__lesson-link__title">{{
-            toc.title
-          }}</span></mat-list-item
-        ></mat-nav-list
-      >
-    </div>
-
-    <div main>
-      <mat-tab-group
-        [selectedIndex]="currentTab$ | async"
-        (selectedIndexChange)="onSelectedTabIndexChanged($event)"
-      >
-        <mat-tab label="Lesmateriaal">
-          <div data-cy="search-filters" class="method-chapter--filters">
-            <ng-container searchPortal="searchTerm"></ng-container>
-            <ng-container searchPortal="hostTop"></ng-container>
-            <campus-button
-              class="method-chapter--reset-filters"
-              iconClass="reset-filters"
-              (click)="clearSearchFilters()"
-            ></campus-button>
-          </div>
-          <campus-search
-            [autoCompleteValues]="autoCompleteValues$ | async"
-            (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
-            [autoFocusSearchTerm]="true"
-            [searchMode]="searchMode$ | async"
-            [initialState]="initialSearchState$ | async"
-            [searchResults]="searchResults$ | async"
-            (searchState$)="onSearchStateChange($event)"
-          ></campus-search>
-        </mat-tab>
-        <mat-tab label="Leerplandoelen">
-          <div>
-            Hieronder vind je een overzicht van de leerplandoelen die horen bij
-            {{ breadCrumbTitles$ | async }}.
-          </div>
-
-          <campus-multi-check-box-table
-            data-cy="goals-check-box-table"
-            [rowHeaderColumns]="learningPlanGoalTableHeaders"
-            [itemColumns]="classGroupColumns$ | async"
-            [subLevels]="
-              learningPlanGoalsPerLessonWithSelectionForClassGroups$ | async
-            "
-            (checkBoxChanged)="checkBoxChanged($event)"
-            (checkBoxesChanged)="checkBoxesChanged($event)"
+<campus-backdrop [title]="bookTitle$ | async" [static]="true">
+  <backdrop-reveal-action>
+    <mat-icon svgIcon="arrow-back" (click)="clickBack()"></mat-icon>
+  </backdrop-reveal-action>
+  <front-layer-content>
+    <div class="method-chapter">
+      <campus-collapsible-sheet>
+        <div aside>
+          <mat-nav-list *ngIf="currentMethodParams$ | async as params">
+            <div class="method-chapter__list-header" matSubheader
+              >Kies een hoofdstuk</div
+            >
+            <mat-list-item
+              data-cy="lesson-link"
+              *ngFor="let toc of lessonsForChapter$ | async"
+              (click)="clickOpenToc(toc.id, toc.depth)"
+              class="method-chapter__lesson-link"
+              [ngClass]="'method-chapter__lesson-link--depth-' + toc.depth"
+              [class.method-chapter__lesson-link--selected]="
+                toc.id === (params.lesson ? params.lesson : params.chapter)
+              "
+            >
+              <span class="method-chapter__lesson-link__title">{{
+                toc.title
+              }}</span></mat-list-item
+            ></mat-nav-list
           >
-          </campus-multi-check-box-table>
-        </mat-tab>
-      </mat-tab-group>
+        </div>
+
+        <div main>
+          <mat-tab-group
+            [selectedIndex]="currentTab$ | async"
+            (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+          >
+            <mat-tab label="Lesmateriaal">
+              <div data-cy="search-filters" class="method-chapter--filters">
+                <ng-container searchPortal="searchTerm"></ng-container>
+                <ng-container searchPortal="hostTop"></ng-container>
+                <campus-button
+                  flat
+                  icon
+                  bordered
+                  class="method-chapter--reset-filters"
+                  iconClass="reset-filters"
+                  (click)="clearSearchFilters()"
+                ></campus-button>
+              </div>
+              <campus-search
+                [autoCompleteValues]="autoCompleteValues$ | async"
+                (searchTermChangeForAutoComplete)="
+                  onAutoCompleteRequest($event)
+                "
+                [autoFocusSearchTerm]="true"
+                [searchMode]="searchMode$ | async"
+                [initialState]="initialSearchState$ | async"
+                [searchResults]="searchResults$ | async"
+                (searchState$)="onSearchStateChange($event)"
+              ></campus-search>
+            </mat-tab>
+            <mat-tab label="Leerplandoelen">
+              <div>
+                Hieronder vind je een overzicht van de leerplandoelen die horen
+                bij
+                {{ breadCrumbTitles$ | async }}.
+              </div>
+
+              <campus-multi-check-box-table
+                data-cy="goals-check-box-table"
+                [rowHeaderColumns]="learningPlanGoalTableHeaders"
+                [itemColumns]="classGroupColumns$ | async"
+                [subLevels]="
+                  learningPlanGoalsPerLessonWithSelectionForClassGroups$ | async
+                "
+                (checkBoxChanged)="checkBoxChanged($event)"
+                (checkBoxesChanged)="checkBoxesChanged($event)"
+              >
+              </campus-multi-check-box-table>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </campus-collapsible-sheet>
     </div>
-  </campus-collapsible-sheet>
-</div>
+  </front-layer-content>
+</campus-backdrop>

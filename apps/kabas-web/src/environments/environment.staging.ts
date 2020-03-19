@@ -11,13 +11,14 @@ export const environment = {
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'https://teacher.staging.lk2020.be/logout'
+    url: 'https://teacher.staging.lk2020.be/login'
   },
   login: {
     url: 'https://teacher.staging.lk2020.be/login',
     loginPresets: [
       { label: 'Student', username: 'student1', password: 'testje' },
-      { label: 'Leerkracht', username: 'teacher1', password: 'testje' }
+      { label: 'Leerkracht (Tom)', username: 'teacher1', password: 'testje' },
+      { label: 'Leerkracht (Lowie)', username: 'teacher2', password: 'testje' }
     ]
   },
   termPrivacy: {
@@ -60,6 +61,9 @@ export const environment = {
         FavoriteTypesEnum.TASK,
         FavoriteTypesEnum.EDUCONTENT
       ]
+    },
+    collectionManagement: {
+      useFilter: false
     }
   },
   sso: {},
@@ -69,6 +73,11 @@ export const environment = {
   },
   ui: {
     useNavItemStyle: true,
-    useInfoPanelStyle: false
+    useInfoPanelStyle: false,
+    footerHeight: 10,
+    backdrop: {
+      safeMargin: 64
+    },
+    useModalSideSheetStyle: true
   }
 };

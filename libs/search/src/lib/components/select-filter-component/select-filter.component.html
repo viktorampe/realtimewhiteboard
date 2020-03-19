@@ -6,8 +6,14 @@
   [matBadgeHidden]="count === 0"
   matBadgePosition="above after"
 >
-  <mat-option *ngIf="resetLabel" [value]="null">{{ resetLabel }}</mat-option>
-  <mat-option *ngFor="let option of options" [value]="option.value">
+  <mat-option data-cy="select-reset" *ngIf="resetLabel" [value]="null">{{
+    resetLabel
+  }}</mat-option>
+  <mat-option
+    data-cy="select-option"
+    *ngFor="let option of options"
+    [value]="option.value"
+  >
     {{ option.viewValue }}
   </mat-option>
 </mat-select>

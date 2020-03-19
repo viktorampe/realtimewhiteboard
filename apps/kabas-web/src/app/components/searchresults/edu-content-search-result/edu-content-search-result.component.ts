@@ -1,4 +1,11 @@
-import { Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Inject,
+  Input,
+  OnInit,
+  Optional
+} from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import {
   ContentActionInterface,
@@ -17,6 +24,9 @@ import {
 })
 export class EduContentSearchResultComponent extends ResultItemBase
   implements OnInit {
+  @HostBinding('class.app-educontentsearchresult--included')
+  public isInTask = false;
+
   @Input() data: EduContentSearchResultInterface;
 
   actions: ContentActionInterface[];
@@ -24,9 +34,13 @@ export class EduContentSearchResultComponent extends ResultItemBase
   @HostBinding('class.app-educontentsearchresult')
   appEduContentSearchResultClass = true;
 
+  @HostBinding('attr.data-cy')
+  dataCy = 'search-result';
+
   constructor(
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
     private contentOpenActionsService: ContentOpenActionsServiceInterface,
+    @Optional()
     @Inject(CONTENT_TASK_ACTIONS_SERVICE_TOKEN)
     private contentTaskActionsService: ContentTaskActionsServiceInterface
   ) {
@@ -35,6 +49,12 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   ngOnInit() {
     super.ngOnInit();
+    this.update();
+  }
+
+  public update() {
+    super.update();
+    this.isInTask = this.data.inTask;
     this.setupActions();
   }
 
@@ -44,6 +64,11 @@ export class EduContentSearchResultComponent extends ResultItemBase
     );
 
     if (this.data.addTaskActions) {
+      if (!this.contentTaskActionsService) {
+        throw new Error(
+          'CONTENT_TASK_ACTIONS_SERVICE_TOKEN not provided in module'
+        );
+      }
       this.actions = [
         ...this.contentTaskActionsService.getTaskActionsForEduContent(
           this.data.eduContent,

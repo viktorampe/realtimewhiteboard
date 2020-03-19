@@ -1,6 +1,7 @@
 import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
@@ -46,7 +47,7 @@ export interface DateFilterComponentFormValues {
 @Component({
   selector: 'campus-date-filter',
   templateUrl: './date-filter.component.html',
-  styleUrls: ['./date-filter.component.css'],
+  styleUrls: ['./date-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateFilterComponent
@@ -103,7 +104,10 @@ export class DateFilterComponent
   @HostBinding('class.date-filter-component')
   dateFilterComponentClass = true;
 
-  constructor(@Inject(MAT_DATE_LOCALE) private locale: string) {}
+  constructor(
+    @Inject(MAT_DATE_LOCALE) private locale: string,
+    @Inject(ChangeDetectorRef) private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -122,9 +126,11 @@ export class DateFilterComponent
               break;
             case RadioOptionValueType.FilterCriteriaValue:
               this.criteria.values = [optionValue.contents];
+              this.resetDates();
               break;
             default:
               this.criteria.values = [];
+              this.resetDates();
               break;
           }
         })
@@ -278,13 +284,16 @@ export class DateFilterComponent
       !!(this.criteria.values[0].data.gte || this.criteria.values[0].data.lte);
 
     this.count = +hasDates;
+
+    this.cd.markForCheck();
   }
 
   public reset(emit = true): void {
     this.dateSelection.setValue({}, { emitEvent: false });
-    this.filterCriteria.values = [{ data: {} }];
+    this.filterCriteria.values = [];
+    this.resetDates();
     this.updateView();
-    if (emit) this.filterSelectionChange.next([this.filterCriteria]);
+    if (emit) this.filterSelectionChange.emit([this.filterCriteria]);
   }
 
   private storeFormValues(): void {
@@ -321,5 +330,10 @@ export class DateFilterComponent
     }
 
     return options;
+  }
+
+  private resetDates() {
+    this.startDate.reset(null, { emitEvent: false });
+    this.endDate.reset(null, { emitEvent: false });
   }
 }

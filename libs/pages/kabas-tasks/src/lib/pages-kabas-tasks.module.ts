@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatChipsModule,
   MatDialogModule,
   MatInputModule,
   MatRadioModule,
@@ -11,11 +12,19 @@ import {
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import { SearchModule } from '@campus/search';
+import { SearchModule, SEARCH_RESULT_ITEM_UPDATER_TOKEN } from '@campus/search';
 import {
+  ContentTaskActionsService,
   CONTENT_OPENER_TOKEN,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   CONTENT_TASK_MANAGER_TOKEN,
-  SharedModule
+  SharedModule,
+  STUDENT_TASK_OPENER_TOKEN,
+  TaskActionsStudentService,
+  TaskActionsTeacherService,
+  TASK_ACTIONS_STUDENT_SERVICE_TOKEN,
+  TASK_ACTIONS_TEACHER_SERVICE_TOKEN,
+  TEACHER_TASK_OPENER_TOKEN
 } from '@campus/shared';
 import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
@@ -27,10 +36,17 @@ import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tas
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { PrintPaperTaskModalComponent } from './components/print-paper-task-modal/print-paper-task-modal.component';
+import { StudentTaskContentListItemComponent } from './components/student-task-content-list-item/student-task-content-list-item.component';
+import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
+import { StudentTaskListItemComponent } from './components/student-task-list-item/student-task-list-item.component';
+import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
+import { StudentTasksViewModel } from './components/student-tasks.viewmodel';
 import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PendingTaskGuard } from './guards/pending-task.guard';
+import { ValidTaskInstanceGuard } from './guards/valid-task-instance.guard';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+import { TaskInfoByLearningAreaPipe } from './pipes/task-info-by-learning-area.pipe';
 
 @NgModule({
   imports: [
@@ -50,7 +66,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     MatRadioModule,
     FormsModule,
     ReactiveFormsModule,
-    DragDropModule
+    DragDropModule,
+    MatChipsModule
   ],
   declarations: [
     ManageKabasTasksOverviewComponent,
@@ -62,7 +79,12 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     NewTaskComponent,
     TaskEduContentListItemComponent,
     PrintPaperTaskModalComponent,
-    ManageTaskContentComponent
+    ManageTaskContentComponent,
+    StudentTaskOverviewComponent,
+    StudentTaskDetailComponent,
+    TaskInfoByLearningAreaPipe,
+    StudentTaskListItemComponent,
+    StudentTaskContentListItemComponent
   ],
   providers: [
     {
@@ -73,9 +95,34 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
       provide: CONTENT_TASK_MANAGER_TOKEN,
       useExisting: KabasTasksViewModel
     },
+    {
+      provide: TEACHER_TASK_OPENER_TOKEN,
+      useExisting: KabasTasksViewModel
+    },
+    {
+      provide: STUDENT_TASK_OPENER_TOKEN,
+      useExisting: StudentTasksViewModel
+    },
+    {
+      provide: SEARCH_RESULT_ITEM_UPDATER_TOKEN,
+      useExisting: KabasTasksViewModel
+    },
+    {
+      provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentTaskActionsService
+    },
+    {
+      provide: TASK_ACTIONS_TEACHER_SERVICE_TOKEN,
+      useClass: TaskActionsTeacherService
+    },
+    {
+      provide: TASK_ACTIONS_STUDENT_SERVICE_TOKEN,
+      useClass: TaskActionsStudentService
+    },
+    ValidTaskInstanceGuard,
     PendingTaskGuard
   ],
-  exports: [ManageKabasTasksAssigneeModalComponent],
+  exports: [],
   entryComponents: [
     ManageKabasTasksAssigneeModalComponent,
     NewTaskComponent,

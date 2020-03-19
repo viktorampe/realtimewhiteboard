@@ -8,7 +8,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { ENVIRONMENT_UI_TOKEN } from '@campus/shared';
+import { ENVIRONMENT_UI_TOKEN } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { ProfileViewModel } from './profile.viewmodel';

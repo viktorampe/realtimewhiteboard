@@ -1,6 +1,7 @@
 .ui-section {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
 
   &__header {
     display: flex;
@@ -12,16 +13,15 @@
     }
   }
 
+  &__footer__actions {
+    display: flex;
+    justify-content: flex-end;
+    > .campus-button:not(:last-child) {
+      margin-right: 4px;
+    }
+  }
+
   &--editable {
     cursor: pointer;
-
-    .ui-section__header__actions {
-      display: none;
-    }
-    &:hover {
-      .ui-section__header__actions {
-        display: block;
-      }
-    }
   }
 }
