@@ -29,13 +29,25 @@ export class DemoPageComponent implements OnInit {
   backHeaderTitle = 'Lesmateriaal toevoegen';
   showBack = false;
   isOpen = false;
+  countProgress = 0;
 
   constructor() {}
 
-  ngOnInit() {}
-
-  clickEmptyCta() {
-    console.log('Empty State CTA Clicked!');
+  ngOnInit() {
+    this.setupInterval();
+  }
+  setupInterval() {
+    const interval = setInterval(
+      () =>
+        this.countProgress < 50
+          ? this.countProgress++
+          : clearInterval(interval),
+      100
+    );
+  }
+  clickResetProgress() {
+    this.countProgress = 0;
+    this.setupInterval();
   }
 
   log(data: MultiCheckBoxTableColumnChangeEventInterface<ClassGroupInterface>) {

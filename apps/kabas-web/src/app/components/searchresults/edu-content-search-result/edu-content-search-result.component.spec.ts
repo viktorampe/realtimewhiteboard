@@ -211,6 +211,34 @@ describe('EduContentSearchResultComponent', () => {
         clickAction.mockReset();
       });
     });
+
+    it('should not have the `--included` style when `data.inTask = false`', () => {
+      component.data = {
+        eduContent: mockEduContent,
+        inTask: false
+      };
+      component.update();
+      fixture.detectChanges();
+
+      expect(component.isInTask).toBe(false);
+      expect(fixture.debugElement.nativeElement.classList).not.toContain(
+        'app-educontentsearchresult--included'
+      );
+    });
+
+    it('should have the `--included` style when `data.inTask = true`', () => {
+      component.data = {
+        eduContent: mockEduContent,
+        inTask: true
+      };
+      component.update();
+      fixture.detectChanges();
+
+      expect(component.isInTask).toBe(true);
+      expect(fixture.debugElement.nativeElement.classList).toContain(
+        'app-educontentsearchresult--included'
+      );
+    });
   });
 
   describe('actions', () => {

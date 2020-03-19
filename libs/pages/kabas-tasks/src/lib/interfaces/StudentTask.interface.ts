@@ -1,11 +1,13 @@
+import { TaskInterface } from '@campus/dal';
 import { ContentActionInterface } from '@campus/shared';
 export interface StudentTaskInterface {
+  task: TaskInterface;
   name: string;
   description: string;
   learningAreaName: string;
   learningAreaId: number; //use as anchor
   count: {
-    finishedRequired: number;
+    completedRequired: number;
     totalRequired: number;
   };
   isFinished: boolean;

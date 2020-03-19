@@ -11,6 +11,7 @@ export const icons = {
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   methods: 'assets/icons/methods.svg', //Temp icon
+  task: 'assets/icons/tasks/assignment.svg',
   tasks: 'assets/icons/tasks/assignment.svg',
   results: 'assets/icons/results.svg', //Temp icon
   differentiate: 'assets/icons/differentiate.svg', //Temp icon
@@ -69,7 +70,7 @@ export const icons = {
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
   plus: 'assets/icons/add.svg',
   'rating-star': 'assets/icons/rating-star.svg',
-  'rating-star-empty': 'assets/icons/rating-star-empty.svg',
+  hourglass: 'assets/icons/material/hourglass_empty.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

@@ -10,6 +10,7 @@ import { MatTreeNestedDataSource } from '@angular/material';
  */
 export interface NavItem {
   title: string;
+  description?: string;
   icon?: string;
   link?: any[] | string;
   children?: NavItem[];
