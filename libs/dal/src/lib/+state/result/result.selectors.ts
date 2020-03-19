@@ -1,6 +1,6 @@
 import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Result, ResultInterface } from '../../+models';
+import { Result, ResultInterface, ResultStatus } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -115,13 +115,24 @@ export const getResultsGroupedByArea = createSelector(
 
 export const getBestResultByEduContentId = createSelector(
   selectResultState,
-  (state: State) => {
+  (state: State, props: { taskId?: number }) => {
     const ids: number[] = <number[]>state.ids;
 
     return ids.reduce((acc, id): {
       [eduContentId: number]: ResultInterface;
     } => {
       const result = state.entities[id];
+      if (props.taskId && result.taskId !== props.taskId) {
+        return acc;
+      }
+      if (
+        ![
+          ResultStatus.STATUS_COMPLETED,
+          ResultStatus.STATUS_INCOMPLETE
+        ].includes(result.status)
+      ) {
+        return acc;
+      }
       const eduContentId = result.eduContentId;
 
       // treat 0 as a better value than undefined
