@@ -225,6 +225,7 @@ describe('student-tasks viewmodel selectors', () => {
       const expected: StudentTaskInterface[] = [
         {
           task: task,
+          taskInstanceId: 1,
           name: 'Huiswerk',
           description: 'Super belangrijke herhalingsoefeningen',
           learningAreaName: 'Frans',
@@ -257,6 +258,7 @@ describe('student-tasks viewmodel selectors', () => {
       const expected: StudentTaskInterface[] = [
         {
           task,
+          taskInstanceId: 1,
           name: 'Huiswerk',
           description: 'Super belangrijke herhalingsoefeningen',
           learningAreaName: 'Frans',
