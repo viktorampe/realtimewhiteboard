@@ -4,8 +4,10 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TaskInterface } from '@campus/dal';
-import { TASK_ACTIONS_STUDENT_SERVICE_TOKEN } from '@campus/shared';
+import {
+  TaskActionInterface,
+  TASK_ACTIONS_STUDENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -25,6 +27,11 @@ describe('StudentTaskOverviewComponent', () => {
   let router: Router;
   let viewmodel: StudentTasksViewModel;
 
+  const actions: TaskActionInterface[] = [
+    { label: 'bar', icon: null, tooltip: 'foo', handler: () => {} }
+  ];
+  const getActions = jest.fn().mockReturnValue(actions);
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule, RouterTestingModule],
@@ -37,9 +44,7 @@ describe('StudentTaskOverviewComponent', () => {
         { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         {
           provide: TASK_ACTIONS_STUDENT_SERVICE_TOKEN,
-          useValue: {
-            getActions: (task: TaskInterface) => []
-          }
+          useValue: { getActions }
         },
         { provide: StudentTasksViewModel, useClass: MockStudentTasksViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
@@ -53,6 +58,11 @@ describe('StudentTaskOverviewComponent', () => {
     router = TestBed.get(Router);
     viewmodel = TestBed.get(StudentTasksViewModel);
     fixture.detectChanges();
+
+    // using a shared actionService
+    // needs to happen after initial vm emit
+    // or the initial emit is also counted in the spy
+    getActions.mockClear();
   });
 
   it('should create', () => {
@@ -276,6 +286,31 @@ describe('StudentTaskOverviewComponent', () => {
       >;
     });
 
+    describe('actions', () => {
+      const mockTasks = [
+        new StudentTaskFixture({ ...vorigeWeekVrijdag }),
+        new StudentTaskFixture({ ...gisteren }),
+        new StudentTaskFixture({ ...volgendeWeekDonderdag }),
+        new StudentTaskFixture({ ...volgendeWeekDonderdag }),
+        new StudentTaskFixture({ ...vorigeWeekVrijdag })
+      ];
+
+      beforeEach(() => {
+        viewmodelStudentTasks$.next(mockTasks);
+      });
+
+      it('should add the correct actions', () => {
+        expect(getActions).toHaveBeenCalledTimes(mockTasks.length);
+
+        mockTasks.forEach(task =>
+          expect(getActions).toHaveBeenCalledWith(task)
+        );
+
+        // the returned actions are tested in the taskListSections$
+        // since they were added in getPresets to `wiskunde` and `frans`
+      });
+    });
+
     describe('taskCount$', () => {
       const mockTasks = [
         new StudentTaskFixture({ ...vorigeWeekVrijdag }),
@@ -475,65 +510,69 @@ describe('StudentTaskOverviewComponent', () => {
       });
     });
   });
+
+  function getPresets(): { [key: string]: Partial<StudentTaskInterface> } {
+    // learningArea presets
+    const wiskunde = {
+      learningAreaId: 1,
+      learningAreaName: 'Wiskunde',
+      actions
+    };
+    const frans = { learningAreaId: 2, learningAreaName: 'Frans', actions };
+
+    // date presets
+    const vandaag = {
+      dateGroupLabel: 'vandaag',
+      dateLabel: 'vandaag',
+      endDate: new Date(2020, 2, 12),
+      isUrgent: true,
+      isFinished: false
+    };
+    const volgendeWeekVrijdag = {
+      dateGroupLabel: 'volgende week',
+      dateLabel: 'vrijdag',
+      endDate: new Date(2020, 2, 20),
+      isUrgent: false,
+      isFinished: false
+    };
+    const volgendeWeekDonderdag = {
+      dateGroupLabel: 'volgende week',
+      dateLabel: 'donderdag',
+      endDate: new Date(2020, 2, 19),
+      isUrgent: false,
+      isFinished: false
+    };
+    const gisteren = {
+      dateGroupLabel: 'gisteren',
+      dateLabel: 'gisteren',
+      endDate: new Date(2020, 2, 11),
+      isUrgent: false,
+      isFinished: true
+    };
+    const vorigeWeekDonderdag = {
+      dateGroupLabel: 'vorige week',
+      dateLabel: 'donderdag',
+      endDate: new Date(2020, 2, 5),
+      isUrgent: false,
+      isFinished: true
+    };
+    const vorigeWeekVrijdag = {
+      dateGroupLabel: 'vorige week',
+      dateLabel: 'vrijdag',
+      endDate: new Date(2020, 2, 6),
+      isUrgent: false,
+      isFinished: true
+    };
+
+    return {
+      wiskunde,
+      frans,
+      vandaag,
+      volgendeWeekDonderdag,
+      volgendeWeekVrijdag,
+      gisteren,
+      vorigeWeekDonderdag,
+      vorigeWeekVrijdag
+    };
+  }
 });
-
-function getPresets(): { [key: string]: Partial<StudentTaskInterface> } {
-  // learningArea presets
-  const wiskunde = { learningAreaId: 1, learningAreaName: 'Wiskunde' };
-  const frans = { learningAreaId: 2, learningAreaName: 'Frans' };
-
-  // date presets
-  const vandaag = {
-    dateGroupLabel: 'vandaag',
-    dateLabel: 'vandaag',
-    endDate: new Date(2020, 2, 12),
-    isUrgent: true,
-    isFinished: false
-  };
-  const volgendeWeekVrijdag = {
-    dateGroupLabel: 'volgende week',
-    dateLabel: 'vrijdag',
-    endDate: new Date(2020, 2, 20),
-    isUrgent: false,
-    isFinished: false
-  };
-  const volgendeWeekDonderdag = {
-    dateGroupLabel: 'volgende week',
-    dateLabel: 'donderdag',
-    endDate: new Date(2020, 2, 19),
-    isUrgent: false,
-    isFinished: false
-  };
-  const gisteren = {
-    dateGroupLabel: 'gisteren',
-    dateLabel: 'gisteren',
-    endDate: new Date(2020, 2, 11),
-    isUrgent: false,
-    isFinished: true
-  };
-  const vorigeWeekDonderdag = {
-    dateGroupLabel: 'vorige week',
-    dateLabel: 'donderdag',
-    endDate: new Date(2020, 2, 5),
-    isUrgent: false,
-    isFinished: true
-  };
-  const vorigeWeekVrijdag = {
-    dateGroupLabel: 'vorige week',
-    dateLabel: 'vrijdag',
-    endDate: new Date(2020, 2, 6),
-    isUrgent: false,
-    isFinished: true
-  };
-
-  return {
-    wiskunde,
-    frans,
-    vandaag,
-    volgendeWeekDonderdag,
-    volgendeWeekVrijdag,
-    gisteren,
-    vorigeWeekDonderdag,
-    vorigeWeekVrijdag
-  };
-}
