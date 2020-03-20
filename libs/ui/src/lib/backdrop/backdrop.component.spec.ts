@@ -75,7 +75,6 @@ describe('BasicBackdropComponent', () => {
   let window: Window;
   let ui: { footerHeight: number; backdrop: { safeMargin: number } };
 
-  //file.only
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, CommonModule],
