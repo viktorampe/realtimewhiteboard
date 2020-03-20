@@ -191,7 +191,6 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
   private setupHeights() {
     this.delta = this.calculateDelta();
     this.maxDelta = this.calculateMaxDelta();
-    console.log(this.maxDelta);
 
     if (this.delta > this.maxDelta) {
       this.delta = this.maxDelta - this.getFooterHeight();
