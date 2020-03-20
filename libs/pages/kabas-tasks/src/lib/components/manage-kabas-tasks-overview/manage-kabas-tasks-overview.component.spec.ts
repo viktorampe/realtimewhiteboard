@@ -1120,7 +1120,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
       component.handleTaskAction(mockTaskAction, mockTask);
 
-      expect(mockTaskAction.handler).toHaveBeenCalledWith(mockTask);
+      expect(mockTaskAction.handler).toHaveBeenCalledWith({ task: mockTask });
     });
   });
 

@@ -8,7 +8,7 @@ export interface TaskActionsTeacherServiceInterface {
 }
 
 export interface TeacherTaskOpenerInterface {
-  openTask(task: TaskInterface);
+  openTask(props: { task: TaskInterface });
   archiveTask(task: TaskWithAssigneesInterface);
   unarchiveTask(task: TaskWithAssigneesInterface);
   openResultsForTask(task: TaskInterface);
