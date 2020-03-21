@@ -95,7 +95,7 @@
         [(mode)]="card.mode"
         [viewModeImage]="card.viewModeImage"
         (update)="updateCard($event, card)"
-        (remove)="removeImage(card)"
+        (removeImage)="removeImage(card)"
         (openFilePicker)="openFilePicker(filePicker)"
         (press)="onCardPressed(card)"
       ></campus-card>
