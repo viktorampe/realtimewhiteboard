@@ -1,3 +1,7 @@
+.ui-iframe-close {
+  display: none;
+}
+
 .ui-iframe--fullscreen {
   padding: 0 !important;
   width: 100vw !important;
@@ -18,10 +22,25 @@
     min-height: inherit;
     max-height: inherit;
 
+    campus-iframe,
     iframe {
+      display: block;
       width: 100%;
       height: 100%;
       border: none;
+    }
+
+    .ui-iframe-close {
+      display: block;
+      cursor: pointer;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      border: solid 2px;
+      border-radius: 50%;
+      padding: 10px;
+      font-size: 20px;
+      line-height: 20px;
     }
   }
 }
