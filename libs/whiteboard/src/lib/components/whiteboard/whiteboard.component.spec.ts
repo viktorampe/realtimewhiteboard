@@ -18,6 +18,7 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
+import { PermissionEnum } from '../../enums/permission.enum';
 import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
 import { WhiteboardFixture } from '../../models/whiteboard.fixture';
@@ -118,6 +119,8 @@ describe('WhiteboardComponent', () => {
       cards: [card1, card2],
       shelfCards: []
     });
+
+    component.user$.next({ permission: PermissionEnum.MANAGEWHITEBOARD });
 
     fixture.detectChanges();
   });
