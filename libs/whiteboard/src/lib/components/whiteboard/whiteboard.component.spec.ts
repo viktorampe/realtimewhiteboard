@@ -25,7 +25,7 @@ import { WhiteboardFixture } from '../../models/whiteboard.fixture';
 import {
   WhiteboardHttpService,
   WhiteboardHttpServiceInterface
-} from '../../services/whiteboardservice/whiteboard-http.service';
+} from '../../services/whiteboard-http.service';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
 import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';

@@ -27,7 +27,7 @@ import CardInterface from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
 import { UserInterface } from '../../models/User.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
-import { WhiteboardHttpService } from '../../services/whiteboardservice/whiteboard-http.service';
+import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 
 @Component({
   selector: 'campus-whiteboard',
@@ -415,13 +415,14 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  onClickWhiteboard(event) {
+  onClickWhiteboard(event: MouseEvent) {
+    const target = event.target as HTMLElement;
     if (
-      event.target.classList.contains('whiteboard__workspace') ||
-      event.target.classList.contains('card') ||
-      event.target.classList.contains('card-text') ||
-      event.target.classList.contains('card-image') ||
-      event.target.classList.contains('card-image__image')
+      target.classList.contains('whiteboard__workspace') ||
+      target.classList.contains('card') ||
+      target.classList.contains('card-text') ||
+      target.classList.contains('card-image') ||
+      target.classList.contains('card-image__image')
     ) {
       this.selectedCards = [];
       const cards = this.whiteboard$.value.cards;
