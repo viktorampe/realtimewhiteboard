@@ -1,9 +1,4 @@
-<div class="shelf" cdkDropList>
-  <div class="shelf__button">
-    <button (click)="toggleShelf()">{{
-      isMinimized ? 'expand' : 'minimize'
-    }}</button>
-  </div>
+<div class="shelf" cdkDropList #shelf>
   <ng-container *ngIf="!isMinimized">
     <campus-card
       cdkDrag

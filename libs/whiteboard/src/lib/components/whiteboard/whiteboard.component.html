@@ -1,10 +1,12 @@
 <div
+  *ngIf="whiteboard$ | async as whiteboard"
   class="whiteboard"
   (filesDroppedEvent)="onFilesDropped($event)"
   campusImageDrag
-  (click)="onClickWhiteboard()"
+  (tap)="onClickWhiteboard($event)"
 >
   <campus-whiteboard-toolbar
+    @showHideWhiteboardTools
     *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
@@ -14,34 +16,62 @@
       *ngIf="!isTitleInputSelected"
       class="whiteboard__header__title"
       (click)="showTitleInput()"
-      >{{ title }}</h2
+      >{{ whiteboard.title }}</h2
     >
     <input
       type="text"
       #titleInput
-      [(ngModel)]="title"
+      [formControl]="titleFC"
       (keyup.enter)="hideTitleInput()"
       (focusout)="hideTitleInput()"
       *ngIf="isTitleInputSelected"
     />
   </div>
-  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
+  <div class="whiteboard__workspace__actions">
+    <div color="primary" class="whiteboard__workspace__actions__settingsbutton">
+      <mat-icon [svgIcon]="'settings'"></mat-icon>
+    </div>
+    <div class="whiteboard__workspace__actions__zoom">
+      <mat-icon
+        class="whiteboard__workspace__actions__zoom__button"
+        [svgIcon]="'remove'"
+      ></mat-icon>
+      <div class="whiteboard__workspace__actions__zoom__separator"></div>
+      <mat-icon
+        class="whiteboard__workspace__actions__zoom__button"
+        [svgIcon]="'plus'"
+      ></mat-icon>
+    </div>
+  </div>
+  <div
+    class="whiteboard__workspace"
+    (dblclick)="createCard($event)"
+    (longpress)="createCard($event)"
+    #workspace
+  >
     <div
+      @showHideCard
       class="whiteboard__workspace__container"
-      *ngFor="let card of cards"
+      *ngFor="let card of whiteboard.cards"
       cdkDrag
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
       [cdkDragDisabled]="card.mode === Mode.ZOOM"
       cdkDragBoundary=".whiteboard__workspace"
       [class.zoom]="card.mode === Mode.ZOOM"
       [class.onTop]="card.mode === Mode.SELECTED"
+      (cdkDragEnded)="onDragEnded($event, card)"
+      (cdkDragStarted)="onDragStarted(card)"
+      (tap)="onCardTapped(card)"
     >
       <campus-color-list
+        @showHideColorList
         class="whiteboard__color-list"
+        [mode]="card.mode"
         (selectedColor)="changeColorForCard(card, $event)"
         *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
       ></campus-color-list>
       <campus-card-toolbar
+        @showHideToolbar
         *ngIf="
           card.mode === Mode.EDIT ||
           card.mode === Mode.SELECTED ||
@@ -65,11 +95,9 @@
         [(mode)]="card.mode"
         [viewModeImage]="card.viewModeImage"
         (update)="updateCard($event, card)"
+        (removeImage)="removeImage(card)"
         (openFilePicker)="openFilePicker(filePicker)"
-        (cdkDragEnded)="onDragEnded($event, card)"
-        (click)="onCardClicked($event, card)"
         (press)="onCardPressed(card)"
-        (tap)="onCardTapped(card)"
       ></campus-card>
       <input
         (change)="onFilePickerImageSelected($event, card)"
@@ -79,28 +107,40 @@
         style="display: none;"
       />
     </div>
-  </div>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard__addbutton"
-    (click)="btnPlusClicked()"
-  >
-    <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
-  </button>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard__savebutton"
-    (click)="saveWhiteboard()"
-  >
-    <mat-icon style="color: #FFFFFF;" [svgIcon]="'check'"></mat-icon>
-  </button>
 
-  <campus-shelf
-    (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
-    [class.minimizedShelf]="isShelfMinimized"
-    [cards]="this.shelvedCards"
-    [(isMinimized)]="isShelfMinimized"
-  ></campus-shelf>
+    <div
+      class="whiteboard__addbutton"
+      [class.plusMinimized]="isShelfMinimized"
+      (tap)="btnPlusClicked($event)"
+    >
+      <mat-icon [svgIcon]="'plus'"></mat-icon>
+    </div>
+
+    <div
+      [class.shelfMinimized]="isShelfMinimized"
+      class="whiteboard__shelf__button"
+      (tap)="toggleShelf()"
+      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
+    ></div>
+
+    <campus-shelf
+      (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
+      [class.minimizedShelf]="isShelfMinimized"
+      [cards]="whiteboard.shelfCards"
+      [(isMinimized)]="isShelfMinimized"
+    ></campus-shelf>
+  </div>
+  <campus-empty-state
+    class="whiteboard__empty"
+    *ngIf="!whiteboard.cards.length"
+    [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
+    [description]="
+      true
+        ? 'Sleep kaartjes uit de shelf naar het bord.'
+        : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
+    "
+    [svgIcon]="
+      true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+    "
+  ></campus-empty-state>
 </div>

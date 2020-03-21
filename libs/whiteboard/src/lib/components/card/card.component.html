@@ -1,6 +1,13 @@
 <div
   class="card"
   [class.zoom]="mode === Mode.ZOOM"
+  [class.active]="
+    mode === Mode.UPLOAD ||
+    mode === Mode.SELECTED ||
+    mode === Mode.MULTISELECTSELECTED ||
+    mode === Mode.MULTISELECT ||
+    mode === Mode.EDIT
+  "
   [style.border-color]="color"
 >
   <div class="card__content" [class.zoom]="mode === Mode.ZOOM">
@@ -8,9 +15,9 @@
       <campus-card-image
         *ngIf="viewModeImage; else viewModeText"
         class="card__content__image"
-        [imageUrl]="image"
+        [imageUrl]="image.imageUrl"
         [mode]="mode"
-        (remove)="updateImage('')"
+        (remove)="removeImg()"
         (openFilePicker)="selectImage()"
       ></campus-card-image>
       <ng-template #viewModeText class="card__content__input">
@@ -23,7 +30,10 @@
       </ng-template>
     </ng-container>
     <ng-template #uploadMode>
-      <campus-progress-bar [progressPercentage]="67"></campus-progress-bar>
+      <campus-progress-bar
+        *ngIf="image.progress"
+        [progressPercentage]="image.progress"
+      ></campus-progress-bar>
     </ng-template>
   </div>
 </div>

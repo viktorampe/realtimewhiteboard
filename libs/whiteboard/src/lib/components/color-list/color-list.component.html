@@ -1,8 +1,15 @@
 <div class="color-list">
   <div
-    *ngFor="let swatch of defaultColors"
+    [@showHideColorSwatchOne]="
+      mode === Mode.SELECTED
+        ? 'select'
+        : mode === Mode.EDIT
+        ? 'edit'
+        : 'whiteboard'
+    "
+    *ngFor="let colorMap of defaultColors"
     class="color-list__swatches"
-    (click)="clickColor(swatch)"
-    [style.background-color]="swatch"
+    (tap)="clickColor(colorMap.hexCode)"
+    [ngClass]="colorMap.colorName"
   ></div>
 </div>

@@ -69,11 +69,6 @@ export const icons = {
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
   plus: 'assets/icons/add.svg',
-  'delete-forever': 'assets/icons/material/delete_forever.svg',
-  'add-photo-alternate': 'assets/icons/material/add_photo_alternate.svg',
-  multiselect: 'assets/icons/multiselect.svg',
-  'multiselect-selected': 'assets/icons/multiselect-selected.svg',
-  'open-in-new': 'assets/icons/material/open_in_new.svg',
   'rating-star': 'assets/icons/rating-star.svg',
   hourglass: 'assets/icons/material/hourglass_empty.svg',
 
@@ -97,5 +92,16 @@ export const icons = {
   //empty-states
   'empty-state-all-done': 'assets/empty-states/all-done.svg',
   'empty-state-no-educontent': 'assets/empty-states/no-educontent.svg',
-  'empty-state-no-users': 'assets/empty-states/no-users.svg'
+  'empty-state-no-users': 'assets/empty-states/no-users.svg',
+  'empty-state-whiteboard-empty': 'assets/empty-states/whiteboard-empty.svg',
+  'empty-state-whiteboard-drop': 'assets/empty-states/whiteboard-drop.svg',
+
+  // whiteboard icons
+  'delete-forever': 'assets/icons/whiteboard/image-delete.svg',
+  'add-photo-alternate': 'assets/icons/whiteboard/image-edit.svg',
+  multiselect: 'assets/icons/whiteboard/multiselect.svg',
+  'multiselect-selected': 'assets/icons/whiteboard/multiselect-selected.svg',
+  'open-in-new': 'assets/icons/material/open_in_new.svg',
+  remove: 'assets/icons/material/remove.svg',
+  'arrow-down': 'assets/icons/material/arrow_down.svg'
 };

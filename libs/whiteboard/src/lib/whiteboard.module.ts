@@ -9,6 +9,7 @@ import {
 } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { UiModule } from '@campus/ui';
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardTextComponent } from './components/card-text/card-text.component';
 import { CardToolbarComponent } from './components/card-toolbar/card-toolbar.component';
@@ -16,6 +17,7 @@ import { CardComponent } from './components/card/card.component';
 import { ColorListComponent } from './components/color-list/color-list.component';
 import { ImageToolbarComponent } from './components/image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { ShelfComponent } from './components/shelf/shelf.component';
 import { WhiteboardToolbarComponent } from './components/whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
@@ -31,7 +33,8 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     ReactiveFormsModule,
     MatButtonModule,
     MatProgressBarModule,
-    MatInputModule
+    MatInputModule,
+    UiModule
   ],
   declarations: [
     WhiteboardComponent,
@@ -45,7 +48,8 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     ProgressBarComponent,
     ImageToolbarComponent,
     CardTextComponent,
-    ShelfComponent
+    ShelfComponent,
+    SettingsComponent
   ],
   exports: [WhiteboardComponent, ImageDragDirective]
 })

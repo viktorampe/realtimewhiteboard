@@ -1,16 +1,94 @@
+import {
+  animate,
+  animateChild,
+  keyframes,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
+import { PermissionEnum } from '../../enums/permission.enum';
 import CardInterface from '../../models/card.interface';
+import ImageInterface from '../../models/image.interface';
+import { UserInterface } from '../../models/User.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
-  styleUrls: ['./whiteboard.component.scss']
+  styleUrls: ['./whiteboard.component.scss'],
+  animations: [
+    trigger('showHideCard', [
+      transition(':leave', [
+        style({ opacity: '1' }),
+        animate('150ms cubic-bezier(.43,0,.31,1)', style({ opacity: '0' }))
+      ])
+    ]),
+    trigger('showHideWhiteboardTools', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ transform: 'translateY(-100%)', offset: 0 }),
+            style({ transform: 'translateY(8px)', offset: 0.75 }),
+            style({ transform: 'translateY(-5px)', offset: 0.9 }),
+            style({ transform: 'translateY(0)', offset: 1 })
+          ])
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)' }),
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'translateY(-100%)' })
+        )
+      ])
+    ]),
+    trigger('showHideColorList', [
+      transition(':enter', [
+        query('@showHideColorSwatchOne', stagger(50, [animateChild()]), {
+          optional: true
+        })
+      ]),
+      transition(':leave', [
+        query('@showHideColorSwatchOne', stagger(-50, [animateChild()]), {
+          optional: true
+        })
+      ])
+    ]),
+    trigger('showHideToolbar', [
+      transition(':enter', [
+        query('@showHideToolbarTool', stagger(-50, [animateChild()]), {
+          optional: true
+        })
+      ]),
+      transition(':leave', [
+        query('@showHideToolbarTool', stagger(50, [animateChild()]), {
+          optional: true
+        })
+      ])
+    ])
+  ],
+  encapsulation: ViewEncapsulation.None
 })
-export class WhiteboardComponent implements OnInit {
+export class WhiteboardComponent implements OnChanges {
   @ViewChild('titleInput', { static: false }) set titleInput(
     titleInput: ElementRef
   ) {
@@ -19,40 +97,90 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  @ViewChild('workspace', { static: true }) workspaceElementRef: ElementRef;
+  @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
+
+  @Input() metadataId: number;
+  @Input() apiBase: string;
+
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
-  cards: CardInterface[] = [];
-  shelvedCards: CardInterface[] = [];
+  public whiteboard$ = new BehaviorSubject<WhiteboardInterface>(null);
+  public user$ = new BehaviorSubject<UserInterface>(null);
+
+  public titleFC: FormControl;
+
   selectedCards: CardInterface[] = [];
 
   lastColor = '#00A7E2';
-  title = '';
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
-  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {
+    this.initialiseForm();
+  }
 
-  ngOnInit() {
-    this.whiteboardHttpService.getJson().subscribe(whiteboard => {
-      this.title = whiteboard.title;
-      this.cards = whiteboard.cards;
-      this.shelvedCards = whiteboard.shelfCards;
-    });
+  ngOnChanges() {
+    if (this.apiBase && this.metadataId) {
+      this.whiteboardHttpService.setSettings({
+        apiBase: this.apiBase,
+        metadataId: this.metadataId
+      });
+      this.initialiseObservables();
+    }
   }
 
   get Mode() {
     return ModeEnum;
   }
 
-  //#region WORKSPACE INTERACTIONS
+  private updateWhiteboardSubject(updates: Partial<WhiteboardInterface>) {
+    this.whiteboard$.next({
+      ...this.whiteboard$.value,
+      ...updates
+    });
+  }
 
-  onDblClick(event: MouseEvent) {
-    if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
-      const top = event.offsetY;
-      const left = event.offsetX;
-      this.addEmptyCard(top, left);
+  private initialiseObservables(): void {
+    this.whiteboardHttpService
+      .getJson()
+      .pipe(take(1))
+      .subscribe(whiteboardData => {
+        this.titleFC.patchValue(whiteboardData.title);
+        this.whiteboard$.next(whiteboardData);
+      });
+    this.user$.next({ permission: PermissionEnum.MANAGEWHITEBOARD });
+  }
+
+  private initialiseForm(): void {
+    this.titleFC = new FormControl('', Validators.required);
+  }
+
+  private updateViewMode(card: CardInterface) {
+    if (!card.image.imageUrl) {
+      this.updateCard({ viewModeImage: false }, card);
+    }
+    if (!card.description) {
+      this.updateCard({ viewModeImage: true }, card);
+    }
+
+    this.saveWhiteboard();
+  }
+  //#region WORKSPACE INTERACTIONS
+  createCard(event: any) {
+    if (event.target.className.includes('whiteboard__workspace')) {
+      if (event.type === 'longpress') {
+        const top =
+          event.center.y -
+          this.workspaceElementRef.nativeElement.getBoundingClientRect().top;
+        const left = event.center.x;
+        this.addEmptyCard({ top, left });
+      }
+      if (event.type === 'dblclick') {
+        const top = event.offsetY;
+        const left = event.offsetX;
+        this.addEmptyCard({ top, left });
+      }
     }
   }
 
@@ -63,67 +191,95 @@ export class WhiteboardComponent implements OnInit {
 
   //#region CARD ACTIONS
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
+    // update card
     Object.assign(card, updates);
+    // sync shelfcard
+    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.find(
+      shelfcard => shelfcard.id === card.id
+    );
+    if (shelfCard) {
+      Object.assign(shelfCard, updates, { mode: ModeEnum.SHELF });
+    }
+
+    this.updateWhiteboardSubject({});
   }
 
-  addEmptyCard(
-    top: number = 0,
-    left: number = 0,
-    image: string = ''
-  ): CardInterface {
+  addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    //deselect all selected cards
+    this.selectedCards = [];
+    // set idle mode
+    this.whiteboard$.value.cards
+      .filter(c => c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
+    // add card to the workspace
     const card = {
-      mode: ModeEnum.IDLE,
+      id: uuidv4(),
+      mode: ModeEnum.EDIT,
       color: this.lastColor,
       description: '',
-      image: image,
-      top: top,
-      left: left,
-      viewModeImage: true
+      image: {},
+      top: 0,
+      left: 0,
+      viewModeImage: false,
+      ...values
     };
-    this.cards.push(card);
 
-    if (this.selectedCards.length) {
-      card.mode = ModeEnum.MULTISELECT;
+    // add a 'copy' ( card with a different reference ) to the shelf
+    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
+      this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
     }
+
+    // Update whiteboardsubject
+    this.updateWhiteboardSubject({
+      cards: [...this.whiteboard$.value.cards, card]
+    });
+
+    this.saveWhiteboard();
 
     return card;
   }
 
   addCardToShelf(card: CardInterface) {
-    card.mode = ModeEnum.SHELF;
-    this.shelvedCards.push(card);
+    if (!this.whiteboard$.value.shelfCards.find(sc => sc.id === card.id)) {
+      this.updateCard({ mode: ModeEnum.SHELF }, card);
+      this.updateWhiteboardSubject({
+        shelfCards: [...this.whiteboard$.value.shelfCards, card]
+      });
+      this.saveWhiteboard();
+    }
+  }
+
+  removeImage(card: CardInterface) {
+    this.updateCard({ image: {} }, card);
+    this.saveWhiteboard();
   }
 
   onDeleteCard(card: CardInterface) {
-    //TODO: if(kaartje werd door redactie gemaakt)
-    this.addCardToShelf(card);
-    //TODO: else
-    this.cards = this.cards.filter(c => c !== card);
+    this.updateWhiteboardSubject({
+      cards: this.whiteboard$.value.cards.filter(c => c !== card)
+    });
   }
 
   onCardTapped(card: CardInterface) {
     if (card.mode === ModeEnum.ZOOM) {
-      card.mode = ModeEnum.IDLE;
+      this.updateCard({ mode: ModeEnum.IDLE }, card);
     } else if (this.isZoomAllowedForCard(card)) {
-      card.mode = ModeEnum.ZOOM;
+      this.updateCard({ mode: ModeEnum.ZOOM }, card);
     }
   }
 
   onCardPressed(card: CardInterface) {
     if (card.mode !== ModeEnum.SHELF) {
       if (card.mode === ModeEnum.SELECTED || card.mode === ModeEnum.EDIT) {
-        card.mode = ModeEnum.IDLE;
+        this.updateCard({ mode: ModeEnum.IDLE }, card);
       } else {
-        card.mode = ModeEnum.SELECTED;
-        this.setCardsModeIdleExceptUploadModeAndCard(card);
+        this.whiteboard$.value.cards
+          .filter(c => c.id !== card.id)
+          .forEach(c => (c.mode = ModeEnum.IDLE));
+        this.updateCard({ mode: ModeEnum.SELECTED }, card);
         this.selectedCards = [];
       }
-    }
-  }
-
-  onCardClicked(event: MouseEvent, card: CardInterface) {
-    if (card.mode !== ModeEnum.IDLE) {
-      event.stopPropagation();
     }
   }
 
@@ -144,35 +300,50 @@ export class WhiteboardComponent implements OnInit {
 
   // TODO: check upload flow
   uploadImageForCard(card: CardInterface, image: File) {
-    card.mode = ModeEnum.UPLOAD;
+    this.updateCard({ mode: ModeEnum.UPLOAD }, card);
     this.whiteboardHttpService
       .uploadFile(image)
-      .subscribe((imageUrl: string) => {
-        card.image = imageUrl;
-        if (this.selectedCards.length) {
-          card.mode = ModeEnum.MULTISELECT;
-        } else {
-          card.mode = ModeEnum.EDIT;
+      .subscribe((response: ImageInterface) => {
+        this.updateCard({ image: response }, card);
+        if (response.imageUrl) {
+          if (this.selectedCards.length) {
+            this.updateCard(
+              { mode: ModeEnum.MULTISELECT, viewModeImage: true },
+              card
+            );
+          } else {
+            this.updateCard({ mode: ModeEnum.IDLE, viewModeImage: true }, card);
+          }
+          this.saveWhiteboard();
         }
       });
   }
 
   changeColorForCard(card: CardInterface, color: string) {
     this.lastColor = color;
-    card.color = color;
-    card.mode = ModeEnum.IDLE;
+    this.updateCard({ mode: ModeEnum.IDLE, color: color }, card);
+    this.saveWhiteboard();
   }
 
-  onDragEnded(event: CdkDragEnd, card) {
+  onDragStarted(card: CardInterface) {
+    if (!this.selectedCards.length) {
+      const cards = this.whiteboard$.value.cards;
+      cards
+        .filter(c => c.id !== card.id && c.mode !== ModeEnum.UPLOAD)
+        .forEach(c => (c.mode = this.Mode.IDLE));
+      this.updateWhiteboardSubject({ cards: cards });
+    }
+  }
+
+  onDragEnded(event: CdkDragEnd, card: CardInterface) {
     const cardPosition = event.source.getFreeDragPosition();
-    card.top = cardPosition.y;
-    card.left = cardPosition.x;
-  }
-
-  private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
-    this.cards
-      .filter(c => c !== card && c.mode !== ModeEnum.UPLOAD)
-      .forEach(c => (c.mode = ModeEnum.IDLE));
+    this.updateCard({ top: cardPosition.y, left: cardPosition.x }, card);
+    this.updateWhiteboardSubject({
+      cards: [
+        ...this.whiteboard$.value.cards.filter(c => c.id !== card.id),
+        card
+      ]
+    });
   }
 
   private isZoomAllowedForCard(card: CardInterface): Boolean {
@@ -181,7 +352,7 @@ export class WhiteboardComponent implements OnInit {
     const isZoomAllowed =
       !isACardSelected &&
       card.viewModeImage &&
-      card.image &&
+      card.image.imageUrl &&
       card.mode !== ModeEnum.EDIT &&
       card.mode !== ModeEnum.MULTISELECT &&
       card.mode !== ModeEnum.MULTISELECTSELECTED;
@@ -190,7 +361,9 @@ export class WhiteboardComponent implements OnInit {
   }
 
   private isACardSelected() {
-    return !!this.cards.filter(c => c.mode === ModeEnum.SELECTED).length;
+    return !!this.whiteboard$.value.cards.filter(
+      c => c.mode === ModeEnum.SELECTED
+    ).length;
   }
   //#endregion
 
@@ -200,8 +373,10 @@ export class WhiteboardComponent implements OnInit {
   }
 
   hideTitleInput() {
-    if (this.title !== '') {
+    if (!!this.titleFC.value) {
       this.isTitleInputSelected = false;
+      this.updateWhiteboardSubject({ title: this.titleFC.value });
+      this.saveWhiteboard();
     }
   }
 
@@ -217,62 +392,141 @@ export class WhiteboardComponent implements OnInit {
       const offsetX = x + i * this.multipleCardCreationOffset;
       const offsetY = y + i * this.multipleCardCreationOffset;
 
-      const card = this.addEmptyCard(offsetY, offsetX);
+      const card = this.addEmptyCard({ top: offsetY, left: offsetX });
+      this.updateCard({ viewModeImage: true }, card);
       this.uploadImageForCard(card, images[i]);
     }
+    this.saveWhiteboard();
   }
 
   saveWhiteboard() {
-    const whiteboard: WhiteboardInterface = {
-      title: this.title,
-      cards: this.cards,
-      shelfCards: this.shelvedCards
-    };
-    this.whiteboardHttpService.setJson(whiteboard);
+    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
+      console.log('saving whiteboard...');
+      const whiteboard = { ...this.whiteboard$.value };
+      whiteboard.cards = whiteboard.shelfCards;
+      whiteboard.shelfCards = null;
+      whiteboard.cards.forEach(c => {
+        c.top = null;
+        c.left = null;
+      });
+      this.whiteboardHttpService.setJson(whiteboard).subscribe();
+    } else {
+      console.log('no permissin to save whiteboard');
+    }
   }
 
-  onClickWhiteboard() {
-    this.selectedCards = [];
-    this.cards
-      .filter(c => c.mode !== ModeEnum.UPLOAD)
-      .forEach(c => (c.mode = ModeEnum.IDLE));
+  onClickWhiteboard(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (
+      target.classList.contains('whiteboard__workspace') ||
+      target.classList.contains('card') ||
+      target.classList.contains('card-text') ||
+      target.classList.contains('card-image') ||
+      target.classList.contains('card-image__image')
+    ) {
+      this.selectedCards = [];
+      const cards = this.whiteboard$.value.cards;
+      const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
+
+      if (cardInEditMode) {
+        this.updateCard(
+          { description: cardInEditMode.description },
+          cardInEditMode
+        );
+        this.updateViewMode(cardInEditMode);
+        this.saveWhiteboard();
+      }
+      const nonIdleUploadCards = cards.filter(
+        c =>
+          c.mode !== ModeEnum.UPLOAD &&
+          c.mode !== ModeEnum.IDLE &&
+          c.mode !== ModeEnum.ZOOM
+      );
+      if (nonIdleUploadCards.length) {
+        nonIdleUploadCards.forEach(c =>
+          this.updateCard({ mode: ModeEnum.IDLE }, c)
+        );
+      }
+    }
   }
 
   cardDraggedPosition($event: {
     event: CdkDragDrop<any>;
     card: CardInterface;
     cardElement: HTMLElement;
+    scrollLeft: number;
   }) {
-    const { card, event, cardElement } = $event;
+    this.whiteboard$.value.cards
+      .filter(c => c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => (c.mode = ModeEnum.IDLE));
+    const { card, event, cardElement, scrollLeft } = $event;
 
-    card.left = cardElement.offsetLeft + event.distance.x;
+    const currentMode = this.selectedCards.length
+      ? ModeEnum.MULTISELECT
+      : ModeEnum.IDLE;
 
-    card.top =
-      this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
-      (167 + cardElement.offsetTop) -
-      Math.abs(event.distance.y);
+    const workspaceCard: CardInterface = {
+      ...card,
+      mode: currentMode,
+      left: cardElement.offsetLeft + event.distance.x - scrollLeft,
+      top:
+        this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
+        (167 + cardElement.offsetTop) -
+        Math.abs(event.distance.y)
+    };
 
-    card.mode = ModeEnum.IDLE;
-    this.cards.push(card);
-    this.shelvedCards = this.shelvedCards.filter(c => c !== card);
+    if (currentMode === ModeEnum.MULTISELECT) {
+      //return multiselectselected cards to the right mode so the icon is clicked + green
+      this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
+      //change all cards to multiselect mode
+      this.whiteboard$.value.cards
+        .filter(
+          c =>
+            c.mode !== ModeEnum.MULTISELECTSELECTED &&
+            c.mode !== ModeEnum.UPLOAD
+        )
+        .forEach(c => (c.mode = ModeEnum.MULTISELECT));
+    }
+
+    if (
+      !this.whiteboard$.value.cards
+        .map(workspacecard => workspacecard.id)
+        .includes(workspaceCard.id)
+    ) {
+      this.updateWhiteboardSubject({
+        cards: [...this.whiteboard$.value.cards, workspaceCard]
+      });
+    }
   }
+
   //#endregion
 
   //#region CARD TOOLBAR
 
   cardEditIconClicked(card: CardInterface) {
-    card.mode = ModeEnum.EDIT;
+    this.updateCard({ mode: ModeEnum.EDIT }, card);
   }
 
   cardConfirmIconClicked(card: CardInterface) {
-    card.mode = ModeEnum.IDLE;
+    this.updateCard(
+      { mode: ModeEnum.IDLE, description: card.description },
+      card
+    );
+    this.updateViewMode(card);
+    this.saveWhiteboard();
   }
 
   cardFlipIconClicked(card: CardInterface) {
-    card.viewModeImage = !card.viewModeImage;
+    if (
+      (card.description && card.image.imageUrl) ||
+      card.mode === ModeEnum.EDIT
+    ) {
+      this.updateCard({ viewModeImage: !card.viewModeImage }, card);
 
-    if (card.mode !== ModeEnum.EDIT) {
-      card.mode = ModeEnum.IDLE;
+      if (card.mode !== ModeEnum.EDIT) {
+        this.updateCard({ mode: ModeEnum.IDLE }, card);
+        this.updateViewMode(card);
+      }
     }
   }
 
@@ -280,37 +534,57 @@ export class WhiteboardComponent implements OnInit {
 
   //#region MULTI SELECT ACTIONS
   bulkDeleteClicked() {
-    this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
-    this.selectedCards.forEach(c => this.addCardToShelf(c));
+    const cards = this.whiteboard$.value.cards.filter(
+      c => !this.selectedCards.includes(c)
+    );
+    cards.forEach(c => this.onDeleteCard(c));
+    cards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+    this.updateWhiteboardSubject({
+      cards: cards
+    });
     this.selectedCards = [];
   }
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
-    this.selectedCards.forEach(c => (c.color = this.lastColor));
+    this.selectedCards.forEach(c =>
+      this.updateCard({ color: this.lastColor }, c)
+    );
+    this.updateWhiteboardSubject({});
+    this.saveWhiteboard();
   }
 
   onSelectCard(card: CardInterface) {
     this.selectedCards.push(card);
 
     if (this.selectedCards.length === 1) {
-      this.cards
+      const cards = this.whiteboard$.value.cards;
+
+      cards
         .filter(c => c.mode !== ModeEnum.UPLOAD)
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
-    card.mode = ModeEnum.MULTISELECTSELECTED;
+    this.updateCard({ mode: ModeEnum.MULTISELECTSELECTED }, card);
   }
 
   onDeselectCard(card: CardInterface) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
 
     if (!this.selectedCards.length) {
-      this.cards.forEach(c => (c.mode = ModeEnum.IDLE));
+      this.whiteboard$.value.cards.forEach(c =>
+        this.updateCard({ mode: ModeEnum.IDLE }, c)
+      );
     } else {
-      card.mode = ModeEnum.MULTISELECT;
+      this.updateCard({ mode: ModeEnum.MULTISELECT }, card);
     }
   }
 
+  //#endregion
+
+  //#region shelf actions
+  toggleShelf() {
+    this.isShelfMinimized = !this.isShelfMinimized;
+  }
   //#endregion
 }

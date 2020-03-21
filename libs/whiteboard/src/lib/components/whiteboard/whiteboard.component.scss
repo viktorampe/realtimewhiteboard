@@ -1,13 +1,29 @@
+$zoom-background: #e0e5ec;
+
+$shadow-color-dark: #a3b1c6;
+$shadow-color-light: #ffffff;
+
+$gradient-angle: 135deg;
+
+$defaultColor: #d9328a;
+$L1: #d9328a;
+$L2: #00b3c4;
+$L3: #afcb27;
+$L4: #ea9d04;
+$L5: #963a8e;
+$L6: #e40521;
+
 .whiteboard {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
 
   campus-whiteboard-toolbar {
     position: absolute;
+    top: 24px;
     z-index: 1;
-    left: 0;
-    right: 0;
+    align-self: center;
   }
 
   &.image-drag-directive-dragging {
@@ -40,6 +56,10 @@
       top: 0;
       left: 0;
 
+      &:active {
+        z-index: 1;
+      }
+
       &.zoom {
         position: fixed;
 
@@ -61,45 +81,196 @@
         z-index: 1;
       }
     }
+
+    &__actions {
+      position: absolute;
+      display: flex;
+      top: 24px;
+      right: 24px;
+      z-index: 3;
+
+      &__settingsbutton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+        border-radius: 50%;
+        transition: box-shadow 300ms;
+        background: linear-gradient(
+          145deg,
+          lighten(#e0e5ec, 5%),
+          darken(#e0e5ec, 5%)
+        );
+        transition: all 300ms;
+
+        &:active {
+          box-shadow: inset 1px 1px 6px darken(#e0e5ec, 20%),
+            inset -2px -2px 3px #fff, 3px 3px 8px #a3b1c6, -3px -3px 8px #ffffff;
+          background: linear-gradient(
+            145deg,
+            darken(#e0e5ec, 5%),
+            lighten(#e0e5ec, 5%)
+          );
+        }
+
+        mat-icon {
+          color: rgba(0, 0, 0, 0.57);
+        }
+      }
+
+      &__zoom {
+        margin-left: 24px;
+        display: flex;
+        align-items: center;
+        background-color: $zoom-background;
+        border-radius: 12px;
+        box-shadow: 3px 3px 16px -1px rgba($defaultColor, 0.3),
+          9px 9px 16px $shadow-color-dark,
+          -1px -1px 6px -3px rgba($defaultColor, 0.2),
+          -9px -9px 16px $shadow-color-light;
+        background: linear-gradient(
+          $gradient-angle,
+          lighten($zoom-background, 5%),
+          darken($zoom-background, 5%)
+        );
+
+        &__separator {
+          width: 1px;
+          align-self: stretch;
+          margin: 8px 0;
+          box-shadow: -1px 0px 1px $shadow-color-dark,
+            1px 0px 1px $shadow-color-light;
+        }
+
+        &__button {
+          color: rgba(0, 0, 0, 0.54);
+          padding: 6px;
+          height: 36px;
+          width: 36px;
+        }
+      }
+    }
+  }
+
+  &__empty {
+    position: absolute;
+    align-self: center;
+
+    pointer-events: none;
+
+    width: 100%;
+
+    .ui-empty-state__image {
+      max-width: 300px;
+    }
+
+    .ui-empty-state__title,
+    .ui-empty-state__description {
+      font-family: 'Open Sans', sans-serif;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .ui-empty-state__title {
+      font-size: 64px;
+    }
+
+    .ui-empty-state__description {
+      font-size: 32px;
+    }
   }
 
   &__addbutton {
-    position: absolute;
+    position: absolute !important;
     right: 40px;
     bottom: 107px;
-    z-index: 1;
+
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 3;
+
+    background: #ffffff;
+    box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 18px #ffffff;
+
+    &:active {
+      box-shadow: inset 1px 1px 6px darken(#ffffff, 20%),
+        inset -1px -1px 6px lighten(#ffffff, 20%),
+        1px 1px 2px darken(#a3b1c6, 5%), -1px -1px 2px #ffffff;
+    }
+
+    mat-icon {
+      color: #d9328a;
+    }
+
+    &.plusMinimized {
+      bottom: 35px !important;
+    }
   }
 
-  &__savebutton {
+  &__shelf__button {
+    width: 48px;
+    height: 32px;
+    background: linear-gradient(
+      145deg,
+      lighten(#e0e5ec, 5%),
+      darken(#e0e5ec, 5%)
+    );
+    box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+    border-radius: 12px;
     position: absolute;
-    bottom: 107px;
-    z-index: 1;
-    right: 120px;
+    z-index: 3;
+    left: 50%;
+    bottom: 115px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:active {
+      background: linear-gradient(
+        -145deg,
+        lighten(#e0e5ec, 5%),
+        darken(#e0e5ec, 5%)
+      );
+      box-shadow: inset 1px 1px 6px darken(#e0e5ec, 20%),
+        inset -1px -1px 6px lighten(#e0e5ec, 20%),
+        1px 1px 2px darken(#a3b1c6, 5%), -1px -1px 2px #ffffff;
+    }
+    &.shelfMinimized {
+      bottom: 46px !important;
+    }
   }
 
   campus-shelf {
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    overflow-x: scroll;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    z-index: 2;
+    width: auto;
+    overflow-y: hidden;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0px 160px;
-
-    // OLD DESIGN
-    min-height: 136px;
-    background-color: white;
-    box-shadow: 0px -3px 15px #00000024;
-
-    // NEW DESIGN
-    // overflow: visible !important;
-    // height: 68px;
-    // background: linear-gradient(#f8f4ff 0%, #e0d1ff 100%);
-    // box-shadow: 0px -1px 1px #23033e52;
+    border-radius: 24px;
+    height: auto;
+    background: linear-gradient(
+      145deg,
+      lighten(#e0e5ec, 5%),
+      darken(#e0e5ec, 5%)
+    );
+    //$defaultColor -> #a3b1c6 (for the rgba() values)
+    box-shadow: 3px 3px 16px -1px rgba($shadow-color-dark, 0.3),
+      9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba($shadow-color-dark, 0.2),
+      -9px -9px 16px #ffffff;
   }
 
   .minimizedShelf {
-    height: 20px;
+    height: 36px;
   }
 }
