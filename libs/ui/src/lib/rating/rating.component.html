@@ -1,3 +1,5 @@
-<mat-icon svgIcon="rating-star"></mat-icon>
-<mat-icon svgIcon="rating-star"></mat-icon>
-<mat-icon svgIcon="rating-star-empty"></mat-icon>
+<mat-icon
+  svgIcon="rating-star"
+  *ngFor="let index of total | range"
+  [ngClass]="{ 'ui-rating--filled': index < count }"
+></mat-icon>

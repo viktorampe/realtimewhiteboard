@@ -103,4 +103,11 @@ export class EduContent implements EduContentInterface, ContentInterface {
       )
     );
   }
+
+  static toEduContent(eduContent: EduContentInterface) {
+    return Object.assign<EduContent, EduContentInterface>(
+      new EduContent(),
+      eduContent
+    );
+  }
 }

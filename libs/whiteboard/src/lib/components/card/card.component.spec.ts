@@ -62,7 +62,7 @@ describe('CardComponent', () => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
     updateSpy = spyOn(component.update, 'emit');
-    removeSpy = spyOn(component.remove, 'emit');
+    removeSpy = spyOn(component.removeImage, 'emit');
 
     const mockData: CardInterface = {
       id: uuidv4(),
@@ -89,7 +89,7 @@ describe('CardComponent', () => {
   });
 
   it('removeImage should trigger remove', () => {
-    component.removeImage();
+    component.removeImg();
     expect(removeSpy).toHaveBeenCalled();
   });
 

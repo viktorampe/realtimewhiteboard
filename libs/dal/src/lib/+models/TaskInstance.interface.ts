@@ -13,6 +13,8 @@ export interface TaskInstanceInterface {
   task?: TaskInterface;
   student?: PersonInterface;
   group?: GroupInterface;
+  assignerId?: number;
+  assigner?: PersonInterface;
 
   progress?: number;
 }

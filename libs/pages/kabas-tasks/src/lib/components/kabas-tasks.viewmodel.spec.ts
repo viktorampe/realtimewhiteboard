@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   AssigneeFixture,
   AssigneeTypesEnum,
@@ -67,7 +69,6 @@ import {
   getTaskFavoriteBookIds,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
-
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
   const userId = 1;
@@ -80,13 +81,14 @@ describe('KabasTaskViewModel', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let eduContentService: EduContentServiceInterface;
+  let router: Router;
 
   const apiBase = 'api.foo.be';
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [RouterTestingModule],
       providers: [
         KabasTasksViewModel,
         provideMockStore(),
@@ -145,6 +147,7 @@ describe('KabasTaskViewModel', () => {
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
+    router = TestBed.get(Router);
   });
 
   afterAll(() => {
@@ -911,6 +914,38 @@ describe('KabasTaskViewModel', () => {
           ]
         })
       );
+    });
+  });
+
+  describe('task action handlers', () => {
+    const mockTask = new TaskWithAssigneesFixture({ id: 666 });
+
+    it('openTask() should navigate to the task detail', () => {
+      const routerSpy = jest.spyOn(router, 'navigate');
+      kabasTasksViewModel.openTask(mockTask);
+      expect(routerSpy).toHaveBeenCalledWith(['tasks', 'manage', 666]);
+    });
+
+    it('archiveTask() should call startArchivingTasks - true', () => {
+      const mockActiveTask = new TaskWithAssigneesFixture({
+        id: 666,
+        archivedYear: undefined
+      });
+
+      const spy = jest.spyOn(kabasTasksViewModel, 'startArchivingTasks');
+      kabasTasksViewModel.archiveTask(mockActiveTask);
+      expect(spy).toHaveBeenCalledWith([mockActiveTask], true);
+    });
+
+    it('unarchiveTask() should call startArchivingTasks - false', () => {
+      const mockArchivedTask = new TaskWithAssigneesFixture({
+        id: 666,
+        archivedYear: 1999
+      });
+
+      const spy = jest.spyOn(kabasTasksViewModel, 'startArchivingTasks');
+      kabasTasksViewModel.archiveTask(mockArchivedTask);
+      expect(spy).toHaveBeenCalledWith([mockArchivedTask], false);
     });
   });
 

@@ -11,6 +11,7 @@ export const icons = {
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   methods: 'assets/icons/methods.svg', //Temp icon
+  task: 'assets/icons/tasks/assignment.svg',
   tasks: 'assets/icons/tasks/assignment.svg',
   results: 'assets/icons/results.svg', //Temp icon
   differentiate: 'assets/icons/differentiate.svg', //Temp icon
@@ -69,7 +70,7 @@ export const icons = {
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
   plus: 'assets/icons/add.svg',
   'rating-star': 'assets/icons/rating-star.svg',
-  'rating-star-empty': 'assets/icons/rating-star-empty.svg',
+  hourglass: 'assets/icons/material/hourglass_empty.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
@@ -95,11 +96,12 @@ export const icons = {
   'empty-state-whiteboard-empty': 'assets/empty-states/whiteboard-empty.svg',
   'empty-state-whiteboard-drop': 'assets/empty-states/whiteboard-drop.svg',
 
-  // whiteboard
-  'delete-forever': 'assets/icons/material/delete_forever.svg',
-  'add-photo-alternate': 'assets/icons/material/add_photo_alternate.svg',
-  multiselect: 'assets/icons/multiselect.svg',
-  'multiselect-selected': 'assets/icons/multiselect-selected.svg',
+  // whiteboard icons
+  'delete-forever': 'assets/icons/whiteboard/image-delete.svg',
+  'add-photo-alternate': 'assets/icons/whiteboard/image-edit.svg',
+  multiselect: 'assets/icons/whiteboard/multiselect.svg',
+  'multiselect-selected': 'assets/icons/whiteboard/multiselect-selected.svg',
   'open-in-new': 'assets/icons/material/open_in_new.svg',
+  remove: 'assets/icons/material/remove.svg',
   'arrow-down': 'assets/icons/material/arrow_down.svg'
 };

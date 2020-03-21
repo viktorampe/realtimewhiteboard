@@ -1,5 +1,6 @@
 @import './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.theme';
 @import './components/task-list-item/task-list-item.component.theme';
+@import './components/student-task-list-item/student-task-list-item.component.theme';
 @import './components/task-edu-content-list-item/task-edu-content-list-item.theme';
 @import './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.theme';
 @import './components/manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component.theme';
@@ -9,6 +10,7 @@
 @import './components/manage-task-content/manage-task-content.theme';
 @import './components/student-task-overview/student-task-overview.component.theme.scss';
 @import './components/student-task-detail/student-task-detail.component.theme.scss';
+@import './components/student-task-content-list-item/student-task-content-list-item.component.theme.scss';
 
 // color palette
 $pages-kabas-tasks-text-color--primary: black !default;
@@ -16,6 +18,7 @@ $pages-kabas-tasks-text-color--primary--accent: darkred !default;
 $pages-kabas-tasks-text-color--secondary: grey !default;
 $pages-kabas-tasks-action-color--primary: #15adb9 !default;
 $pages-kabas-tasks-action-color--secondary: #808080 !default;
+$pages-kabas-tasks-text-color--tertiary: blue !default;
 
 $pages-kabas-tasks-border-color--primary: lightgrey !default;
 $pages-kabas-tasks-border-color--secondary: #808080 !default;
@@ -79,6 +82,7 @@ $pages-kabas-tasks_link_label-height: 16px !default;
 @mixin pages-kabas-tasks-theme() {
   @include manage-kabas-tasks-overview-theme();
   @include pages-manage-kabas-tasks-task-list-item-theme();
+  @include pages-manage-kabas-tasks-student-task-list-item-theme();
   @include pages-manage-kabas-tasks-task-edu-content-list-item-theme();
   @include manage-kabas-tasks-detail-theme();
   @include pages-kabas-tasks-modal-theme();
@@ -88,4 +92,5 @@ $pages-kabas-tasks_link_label-height: 16px !default;
   @include manage-task-content-theme();
   @include student-task-overview-theme();
   @include student-task-detail-theme();
+  @include student-task-list-item-content();
 }

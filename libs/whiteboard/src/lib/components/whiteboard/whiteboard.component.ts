@@ -27,7 +27,7 @@ import CardInterface from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
 import { UserInterface } from '../../models/User.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
-import { WhiteboardHttpService } from '../../services/whiteboardservice/whiteboard-http.service';
+import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 
 @Component({
   selector: 'campus-whiteboard',
@@ -194,9 +194,9 @@ export class WhiteboardComponent implements OnChanges {
     // update card
     Object.assign(card, updates);
     // sync shelfcard
-    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
+    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.find(
       shelfcard => shelfcard.id === card.id
-    )[0];
+    );
     if (shelfCard) {
       Object.assign(shelfCard, updates, { mode: ModeEnum.SHELF });
     }
@@ -241,11 +241,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addCardToShelf(card: CardInterface) {
-    if (
-      !this.whiteboard$.value.shelfCards
-        .map(shelfcard => shelfcard.id)
-        .includes(card.id)
-    ) {
+    if (!this.whiteboard$.value.shelfCards.find(sc => sc.id === card.id)) {
       this.updateCard({ mode: ModeEnum.SHELF }, card);
       this.updateWhiteboardSubject({
         shelfCards: [...this.whiteboard$.value.shelfCards, card]
@@ -419,13 +415,14 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  onClickWhiteboard(event) {
+  onClickWhiteboard(event: MouseEvent) {
+    const target = event.target as HTMLElement;
     if (
-      event.target.classList.contains('whiteboard__workspace') ||
-      event.target.classList.contains('card') ||
-      event.target.classList.contains('card-text') ||
-      event.target.classList.contains('card-image') ||
-      event.target.classList.contains('card-image__image')
+      target.classList.contains('whiteboard__workspace') ||
+      target.classList.contains('card') ||
+      target.classList.contains('card-text') ||
+      target.classList.contains('card-image') ||
+      target.classList.contains('card-image__image')
     ) {
       this.selectedCards = [];
       const cards = this.whiteboard$.value.cards;

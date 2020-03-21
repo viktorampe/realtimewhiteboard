@@ -15,6 +15,7 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
@@ -91,7 +92,10 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
-import { ProgressComponent } from './progress/progress.component';
+import {
+  CompletedProgressIconDirective,
+  ProgressComponent
+} from './progress/progress.component';
 import { RatingComponent } from './rating/rating.component';
 import {
   SectionActionsDirective,
@@ -119,6 +123,7 @@ import { IsMobileDirective } from './utils/directives/is-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { JoinPipe } from './utils/pipes/join/join.pipe';
+import { RangePipe } from './utils/pipes/range/range.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
@@ -137,6 +142,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatSelectModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
@@ -235,8 +241,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     FrontLayerContentDirective,
     FrontLayerHeaderDirective,
     ProgressComponent,
+    CompletedProgressIconDirective,
     CollapsibleContainerComponent,
-    RatingComponent
+    RatingComponent,
+    RangePipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -327,8 +335,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     FrontLayerContentDirective,
     FrontLayerHeaderDirective,
     ProgressComponent,
+    CompletedProgressIconDirective,
     CollapsibleContainerComponent,
-    RatingComponent
+    RatingComponent,
+    RangePipe
   ],
   providers: [
     {

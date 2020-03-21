@@ -11,9 +11,9 @@ import {
   take,
   tap
 } from 'rxjs/operators';
-import WhiteboardInterface from '../../../lib/models/whiteboard.interface';
-import { ModeEnum } from '../../enums/mode.enum';
-import ImageInterface from '../../models/image.interface';
+import { ModeEnum } from '../enums/mode.enum';
+import ImageInterface from '../models/image.interface';
+import WhiteboardInterface from '../models/whiteboard.interface';
 
 const RETRY_AMOUNT = 2;
 

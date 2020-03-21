@@ -1,11 +1,10 @@
-import { ScormStatus } from '../+external-interfaces/scorm-api.interface';
-import { Result, ResultInterface } from '../+models';
+import { Result, ResultInterface, ResultStatus } from '../+models';
 
 export class ResultFixture extends Result {
   // defaults
   score = 75;
   time = 10000;
-  status = ScormStatus.STATUS_COMPLETED;
+  status = ResultStatus.STATUS_COMPLETED;
   created = new Date(2018, 11 - 1, 20);
   id = 1;
   eduContentId = 1;
@@ -17,6 +16,7 @@ export class ResultFixture extends Result {
   personDisplayName = 'bar';
   bundleId = 1;
   unlockedContentId = 2;
+  lastUpdated = new Date(2018, 11 - 1, 20);
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults

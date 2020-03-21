@@ -15,6 +15,10 @@ export interface ContentOpenerInterface {
   previewEduContentAsImage(eduContent: EduContent): void;
 }
 
+export interface ResultOpenerInterface {
+  openEduContentFromResult(result: ResultInterface): void;
+}
+
 export const CONTENT_OPEN_ACTIONS_SERVICE_TOKEN = new InjectionToken(
   'ContentOpenActionsService'
 );
@@ -28,7 +32,7 @@ export interface ContentOpenActionsServiceInterface {
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[];
   getActionsForTaskInstanceEduContent(
     eduContent: EduContent,
-    result: ResultInterface,
-    taskInstance: TaskInstanceInterface
+    result: Pick<ResultInterface, 'status'>,
+    taskInstance: Pick<TaskInstanceInterface, 'end'>
   ): ContentActionInterface[];
 }

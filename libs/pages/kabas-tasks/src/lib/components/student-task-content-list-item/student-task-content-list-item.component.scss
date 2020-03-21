@@ -1,0 +1,13 @@
+:host {
+  flex: 1 1 auto;
+
+  .student-task-content-list-item {
+    &__last-updated {
+      display: flex;
+
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+  }
+}

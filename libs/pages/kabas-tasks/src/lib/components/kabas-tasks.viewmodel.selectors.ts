@@ -100,7 +100,7 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
 
             return {
               ...tEdu,
-              eduContent: toEduContent({
+              eduContent: EduContent.toEduContent({
                 ...eduContent,
                 publishedEduContentMetadata
               })
@@ -161,12 +161,5 @@ function methodLevelForEduContent(
     mLevel =>
       mLevel.methodId === allowedEduContentMethodId &&
       mLevel.levelId === eduContent.publishedEduContentMetadata.levelId
-  );
-}
-
-function toEduContent(eduContent: EduContentInterface) {
-  return Object.assign<EduContent, EduContentInterface>(
-    new EduContent(),
-    eduContent
   );
 }
