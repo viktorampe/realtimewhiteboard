@@ -127,6 +127,7 @@ export class WhiteboardComponent implements OnChanges {
         apiBase: this.apiBase,
         metadataId: this.metadataId
       });
+      this.initialiseObservables();
     }
   }
 
