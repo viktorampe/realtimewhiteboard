@@ -118,7 +118,6 @@ export class WhiteboardComponent implements OnChanges {
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {
     this.initialiseForm();
-    this.initialiseObservables();
   }
 
   ngOnChanges() {
