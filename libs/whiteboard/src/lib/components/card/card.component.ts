@@ -17,15 +17,15 @@ export class CardComponent {
 
   @Output() openFilePicker = new EventEmitter<string>();
   @Output() update = new EventEmitter<Partial<CardInterface>>();
-  @Output() remove = new EventEmitter<void>();
+  @Output() removeImage = new EventEmitter<void>();
   constructor() {}
 
   get Mode() {
     return ModeEnum;
   }
 
-  removeImage() {
-    this.remove.emit();
+  removeImg() {
+    this.removeImage.emit();
   }
 
   selectImage() {
