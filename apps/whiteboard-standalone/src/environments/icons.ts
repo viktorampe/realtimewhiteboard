@@ -10,7 +10,7 @@ export const icons: { [icon: string]: string } = {
   flip: 'assets/icons/material/flip_camera.svg',
   edit: 'assets/icons/material/edit.svg',
   settings: 'assets/icons/settings.svg',
-  remove: 'assets/icons/material/arrow_down.svg',
+  remove: 'assets/icons/material/remove.svg',
   'arrow-down': 'assets/icons/material/arrow_down.svg',
   'empty-state-whiteboard-empty': 'assets/empty-states/whiteboard-empty.svg',
   'empty-state-whiteboard-drop': 'assets/empty-states/whiteboard-drop.svg'
