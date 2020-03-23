@@ -115,6 +115,7 @@ export class WhiteboardComponent implements OnChanges {
   lastColor = '#00A7E2';
   isTitleInputSelected = true;
   isShelfMinimized = false;
+  isSettingsActive = false;
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {
     this.initialiseForm();
@@ -370,6 +371,10 @@ export class WhiteboardComponent implements OnChanges {
   //#region WHITEBOARD ACTIONS
   showTitleInput() {
     this.isTitleInputSelected = true;
+  }
+
+  toggleSettings() {
+    this.isSettingsActive = !this.isSettingsActive;
   }
 
   hideTitleInput() {

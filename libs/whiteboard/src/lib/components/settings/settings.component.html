@@ -1,0 +1,16 @@
+<div class="settings__container">
+  <div class="settings__formgroup">
+    <label for="whiteboardtitle"><h4>Titel</h4></label>
+    <input />
+  </div>
+  <div class="settings__formgroup">
+    <label for="defaultColor"><h4>Kleur</h4></label>
+    <campus-color-list
+      class="settings__color-list"
+      (selectedColor)="setDefaultColor($event)"
+    ></campus-color-list>
+  </div>
+  <div class="settings__submitButton">
+    <button class="settings__submitButton__button">Klaar</button>
+  </div>
+</div>

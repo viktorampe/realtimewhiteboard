@@ -6,7 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+  whiteboardTitle: '';
+  defaultColor: string;
+
   constructor() {}
 
   ngOnInit() {}
+
+  setDefaultColor(color: string) {
+    this.defaultColor = color;
+  }
 }
