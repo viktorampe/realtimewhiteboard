@@ -304,14 +304,18 @@ export class WhiteboardComponent implements OnChanges {
     this.whiteboardHttpService
       .uploadFile(image)
       .subscribe((response: ImageInterface) => {
-        this.updateCard({ image: response }, card);
         if (response.imageUrl) {
+          // update card
+          this.updateCard({ image: response }, card);
+          // set mode to MUTLISELECT when mutliple cards are selected
           if (this.selectedCards.length) {
             this.updateCard(
               { mode: ModeEnum.MULTISELECT, viewModeImage: true },
               card
             );
-          } else {
+          }
+          // else set to IDLE
+          else {
             this.updateCard({ mode: ModeEnum.IDLE, viewModeImage: true }, card);
           }
           this.saveWhiteboard();
