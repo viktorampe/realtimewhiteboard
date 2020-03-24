@@ -13,6 +13,13 @@
       rel="stylesheet"
       type="text/css"
     />
+
+    <script>
+      // discard subdomain and port for window.opener or iframes to work on cross-domain subdomains
+      document.domain = location.host
+        .replace(/^.*?([^.]+\.[^.]+)$/g, '$1')
+        .replace(/\:(\d)+/, '');
+    </script>
   </head>
   <body>
     <campus-root></campus-root>
