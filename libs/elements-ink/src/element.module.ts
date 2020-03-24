@@ -3,7 +3,7 @@ import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditorTimelineComponent, TimelineModule } from '@campus/timeline';
-import { WhiteboardComponent, WhiteboardModule } from '../../whiteboard/src';
+import { WhiteboardComponent, WhiteboardModule } from '@campus/whiteboard';
 
 @NgModule({
   imports: [

@@ -13,10 +13,7 @@ import { WindowServiceInterface } from './window.service.interface';
 })
 export class WindowService implements WindowServiceInterface {
   private _openedWindows: { [name: string]: Window } = {};
-  constructor(
-    @Inject(WINDOW) private nativeWindow: Window,
-    public dialog: MatDialog
-  ) {}
+  constructor(@Inject(WINDOW) private nativeWindow, public dialog: MatDialog) {}
 
   openWindow(name: string, url: string, useIframe: boolean = false) {
     if (!useIframe) {

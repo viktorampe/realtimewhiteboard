@@ -167,7 +167,7 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
   frontLayerElement: ElementRef;
 
   constructor(
-    @Inject(WINDOW) private window: Window,
+    @Inject(WINDOW) private window,
     private cdRef: ChangeDetectorRef,
     @Inject(ENVIRONMENT_UI_TOKEN) private environmentUI: EnvironmentUIInterface
   ) {}
