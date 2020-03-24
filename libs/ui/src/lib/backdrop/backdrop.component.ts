@@ -13,6 +13,7 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  HostListener,
   Inject,
   Input,
   OnChanges,
@@ -188,6 +189,10 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
     this.setupHeights();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setupHeights();
+  }
   private setupHeights() {
     this.delta = this.calculateDelta();
     this.maxDelta = this.calculateMaxDelta();

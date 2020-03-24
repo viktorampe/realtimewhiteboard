@@ -7,8 +7,7 @@ import {
   EduContent,
   getRouterState,
   ResultInterface,
-  RouterStateUrl,
-  TaskInterface
+  RouterStateUrl
 } from '@campus/dal';
 import {
   ContentOpenerInterface,
@@ -97,8 +96,8 @@ export class StudentTasksViewModel
     );
   }
 
-  openTask(task: TaskInterface) {
-    this.router.navigate(['tasks', task.id]);
+  openTask(prop: { taskInstanceId: number }) {
+    this.router.navigate(['tasks', prop.taskInstanceId]);
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {

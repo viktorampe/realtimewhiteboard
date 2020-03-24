@@ -27,6 +27,10 @@ export const CONTENT_OPENER_TOKEN = new InjectionToken<ContentOpenerInterface>(
   'ContentOpener'
 );
 
+export const STUDENT_CONTENT_OPENER_TOKEN = new InjectionToken<
+  ContentOpenerInterface
+>('StudentContentOpener');
+
 export interface ContentOpenActionsServiceInterface {
   contentActionDictionary: { [key: string]: ContentActionInterface };
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[];
