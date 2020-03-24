@@ -3,7 +3,10 @@ import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditorTimelineComponent, TimelineModule } from '@campus/timeline';
-import { WhiteboardComponent, WhiteboardModule } from '@campus/whiteboard';
+import {
+  WhiteboardModule,
+  WhiteboardStandaloneComponent
+} from '@campus/whiteboard';
 
 @NgModule({
   imports: [
@@ -12,7 +15,7 @@ import { WhiteboardComponent, WhiteboardModule } from '@campus/whiteboard';
     BrowserAnimationsModule,
     WhiteboardModule
   ],
-  entryComponents: [EditorTimelineComponent, WhiteboardComponent] //place additional custom components here and ...
+  entryComponents: [EditorTimelineComponent, WhiteboardStandaloneComponent] //place additional custom components here and ...
 })
 export class ElementModule {
   constructor(injector: Injector) {
@@ -23,9 +26,12 @@ export class ElementModule {
       }
     );
 
-    const whiteboardComponent = createCustomElement(WhiteboardComponent, {
-      injector: injector
-    });
+    const whiteboardComponent = createCustomElement(
+      WhiteboardStandaloneComponent,
+      {
+        injector: injector
+      }
+    );
     customElements.define('campus-whiteboard', whiteboardComponent);
     customElements.define('campus-editor-timeline', timelineEditorComponent); //... and here
   }
