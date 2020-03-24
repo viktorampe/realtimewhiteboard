@@ -1,22 +1,6 @@
-import {
-  animate,
-  animateChild,
-  keyframes,
-  query,
-  stagger,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
+import { animate, animateChild, keyframes, query, stagger, style, transition, trigger } from '@angular/animations';
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -508,6 +492,15 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
+  updateSettings(settings: any) {
+    this.updateWhiteboardSubject({
+      title: settings.whiteboardTitle,
+      defaultColor: settings.defaultColor
+    });
+    this.saveWhiteboard();
+    this.lastColor = settings.defaultColor;
+    this.toggleSettings();
+  }
   //#endregion
 
   //#region CARD TOOLBAR

@@ -33,6 +33,7 @@ import { CardComponent } from '../card/card.component';
 import { ColorListComponent } from '../color-list/color-list.component';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
+import { SettingsComponent } from '../settings/settings.component';
 import { ShelfComponent } from '../shelf/shelf.component';
 import { WhiteboardToolbarComponent } from '../whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -66,7 +67,8 @@ describe('WhiteboardComponent', () => {
         ShelfComponent,
         CardImageComponent,
         CardTextComponent,
-        ImageToolbarComponent
+        ImageToolbarComponent,
+        SettingsComponent
       ],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
@@ -116,6 +118,7 @@ describe('WhiteboardComponent', () => {
 
     component.whiteboard$.next({
       title: '',
+      defaultColor: '#00A7E2',
       cards: [card1, card2],
       shelfCards: []
     });
@@ -158,6 +161,48 @@ describe('WhiteboardComponent', () => {
       cardSizeBeforeDelete - 1
     );
     expect(component.whiteboard$.value.cards).not.toContain(card);
+  });
+
+  describe('updateSettings()', () => {
+    it('should update whiteboard title and defaultColor', () => {
+      component.whiteboard$.value.title = 'beforeTitle';
+      component.whiteboard$.value.defaultColor = '#FFFFFFFF';
+
+      component.updateSettings({
+        whiteboardTitle: 'afterTitle',
+        defaultColor: '#00000000'
+      });
+
+      expect(component.whiteboard$.value.title).toBe('afterTitle');
+      expect(component.whiteboard$.value.defaultColor).toBe('#00000000');
+    });
+    it('should save the whiteboard', () => {
+      const saveWhiteboardSpy = jest.spyOn(component, 'saveWhiteboard');
+      component.updateSettings({
+        whiteboardTitle: 'title',
+        defaultColor: '#00000000'
+      });
+      expect(saveWhiteboardSpy).toHaveBeenCalled();
+    });
+    it('should set lastColor', () => {
+      component.updateSettings({
+        whiteboardTitle: 'title',
+        defaultColor: '#00000000'
+      });
+
+      expect(component.lastColor).toBe('#00000000');
+    });
+    it('should toggle settings visibility', () => {
+      const toggleSettingsSpy = jest.spyOn(component, 'toggleSettings');
+      const visibilityBefore = component.isSettingsActive;
+      component.updateSettings({
+        whiteboardTitle: 'title',
+        defaultColor: '#00000000'
+      });
+      const visibilityAfter = component.isSettingsActive;
+      expect(visibilityBefore).not.toBe(visibilityAfter);
+      expect(toggleSettingsSpy).toHaveBeenCalled();
+    });
   });
 
   describe('showTitleInput()', () => {
@@ -603,6 +648,7 @@ describe('WhiteboardComponent', () => {
       shelvedCard.mode = <ModeEnum>ModeEnum.SHELF;
 
       component.whiteboard$.value.title = 'test board';
+      component.whiteboard$.value.defaultColor = '#FFFFFF';
       component.whiteboard$.value.shelfCards = [shelvedCard];
 
       component.saveWhiteboard();
@@ -617,6 +663,7 @@ describe('WhiteboardComponent', () => {
 
       const expected = new WhiteboardFixture({
         title: 'test board',
+        defaultColor: '#FFFFFF',
         cards: cards,
         shelfCards: null
       });

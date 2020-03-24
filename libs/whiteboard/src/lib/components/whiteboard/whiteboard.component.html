@@ -37,21 +37,21 @@
     (longpress)="createCard($event)"
     #workspace
   >
-    <div
-      @showHideCard
-      class="whiteboard__workspace__container"
-      *ngFor="let card of whiteboard.cards"
-      cdkDrag
-      [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
-      [cdkDragDisabled]="card.mode === Mode.ZOOM"
-      cdkDragBoundary=".whiteboard__workspace"
-      [class.zoom]="card.mode === Mode.ZOOM"
-      [class.onTop]="card.mode === Mode.SELECTED"
-      (cdkDragEnded)="onDragEnded($event, card)"
-      (cdkDragStarted)="onDragStarted(card)"
-      (tap)="onCardTapped(card)"
-    >
-      <ng-container *ngIf="!isSettingsActive; else settingsView">
+    <ng-container *ngIf="!isSettingsActive; else settingsView">
+      <div
+        @showHideCard
+        class="whiteboard__workspace__container"
+        *ngFor="let card of whiteboard.cards"
+        cdkDrag
+        [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
+        [cdkDragDisabled]="card.mode === Mode.ZOOM"
+        cdkDragBoundary=".whiteboard__workspace"
+        [class.zoom]="card.mode === Mode.ZOOM"
+        [class.onTop]="card.mode === Mode.SELECTED"
+        (cdkDragEnded)="onDragEnded($event, card)"
+        (cdkDragStarted)="onDragStarted(card)"
+        (tap)="onCardTapped(card)"
+      >
         <campus-color-list
           @showHideColorList
           class="whiteboard__color-list"
@@ -95,11 +95,15 @@
           multiple="false"
           style="display: none;"
         />
-      </ng-container>
-      <ng-template #settingsView>
-        <campus-settings></campus-settings>
-      </ng-template>
-    </div>
+      </div>
+    </ng-container>
+    <ng-template #settingsView>
+      <campus-settings
+        (settings)="updateSettings($event)"
+        [defaultColor]="whiteboard$.value.defaultColor"
+        [whiteboardTitle]="whiteboard$.value.title"
+      ></campus-settings>
+    </ng-template>
 
     <div
       class="whiteboard__addbutton"
@@ -123,7 +127,7 @@
   </div>
   <campus-empty-state
     class="whiteboard__empty"
-    *ngIf="!whiteboard.cards.length"
+    *ngIf="!whiteboard.cards.length && !isSettingsActive"
     [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
     [description]="
       true

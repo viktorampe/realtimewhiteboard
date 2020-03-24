@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-settings',
@@ -6,8 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
-  whiteboardTitle: '';
-  defaultColor: string;
+  @Output() settings = new EventEmitter<Object>();
+  @Input() defaultColor: string;
+  @Input() whiteboardTitle: string;
 
   constructor() {}
 
@@ -15,5 +16,12 @@ export class SettingsComponent implements OnInit {
 
   setDefaultColor(color: string) {
     this.defaultColor = color;
+  }
+
+  emitSettings() {
+    this.settings.emit({
+      whiteboardTitle: this.whiteboardTitle,
+      defaultColor: this.defaultColor
+    });
   }
 }

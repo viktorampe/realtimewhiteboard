@@ -66,6 +66,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
       map(
         (whiteboard: WhiteboardInterface): WhiteboardInterface => ({
           title: whiteboard.title,
+          defaultColor: whiteboard.defaultColor,
           cards: [],
           shelfCards: whiteboard.cards.map(c => ({
             ...c,

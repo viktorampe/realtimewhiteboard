@@ -1,17 +1,4 @@
-$zoom-background: #e0e5ec;
-
-$shadow-color-dark: #a3b1c6;
-$shadow-color-light: #ffffff;
-
-$gradient-angle: 135deg;
-
-$defaultColor: #d9328a;
-$L1: #d9328a;
-$L2: #00b3c4;
-$L3: #afcb27;
-$L4: #ea9d04;
-$L5: #963a8e;
-$L6: #e40521;
+@import '../../../constants.scss';
 
 .whiteboard {
   position: relative;
