@@ -44,7 +44,8 @@ export class StudentTaskDetailComponent {
       humanDateTimeRulesEnum.WEEKDAY,
       humanDateTimeRulesEnum.NEXT_WEEK
     ]),
-    datePrefix: 'op'
+    datePrefix: 'op',
+    addDate: true
   };
 
   @HostBinding('class.student-task-detail')

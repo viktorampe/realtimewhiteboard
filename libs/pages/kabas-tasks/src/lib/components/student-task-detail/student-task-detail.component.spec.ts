@@ -170,37 +170,39 @@ describe('StudentTaskDetailComponent', () => {
       {
         it: 'today',
         input: today,
-        expected: 'vandaag'
+        expected: 'vandaag (' + today.toLocaleDateString('nl-BE') + ')'
       },
       {
         it: 'tomorrow',
         input: tomorrow,
-        expected: 'morgen'
+        expected: 'morgen (' + tomorrow.toLocaleDateString('nl-BE') + ')'
       },
       {
         it: 'day after tomorrow',
         input: dayAfterTomorrow,
-        expected: 'overmorgen'
+        expected:
+          'overmorgen (' + dayAfterTomorrow.toLocaleDateString('nl-BE') + ')'
       },
       {
         it: 'thursday',
         input: thursday,
-        expected: 'donderdag'
+        expected: 'donderdag (' + thursday.toLocaleDateString('nl-BE') + ')'
       },
       {
         it: 'sunday',
         input: sunday,
-        expected: 'zondag'
+        expected: 'zondag (' + sunday.toLocaleDateString('nl-BE') + ')'
       },
       {
         it: 'next week',
         input: nextWeek,
-        expected: 'volgende week'
+        expected: 'volgende week (' + nextWeek.toLocaleDateString('nl-BE') + ')'
       },
       {
         it: 'next week - end',
         input: endNextWeek,
-        expected: 'volgende week'
+        expected:
+          'volgende week (' + endNextWeek.toLocaleDateString('nl-BE') + ')'
       },
       {
         it: 'future',

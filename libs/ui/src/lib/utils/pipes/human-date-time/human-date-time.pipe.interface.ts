@@ -8,4 +8,5 @@ export interface HumanDateTimeArgsInterface {
   referenceDate?: Date; // default -> now
   locale?: string; // default -> 'nl-BE'
   datePrefix?: string;
+  addDate?: boolean;
 }
