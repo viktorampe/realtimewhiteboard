@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import WhiteboardInterface from '../../models/whiteboard.interface';
@@ -14,7 +14,7 @@ import {
   styleUrls: ['./whiteboard-standalone.component.scss']
 })
 export class WhiteboardStandaloneComponent implements OnChanges {
-  @Input() metadataId: number;
+  @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
   @Input() canManage: boolean;
 
@@ -23,19 +23,23 @@ export class WhiteboardStandaloneComponent implements OnChanges {
     null
   );
 
-  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {
+    console.log('constructed');
+  }
 
-  ngOnChanges() {
-    if (this.apiBase && this.metadataId) {
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('in on changes', changes);
+    if (this.apiBase && this.eduContentMetadataId && this.canManage) {
       this.whiteboardHttpService.setSettings({
         apiBase: this.apiBase,
-        metadataId: this.metadataId
+        metadataId: this.eduContentMetadataId
       });
       this.initialize();
     }
   }
 
   private initialize(): void {
+    console.log('initialize');
     this.whiteboard$ = this.whiteboardHttpService.getJson();
   }
 
