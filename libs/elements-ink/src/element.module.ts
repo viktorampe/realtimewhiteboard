@@ -26,13 +26,13 @@ export class ElementModule {
       }
     );
 
-    const whiteboardComponent = createCustomElement(
+    const whiteboardElement = createCustomElement(
       WhiteboardStandaloneComponent,
       {
         injector: injector
       }
     );
-    customElements.define('campus-whiteboard', whiteboardComponent);
+    customElements.define('campus-whiteboard-element', whiteboardElement);
     customElements.define('campus-editor-timeline', timelineEditorComponent); //... and here
   }
 
