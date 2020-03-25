@@ -23,12 +23,9 @@ export class WhiteboardStandaloneComponent implements OnChanges {
     null
   );
 
-  constructor(private whiteboardHttpService: WhiteboardHttpService) {
-    console.log('constructed');
-  }
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('in on changes', changes);
     if (this.apiBase && this.eduContentMetadataId && this.canManage) {
       this.whiteboardHttpService.setSettings({
         apiBase: this.apiBase,
@@ -39,7 +36,6 @@ export class WhiteboardStandaloneComponent implements OnChanges {
   }
 
   private initialize(): void {
-    console.log('initialize');
     this.whiteboard$ = this.whiteboardHttpService.getJson();
   }
 
