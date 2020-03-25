@@ -21,6 +21,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
+import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
 import { PermissionEnum } from '../../enums/permission.enum';
 import CardInterface from '../../models/card.interface';
@@ -212,10 +213,11 @@ export class WhiteboardComponent implements OnChanges {
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
 
-    // add card to the workspace
+    // add card to the workspace, override values
     const card = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
+      cardType: true ? CardTypeEnum.PUBLISHERCARD : CardTypeEnum.TEACHERCARD, // TODO: replace true with 'canManage'
       color: this.lastColor,
       description: '',
       image: {},
@@ -255,7 +257,7 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDeleteCard(card: CardInterface) {
+  deleteCard(card: CardInterface) {
     this.updateWhiteboardSubject({
       cards: this.whiteboard$.value.cards.filter(c => c !== card)
     });
@@ -541,7 +543,7 @@ export class WhiteboardComponent implements OnChanges {
     const cards = this.whiteboard$.value.cards.filter(
       c => !this.selectedCards.includes(c)
     );
-    cards.forEach(c => this.onDeleteCard(c));
+    cards.forEach(c => this.deleteCard(c));
     cards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
     this.updateWhiteboardSubject({
       cards: cards
