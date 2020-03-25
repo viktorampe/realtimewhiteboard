@@ -59,7 +59,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
       tap(response => (this.eduContentId = response.eduContentId)),
       map(
         (response: any): WhiteboardInterface =>
-          response
+          response.data
             ? JSON.parse(response.data)
             : { title: '', cards: [], shelfCards: {} }
       ),
