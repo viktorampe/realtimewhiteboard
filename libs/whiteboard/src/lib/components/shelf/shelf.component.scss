@@ -6,7 +6,20 @@
   width: 100%;
   overflow-x: scroll;
 
+  &__container {
+    position: relative;
+    margin-right: 20px;
+
+    &:hover .shelf__card__toolbar {
+      display: block;
+    }
+  }
+
   &__card {
     margin-right: 20px;
+  }
+
+  &__card__toolbar {
+    display: none;
   }
 }

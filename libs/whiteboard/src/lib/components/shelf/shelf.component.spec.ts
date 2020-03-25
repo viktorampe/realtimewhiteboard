@@ -63,4 +63,10 @@ describe('ShelfComponent', () => {
     component.toggleShelf();
     expect(component.isMinimizedChange.emit).toHaveBeenCalled();
   });
+
+  it('should emit clickDeleteIcon when deleteIconClicked is called', () => {
+    spyOn(component.deleteCard, 'emit');
+    component.emitDeleteCard({});
+    expect(component.deleteCard.emit).toHaveBeenCalled();
+  });
 });

@@ -148,16 +148,34 @@ describe('WhiteboardComponent', () => {
     expect(component.whiteboard$.value.shelfCards).toContain(card);
   });
 
-  it('should delete a card from the list of cards when the user clicks delete', () => {
+  it('should permanently delete a card from the list of cards when the user clicks delete', () => {
     const cardSizeBeforeDelete = component.whiteboard$.value.cards.length;
     const [card] = component.whiteboard$.value.cards;
+    component.addCardToShelf(card);
+    component.onDeleteCard(card, true);
 
+    expect(component.whiteboard$.value.cards.length).toBe(
+      cardSizeBeforeDelete - 1
+    );
+    expect(component.whiteboard$.value.cards).not.toContain(card);
+    expect(
+      component.whiteboard$.value.shelfCards.map(sc => sc.id)
+    ).not.toContain(card.id);
+  });
+
+  it('should return card to shelf when the user clicks returncardtoshelf', () => {
+    const cardSizeBeforeDelete = component.whiteboard$.value.cards.length;
+    const [card] = component.whiteboard$.value.cards;
+    component.addCardToShelf(card);
     component.onDeleteCard(card);
 
     expect(component.whiteboard$.value.cards.length).toBe(
       cardSizeBeforeDelete - 1
     );
     expect(component.whiteboard$.value.cards).not.toContain(card);
+    expect(component.whiteboard$.value.shelfCards.map(sc => sc.id)).toContain(
+      card.id
+    );
   });
 
   describe('showTitleInput()', () => {

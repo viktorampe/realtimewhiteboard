@@ -255,10 +255,18 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDeleteCard(card: CardInterface) {
+  onDeleteCard(card: CardInterface, permanent?: boolean) {
     this.updateWhiteboardSubject({
       cards: this.whiteboard$.value.cards.filter(c => c !== card)
     });
+    if (permanent) {
+      this.updateWhiteboardSubject({
+        shelfCards: this.whiteboard$.value.shelfCards.filter(
+          sc => sc.id !== card.id
+        )
+      });
+    }
+    this.saveWhiteboard();
   }
 
   onCardTapped(card: CardInterface) {
@@ -460,15 +468,19 @@ export class WhiteboardComponent implements OnChanges {
     cardElement: HTMLElement;
     scrollLeft: number;
   }) {
+    const { card, event, cardElement, scrollLeft } = $event;
+
+    // set all cards to IDLE (except cards in UPLOAD)
     this.whiteboard$.value.cards
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => (c.mode = ModeEnum.IDLE));
-    const { card, event, cardElement, scrollLeft } = $event;
 
+    // check if there are currently cards in MULTISELECT
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
       : ModeEnum.IDLE;
 
+    // Initialize new card
     const workspaceCard: CardInterface = {
       ...card,
       mode: currentMode,
@@ -479,10 +491,11 @@ export class WhiteboardComponent implements OnChanges {
         Math.abs(event.distance.y)
     };
 
+    // There are currently cards in MULTISELECT
     if (currentMode === ModeEnum.MULTISELECT) {
-      //return multiselectselected cards to the right mode so the icon is clicked + green
+      // return previously selected cards to multiselectselected
       this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
-      //change all cards to multiselect mode
+      // set all cards to multiselect mode
       this.whiteboard$.value.cards
         .filter(
           c =>
@@ -492,6 +505,7 @@ export class WhiteboardComponent implements OnChanges {
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
+    // Add card to workspace
     if (
       !this.whiteboard$.value.cards
         .map(workspacecard => workspacecard.id)

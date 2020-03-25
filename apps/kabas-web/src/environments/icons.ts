@@ -71,6 +71,7 @@ export const icons = {
   plus: 'assets/icons/add.svg',
   'rating-star': 'assets/icons/rating-star.svg',
   hourglass: 'assets/icons/material/hourglass_empty.svg',
+  returntoshelf: 'assets/icons/material/return-to-shelf.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

@@ -22,6 +22,7 @@ export class ShelfComponent implements OnInit {
   @Input() isMinimized = false;
   @Output() isMinimizedChange = new EventEmitter<boolean>();
   @Output() cardDraggedOutsideContainer = new EventEmitter<any>();
+  @Output() deleteCard = new EventEmitter<CardInterface>();
 
   private cardElementBeingDragged: HTMLElement;
 
@@ -39,6 +40,7 @@ export class ShelfComponent implements OnInit {
   }
 
   onCardDragged(event: CdkDragDrop<any>, card: CardInterface) {
+    console.log(this.cardElementBeingDragged);
     if (!event.isPointerOverContainer) {
       this.cardDraggedOutsideContainer.emit({
         event: event,
@@ -48,5 +50,9 @@ export class ShelfComponent implements OnInit {
       });
     }
     this.cardElementBeingDragged = null;
+  }
+
+  emitDeleteCard(card) {
+    this.deleteCard.emit(card);
   }
 }
