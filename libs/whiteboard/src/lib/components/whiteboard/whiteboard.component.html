@@ -11,22 +11,7 @@
     (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
   ></campus-whiteboard-toolbar>
-  <div class="whiteboard__header">
-    <h2
-      *ngIf="!isTitleInputSelected"
-      class="whiteboard__header__title"
-      (click)="showTitleInput()"
-      >{{ whiteboard.title }}</h2
-    >
-    <input
-      type="text"
-      #titleInput
-      [formControl]="titleFC"
-      (keyup.enter)="hideTitleInput()"
-      (focusout)="hideTitleInput()"
-      *ngIf="isTitleInputSelected"
-    />
-  </div>
+
   <div class="whiteboard__workspace__actions">
     <div color="primary" class="whiteboard__workspace__actions__settingsbutton">
       <mat-icon [svgIcon]="'settings'"></mat-icon>
