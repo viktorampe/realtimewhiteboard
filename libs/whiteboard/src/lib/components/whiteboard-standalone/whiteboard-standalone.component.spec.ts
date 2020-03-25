@@ -1,5 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardStandaloneComponent } from './whiteboard-standalone.component';
 
 describe('WhiteboardStandaloneComponent', () => {
@@ -8,9 +9,10 @@ describe('WhiteboardStandaloneComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WhiteboardStandaloneComponent ]
-    })
-    .compileComponents();
+      imports: [WhiteboardModule, HttpClientTestingModule],
+
+      declarations: []
+    }).compileComponents();
   }));
 
   beforeEach(() => {
