@@ -1,25 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatCardModule,
-  MatIconRegistry,
-  MatInputModule,
-  MatProgressBarModule
-} from '@angular/material';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
-import { CardImageComponent } from '../card-image/card-image.component';
-import { CardTextComponent } from '../card-text/card-text.component';
-import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
-import { ColorListComponent } from '../color-list/color-list.component';
-import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
-import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
+import { WhiteboardModule } from '../../whiteboard.module';
 import { CardComponent } from './card.component';
 
 describe('CardComponent', () => {
@@ -30,24 +17,8 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MatCardModule,
-        FormsModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatProgressBarModule,
-        MatInputModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [
-        CardComponent,
-        CardToolbarComponent,
-        ColorListComponent,
-        CardTextComponent,
-        CardImageComponent,
-        ImageToolbarComponent,
-        ProgressBarComponent
-      ],
+      imports: [WhiteboardModule],
+      declarations: [],
       providers: [
         {
           provide: HAMMER_LOADER,

@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardStandaloneComponent } from './whiteboard-standalone.component';
 
@@ -7,13 +8,13 @@ describe('WhiteboardStandaloneComponent', () => {
   let component: WhiteboardStandaloneComponent;
   let fixture: ComponentFixture<WhiteboardStandaloneComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [WhiteboardModule, HttpClientTestingModule],
 
       declarations: []
-    }).compileComponents();
-  }));
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(WhiteboardStandaloneComponent);

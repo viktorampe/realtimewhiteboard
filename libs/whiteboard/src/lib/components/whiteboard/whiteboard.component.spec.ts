@@ -10,7 +10,6 @@ import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
-// file.only
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
