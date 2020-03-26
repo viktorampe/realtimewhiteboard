@@ -21,6 +21,7 @@ import { ModeEnum } from '../../enums/mode.enum';
 import { PermissionEnum } from '../../enums/permission.enum';
 import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
+import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardFixture } from '../../models/whiteboard.fixture';
 import {
   WhiteboardHttpService,
@@ -168,68 +169,45 @@ describe('WhiteboardComponent', () => {
       component.whiteboard$.value.title = 'beforeTitle';
       component.whiteboard$.value.defaultColor = '#FFFFFFFF';
 
-      component.updateSettings({
-        whiteboardTitle: 'afterTitle',
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
         defaultColor: '#00000000'
-      });
+      };
+
+      component.updateSettings(settings);
 
       expect(component.whiteboard$.value.title).toBe('afterTitle');
       expect(component.whiteboard$.value.defaultColor).toBe('#00000000');
     });
     it('should save the whiteboard', () => {
       const saveWhiteboardSpy = jest.spyOn(component, 'saveWhiteboard');
-      component.updateSettings({
-        whiteboardTitle: 'title',
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
         defaultColor: '#00000000'
-      });
+      };
+      component.updateSettings(settings);
       expect(saveWhiteboardSpy).toHaveBeenCalled();
     });
     it('should set lastColor', () => {
-      component.updateSettings({
-        whiteboardTitle: 'title',
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
         defaultColor: '#00000000'
-      });
+      };
+      component.updateSettings(settings);
 
       expect(component.lastColor).toBe('#00000000');
     });
     it('should toggle settings visibility', () => {
       const toggleSettingsSpy = jest.spyOn(component, 'toggleSettings');
       const visibilityBefore = component.isSettingsActive;
-      component.updateSettings({
-        whiteboardTitle: 'title',
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
         defaultColor: '#00000000'
-      });
+      };
+      component.updateSettings(settings);
       const visibilityAfter = component.isSettingsActive;
       expect(visibilityBefore).not.toBe(visibilityAfter);
       expect(toggleSettingsSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('showTitleInput()', () => {
-    it('should set isTitleInputSelected to true', () => {
-      component.isTitleInputSelected = false;
-
-      component.showTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(true);
-    });
-
-    it('should set isTitleInputSelected to false if title is not empty', () => {
-      component.isTitleInputSelected = true;
-      component.titleFC.patchValue('test');
-
-      component.hideTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(false);
-    });
-
-    it('should set isTitleInputSelected to true if title is empty', () => {
-      component.isTitleInputSelected = true;
-      component.titleFC.patchValue('');
-
-      component.hideTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(true);
     });
   });
 

@@ -141,6 +141,15 @@
     }
   }
 
+  &__settings {
+    width: 60%;
+    max-width: 400px;
+    position: absolute;
+    left: 50%;
+    top: 35%;
+    transform: translate(-50%, -50%);
+  }
+
   &__empty {
     position: absolute;
     align-self: center;

@@ -11,7 +11,7 @@
     class="color-list__swatches"
     (tap)="clickColor(colorMap.hexCode)"
     [ngClass]="
-      colorMap.hexCode.includes(defaultColor)
+      colorMap.hexCode.includes(activeColor)
         ? 'default ' + colorMap.colorName
         : colorMap.colorName
     "

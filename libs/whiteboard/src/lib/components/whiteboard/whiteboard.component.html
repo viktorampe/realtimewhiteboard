@@ -98,11 +98,13 @@
       </div>
     </ng-container>
     <ng-template #settingsView>
-      <campus-settings
-        (settings)="updateSettings($event)"
-        [defaultColor]="whiteboard$.value.defaultColor"
-        [whiteboardTitle]="whiteboard$.value.title"
-      ></campus-settings>
+      <div class="whiteboard__settings">
+        <campus-settings
+          (settings)="updateSettings($event)"
+          [activeColor]="whiteboard.defaultColor"
+          [title]="whiteboard.title"
+        ></campus-settings>
+      </div>
     </ng-template>
 
     <div
@@ -130,7 +132,7 @@
     *ngIf="!whiteboard.cards.length && !isSettingsActive"
     [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
     [description]="
-      true
+      whiteboard.shelfCards.length
         ? 'Sleep kaartjes uit de shelf naar het bord.'
         : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
     "

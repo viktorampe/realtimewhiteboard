@@ -1,7 +1,22 @@
-import { animate, animateChild, keyframes, query, stagger, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  animateChild,
+  keyframes,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,6 +24,7 @@ import { ModeEnum } from '../../enums/mode.enum';
 import { PermissionEnum } from '../../enums/permission.enum';
 import CardInterface from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
+import { SettingsInterface } from '../../models/settings.interface';
 import { UserInterface } from '../../models/User.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
@@ -73,14 +89,6 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   encapsulation: ViewEncapsulation.None
 })
 export class WhiteboardComponent implements OnChanges {
-  @ViewChild('titleInput', { static: false }) set titleInput(
-    titleInput: ElementRef
-  ) {
-    if (titleInput) {
-      titleInput.nativeElement.focus();
-    }
-  }
-
   @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
 
   @Input() metadataId: number;
@@ -92,18 +100,13 @@ export class WhiteboardComponent implements OnChanges {
   public whiteboard$ = new BehaviorSubject<WhiteboardInterface>(null);
   public user$ = new BehaviorSubject<UserInterface>(null);
 
-  public titleFC: FormControl;
-
   selectedCards: CardInterface[] = [];
 
   lastColor = '#00A7E2';
-  isTitleInputSelected = true;
   isShelfMinimized = false;
   isSettingsActive = false;
 
-  constructor(private whiteboardHttpService: WhiteboardHttpService) {
-    this.initialiseForm();
-  }
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
 
   ngOnChanges() {
     if (this.apiBase && this.metadataId) {
@@ -131,14 +134,9 @@ export class WhiteboardComponent implements OnChanges {
       .getJson()
       .pipe(take(1))
       .subscribe(whiteboardData => {
-        this.titleFC.patchValue(whiteboardData.title);
         this.whiteboard$.next(whiteboardData);
       });
     this.user$.next({ permission: PermissionEnum.MANAGEWHITEBOARD });
-  }
-
-  private initialiseForm(): void {
-    this.titleFC = new FormControl('', Validators.required);
   }
 
   private updateViewMode(card: CardInterface) {
@@ -357,20 +355,9 @@ export class WhiteboardComponent implements OnChanges {
   //#endregion
 
   //#region WHITEBOARD ACTIONS
-  showTitleInput() {
-    this.isTitleInputSelected = true;
-  }
 
   toggleSettings() {
     this.isSettingsActive = !this.isSettingsActive;
-  }
-
-  hideTitleInput() {
-    if (!!this.titleFC.value) {
-      this.isTitleInputSelected = false;
-      this.updateWhiteboardSubject({ title: this.titleFC.value });
-      this.saveWhiteboard();
-    }
   }
 
   onFilesDropped(event) {
@@ -492,14 +479,22 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  updateSettings(settings: any) {
+  updateSettings(settings: SettingsInterface) {
     this.updateWhiteboardSubject({
-      title: settings.whiteboardTitle,
+      title: settings.title,
       defaultColor: settings.defaultColor
     });
-    this.saveWhiteboard();
+
+    this.whiteboard$.value.cards.forEach(
+      c => (c.color = settings.defaultColor)
+    );
+    this.whiteboard$.value.shelfCards.forEach(
+      c => (c.color = settings.defaultColor)
+    );
+
     this.lastColor = settings.defaultColor;
     this.toggleSettings();
+    this.saveWhiteboard();
   }
   //#endregion
 

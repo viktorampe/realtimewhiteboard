@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SettingsInterface } from '../../models/settings.interface';
 import { ColorListComponent } from '../color-list/color-list.component';
 import { SettingsComponent } from './settings.component';
 
@@ -26,23 +27,24 @@ describe('SettingsComponent', () => {
   });
 
   it('should set defaut color', () => {
-    const defaultColorBefore = component.defaultColor;
+    const defaultColorBefore = component.activeColor;
     component.setDefaultColor('#00000000');
-    const defaultColorAfter = component.defaultColor;
+    const defaultColorAfter = component.activeColor;
     expect(defaultColorBefore).not.toBe(defaultColorAfter);
-    expect(component.defaultColor).toBe(defaultColorAfter);
+    expect(component.activeColor).toBe(defaultColorAfter);
   });
 
   describe('event handlers', () => {
-    it('emitSettings() should emit settings', () => {
+    it('onSubmit() should emit settings', () => {
       spyOn(component.settings, 'emit');
-      component.whiteboardTitle = 'title';
-      component.defaultColor = '#FFFFFFFF';
-      component.emitSettings();
-      expect(component.settings.emit).toHaveBeenCalledWith({
-        whiteboardTitle: 'title',
+      component.title = 'title';
+      component.activeColor = '#FFFFFFFF';
+      component.onSubmit();
+      const settings: SettingsInterface = {
+        title: 'title',
         defaultColor: '#FFFFFFFF'
-      });
+      };
+      expect(component.settings.emit).toHaveBeenCalledWith(settings);
     });
   });
 });

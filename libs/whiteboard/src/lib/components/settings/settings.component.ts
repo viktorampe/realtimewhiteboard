@@ -1,27 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { SettingsInterface } from '../../models/settings.interface';
 
 @Component({
   selector: 'campus-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
-  @Output() settings = new EventEmitter<Object>();
-  @Input() defaultColor: string;
-  @Input() whiteboardTitle: string;
+export class SettingsComponent {
+  @Input() activeColor: string;
+  @Input() title: string;
+  @Output() settings = new EventEmitter<SettingsInterface>();
 
   constructor() {}
 
-  ngOnInit() {}
-
   setDefaultColor(color: string) {
-    this.defaultColor = color;
+    this.activeColor = color;
   }
 
-  emitSettings() {
+  onSubmit() {
     this.settings.emit({
-      whiteboardTitle: this.whiteboardTitle,
-      defaultColor: this.defaultColor
+      title: this.title,
+      defaultColor: this.activeColor
     });
   }
 }

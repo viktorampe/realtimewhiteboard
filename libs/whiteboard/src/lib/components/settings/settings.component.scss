@@ -1,13 +1,5 @@
 @import '../../../constants.scss';
-
-.settings__container {
-  width: 60%;
-  max-width: 400px;
-  position: absolute;
-  left: 50%;
-  top: 35%;
-  transform: translate(-50%, -50%);
-
+.settings {
   &__formgroup {
     display: flex;
     align-items: center;

@@ -1,24 +1,21 @@
-<div class="settings__container">
-  <div class="settings__container__formgroup">
-    <label for="title"><h4>Titel: </h4></label>
-    <input
-      [(ngModel)]="whiteboardTitle"
-      #fullName="ngModel"
-      id="title"
-      name="title"
-      type="text"
-      [placeholder]="whiteboardTitle"
-    />
-  </div>
-  <div class="settings__container__formgroup">
-    <label for="defaultColor"><h4>Kleur: </h4></label>
-    <campus-color-list
-      class="settings__color-list"
-      (selectedColor)="setDefaultColor($event)"
-      [defaultColor]="defaultColor"
-    ></campus-color-list>
-  </div>
-  <div class="settings__container__submitButton">
-    <button (tap)="emitSettings()">Klaar</button>
-  </div>
+<div class="settings__formgroup">
+  <label for="title"><h4>Titel: </h4></label>
+  <input
+    [(ngModel)]="title"
+    id="title"
+    name="title"
+    type="text"
+    [placeholder]="title"
+  />
+</div>
+<div class="settings__formgroup">
+  <label for="defaultColor"><h4>Kleur: </h4></label>
+  <campus-color-list
+    class="settings__color-list"
+    (selectedColor)="setDefaultColor($event)"
+    [activeColor]="activeColor"
+  ></campus-color-list>
+</div>
+<div class="settings__submitButton">
+  <button (tap)="onSubmit()">Klaar</button>
 </div>
