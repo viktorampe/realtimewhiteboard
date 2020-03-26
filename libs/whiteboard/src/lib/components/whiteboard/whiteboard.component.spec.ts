@@ -160,9 +160,38 @@ describe('WhiteboardComponent', () => {
   });
 
   describe('canManage', () => {
-    it('should hide card-colorlist when canMange is true', () => {});
-    it('should show settingsbutton when canMange is true', () => {});
-    it('should hide settingsbutton when canMange is false', () => {});
+    it('should hide card-colorlist when canMange is true', () => {
+      component.canManage = true;
+      fixture.detectChanges();
+      const colorlist = fixture.debugElement.query(
+        By.css('.whiteboard__color-list')
+      );
+      expect(colorlist).toBeFalsy();
+    });
+    it('should show card-colorlist when canMange is false', () => {
+      component.canManage = false;
+      fixture.detectChanges();
+      const colorlist = fixture.debugElement.query(
+        By.css('.whiteboard__color-list')
+      );
+      expect(colorlist).toBeTruthy();
+    });
+    it('should show settingsbutton when canMange is true', () => {
+      component.canManage = true;
+      fixture.detectChanges();
+      const settingsbutton = fixture.debugElement.query(
+        By.css('.whiteboard__workspace__actions__settingsbutton')
+      );
+      expect(settingsbutton).toBeTruthy();
+    });
+    it('should hide settingsbutton when canMange is false', () => {
+      component.canManage = false;
+      fixture.detectChanges();
+      const settingsbutton = fixture.debugElement.query(
+        By.css('.whiteboard__workspace__actions__settingsbutton')
+      );
+      expect(settingsbutton).toBeFalsy();
+    });
   });
 
   describe('showTitleInput()', () => {
