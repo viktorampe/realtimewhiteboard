@@ -159,6 +159,12 @@ describe('WhiteboardComponent', () => {
     expect(component.whiteboard$.value.cards).not.toContain(card);
   });
 
+  describe('canManage', () => {
+    it('should hide card-colorlist when canMange is true', () => {});
+    it('should show settingsbutton when canMange is true', () => {});
+    it('should hide settingsbutton when canMange is false', () => {});
+  });
+
   describe('showTitleInput()', () => {
     it('should set isTitleInputSelected to true', () => {
       component.isTitleInputSelected = false;

@@ -74,8 +74,7 @@
         [mode]="card.mode"
         (selectedColor)="changeColorForCard(card, $event)"
         *ngIf="
-          (card.mode === Mode.EDIT && !canManage) ||
-          (card.mode === Mode.SELECTED && !canManage)
+          (card.mode === Mode.EDIT || card.mode === Mode.SELECTED) && !canManage
         "
       ></campus-color-list>
       <campus-card-toolbar
