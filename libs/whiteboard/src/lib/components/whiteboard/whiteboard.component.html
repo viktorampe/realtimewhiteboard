@@ -1,5 +1,4 @@
 <div
-  *ngIf="whiteboard"
   class="whiteboard"
   (filesDroppedEvent)="onFilesDropped($event)"
   campusImageDrag
@@ -37,7 +36,7 @@
     <div
       @showHideCard
       class="whiteboard__workspace__container"
-      *ngFor="let card of whiteboard.cards"
+      *ngFor="let card of cards"
       cdkDrag
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
       [cdkDragDisabled]="card.mode === Mode.ZOOM"
@@ -111,14 +110,14 @@
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       [class.minimizedShelf]="isShelfMinimized"
-      [cards]="whiteboard.shelfCards"
+      [cards]="shelfCards"
       [(isMinimized)]="isShelfMinimized"
     ></campus-shelf>
   </div>
   <campus-empty-state
     class="whiteboard__empty"
-    *ngIf="!whiteboard.cards.length"
-    [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
+    *ngIf="!cards.length"
+    [title]="title ? title : 'Geen titel'"
     [description]="
       true
         ? 'Sleep kaartjes uit de shelf naar het bord.'

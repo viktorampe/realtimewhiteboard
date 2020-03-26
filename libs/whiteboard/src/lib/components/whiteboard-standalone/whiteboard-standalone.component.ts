@@ -8,8 +8,9 @@ import {
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { filter, map, shareReplay, take } from 'rxjs/operators';
 import { iconMap } from '../../icons/icon-mapping';
+import CardInterface from '../../models/card.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from '../../tokens/whiteboard-element-icon-mapping.token';
@@ -32,6 +33,11 @@ export class WhiteboardStandaloneComponent implements OnChanges {
   @Input() canManage: boolean;
 
   whiteboard$: Observable<WhiteboardInterface>;
+
+  title$: Observable<string>;
+  cards$: Observable<CardInterface[]>;
+  shelfCards$: Observable<CardInterface[]>;
+
   uploadImageResponse$ = new BehaviorSubject<CardImageUploadResponseInterface>(
     null
   );
@@ -57,7 +63,18 @@ export class WhiteboardStandaloneComponent implements OnChanges {
   }
 
   private initialize(): void {
-    this.whiteboard$ = this.whiteboardHttpService.getJson();
+    this.whiteboard$ = this.whiteboardHttpService.getJson().pipe(
+      filter(whiteboard => !!whiteboard),
+      shareReplay(1)
+    );
+
+    this.title$ = this.whiteboard$.pipe(map(whiteboard => whiteboard.title));
+    this.cards$ = this.whiteboard$.pipe(
+      map(whiteboard => (whiteboard.cards ? whiteboard.cards : []))
+    );
+    this.shelfCards$ = this.whiteboard$.pipe(
+      map(whiteboard => (whiteboard.shelfCards ? whiteboard.shelfCards : []))
+    );
   }
 
   saveWhiteboard(data: WhiteboardInterface): void {

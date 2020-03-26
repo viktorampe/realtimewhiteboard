@@ -1,5 +1,7 @@
 <campus-whiteboard
-  [whiteboard]="whiteboard$ | async"
+  [title]="title$ | async"
+  [cards]="cards$ | async"
+  [shelfCards]="shelfCards$ | async"
   [canManage]="canManage"
   [uploadImageResponse]="uploadImageResponse$ | async"
   (uploadImage)="uploadImageForCard($event)"
