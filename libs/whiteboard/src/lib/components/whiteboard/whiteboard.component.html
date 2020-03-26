@@ -39,7 +39,6 @@
     (longpress)="createCard($event)"
     #workspace
   >
-    <<<<<<< HEAD
     <ng-container *ngIf="!isSettingsActive; else settingsView">
       <div
         @showHideCard
@@ -103,13 +102,13 @@
     <ng-template #settingsView>
       <div class="whiteboard__settings">
         <campus-settings
-          (settings)="updateSettings($event)"
+          (update)="updateSettings($event)"
           [activeColor]="whiteboard.defaultColor"
           [title]="whiteboard.title"
         ></campus-settings>
       </div>
     </ng-template>
-    =======
+
     <div
       @showHideCard
       class="whiteboard__workspace__container"
@@ -170,7 +169,6 @@
         style="display: none;"
       />
     </div>
-    >>>>>>> origin/whiteboard-dev
 
     <div
       class="whiteboard__addbutton"
