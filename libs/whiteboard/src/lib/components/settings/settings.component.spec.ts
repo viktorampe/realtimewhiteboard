@@ -36,7 +36,7 @@ describe('SettingsComponent', () => {
 
   describe('event handlers', () => {
     it('onSubmit() should emit settings', () => {
-      spyOn(component.settings, 'emit');
+      spyOn(component.update, 'emit');
       component.title = 'title';
       component.activeColor = '#FFFFFFFF';
       component.onSubmit();
@@ -44,7 +44,7 @@ describe('SettingsComponent', () => {
         title: 'title',
         defaultColor: '#FFFFFFFF'
       };
-      expect(component.settings.emit).toHaveBeenCalledWith(settings);
+      expect(component.update.emit).toHaveBeenCalledWith(settings);
     });
   });
 });

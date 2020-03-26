@@ -9,7 +9,7 @@ import { SettingsInterface } from '../../models/settings.interface';
 export class SettingsComponent {
   @Input() activeColor: string;
   @Input() title: string;
-  @Output() settings = new EventEmitter<SettingsInterface>();
+  @Output() update = new EventEmitter<SettingsInterface>();
 
   constructor() {}
 
@@ -18,7 +18,7 @@ export class SettingsComponent {
   }
 
   onSubmit() {
-    this.settings.emit({
+    this.update.emit({
       title: this.title,
       defaultColor: this.activeColor
     });
