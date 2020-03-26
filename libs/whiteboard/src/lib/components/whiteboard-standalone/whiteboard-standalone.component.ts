@@ -1,8 +1,18 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { iconMap } from '../../icons/icon-mapping';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
+import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from '../../tokens/whiteboard-element-icon-mapping.token';
 import {
   CardImageUploadInterface,
   CardImageUploadResponseInterface
@@ -11,7 +21,10 @@ import {
 @Component({
   selector: 'campus-whiteboard-standalone',
   templateUrl: './whiteboard-standalone.component.html',
-  styleUrls: ['./whiteboard-standalone.component.scss']
+  styleUrls: ['./whiteboard-standalone.component.scss'],
+  providers: [
+    { provide: WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN, useValue: iconMap } // this component is used as angular-element, it can not resolve relative urls
+  ]
 })
 export class WhiteboardStandaloneComponent implements OnChanges {
   @Input() eduContentMetadataId: number;
@@ -23,7 +36,15 @@ export class WhiteboardStandaloneComponent implements OnChanges {
     null
   );
 
-  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
+  constructor(
+    private whiteboardHttpService: WhiteboardHttpService,
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer,
+    @Inject(WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN)
+    private iconMapping
+  ) {
+    this.setupIconRegistry();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.apiBase && this.eduContentMetadataId && this.canManage) {
@@ -71,6 +92,23 @@ export class WhiteboardStandaloneComponent implements OnChanges {
         );
     } else {
       console.log('You are not authorized to upload an image.');
+    }
+  }
+
+  private setupIconRegistry() {
+    for (const key in this.iconMapping) {
+      if (key.indexOf(':') > 0) {
+        this.iconRegistry.addSvgIconLiteralInNamespace(
+          key.split(':')[0],
+          key.split(':')[1],
+          this.sanitizer.bypassSecurityTrustHtml(this.iconMapping[key])
+        );
+      } else {
+        this.iconRegistry.addSvgIconLiteral(
+          key,
+          this.sanitizer.bypassSecurityTrustHtml(this.iconMapping[key])
+        );
+      }
     }
   }
 }

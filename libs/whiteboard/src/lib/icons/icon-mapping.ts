@@ -20,7 +20,11 @@ import {
   settingsSvg
 } from './whiteboard/whiteboard-icons';
 
-export const icons: { [icon: string]: string } = {
+// map icon name to literal SVG source of the icon (html string)
+// this is needed because relative paths to the svg files do not work for angular-elements
+//
+
+export const iconMap: { [icon: string]: string } = {
   check: checkSvg,
   'delete-forever': imageDeleteSvg,
   'add-photo-alternate': imageEditSvg,
