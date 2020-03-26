@@ -21,12 +21,10 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
-import { PermissionEnum } from '../../enums/permission.enum';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
 import { SettingsInterface } from '../../models/settings.interface';
-import { UserInterface } from '../../models/User.interface';
-import WhiteboardInterface from '../../models/whiteboard.interface';
+import { WhiteboardInterface } from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 
 @Component({
@@ -93,12 +91,12 @@ export class WhiteboardComponent implements OnChanges {
 
   @Input() metadataId: number;
   @Input() apiBase: string;
+  @Input() canManage: boolean;
 
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
   public whiteboard$ = new BehaviorSubject<WhiteboardInterface>(null);
-  public user$ = new BehaviorSubject<UserInterface>(null);
 
   selectedCards: CardInterface[] = [];
 
@@ -136,7 +134,6 @@ export class WhiteboardComponent implements OnChanges {
       .subscribe(whiteboardData => {
         this.whiteboard$.next(whiteboardData);
       });
-    this.user$.next({ permission: PermissionEnum.MANAGEWHITEBOARD });
   }
 
   private updateViewMode(card: CardInterface) {
@@ -209,7 +206,7 @@ export class WhiteboardComponent implements OnChanges {
     };
 
     // add a 'copy' ( card with a different reference ) to the shelf
-    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
+    if (this.canManage) {
       this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
     }
 
@@ -380,7 +377,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   saveWhiteboard() {
-    if (this.user$.value.permission === PermissionEnum.MANAGEWHITEBOARD) {
+    if (this.canManage) {
       console.log('saving whiteboard...');
       const whiteboard = { ...this.whiteboard$.value };
       whiteboard.cards = whiteboard.shelfCards;

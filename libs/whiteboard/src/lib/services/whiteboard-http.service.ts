@@ -13,7 +13,7 @@ import {
 } from 'rxjs/operators';
 import { ModeEnum } from '../enums/mode.enum';
 import ImageInterface from '../models/image.interface';
-import WhiteboardInterface from '../models/whiteboard.interface';
+import { WhiteboardInterface } from '../models/whiteboard.interface';
 
 const RETRY_AMOUNT = 2;
 

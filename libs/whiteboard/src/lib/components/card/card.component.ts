@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
 
 @Component({
