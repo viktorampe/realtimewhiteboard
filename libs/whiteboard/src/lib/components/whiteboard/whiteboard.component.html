@@ -35,11 +35,13 @@
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'remove'"
+        (tap)="decreaseZoom()"
       ></mat-icon>
       <div class="whiteboard__workspace__actions__zoom__separator"></div>
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'plus'"
+        (tap)="increaseZoom()"
       ></mat-icon>
     </div>
   </div>
@@ -67,6 +69,7 @@
         @showHideColorList
         class="whiteboard__color-list"
         [mode]="card.mode"
+        [zoomFactor]="zoomFactor"
         (selectedColor)="changeColorForCard(card, $event)"
         *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
       ></campus-color-list>
@@ -80,6 +83,7 @@
         "
         class="whiteboard__card_toolbar"
         [mode]="card.mode"
+        [zoomFactor]="zoomFactor"
         (clickDeleteIcon)="onDeleteCard(card)"
         (clickEditIcon)="cardEditIconClicked(card)"
         (clickFlipIcon)="cardFlipIconClicked(card)"
@@ -94,6 +98,7 @@
         [image]="card.image"
         [(mode)]="card.mode"
         [viewModeImage]="card.viewModeImage"
+        [zoomFactor]="zoomFactor"
         (update)="updateCard($event, card)"
         (removeImage)="removeImage(card)"
         (openFilePicker)="openFilePicker(filePicker)"

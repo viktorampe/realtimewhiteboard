@@ -57,6 +57,8 @@ import { ModeEnum } from '../../enums/mode.enum';
 })
 export class ColorListComponent implements OnInit {
   @Output() selectedColor = new EventEmitter<string>();
+
+  @Input() zoomFactor: number;
   @Input() mode: ModeEnum;
   defaultColors: { colorName: string; hexCode: string }[] = [
     { colorName: 'blue', hexCode: '#00A7E2' },
@@ -65,6 +67,10 @@ export class ColorListComponent implements OnInit {
     { colorName: 'purple', hexCode: '#5D3284' },
     { colorName: 'yellow', hexCode: '#FADB48' }
   ];
+
+  defaultHeight = 40;
+  defaultWidth = 40;
+  // TODO: fix colorlist position left
   constructor() {}
 
   ngOnInit() {}

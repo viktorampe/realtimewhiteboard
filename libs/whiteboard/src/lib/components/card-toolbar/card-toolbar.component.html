@@ -4,11 +4,17 @@
     else multiSelectView
   "
 >
-  <div class="toolbar" *ngIf="mode !== Mode.EDIT; else editModeView">
+  <div
+    class="toolbar"
+    *ngIf="mode !== Mode.EDIT; else editModeView"
+    [style.top.px]="((1 - this.zoomFactor) / 0.2) * 7"
+  >
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool toolbar__delete"
       (tap)="deleteIconClicked()"
+      [style.width.px]="defaultWidth * zoomFactor"
+      [style.height.px]="defaultHeight * zoomFactor"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -19,6 +25,8 @@
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (tap)="multiSelectClicked()"
+      [style.width.px]="defaultWidth * zoomFactor"
+      [style.height.px]="defaultHeight * zoomFactor"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
       </mat-icon>
@@ -27,6 +35,8 @@
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (tap)="flipIconClicked()"
+      [style.width.px]="defaultWidth * zoomFactor"
+      [style.height.px]="defaultHeight * zoomFactor"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
@@ -34,6 +44,8 @@
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (tap)="editIconClicked()"
+      [style.width.px]="defaultWidth * zoomFactor"
+      [style.height.px]="defaultHeight * zoomFactor"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>
@@ -44,6 +56,8 @@
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__delete"
         (tap)="deleteIconClicked()"
+        [style.width.px]="defaultWidth * zoomFactor"
+        [style.height.px]="defaultHeight * zoomFactor"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__delete__icon"
@@ -54,6 +68,8 @@
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool"
         (tap)="flipIconClicked()"
+        [style.width.px]="defaultWidth * zoomFactor"
+        [style.height.px]="defaultHeight * zoomFactor"
       >
         <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
       </div>
@@ -61,6 +77,8 @@
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__confirm"
         (tap)="confirmIconClicked()"
+        [style.width.px]="defaultWidth * zoomFactor"
+        [style.height.px]="defaultHeight * zoomFactor"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__confirm__icon"
@@ -78,6 +96,8 @@
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
       (tap)="multiSelectClicked()"
+      [style.width.px]="defaultWidth * zoomFactor"
+      [style.height.px]="defaultHeight * zoomFactor"
     >
       <mat-icon class="toolbar__tool__icon " [svgIcon]="'multiselect'">
       </mat-icon>
@@ -88,6 +108,8 @@
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
         (tap)="multiSelectSelectedClicked()"
+        [style.width.px]="defaultWidth * zoomFactor"
+        [style.height.px]="defaultHeight * zoomFactor"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__select__icon"

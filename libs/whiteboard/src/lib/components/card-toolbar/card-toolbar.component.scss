@@ -47,7 +47,6 @@ $tool-bg-green-active: linear-gradient(
   right: 8px;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
 
   transform: translateY(-48px);
   z-index: 1;
@@ -57,6 +56,8 @@ $tool-bg-green-active: linear-gradient(
     border-radius: 50%;
     padding: 8px;
     display: flex;
+    justify-content: center;
+    align-items: center;
 
     box-shadow: $tool-shadow;
     background: $tool-bg-dark;

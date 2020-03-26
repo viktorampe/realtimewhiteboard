@@ -115,6 +115,7 @@ export class WhiteboardComponent implements OnChanges {
   lastColor = '#00A7E2';
   isTitleInputSelected = true;
   isShelfMinimized = false;
+  zoomFactor = 1;
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {
     this.initialiseForm();
@@ -501,6 +502,18 @@ export class WhiteboardComponent implements OnChanges {
         cards: [...this.whiteboard$.value.cards, workspaceCard]
       });
     }
+  }
+
+  increaseZoom() {
+    Math.ceil(this.zoomFactor) < 2.4
+      ? Math.ceil((this.zoomFactor += 0.2))
+      : Math.ceil((this.zoomFactor = 2.4));
+  }
+
+  decreaseZoom() {
+    Math.floor(this.zoomFactor) > 0.6
+      ? Math.floor((this.zoomFactor -= 0.2))
+      : Math.floor((this.zoomFactor = 0.6));
   }
 
   //#endregion

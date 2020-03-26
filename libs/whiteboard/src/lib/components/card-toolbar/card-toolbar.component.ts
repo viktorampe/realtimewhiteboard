@@ -51,6 +51,7 @@ import { ModeEnum } from '../../enums/mode.enum';
 })
 export class CardToolbarComponent implements OnInit {
   @Input() mode: ModeEnum;
+  @Input() zoomFactor: number;
 
   @Output() clickDeleteIcon = new EventEmitter<void>();
   @Output() clickEditIcon = new EventEmitter<void>();
@@ -58,6 +59,9 @@ export class CardToolbarComponent implements OnInit {
   @Output() clickFlipIcon = new EventEmitter<void>();
   @Output() clickMultiSelectIcon = new EventEmitter<void>();
   @Output() clickMultiSelectSelectedIcon = new EventEmitter<void>();
+
+  defaultWidth = 40;
+  defaultHeight = 40;
 
   constructor() {}
 

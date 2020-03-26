@@ -14,10 +14,15 @@ export class CardComponent {
   @Input() description: string;
   @Input() image: ImageInterface;
   @Input() viewModeImage: boolean;
+  @Input() zoomFactor: number;
 
   @Output() openFilePicker = new EventEmitter<string>();
   @Output() update = new EventEmitter<Partial<CardInterface>>();
   @Output() removeImage = new EventEmitter<void>();
+
+  defaultWidth = 250;
+  defaultHeight = 167;
+
   constructor() {}
 
   get Mode() {
