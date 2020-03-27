@@ -107,7 +107,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
 
-  @Output() save = new EventEmitter<WhiteboardInterface>();
+  @Output() changes = new EventEmitter<WhiteboardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
 
   @ViewChild('titleInput', { static: false }) set titleInput(
@@ -430,7 +430,7 @@ export class WhiteboardComponent implements OnChanges {
     };
     whiteboard.cards = whiteboard.shelfCards;
     delete whiteboard.shelfCards;
-    this.save.emit(whiteboard);
+    this.changes.emit(whiteboard);
   }
 
   onClickWhiteboard(event: MouseEvent) {

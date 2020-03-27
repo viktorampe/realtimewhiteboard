@@ -5,5 +5,5 @@
   [canManage]="canManage"
   [uploadImageResponse]="uploadImageResponse$ | async"
   (uploadImage)="uploadImageForCard($event)"
-  (save)="saveWhiteboard($event)"
+  (changes)="saveWhiteboard($event)"
 ></campus-whiteboard>
