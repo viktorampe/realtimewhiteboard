@@ -21,7 +21,7 @@ export class CardComponent {
   constructor() {}
 
   get Mode() {
-    return ModeEnum; // test
+    return ModeEnum;
   }
 
   removeImg() {
