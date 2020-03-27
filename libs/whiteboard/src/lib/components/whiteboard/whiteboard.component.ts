@@ -118,7 +118,6 @@ export class WhiteboardComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.cards);
     if (this.uploadImageResponse) {
       this.handleImageUploadResponse(this.uploadImageResponse);
     }
