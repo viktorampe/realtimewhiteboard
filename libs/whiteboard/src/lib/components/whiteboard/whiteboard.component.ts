@@ -20,13 +20,10 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
-import { UserInterface } from '../../models/User.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 
 export interface CardImageUploadInterface {
@@ -102,38 +99,21 @@ export class WhiteboardComponent implements OnChanges {
   @Input() title: string;
   @Input() cards: CardInterface[];
   @Input() shelfCards: CardInterface[];
-
-  // @Input() whiteboard: WhiteboardInterface;
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
 
   @Output() changes = new EventEmitter<WhiteboardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
 
-  @ViewChild('titleInput', { static: false }) set titleInput(
-    titleInput: ElementRef
-  ) {
-    if (titleInput) {
-      titleInput.nativeElement.focus();
-    }
-  }
-
   @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
 
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
-  public user$ = new BehaviorSubject<UserInterface>(null);
-
-  public titleFC: FormControl;
-
   selectedCards: CardInterface[] = [];
 
   lastColor = '#00A7E2';
-  isTitleInputSelected = true;
   isShelfMinimized = false;
-
-  private whiteboard: WhiteboardInterface;
 
   constructor() {}
 
@@ -392,17 +372,6 @@ export class WhiteboardComponent implements OnChanges {
   //#endregion
 
   //#region WHITEBOARD ACTIONS
-  showTitleInput() {
-    this.isTitleInputSelected = true;
-  }
-
-  hideTitleInput() {
-    if (!!this.titleFC.value) {
-      this.isTitleInputSelected = false;
-      this.updateWhiteboard({ title: this.titleFC.value }, true);
-    }
-  }
-
   onFilesDropped(event) {
     const images = event.dataTransfer.files;
     const { offsetX: x, offsetY: y } = event;
