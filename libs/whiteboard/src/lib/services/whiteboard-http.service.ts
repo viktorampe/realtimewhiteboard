@@ -61,7 +61,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
         (response: any): WhiteboardInterface =>
           response.data
             ? JSON.parse(response.data)
-            : { title: '', cards: [], shelfCards: {} }
+            : { title: '', cards: [], shelfCards: [] }
       ),
       map(
         (whiteboard: WhiteboardInterface): WhiteboardInterface => ({

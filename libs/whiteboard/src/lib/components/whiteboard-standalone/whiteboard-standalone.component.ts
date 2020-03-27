@@ -3,12 +3,13 @@ import {
   Inject,
   Input,
   OnChanges,
+  OnInit,
   SimpleChanges
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, shareReplay, take } from 'rxjs/operators';
+import { map, shareReplay, take } from 'rxjs/operators';
 import { iconMap } from '../../icons/icon-mapping';
 import CardInterface from '../../models/card.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
@@ -27,7 +28,7 @@ import {
     { provide: WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN, useValue: iconMap } // this component is used as angular-element, it can not resolve relative urls
   ]
 })
-export class WhiteboardStandaloneComponent implements OnChanges {
+export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
   @Input() canManage: boolean;
@@ -52,8 +53,13 @@ export class WhiteboardStandaloneComponent implements OnChanges {
     this.setupIconRegistry();
   }
 
+  ngOnInit(): void {
+    this.initialize();
+    this.setupPresentationStreams();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    if (this.apiBase && this.eduContentMetadataId && this.canManage) {
+    if (this.apiBase && this.eduContentMetadataId) {
       this.whiteboardHttpService.setSettings({
         apiBase: this.apiBase,
         metadataId: this.eduContentMetadataId
@@ -63,11 +69,12 @@ export class WhiteboardStandaloneComponent implements OnChanges {
   }
 
   private initialize(): void {
-    this.whiteboard$ = this.whiteboardHttpService.getJson().pipe(
-      filter(whiteboard => !!whiteboard),
-      shareReplay(1)
-    );
+    this.whiteboard$ = this.whiteboardHttpService
+      .getJson()
+      .pipe(shareReplay(1));
+  }
 
+  private setupPresentationStreams() {
     this.title$ = this.whiteboard$.pipe(map(whiteboard => whiteboard.title));
     this.cards$ = this.whiteboard$.pipe(
       map(whiteboard => (whiteboard.cards ? whiteboard.cards : []))

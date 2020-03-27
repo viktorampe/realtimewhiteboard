@@ -160,7 +160,16 @@ export class WhiteboardComponent implements OnChanges {
     updates: Partial<WhiteboardInterface>,
     shouldPersist = false
   ) {
-    this.whiteboard = { ...this.whiteboard, ...updates }; // local update
+    if (updates.cards) {
+      this.cards = updates.cards;
+    }
+    if (updates.shelfCards) {
+      this.shelfCards = updates.shelfCards;
+    }
+    if (updates.title) {
+      this.title = updates.title;
+    }
+
     if (shouldPersist) {
       this.saveWhiteboard();
     }

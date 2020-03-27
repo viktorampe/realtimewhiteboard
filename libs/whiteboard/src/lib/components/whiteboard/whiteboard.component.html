@@ -116,7 +116,7 @@
   </div>
   <campus-empty-state
     class="whiteboard__empty"
-    *ngIf="!cards.length"
+    *ngIf="cards && !cards.length"
     [title]="title ? title : 'Geen titel'"
     [description]="
       true
