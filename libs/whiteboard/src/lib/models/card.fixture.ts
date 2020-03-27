@@ -13,8 +13,7 @@ export class CardFixture implements CardInterface {
   left = 0;
   viewModeImage = true;
 
-  constructor(type: CardTypeEnum, props?: Partial<CardInterface>) {
-    this.cardType = type;
+  constructor(props?: Partial<CardInterface>) {
     return Object.assign(this, props);
   }
 }
