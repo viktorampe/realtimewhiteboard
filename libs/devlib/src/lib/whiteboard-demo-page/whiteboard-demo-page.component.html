@@ -1,5 +1,11 @@
+Je gebruikt momenteel de whiteboard als
+{{ canManage ? 'redacteur' : 'leerkracht' }}.
+<button (click)="canManage = !canManage"
+  >gebruik als {{ canManage ? 'leerkracht' : 'redacteur' }}</button
+>
+
 <campus-whiteboard-standalone
   [apiBase]="'http://api.kabas.localhost:3000/api'"
   [eduContentMetadataId]="22"
-  [canManage]="true"
+  [canManage]="canManage"
 ></campus-whiteboard-standalone>

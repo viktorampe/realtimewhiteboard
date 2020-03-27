@@ -53,6 +53,6 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     SettingsComponent,
     WhiteboardStandaloneComponent
   ],
-  exports: [WhiteboardStandaloneComponent]
+  exports: [WhiteboardStandaloneComponent, ImageDragDirective]
 })
 export class WhiteboardModule {}

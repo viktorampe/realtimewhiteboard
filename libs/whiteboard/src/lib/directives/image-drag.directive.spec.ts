@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { WhiteboardModule } from '../whiteboard.module';
 import { ImageDragDirective } from './image-drag.directive';
-
+// file.only
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
