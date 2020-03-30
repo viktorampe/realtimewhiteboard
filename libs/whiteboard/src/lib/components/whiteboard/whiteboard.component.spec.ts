@@ -19,7 +19,8 @@ import { delay } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
+import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardFixture } from '../../models/whiteboard.fixture';
 import {
   WhiteboardHttpService,
@@ -32,6 +33,7 @@ import { CardComponent } from '../card/card.component';
 import { ColorListComponent } from '../color-list/color-list.component';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
+import { SettingsComponent } from '../settings/settings.component';
 import { ShelfComponent } from '../shelf/shelf.component';
 import { WhiteboardToolbarComponent } from '../whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -65,7 +67,8 @@ describe('WhiteboardComponent', () => {
         ShelfComponent,
         CardImageComponent,
         CardTextComponent,
-        ImageToolbarComponent
+        ImageToolbarComponent,
+        SettingsComponent
       ],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
@@ -115,6 +118,7 @@ describe('WhiteboardComponent', () => {
 
     component.whiteboard$.next({
       title: '',
+      defaultColor: '#00A7E2',
       cards: [card1, card2],
       shelfCards: []
     });
@@ -159,6 +163,53 @@ describe('WhiteboardComponent', () => {
     expect(component.whiteboard$.value.cards).not.toContain(card);
   });
 
+  describe('updateSettings()', () => {
+    it('should update whiteboard title and defaultColor', () => {
+      component.whiteboard$.value.title = 'beforeTitle';
+      component.whiteboard$.value.defaultColor = '#FFFFFFFF';
+
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+
+      component.updateSettings(settings);
+
+      expect(component.whiteboard$.value.title).toBe('afterTitle');
+      expect(component.whiteboard$.value.defaultColor).toBe('#00000000');
+    });
+    it('should save the whiteboard', () => {
+      const saveWhiteboardSpy = jest.spyOn(component, 'saveWhiteboard');
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+      expect(saveWhiteboardSpy).toHaveBeenCalled();
+    });
+    it('should set lastColor', () => {
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+
+      expect(component.lastColor).toBe('#00000000');
+    });
+    it('should toggle settings visibility', () => {
+      const toggleSettingsSpy = jest.spyOn(component, 'toggleSettings');
+      const visibilityBefore = component.isSettingsActive;
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+      const visibilityAfter = component.isSettingsActive;
+      expect(visibilityBefore).not.toBe(visibilityAfter);
+      expect(toggleSettingsSpy).toHaveBeenCalled();
+    });
+  });
+
   // TODO: fix these tests after refactor to dumb component
   xdescribe('canManage', () => {
     it('should hide card-colorlist when canMange is true', () => {
@@ -192,34 +243,6 @@ describe('WhiteboardComponent', () => {
         By.css('.whiteboard__workspace__actions__settingsbutton')
       );
       expect(settingsbutton).toBeFalsy();
-    });
-  });
-
-  describe('showTitleInput()', () => {
-    it('should set isTitleInputSelected to true', () => {
-      component.isTitleInputSelected = false;
-
-      component.showTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(true);
-    });
-
-    it('should set isTitleInputSelected to false if title is not empty', () => {
-      component.isTitleInputSelected = true;
-      component.titleFC.patchValue('test');
-
-      component.hideTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(false);
-    });
-
-    it('should set isTitleInputSelected to true if title is empty', () => {
-      component.isTitleInputSelected = true;
-      component.titleFC.patchValue('');
-
-      component.hideTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(true);
     });
   });
 
@@ -638,6 +661,7 @@ describe('WhiteboardComponent', () => {
       shelvedCard.mode = <ModeEnum>ModeEnum.SHELF;
 
       component.whiteboard$.value.title = 'test board';
+      component.whiteboard$.value.defaultColor = '#FFFFFF';
       component.whiteboard$.value.shelfCards = [shelvedCard];
 
       component.saveWhiteboard();
@@ -652,6 +676,7 @@ describe('WhiteboardComponent', () => {
 
       const expected = new WhiteboardFixture({
         title: 'test board',
+        defaultColor: '#FFFFFF',
         cards: cards,
         shelfCards: null
       });
