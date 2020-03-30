@@ -1250,11 +1250,7 @@
             "outputPath": "dist/elements/elements-ink",
             "index": "",
             "main": "libs/elements-ink/src/element.ts",
-            "scripts": [
-              {
-                "input": "node_modules/document-register-element/build/document-register-element.js"
-              }
-            ],
+            "scripts": [],
             "styles": [],
             "assets": ["libs/elements-ink/src/package.json"],
             "tsConfig": "libs/elements-ink/tsconfig.json",
