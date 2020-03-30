@@ -10,6 +10,7 @@
     *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
+    [canManage]="canManage"
   ></campus-whiteboard-toolbar>
   <div class="whiteboard__header">
     <h2
@@ -28,7 +29,11 @@
     />
   </div>
   <div class="whiteboard__workspace__actions">
-    <div color="primary" class="whiteboard__workspace__actions__settingsbutton">
+    <div
+      *ngIf="canManage"
+      color="primary"
+      class="whiteboard__workspace__actions__settingsbutton"
+    >
       <mat-icon [svgIcon]="'settings'"></mat-icon>
     </div>
     <div class="whiteboard__workspace__actions__zoom">
@@ -68,7 +73,9 @@
         class="whiteboard__color-list"
         [mode]="card.mode"
         (selectedColor)="changeColorForCard(card, $event)"
-        *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
+        *ngIf="
+          (card.mode === Mode.EDIT || card.mode === Mode.SELECTED) && !canManage
+        "
       ></campus-color-list>
       <campus-card-toolbar
         @showHideToolbar
