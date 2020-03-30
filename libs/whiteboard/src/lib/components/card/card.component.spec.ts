@@ -5,7 +5,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { CardComponent } from './card.component';
 

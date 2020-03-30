@@ -7,7 +7,8 @@ import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
+import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
 
@@ -92,6 +93,53 @@ describe('WhiteboardComponent', () => {
 
     expect(component.cards.length).toBe(cardSizeBeforeDelete - 1);
     expect(component.cards).not.toContain(card);
+  });
+
+  describe('updateSettings()', () => {
+    it('should update whiteboard title and defaultColor', () => {
+      component.title = 'beforeTitle';
+      component.defaultColor = '#FFFFFFFF';
+
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+
+      component.updateSettings(settings);
+
+      expect(component.title).toBe('afterTitle');
+      expect(component.defaultColor).toBe('#00000000');
+    });
+    it('should save the whiteboard', () => {
+      const saveWhiteboardSpy = jest.spyOn(component, 'saveWhiteboard');
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+      expect(saveWhiteboardSpy).toHaveBeenCalled();
+    });
+    it('should set lastColor', () => {
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+
+      expect(component.lastColor).toBe('#00000000');
+    });
+    it('should toggle settings visibility', () => {
+      const toggleSettingsSpy = jest.spyOn(component, 'toggleSettings');
+      const visibilityBefore = component.isSettingsActive;
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+      const visibilityAfter = component.isSettingsActive;
+      expect(visibilityBefore).not.toBe(visibilityAfter);
+      expect(toggleSettingsSpy).toHaveBeenCalled();
+    });
   });
 
   // TODO: fix these tests after refactor to dumb component

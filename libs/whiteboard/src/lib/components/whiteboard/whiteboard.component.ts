@@ -22,9 +22,10 @@ import {
 } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
-import WhiteboardInterface from '../../models/whiteboard.interface';
+import { SettingsInterface } from '../../models/settings.interface';
+import { WhiteboardInterface } from '../../models/whiteboard.interface';
 
 export interface CardImageUploadInterface {
   card: CardInterface;
@@ -35,7 +36,6 @@ export interface CardImageUploadResponseInterface {
   card: CardInterface;
   image: ImageInterface;
 }
-
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -113,7 +113,9 @@ export class WhiteboardComponent implements OnChanges {
   selectedCards: CardInterface[] = [];
 
   lastColor = '#00A7E2';
+  defaultColor = '#00A7E2';
   isShelfMinimized = false;
+  isSettingsActive = false;
 
   constructor() {}
 
@@ -126,6 +128,7 @@ export class WhiteboardComponent implements OnChanges {
   get Mode() {
     return ModeEnum;
   }
+
   /**
    * Update whiteboard data.
    * When shouldPersist flag is true,
@@ -147,6 +150,9 @@ export class WhiteboardComponent implements OnChanges {
     }
     if (updates.title) {
       this.title = updates.title;
+    }
+    if (updates.defaultColor) {
+      this.defaultColor = updates.defaultColor;
     }
 
     if (shouldPersist) {
@@ -371,6 +377,11 @@ export class WhiteboardComponent implements OnChanges {
   //#endregion
 
   //#region WHITEBOARD ACTIONS
+
+  toggleSettings() {
+    this.isSettingsActive = !this.isSettingsActive;
+  }
+
   onFilesDropped(event) {
     const images = event.dataTransfer.files;
     const { offsetX: x, offsetY: y } = event;
@@ -394,7 +405,8 @@ export class WhiteboardComponent implements OnChanges {
     const whiteboard: WhiteboardInterface = {
       title: this.title,
       cards: this.cards,
-      shelfCards: this.shelfCards
+      shelfCards: this.shelfCards,
+      defaultColor: this.lastColor
     };
     whiteboard.cards = whiteboard.shelfCards;
     delete whiteboard.shelfCards;
@@ -485,6 +497,22 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
+  updateSettings(settings: SettingsInterface) {
+    this.cards.forEach(c => (c.color = settings.defaultColor));
+    this.shelfCards.forEach(c => (c.color = settings.defaultColor));
+
+    this.lastColor = settings.defaultColor;
+    this.updateWhiteboard(
+      {
+        title: settings.title,
+        defaultColor: settings.defaultColor
+      },
+      true
+    );
+
+    this.toggleSettings();
+    this.saveWhiteboard();
+  }
   //#endregion
 
   //#region CARD TOOLBAR
