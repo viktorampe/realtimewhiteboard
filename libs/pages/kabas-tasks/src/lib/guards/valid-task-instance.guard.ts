@@ -38,15 +38,12 @@ export class ValidTaskInstanceGuard implements CanActivate {
     return this.studentTaskOverviewResolver.resolve(route).pipe(
       switchMap(() => {
         return this.store.pipe(
-          select(TaskInstanceQueries.getAllGroupedByTaskId)
+          select(TaskInstanceQueries.getById, { id: +route.params.id })
         );
       }),
       take(1),
-      map(groupedByTaskId => {
-        const taskId = +route.params.id;
-        const canVisit = !!(
-          groupedByTaskId[taskId] && groupedByTaskId[taskId].length
-        );
+      map(taskInstance => {
+        const canVisit = !!taskInstance;
 
         if (!canVisit) {
           // Rejected, so give some feedback as to why the page isn't loading

@@ -1,4 +1,4 @@
-<campus-list-item-content>
+<campus-list-item-content [contentRightSeparated]="true">
   <mat-icon
     data-cy="tli-archived-icon"
     list-item-icon
@@ -62,44 +62,46 @@
       >
     </div>
   </list-item-content>
-  <list-item-content class="manage-kabas-tasks-task-list-item__assignees">
-    <ul
-      class="manage-kabas-tasks-task-list-item__assignees-class-groups ui-body-1"
-      *ngIf="classGroups.length"
-    >
-      <li data-cy="tli-classgroup" *ngFor="let classGroup of classGroups">{{
-        classGroup.label
-      }}</li>
-    </ul>
-    <div>
-      <span
-        data-cy="tli-group-count"
-        *ngIf="groups.length"
-        [matTooltip]="groups.join('\n')"
-        class="manage-kabas-tasks-task-list-item__assignees-groups ui-caption"
+  <list-item-content>
+    <div class="manage-kabas-tasks-task-list-item__assignees">
+      <ul
+        class="manage-kabas-tasks-task-list-item__assignees-class-groups ui-body-1"
+        *ngIf="classGroups.length"
       >
-        <span *ngIf="classGroups.length">+ </span>
-        {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
-      >
-      <span
-        data-cy="tli-student-count"
-        *ngIf="students.length"
-        [matTooltip]="students.join('\n')"
-        class="manage-kabas-tasks-task-list-item__assignees-students ui-caption"
-      >
-        <span *ngIf="classGroups.length && !groups.length">+ </span>
-        <span *ngIf="groups.length"> | </span>
-        <span *ngIf="!classGroups.length && groups.length"> en </span>
-        {{ students.length }} individuele leerling{{
-          students.length === 1 ? '' : 'en'
-        }}</span
-      >
+        <li data-cy="tli-classgroup" *ngFor="let classGroup of classGroups">{{
+          classGroup.label
+        }}</li>
+      </ul>
+      <div>
+        <span
+          data-cy="tli-group-count"
+          *ngIf="groups.length"
+          [matTooltip]="groups.join('\n')"
+          class="manage-kabas-tasks-task-list-item__assignees-groups ui-caption"
+        >
+          <span *ngIf="classGroups.length">+ </span>
+          {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
+        >
+        <span
+          data-cy="tli-student-count"
+          *ngIf="students.length"
+          [matTooltip]="students.join('\n')"
+          class="manage-kabas-tasks-task-list-item__assignees-students ui-caption"
+        >
+          <span *ngIf="classGroups.length && !groups.length">+ </span>
+          <span *ngIf="groups.length"> | </span>
+          <span *ngIf="!classGroups.length && groups.length"> en </span>
+          {{ students.length }} individuele leerling{{
+            students.length === 1 ? '' : 'en'
+          }}</span
+        >
 
-      <span
-        *ngIf="!classGroups.length && !groups.length && !students.length"
-        class="ui-caption"
-        >aan niemand toegewezen</span
-      >
+        <span
+          *ngIf="!classGroups.length && !groups.length && !students.length"
+          class="ui-caption"
+          >aan niemand toegewezen</span
+        >
+      </div>
     </div>
   </list-item-content>
   <list-item-content

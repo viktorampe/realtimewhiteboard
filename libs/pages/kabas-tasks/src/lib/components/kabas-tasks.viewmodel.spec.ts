@@ -922,7 +922,7 @@ describe('KabasTaskViewModel', () => {
 
     it('openTask() should navigate to the task detail', () => {
       const routerSpy = jest.spyOn(router, 'navigate');
-      kabasTasksViewModel.openTask(mockTask);
+      kabasTasksViewModel.openTask({ task: mockTask });
       expect(routerSpy).toHaveBeenCalledWith(['tasks', 'manage', 666]);
     });
 

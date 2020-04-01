@@ -6,8 +6,7 @@ import {
   DalState,
   EduContentFixture,
   getRouterState,
-  ResultFixture,
-  TaskFixture
+  ResultFixture
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
@@ -72,10 +71,9 @@ describe('KabasTaskViewModel', () => {
 
   describe('open task action handlers', () => {
     it('openTask() should navigate to the task detail', () => {
-      const mockTask = new TaskFixture({ id: 666 });
       const spy = jest.spyOn(router, 'navigate');
 
-      studentTasksViewModel.openTask(mockTask);
+      studentTasksViewModel.openTask({ taskInstanceId: 666 });
       expect(spy).toHaveBeenCalledWith(['tasks', 666]);
     });
   });
