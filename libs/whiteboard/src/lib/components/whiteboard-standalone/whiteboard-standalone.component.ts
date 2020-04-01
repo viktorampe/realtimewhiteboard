@@ -9,7 +9,8 @@ import {
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, shareReplay, take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
@@ -38,6 +39,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   title$: Observable<string>;
   cards$: Observable<CardInterface[]>;
   shelfCards$: Observable<CardInterface[]>;
+  defaultColor$: Observable<string>;
 
   uploadImageResponse$ = new BehaviorSubject<CardImageUploadResponseInterface>(
     null
@@ -54,7 +56,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.initialize();
+    this.setSourceStreams();
     this.setupPresentationStreams();
   }
 
@@ -64,59 +66,58 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         apiBase: this.apiBase,
         metadataId: this.eduContentMetadataId
       });
-      this.initialize();
+      this.setSourceStreams();
     }
   }
 
-  private initialize(): void {
-    this.whiteboard$ = this.whiteboardHttpService
-      .getJson()
-      .pipe(shareReplay(1));
+  private setSourceStreams(): void {
+    this.whiteboard$ = this.whiteboardHttpService.getJson();
   }
 
   private setupPresentationStreams() {
     this.title$ = this.whiteboard$.pipe(map(whiteboard => whiteboard.title));
     this.cards$ = this.whiteboard$.pipe(
-      map(whiteboard => (whiteboard.cards ? whiteboard.cards : []))
+      map(whiteboard => []) // always start with an empty workspace
     );
     this.shelfCards$ = this.whiteboard$.pipe(
-      map(whiteboard => (whiteboard.shelfCards ? whiteboard.shelfCards : []))
+      map(whiteboard => {
+        // all cards coming from the API should be added to the shelf
+        return [...whiteboard.cards, ...whiteboard.shelfCards] || [];
+      }),
+      map(shelfCards => {
+        return shelfCards.map(c => ({
+          ...c,
+          mode: ModeEnum.SHELF
+        }));
+      })
+    );
+    this.defaultColor$ = this.whiteboard$.pipe(
+      map(whiteboard => whiteboard.defaultColor || '')
     );
   }
 
   saveWhiteboard(data: WhiteboardInterface): void {
     // check for permissions
-    if (this.canManage) {
-      console.log('saving', data);
-      this.whiteboardHttpService
-        .setJson(data)
-        .pipe(take(1))
-        .subscribe();
-    } else {
-      console.log('You are not authorized to save.');
-    }
+    if (!this.canManage) return console.log('You are not authorized to save.');
+
+    this.whiteboardHttpService
+      .setJson(data)
+      .pipe(take(1))
+      .subscribe();
   }
 
   uploadImageForCard(cardImage: CardImageUploadInterface): void {
-    if (this.canManage) {
-      this.whiteboardHttpService
-        .uploadFile(cardImage.imageFile)
-        .pipe(
-          map(response => {
-            return this.uploadImageResponse$.next({
-              card: cardImage.card,
-              image: response
-            });
-          })
-        )
-        .subscribe(
-          value => console.log(value),
-          err => console.log(err),
-          () => console.log('complete')
-        );
-    } else {
-      console.log('You are not authorized to upload an image.');
-    }
+    if (!this.canManage)
+      return console.log('You are not authorized to upload an image.');
+
+    this.whiteboardHttpService
+      .uploadFile(cardImage.imageFile)
+      .subscribe(response => {
+        return this.uploadImageResponse$.next({
+          card: cardImage.card,
+          image: response
+        });
+      });
   }
 
   private setupIconRegistry() {

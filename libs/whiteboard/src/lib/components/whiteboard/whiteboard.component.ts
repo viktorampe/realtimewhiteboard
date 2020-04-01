@@ -27,6 +27,8 @@ import ImageInterface from '../../models/image.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 
+const CARD_HEIGHT = 167; // should be in sync with card.component.scss
+
 export interface CardImageUploadInterface {
   card: CardInterface;
   imageFile: File;
@@ -96,9 +98,10 @@ export interface CardImageUploadResponseInterface {
   encapsulation: ViewEncapsulation.None
 })
 export class WhiteboardComponent implements OnChanges {
-  @Input() title: string;
+  @Input() title = 'Deze sorteeroefening heeft nog geen titel.';
   @Input() cards: CardInterface[];
   @Input() shelfCards: CardInterface[];
+  @Input() defaultColor = '#00A7E2';
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
 
@@ -113,7 +116,6 @@ export class WhiteboardComponent implements OnChanges {
   selectedCards: CardInterface[] = [];
 
   lastColor = '#00A7E2';
-  defaultColor = '#00A7E2';
   isShelfMinimized = false;
   isSettingsActive = false;
 
@@ -142,18 +144,7 @@ export class WhiteboardComponent implements OnChanges {
     updates: Partial<WhiteboardInterface>,
     shouldPersist = false
   ) {
-    if (updates.cards) {
-      this.cards = updates.cards;
-    }
-    if (updates.shelfCards) {
-      this.shelfCards = updates.shelfCards;
-    }
-    if (updates.title) {
-      this.title = updates.title;
-    }
-    if (updates.defaultColor) {
-      this.defaultColor = updates.defaultColor;
-    }
+    Object.assign(this, updates);
 
     if (shouldPersist) {
       this.saveWhiteboard();
@@ -371,8 +362,8 @@ export class WhiteboardComponent implements OnChanges {
     return isZoomAllowed;
   }
 
-  private isACardSelected() {
-    return !!this.cards.filter(c => c.mode === ModeEnum.SELECTED).length;
+  private isACardSelected(): boolean {
+    return this.cards.some(card => card.mode === ModeEnum.SELECTED);
   }
   //#endregion
 
@@ -401,15 +392,13 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  saveWhiteboard() {
+  private saveWhiteboard() {
     const whiteboard: WhiteboardInterface = {
       title: this.title,
       cards: this.cards,
       shelfCards: this.shelfCards,
       defaultColor: this.lastColor
     };
-    whiteboard.cards = whiteboard.shelfCards;
-    delete whiteboard.shelfCards;
     this.changes.emit(whiteboard);
   }
 
@@ -424,7 +413,7 @@ export class WhiteboardComponent implements OnChanges {
     ) {
       this.selectedCards = [];
       const cards = this.cards;
-      const cardInEditMode = cards.filter(c => c.mode === ModeEnum.EDIT)[0];
+      const cardInEditMode = cards.find(c => c.mode === ModeEnum.EDIT);
 
       if (cardInEditMode) {
         this.updateCard(
@@ -454,22 +443,26 @@ export class WhiteboardComponent implements OnChanges {
     cardElement: HTMLElement;
     scrollLeft: number;
   }) {
+    // set all non-upload cards to idle mode
     this.cards
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => (c.mode = ModeEnum.IDLE));
+
+    // card = the currently dragged card
     const { card, event, cardElement, scrollLeft } = $event;
 
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
       : ModeEnum.IDLE;
 
+    // make new workspace card from the currently dragged card
     const workspaceCard: CardInterface = {
       ...card,
       mode: currentMode,
       left: cardElement.offsetLeft + event.distance.x - scrollLeft,
       top:
         this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
-        (167 + cardElement.offsetTop) -
+        (CARD_HEIGHT + cardElement.offsetTop) -
         Math.abs(event.distance.y)
     };
 
@@ -486,11 +479,7 @@ export class WhiteboardComponent implements OnChanges {
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
-    if (
-      !this.cards
-        .map(workspacecard => workspacecard.id)
-        .includes(workspaceCard.id)
-    ) {
+    if (!this.cards.some(c => c.id === workspaceCard.id)) {
       this.updateWhiteboard({
         cards: [...this.cards, workspaceCard]
       });
@@ -549,7 +538,6 @@ export class WhiteboardComponent implements OnChanges {
   //#region MULTI SELECT ACTIONS
   bulkDeleteClicked() {
     const cards = this.cards.filter(c => !this.selectedCards.includes(c));
-    cards.forEach(c => this.onDeleteCard(c));
     cards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
     this.updateWhiteboard({
       cards: cards
