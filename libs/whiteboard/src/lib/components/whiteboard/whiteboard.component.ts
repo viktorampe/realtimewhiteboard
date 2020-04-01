@@ -152,7 +152,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   private updateViewMode(card: CardInterface) {
-    if (!card.image.imageUrl) {
+    if (!card.image) {
       this.updateCard({ viewModeImage: false }, card);
     }
     if (!card.description) {
@@ -303,7 +303,7 @@ export class WhiteboardComponent implements OnChanges {
   private handleImageUploadResponse(
     response: CardImageUploadResponseInterface
   ) {
-    if (response.image.imageUrl) {
+    if (response.image) {
       // update card
       this.updateCard({ image: response.image }, response.card);
       // set mode to MUTLISELECT when mutliple cards are selected
@@ -354,6 +354,7 @@ export class WhiteboardComponent implements OnChanges {
     const isZoomAllowed =
       !isACardSelected &&
       card.viewModeImage &&
+      card.image &&
       card.image.imageUrl &&
       card.mode !== ModeEnum.EDIT &&
       card.mode !== ModeEnum.MULTISELECT &&
@@ -520,10 +521,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardFlipIconClicked(card: CardInterface) {
-    if (
-      (card.description && card.image.imageUrl) ||
-      card.mode === ModeEnum.EDIT
-    ) {
+    if ((card.description && card.image) || card.mode === ModeEnum.EDIT) {
       this.updateCard({ viewModeImage: !card.viewModeImage }, card);
 
       if (card.mode !== ModeEnum.EDIT) {

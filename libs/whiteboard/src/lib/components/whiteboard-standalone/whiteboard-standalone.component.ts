@@ -8,8 +8,13 @@ import {
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import {
+  FileReaderService,
+  FileReaderServiceInterface,
+  FILEREADER_SERVICE_TOKEN
+} from '@campus/browser';
+import { BehaviorSubject, merge, Observable, of } from 'rxjs';
+import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
@@ -26,6 +31,7 @@ import {
   templateUrl: './whiteboard-standalone.component.html',
   styleUrls: ['./whiteboard-standalone.component.scss'],
   providers: [
+    { provide: FILEREADER_SERVICE_TOKEN, useClass: FileReaderService },
     { provide: WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN, useValue: iconMap } // this component is used as angular-element, it can not resolve relative urls
   ]
 })
@@ -33,6 +39,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
   @Input() canManage: boolean;
+  @Input() data: WhiteboardInterface;
 
   whiteboard$: Observable<WhiteboardInterface>;
 
@@ -50,7 +57,9 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
     @Inject(WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN)
-    private iconMapping
+    private iconMapping,
+    @Inject(FILEREADER_SERVICE_TOKEN)
+    private fileReaderService: FileReaderServiceInterface
   ) {
     this.setupIconRegistry();
   }
@@ -71,13 +80,19 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   private setSourceStreams(): void {
-    this.whiteboard$ = this.whiteboardHttpService.getJson();
+    if (this.data && !this.canManage) {
+      // work locally: the data object is made on the API side and changes to the data are not persisted in the DB
+      // this is the case for teachers and students
+      this.whiteboard$ = of(this.data);
+    } else {
+      this.whiteboard$ = this.whiteboardHttpService.getJson();
+    }
   }
 
   private setupPresentationStreams() {
     this.title$ = this.whiteboard$.pipe(map(whiteboard => whiteboard.title));
     this.cards$ = this.whiteboard$.pipe(
-      map(whiteboard => []) // always start with an empty workspace
+      mapTo([]) // always start with an empty workspace
     );
     this.shelfCards$ = this.whiteboard$.pipe(
       map(whiteboard => {
@@ -97,9 +112,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   saveWhiteboard(data: WhiteboardInterface): void {
-    // check for permissions
     if (!this.canManage) return console.log('You are not authorized to save.');
-
     this.whiteboardHttpService
       .setJson(data)
       .pipe(take(1))
@@ -107,17 +120,42 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   uploadImageForCard(cardImage: CardImageUploadInterface): void {
-    if (!this.canManage)
-      return console.log('You are not authorized to upload an image.');
+    if (!this.canManage) {
+      // if you don't have permission to manage, you should still be able to see images locally
+      this.fileReaderService.readAsDataURL(cardImage.imageFile);
 
-    this.whiteboardHttpService
-      .uploadFile(cardImage.imageFile)
-      .subscribe(response => {
-        return this.uploadImageResponse$.next({
+      const imageUrl$ = this.fileReaderService.loaded$.pipe(
+        filter(imageUrl => !!imageUrl),
+        map(imageUrl => ({
           card: cardImage.card,
-          image: response
-        });
+          image: { imageUrl, progress: 100 } // loaded only emits when a read has completed successfully --> progress 100
+        })),
+        take(1)
+      );
+      const progress$ = this.fileReaderService.progress$.pipe(
+        filter(progress => progress !== null),
+        map(progress => ({
+          card: cardImage.card,
+          image: { progress }
+        })),
+        takeUntil(imageUrl$)
+      );
+
+      const uploadResponse$ = merge(progress$, imageUrl$); // merge completes when all input streams complete
+
+      uploadResponse$.subscribe(uploadResponse => {
+        this.uploadImageResponse$.next(uploadResponse);
       });
+    } else {
+      this.whiteboardHttpService
+        .uploadFile(cardImage.imageFile)
+        .subscribe(response => {
+          return this.uploadImageResponse$.next({
+            card: cardImage.card,
+            image: response
+          });
+        });
+    }
   }
 
   private setupIconRegistry() {

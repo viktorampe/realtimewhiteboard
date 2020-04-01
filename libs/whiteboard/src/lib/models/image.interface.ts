@@ -1,4 +1,4 @@
 export default interface ImageInterface {
   progress?: number;
-  imageUrl?: string;
+  imageUrl?: string | ArrayBuffer;
 }

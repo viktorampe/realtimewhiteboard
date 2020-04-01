@@ -22,6 +22,7 @@ export enum FileReaderError {
 export class FileReaderService implements FileReaderServiceInterface {
   loaded$ = new BehaviorSubject<string | ArrayBuffer>(null);
   error$ = new BehaviorSubject<FileReaderError>(null);
+  progress$ = new BehaviorSubject<number>(null);
 
   constructor(@Inject(FILE_READER) private fileReader) {
     this.setEventHandlers();
@@ -63,10 +64,11 @@ export class FileReaderService implements FileReaderServiceInterface {
   }
 
   private setEventHandlers() {
-    this.fileReader.onload = this.onload;
-    this.fileReader.onabort = this.onabort;
-    this.fileReader.onerror = this.onerror;
-    this.fileReader.onloadstart = this.onloadstart;
+    this.fileReader.onload = this.onload; // fired when a read has completed successfully
+    this.fileReader.onabort = this.onabort; // fired when a read has been aborted, for example because the program called FileReader.abort()
+    this.fileReader.onerror = this.onerror; // fired when the read failed due to an error
+    this.fileReader.onloadstart = this.onloadstart; // fired when a read has started
+    this.fileReader.onprogress = this.onprogress; // fired periodically as data is read
   }
 
   // event handlers
@@ -82,5 +84,12 @@ export class FileReaderService implements FileReaderServiceInterface {
   };
   private onloadstart = (ev: ProgressEvent): void => {
     this.loaded$.next(null);
+  };
+
+  private onprogress = (ev: ProgressEvent): void => {
+    if (ev.lengthComputable) {
+      const progress = (ev.loaded / ev.total) * 100;
+      this.progress$.next(progress);
+    }
   };
 }

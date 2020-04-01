@@ -12,7 +12,7 @@ export class CardComponent {
   @Input() mode: ModeEnum;
   @Input() color: string;
   @Input() description: string;
-  @Input() image: ImageInterface;
+  @Input() image: ImageInterface = { imageUrl: null, progress: null };
   @Input() viewModeImage: boolean;
 
   @Output() openFilePicker = new EventEmitter<string>();
