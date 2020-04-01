@@ -20,7 +20,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { configureTestSuite } from 'ng-bullet';
 import {
-  ChapterWithStatus,
+  ChapterWithStatusInterface,
   getChaptersWithStatuses,
   getUnlockedBooks
 } from './practice.viewmodel.selectors';
@@ -134,7 +134,7 @@ describe('PracticeViewModel selectors', () => {
         unlockedFreePractices: Dictionary<UnlockedFreePracticeInterface[]>;
         props: { bookId: number };
       };
-      expected: ChapterWithStatus[];
+      expected: ChapterWithStatusInterface[];
     }[] = [
       {
         it: 'should return correct statuses for each chapter',

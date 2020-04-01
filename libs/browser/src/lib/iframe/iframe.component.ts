@@ -11,9 +11,10 @@ import { WINDOW } from '../window/window';
 })
 export class IframeComponent {
   url: SafeUrl;
+
   constructor(
     sanitizer: DomSanitizer,
-    dialogRef: MatDialogRef<IframeComponent>,
+    private dialogRef: MatDialogRef<IframeComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
     @Inject(WINDOW) public window
   ) {
@@ -27,5 +28,9 @@ export class IframeComponent {
       },
       false
     );
+  }
+
+  public onCloseClicked() {
+    this.dialogRef.close();
   }
 }

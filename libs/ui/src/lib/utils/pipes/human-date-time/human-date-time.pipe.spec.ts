@@ -185,13 +185,38 @@ describe('HumanDateTimePipe', () => {
     });
 
     it('should show the text for dateformat - with prefix', () => {
-      date.setDate(date.getDate() - 7);
+      // date.setDate(date.getDate() - 7);
 
       const expected = 'op ' + date.toLocaleDateString('nl-BE');
       expect(
         pipe.transform(date, {
           rules: [],
           datePrefix: 'op'
+        })
+      ).toBe(expected);
+    });
+
+    it('should add the date when arg addDate = true and condition is matched', () => {
+      const expected = 'sweet (' + date.toLocaleDateString('nl-BE') + ')';
+      expect(
+        pipe.transform(date, {
+          rules: [
+            {
+              condition: () => true,
+              value: () => 'sweet'
+            }
+          ],
+          addDate: true
+        })
+      ).toBe(expected);
+    });
+
+    it('should not add the date when arg addDate = true and no conditions are matched', () => {
+      const expected = date.toLocaleDateString('nl-BE');
+      expect(
+        pipe.transform(date, {
+          rules: [],
+          addDate: true
         })
       ).toBe(expected);
     });

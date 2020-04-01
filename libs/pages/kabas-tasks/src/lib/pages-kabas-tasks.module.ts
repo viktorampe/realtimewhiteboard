@@ -19,6 +19,7 @@ import {
   CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   CONTENT_TASK_MANAGER_TOKEN,
   SharedModule,
+  STUDENT_CONTENT_OPENER_TOKEN,
   STUDENT_TASK_OPENER_TOKEN,
   TaskActionsStudentService,
   TaskActionsTeacherService,
@@ -90,6 +91,10 @@ import { TaskInfoByLearningAreaPipe } from './pipes/task-info-by-learning-area.p
     {
       provide: CONTENT_OPENER_TOKEN,
       useExisting: KabasTasksViewModel
+    },
+    {
+      provide: STUDENT_CONTENT_OPENER_TOKEN,
+      useExisting: StudentTasksViewModel
     },
     {
       provide: CONTENT_TASK_MANAGER_TOKEN,

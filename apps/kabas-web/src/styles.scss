@@ -186,6 +186,10 @@ hr {
   }
 }
 
+.ui-iframe-close {
+  color: #fff;
+}
+
 /* Material checkboxes */
 .mat-checkbox .mat-checkbox-frame,
 .mat-checkbox-checked .mat-checkbox-background {
@@ -253,6 +257,12 @@ hr {
 /* Material Badge */
 .mat-badge-content {
   color: $color-white-1;
+}
+
+/* Material Subheader */
+.mat-list-base .mat-subheader {
+  text-transform: lowercase;
+  color: $ui-text-disabled-color;
 }
 
 /* ng material tabs */

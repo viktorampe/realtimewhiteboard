@@ -37,8 +37,8 @@ describe('StudentTaskListItemComponent', () => {
     component = fixture.componentInstance;
     component.title = 'foo';
     component.actions = [
-      { label: 'Action1', handler: jest.fn() },
-      { label: 'Action2', handler: jest.fn() }
+      { label: 'Action1', handler: jest.fn(), icon: '', tooltip: '' },
+      { label: 'Action2', handler: jest.fn(), icon: '', tooltip: '' }
     ];
     component.urgent = false;
     component.dateLabel = 'morgen';
@@ -53,9 +53,7 @@ describe('StudentTaskListItemComponent', () => {
     it('should pass action handlers', () => {
       const spy = jest.spyOn(component, 'onActionClick');
       const actionDEs = fixture.debugElement.queryAll(
-        By.css(
-          '.manage-kabas-tasks-student-task-list-item__container__actions > .ui-button'
-        )
+        By.css('.student-task-list-item__container__actions > .ui-button')
       );
 
       expect(actionDEs.length).toBe(component.actions.length);
@@ -78,11 +76,9 @@ describe('StudentTaskListItemComponent', () => {
           By.css('[data-cy=tli-date-label]')
         );
 
-        expect(
-          dateLabelDE.nativeElement.classList.contains(
-            'manage-kabas-tasks-student-task-list-item__date-label--urgent'
-          )
-        ).toBeFalsy();
+        expect(dateLabelDE.nativeElement.classList).not.toContain(
+          'student-task-list-item__date-label--urgent'
+        );
       });
 
       it('should have the urgent class when component.urgent is true', () => {
@@ -93,11 +89,9 @@ describe('StudentTaskListItemComponent', () => {
           By.css('[data-cy=tli-date-label]')
         );
 
-        expect(
-          dateLabelDE.nativeElement.classList.contains(
-            'manage-kabas-tasks-student-task-list-item__date-label--urgent'
-          )
-        ).toBeTruthy();
+        expect(dateLabelDE.nativeElement.classList).toContain(
+          'student-task-list-item__date-label--urgent'
+        );
       });
     });
 

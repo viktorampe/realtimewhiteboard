@@ -150,8 +150,8 @@ export class KabasTasksViewModel
   }
 
   //#region  TEACHER TASK OPENER METHODS
-  openTask(task: TaskInterface) {
-    this.router.navigate(['tasks', 'manage', task.id]);
+  openTask(props: { task: TaskInterface }) {
+    this.router.navigate(['tasks', 'manage', props.task.id]);
   }
   archiveTask(task: TaskWithAssigneesInterface) {
     this.startArchivingTasks([task], !task.archivedYear);

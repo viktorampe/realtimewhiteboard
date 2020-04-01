@@ -10,7 +10,7 @@ import { ContentActionInterface } from '../content-action.interface';
 import {
   ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
-  CONTENT_OPENER_TOKEN
+  STUDENT_CONTENT_OPENER_TOKEN
 } from './content-open-actions.service.interface';
 
 @Injectable({
@@ -19,7 +19,7 @@ import {
 export class ContentOpenActionsStudentService
   implements ContentOpenActionsServiceInterface {
   constructor(
-    @Inject(forwardRef(() => CONTENT_OPENER_TOKEN))
+    @Inject(forwardRef(() => STUDENT_CONTENT_OPENER_TOKEN))
     private contentOpener: ContentOpenerInterface
   ) {}
 
