@@ -41,14 +41,14 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() canManage: boolean;
   @Input() data: WhiteboardInterface;
 
-  whiteboard$: Observable<WhiteboardInterface>;
+  private whiteboard$: Observable<WhiteboardInterface>;
 
   title$: Observable<string>;
   cards$: Observable<CardInterface[]>;
   shelfCards$: Observable<CardInterface[]>;
   defaultColor$: Observable<string>;
 
-  uploadImageResponse$ = new BehaviorSubject<CardImageUploadResponseInterface>(
+  imageUploadResponse$ = new BehaviorSubject<CardImageUploadResponseInterface>(
     null
   );
 
@@ -66,7 +66,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     this.setSourceStreams();
-    this.setupPresentationStreams();
+    this.setPresentationStreams();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -89,37 +89,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
     }
   }
 
-  private setupPresentationStreams() {
-    this.title$ = this.whiteboard$.pipe(map(whiteboard => whiteboard.title));
-    this.cards$ = this.whiteboard$.pipe(
-      mapTo([]) // always start with an empty workspace
-    );
-    this.shelfCards$ = this.whiteboard$.pipe(
-      map(whiteboard => {
-        // all cards coming from the API should be added to the shelf
-        return [...whiteboard.cards, ...whiteboard.shelfCards] || [];
-      }),
-      map(shelfCards => {
-        return shelfCards.map(c => ({
-          ...c,
-          mode: ModeEnum.SHELF
-        }));
-      })
-    );
-    this.defaultColor$ = this.whiteboard$.pipe(
-      map(whiteboard => whiteboard.defaultColor || '')
-    );
-  }
-
-  saveWhiteboard(data: WhiteboardInterface): void {
-    if (!this.canManage) return console.log('You are not authorized to save.');
-    this.whiteboardHttpService
-      .setJson(data)
-      .pipe(take(1))
-      .subscribe();
-  }
-
-  uploadImageForCard(cardImage: CardImageUploadInterface): void {
+  public uploadImageForCard(cardImage: CardImageUploadInterface): void {
     if (!this.canManage) {
       // if you don't have permission to manage, you should still be able to see images locally
       this.fileReaderService.readAsDataURL(cardImage.imageFile);
@@ -144,13 +114,13 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       const uploadResponse$ = merge(progress$, imageUrl$); // merge completes when all input streams complete
 
       uploadResponse$.subscribe(uploadResponse => {
-        this.uploadImageResponse$.next(uploadResponse);
+        this.imageUploadResponse$.next(uploadResponse);
       });
     } else {
       this.whiteboardHttpService
         .uploadFile(cardImage.imageFile)
         .subscribe(response => {
-          return this.uploadImageResponse$.next({
+          return this.imageUploadResponse$.next({
             card: cardImage.card,
             image: response
           });
@@ -173,5 +143,32 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         );
       }
     }
+  }
+
+  private setPresentationStreams() {
+    this.title$ = this.whiteboard$.pipe(map(whiteboard => whiteboard.title));
+    this.cards$ = this.whiteboard$.pipe(
+      mapTo([]) // always start with an empty workspace
+    );
+    this.shelfCards$ = this.whiteboard$.pipe(
+      map(whiteboard => {
+        // all cards coming from the API should be added to the shelf
+        return [...whiteboard.cards, ...whiteboard.shelfCards] || [];
+      }),
+      map(shelfCards => {
+        return shelfCards.map(c => ({
+          ...c,
+          mode: ModeEnum.SHELF
+        }));
+      })
+    );
+    this.defaultColor$ = this.whiteboard$.pipe(
+      map(whiteboard => whiteboard.defaultColor)
+    );
+  }
+
+  public saveWhiteboard(data: WhiteboardInterface): void {
+    if (!this.canManage) return console.log('You are not authorized to save.');
+    this.whiteboardHttpService.setJson(data).subscribe();
   }
 }
