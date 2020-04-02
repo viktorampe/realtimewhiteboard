@@ -153,7 +153,9 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
     this.shelfCards$ = this.whiteboard$.pipe(
       map(whiteboard => {
         // all cards coming from the API should be added to the shelf
-        return [...whiteboard.cards, ...whiteboard.shelfCards] || [];
+        const cards = whiteboard.cards || [];
+        const shelfCards = whiteboard.shelfCards || [];
+        return [...cards, ...shelfCards] || [];
       }),
       map(shelfCards => {
         return shelfCards.map(c => ({
