@@ -206,12 +206,12 @@ export class WhiteboardComponent implements OnChanges {
       .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
 
     // add card to the workspace
-    const card = {
+    const card: CardInterface = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
       color: this.lastColor,
       description: '',
-      image: {},
+      image: null,
       top: 0,
       left: 0,
       viewModeImage: false,

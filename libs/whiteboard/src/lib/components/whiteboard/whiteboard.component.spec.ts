@@ -7,7 +7,6 @@ import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
-import { CardInterface } from '../../models/card.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -34,30 +33,8 @@ describe('WhiteboardComponent', () => {
     fixture = TestBed.createComponent(WhiteboardComponent);
     component = fixture.componentInstance;
 
-    const card1: CardInterface = {
-      id: uuidv4(),
-      mode: ModeEnum.IDLE,
-      description: '',
-      image: {},
-      color: null,
-      top: 0,
-      left: 0,
-      viewModeImage: false
-    };
-
-    const card2: CardInterface = {
-      id: uuidv4(),
-      mode: ModeEnum.IDLE,
-      description: '',
-      image: {},
-      color: null,
-      top: 0,
-      left: 0,
-      viewModeImage: false
-    };
-
     component.title = '';
-    component.cards = [card1, card2];
+    component.cards = [new CardFixture(), new CardFixture()];
     component.shelfCards = [];
     component.canManage = true;
 
@@ -229,7 +206,7 @@ describe('WhiteboardComponent', () => {
       it('should toggle viewModeImage', () => {
         const [card] = component.cards;
         card.description = 'tekst';
-        card.image.imageUrl = 'imageUrl';
+        card.image = { imageUrl: 'imageUrl' };
         card.viewModeImage = false;
 
         component.cardFlipIconClicked(card);
@@ -242,6 +219,7 @@ describe('WhiteboardComponent', () => {
       it('should not change viewMode when there is no image', () => {
         const [card] = component.cards;
         card.description = 'tekst';
+        card.image = null;
         card.viewModeImage = false;
 
         component.cardFlipIconClicked(card);
@@ -250,7 +228,8 @@ describe('WhiteboardComponent', () => {
 
       it('should not change viewMode when there is no text', () => {
         const [card] = component.cards;
-        card.image.imageUrl = 'imageUrl';
+        card.description = '';
+        card.image = { imageUrl: 'imageUrl' };
         card.viewModeImage = true;
 
         component.cardFlipIconClicked(card);
@@ -261,7 +240,7 @@ describe('WhiteboardComponent', () => {
         const [card] = component.cards;
         card.mode = <ModeEnum>ModeEnum.SELECTED;
         card.description = 'tekst';
-        card.image.imageUrl = 'imageUrl';
+        card.image = { imageUrl: 'imageUrl' };
 
         const nonEditModes = Object.keys(ModeEnum).filter(
           key =>
@@ -571,7 +550,7 @@ describe('WhiteboardComponent', () => {
           mode: ModeEnum.EDIT,
           color: 'red',
           description: '',
-          image: {},
+          image: null,
           top: 0,
           left: 0,
           viewModeImage: false
