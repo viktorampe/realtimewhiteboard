@@ -21,6 +21,7 @@ import {
 import { TaskInstance } from '../../+models/TaskInstance';
 import { State } from './task-instance.reducer';
 import {
+  getTaskByTaskInstanceId,
   getTaskInstanceWithTaskById,
   getTaskStudentTaskInstances
 } from './task-instance.selectors';
@@ -326,5 +327,17 @@ describe('getTaskStudentTaskInstances()', () => {
       })
     ];
     expect(result).toEqual(expected);
+  });
+});
+
+describe('getTaskByTaskInstanceId', () => {
+  it('should return the related task', () => {
+    const result = getTaskByTaskInstanceId.projector(
+      new TaskInstanceFixture({ id: 666, taskId: 333 }),
+      { 333: new TaskFixture({ id: 333 }), 444: new TaskFixture({ id: 444 }) },
+      { id: 666 }
+    );
+
+    expect(result.id).toEqual(333);
   });
 });

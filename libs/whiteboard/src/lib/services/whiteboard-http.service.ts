@@ -7,11 +7,11 @@ import {
   map,
   mapTo,
   retry,
+  shareReplay,
   switchMap,
   take,
   tap
 } from 'rxjs/operators';
-import { ModeEnum } from '../enums/mode.enum';
 import ImageInterface from '../models/image.interface';
 import { WhiteboardInterface } from '../models/whiteboard.interface';
 
@@ -59,21 +59,11 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
       tap(response => (this.eduContentId = response.eduContentId)),
       map(
         (response: any): WhiteboardInterface =>
-          response
+          response.data
             ? JSON.parse(response.data)
-            : { title: '', cards: [], shelfCards: {} }
+            : { title: '', cards: [], shelfCards: [] }
       ),
-      map(
-        (whiteboard: WhiteboardInterface): WhiteboardInterface => ({
-          title: whiteboard.title,
-          defaultColor: whiteboard.defaultColor,
-          cards: [],
-          shelfCards: whiteboard.cards.map(c => ({
-            ...c,
-            mode: ModeEnum.SHELF
-          }))
-        })
-      )
+      shareReplay(1)
     );
 
     return response$;

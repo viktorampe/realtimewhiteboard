@@ -1,5 +1,4 @@
 <div
-  *ngIf="whiteboard$ | async as whiteboard"
   class="whiteboard"
   (filesDroppedEvent)="onFilesDropped($event)"
   campusImageDrag
@@ -12,6 +11,7 @@
     (changeSelectedColor)="changeSelectedCardsColor($event)"
     [canManage]="canManage"
   ></campus-whiteboard-toolbar>
+
   <div class="whiteboard__workspace__actions">
     <div
       *ngIf="canManage"
@@ -43,7 +43,7 @@
       <div
         @showHideCard
         class="whiteboard__workspace__container"
-        *ngFor="let card of whiteboard.cards"
+        *ngFor="let card of cards"
         cdkDrag
         [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
         [cdkDragDisabled]="card.mode === Mode.ZOOM"
@@ -59,7 +59,10 @@
           class="whiteboard__color-list"
           [mode]="card.mode"
           (selectedColor)="changeColorForCard(card, $event)"
-          *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
+          *ngIf="
+            (card.mode === Mode.EDIT || card.mode === Mode.SELECTED) &&
+            !canManage
+          "
         ></campus-color-list>
         <campus-card-toolbar
           @showHideToolbar
@@ -104,8 +107,8 @@
       <div class="whiteboard__settings">
         <campus-settings
           (update)="updateSettings($event)"
-          [activeColor]="whiteboard.defaultColor"
-          [title]="whiteboard.title"
+          [activeColor]="defaultColor"
+          [title]="title"
         ></campus-settings>
       </div>
     </ng-template>
@@ -113,7 +116,7 @@
     <div
       class="whiteboard__addbutton"
       [class.plusMinimized]="isShelfMinimized"
-      (tap)="btnPlusClicked($event)"
+      (tap)="btnPlusClicked()"
     >
       <mat-icon [svgIcon]="'plus'"></mat-icon>
     </div>
@@ -127,16 +130,16 @@
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       (deleteCard)="onDeleteCard($event, true)"
       [class.minimizedShelf]="isShelfMinimized"
-      [cards]="whiteboard.shelfCards"
+      [cards]="shelfCards"
       [(isMinimized)]="isShelfMinimized"
     ></campus-shelf>
   </div>
   <campus-empty-state
     class="whiteboard__empty"
-    *ngIf="!whiteboard.cards.length && !isSettingsActive"
-    [title]="whiteboard.title ? whiteboard.title : 'Geen titel'"
+    *ngIf="cards && !cards.length && !isSettingsActive"
+    [title]="title"
     [description]="
-      whiteboard.shelfCards.length
+      shelfCards.length
         ? 'Sleep kaartjes uit de shelf naar het bord.'
         : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
     "
