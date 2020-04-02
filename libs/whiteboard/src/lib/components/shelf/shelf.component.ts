@@ -40,7 +40,6 @@ export class ShelfComponent implements OnInit {
   }
 
   onCardDragged(event: CdkDragDrop<any>, card: CardInterface) {
-    console.log(this.cardElementBeingDragged);
     if (!event.isPointerOverContainer) {
       this.cardDraggedOutsideContainer.emit({
         event: event,
