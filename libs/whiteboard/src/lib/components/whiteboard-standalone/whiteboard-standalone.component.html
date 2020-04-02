@@ -1,0 +1,10 @@
+<campus-whiteboard
+  [title]="title$ | async"
+  [cards]="cards$ | async"
+  [shelfCards]="shelfCards$ | async"
+  [defaultColor]="defaultColor$ | async"
+  [canManage]="canManage"
+  [uploadImageResponse]="imageUploadResponse$ | async"
+  (uploadImage)="uploadImageForCard($event)"
+  (changes)="saveWhiteboard($event)"
+></campus-whiteboard>

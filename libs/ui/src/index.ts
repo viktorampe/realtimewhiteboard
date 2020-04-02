@@ -10,6 +10,7 @@ export {
   DateRangeValue
 } from './lib/date-range-picker/date-range-picker.component';
 export { DropdownMenuItemInterface } from './lib/dropdown-menu-item/dropdown-menu-item.component';
+export { EmptyStateComponent } from './lib/empty-state/empty-state.component';
 export { FileIconComponent } from './lib/file-icon/file-icon.component';
 export {
   FilterableItem,

@@ -4,8 +4,9 @@ Je gebruikt momenteel de whiteboard als
   >gebruik als {{ canManage ? 'leerkracht' : 'redacteur' }}</button
 >
 
-<campus-whiteboard
+<campus-whiteboard-standalone
   [apiBase]="'http://api.kabas.localhost:3000/api'"
-  [metadataId]="22"
+  [eduContentMetadataId]="22"
   [canManage]="canManage"
-></campus-whiteboard>
+  [data]="data"
+></campus-whiteboard-standalone>

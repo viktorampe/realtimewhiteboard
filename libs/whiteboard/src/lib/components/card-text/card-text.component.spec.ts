@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardTextComponent } from './card-text.component';
@@ -13,6 +13,12 @@ describe('CardTextComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, BrowserAnimationsModule, MatInputModule],
+      providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
+      ],
       declarations: [CardTextComponent]
     }).compileComponents();
   }));

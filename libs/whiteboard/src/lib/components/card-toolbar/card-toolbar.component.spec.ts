@@ -1,20 +1,28 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { CardToolbarComponent } from './card-toolbar.component';
 
 describe('CardToolbarComponent', () => {
   let component: CardToolbarComponent;
   let fixture: ComponentFixture<CardToolbarComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule, BrowserAnimationsModule],
       declarations: [CardToolbarComponent],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
-  }));
+      providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CardToolbarComponent);
