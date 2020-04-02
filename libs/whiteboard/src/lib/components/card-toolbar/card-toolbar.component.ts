@@ -54,7 +54,7 @@ export class CardToolbarComponent implements OnInit {
   @Input() inShelf: boolean;
 
   @Output() clickDeleteIcon = new EventEmitter<void>();
-  @Output() clickReturntoshelfIcon = new EventEmitter<void>();
+  @Output() clickReturnToShelfIcon = new EventEmitter<void>();
   @Output() clickEditIcon = new EventEmitter<void>();
   @Output() clickConfirmIcon = new EventEmitter<void>();
   @Output() clickFlipIcon = new EventEmitter<void>();
@@ -73,8 +73,8 @@ export class CardToolbarComponent implements OnInit {
     this.clickDeleteIcon.emit();
   }
 
-  returntoshelfIconClicked() {
-    this.clickReturntoshelfIcon.emit();
+  returnToShelfIconClicked() {
+    this.clickReturnToShelfIcon.emit();
   }
 
   editIconClicked() {
