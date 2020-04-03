@@ -6,6 +6,7 @@ import {
   trigger
 } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
@@ -52,6 +53,8 @@ import { ModeEnum } from '../../enums/mode.enum';
 export class CardToolbarComponent implements OnInit {
   @Input() mode: ModeEnum;
   @Input() inShelf: boolean;
+  @Input() canManage: boolean;
+  @Input() cardType: CardTypeEnum;
 
   @Output() clickDeleteIcon = new EventEmitter<void>();
   @Output() clickReturnToShelfIcon = new EventEmitter<void>();

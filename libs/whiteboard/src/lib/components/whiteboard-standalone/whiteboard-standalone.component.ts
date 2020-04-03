@@ -15,6 +15,7 @@ import {
 } from '@campus/browser';
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
 import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
+import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
@@ -160,7 +161,8 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       map(shelfCards => {
         return shelfCards.map(c => ({
           ...c,
-          mode: ModeEnum.SHELF
+          mode: ModeEnum.SHELF,
+          type: CardTypeEnum.PUBLISHERCARD
         }));
       })
     );

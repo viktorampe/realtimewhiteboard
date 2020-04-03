@@ -260,10 +260,12 @@ export class WhiteboardComponent implements OnChanges {
     const updates: Partial<WhiteboardInterface> = {
       cards: this.cards.filter(c => c !== card)
     };
-
     if (permanent) {
-      // also remove from shelf
-      updates.shelfCards = this.shelfCards.filter(sc => sc.id !== card.id);
+      // a teacher can only remove his own cards
+      if (this.canManage || card.type === CardTypeEnum.TEACHERCARD) {
+        // also remove from shelf
+        updates.shelfCards = this.shelfCards.filter(sc => sc.id !== card.id);
+      }
     }
 
     this.updateWhiteboard(updates, true);
