@@ -7,6 +7,7 @@ import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
+import { CardInterface } from '../../models/card.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -60,17 +61,6 @@ describe('WhiteboardComponent', () => {
 
     expect(card.mode).toBe(ModeEnum.SHELF);
     expect(component.shelfCards).toContain(card);
-  });
-
-  it('should permanently delete a card from the list of cards when the user clicks delete', () => {
-    const cardSizeBeforeDelete = component.cards.length;
-    const [card] = component.cards;
-    component.addCardToShelf(card);
-    component.onDeleteCard(card, true);
-
-    expect(component.cards.length).toBe(cardSizeBeforeDelete - 1);
-    expect(component.cards).not.toContain(card);
-    expect(component.shelfCards.map(sc => sc.id)).not.toContain(card.id);
   });
 
   it('should return card to shelf when the user clicks returncardtoshelf', () => {
@@ -551,110 +541,166 @@ describe('WhiteboardComponent', () => {
       expect(component.selectedCards.length).toBe(0);
       component.cards.forEach(c => expect(c.mode).toBe(ModeEnum.IDLE));
     });
+  });
 
-    describe('addEmptyCard()', () => {
-      it('should add an empty card', () => {
-        component.lastColor = 'red';
-        component.cards = [];
-        component.addEmptyCard();
-        expect(component.cards[0]).toEqual({
-          id: component.cards[0].id,
-          mode: ModeEnum.EDIT,
-          color: 'red',
-          description: '',
-          image: null,
-          top: 0,
-          left: 0,
-          viewModeImage: false
-        });
-      });
-
-      it('should add card to shelf and to workspace - canManage = true', () => {
-        component.canManage = true;
-
-        component.cards = [];
-        component.shelfCards = [];
-        component.addEmptyCard();
-        expect(component.shelfCards.length).toEqual(1);
-        expect(component.cards[0].id).toEqual(component.shelfCards[0].id);
+  describe('addEmptyCard()', () => {
+    it('should add an empty card', () => {
+      component.lastColor = 'red';
+      component.cards = [];
+      component.addEmptyCard();
+      expect(component.cards[0]).toEqual({
+        id: component.cards[0].id,
+        mode: ModeEnum.EDIT,
+        color: 'red',
+        description: '',
+        image: null,
+        top: 0,
+        left: 0,
+        viewModeImage: false
       });
     });
 
-    describe('onDeleteCard()', () => {
-      it('should remove card form workspace', () => {
-        component.shelfCards = [];
-        const cardArrayLengthBefore = component.cards.length;
-        const [card] = component.cards;
-        card.mode = ModeEnum.IDLE;
+    it('should add card to shelf and to workspace - canManage = true', () => {
+      component.canManage = true;
 
-        component.onDeleteCard(card);
+      component.cards = [];
+      component.shelfCards = [];
+      component.addEmptyCard();
+      expect(component.shelfCards.length).toEqual(1);
+      expect(component.cards[0].id).toEqual(component.shelfCards[0].id);
+    });
+  });
 
-        const cardArrayLengthAfter = component.cards.length;
+  describe('onDeleteCard()', () => {
+    let cardToBeDeleted: CardInterface;
+    let numberOfWorkspaceCardsBeforeDelete: number;
+    let numberOfShelfCardsBeforeDelete: number;
 
-        expect(cardArrayLengthAfter).toBe(cardArrayLengthBefore - 1);
-        expect(component.cards).not.toContain(card);
+    beforeEach(() => {
+      // test setup:
+      // workspace: 2 cards
+      // shelf: 2 cards
+      cardToBeDeleted = new CardFixture(
+        new CardFixture({ id: 'I should be permantently deleted' })
+      );
+      component.shelfCards = [
+        cardToBeDeleted,
+        new CardFixture({ id: 'don not delete me plz' })
+      ];
+
+      component.cards = [
+        cardToBeDeleted,
+        new CardFixture({ id: 'do not delete me either plz' })
+      ];
+
+      numberOfWorkspaceCardsBeforeDelete = component.cards.length;
+      numberOfShelfCardsBeforeDelete = component.shelfCards.length;
+
+      jest.spyOn(component.changes, 'emit');
+    });
+
+    it('should only remove the card from the workspace - permanent = falsy', () => {
+      component.onDeleteCard(cardToBeDeleted);
+
+      const numberOfWorkspaceCardsAfterDelete = component.cards.length;
+
+      expect(numberOfWorkspaceCardsAfterDelete).toBe(
+        numberOfWorkspaceCardsBeforeDelete - 1
+      );
+      expect(component.shelfCards.map(sc => sc.id)).toContain(
+        cardToBeDeleted.id
+      );
+      expect(component.cards).not.toContain(cardToBeDeleted);
+
+      expect(component.changes.emit).toHaveBeenCalled();
+      expect(component.changes.emit).toHaveBeenCalledWith({
+        title: component.title,
+        defaultColor: component.defaultColor,
+        cards: [new CardFixture({ id: 'do not delete me either plz' })],
+        shelfCards: [
+          cardToBeDeleted,
+          new CardFixture({ id: 'don not delete me plz' })
+        ]
       });
     });
 
-    describe('onFilesDropped()', () => {
-      it('should not add a card if file type of dropped file is unsupported', () => {
-        const cardsLengthBeforeAdd = component.cards.length;
-        const file = new File([''], 'dummy.jpg', {
-          type: ''
-        });
+    it('should remove the card from the workspace and shelf - permanent = true', () => {
+      component.onDeleteCard(cardToBeDeleted, true);
 
-        const fileDropEvent = {
-          preventDefault: () => {},
-          stopPropagation: () => {},
-          dataTransfer: { files: [file] },
-          offsetX: 400,
-          offsetY: 400
-        };
+      expect(component.cards.length).toBe(
+        numberOfWorkspaceCardsBeforeDelete - 1
+      );
+      expect(component.cards).not.toContain(cardToBeDeleted);
+      expect(component.shelfCards.map(sc => sc.id)).not.toContain(
+        cardToBeDeleted.id
+      );
 
-        component.onFilesDropped(fileDropEvent);
+      expect(component.changes.emit).toHaveBeenCalled();
+      expect(component.changes.emit).toHaveBeenCalledWith({
+        title: component.title,
+        defaultColor: component.defaultColor,
+        cards: [new CardFixture({ id: 'do not delete me either plz' })],
+        shelfCards: [new CardFixture({ id: 'don not delete me plz' })]
+      });
+    });
+  });
 
-        expect(component.cards.length).toBe(cardsLengthBeforeAdd);
+  describe('onFilesDropped()', () => {
+    it('should not add a card if file type of dropped file is unsupported', () => {
+      const cardsLengthBeforeAdd = component.cards.length;
+      const file = new File([''], 'dummy.jpg', {
+        type: ''
       });
 
-      it('should add a card to the whiteboard on image drag', () => {
-        const addEmptySpy = jest
-          .spyOn(component, 'addEmptyCard')
-          .mockReturnValue(new CardFixture());
-        const uploadImageForCardSpy = jest
-          .spyOn(component, 'uploadImageForCard')
-          .mockImplementation(() => {});
+      const fileDropEvent = {
+        preventDefault: () => {},
+        stopPropagation: () => {},
+        dataTransfer: { files: [file] },
+        offsetX: 400,
+        offsetY: 400
+      };
 
-        const file = new File([''], 'dummy.jpg', {
-          type: component.allowedFileTypes[0]
-        });
-        const file2 = new File([''], 'dummy.jpg', {
-          type: component.allowedFileTypes[0]
-        });
+      component.onFilesDropped(fileDropEvent);
 
-        const fileDropEvent = {
-          preventDefault: () => {},
-          stopPropagation: () => {},
-          dataTransfer: { files: [file, file2] },
-          offsetX: 400,
-          offsetY: 400
-        };
+      expect(component.cards.length).toBe(cardsLengthBeforeAdd);
+    });
 
-        component.onFilesDropped(fileDropEvent);
+    it('should add a card to the whiteboard on image drag', () => {
+      const addEmptySpy = jest
+        .spyOn(component, 'addEmptyCard')
+        .mockReturnValue(new CardFixture());
+      const uploadImageForCardSpy = jest
+        .spyOn(component, 'uploadImageForCard')
+        .mockImplementation(() => {});
 
-        expect(addEmptySpy).toHaveBeenCalledTimes(2);
-        expect(uploadImageForCardSpy).toHaveBeenCalledTimes(2);
-        expect(addEmptySpy.mock.calls).toEqual([
-          [{ top: 400, left: 400 }],
-          [{ top: 450, left: 450 }]
-        ]);
-        expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(
-          new CardFixture()
-        );
-        expect(uploadImageForCardSpy.mock.calls).toEqual([
-          [new CardFixture(), file],
-          [new CardFixture(), file2]
-        ]);
+      const file = new File([''], 'dummy.jpg', {
+        type: component.allowedFileTypes[0]
       });
+      const file2 = new File([''], 'dummy.jpg', {
+        type: component.allowedFileTypes[0]
+      });
+
+      const fileDropEvent = {
+        preventDefault: () => {},
+        stopPropagation: () => {},
+        dataTransfer: { files: [file, file2] },
+        offsetX: 400,
+        offsetY: 400
+      };
+
+      component.onFilesDropped(fileDropEvent);
+
+      expect(addEmptySpy).toHaveBeenCalledTimes(2);
+      expect(uploadImageForCardSpy).toHaveBeenCalledTimes(2);
+      expect(addEmptySpy.mock.calls).toEqual([
+        [{ top: 400, left: 400 }],
+        [{ top: 450, left: 450 }]
+      ]);
+      expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(new CardFixture());
+      expect(uploadImageForCardSpy.mock.calls).toEqual([
+        [new CardFixture(), file],
+        [new CardFixture(), file2]
+      ]);
     });
   });
 });

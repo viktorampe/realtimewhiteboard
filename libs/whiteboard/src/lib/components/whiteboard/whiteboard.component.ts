@@ -252,15 +252,17 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   onDeleteCard(card: CardInterface, permanent?: boolean) {
-    this.updateWhiteboard({
+    // always remove from workspace
+    const updates: Partial<WhiteboardInterface> = {
       cards: this.cards.filter(c => c !== card)
-    });
+    };
+
     if (permanent) {
-      this.updateWhiteboard({
-        shelfCards: this.shelfCards.filter(sc => sc.id !== card.id)
-      });
+      // also remove from shelf
+      updates.shelfCards = this.shelfCards.filter(sc => sc.id !== card.id);
     }
-    this.saveWhiteboard();
+
+    this.updateWhiteboard(updates, true);
   }
 
   onCardTapped(card: CardInterface) {
