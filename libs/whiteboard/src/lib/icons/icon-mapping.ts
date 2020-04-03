@@ -9,7 +9,8 @@ import {
   editSvg,
   flipCameraSvg,
   openInNewSvg,
-  removeSvg
+  removeSvg,
+  returnToShelfSvg
 } from './material/whiteboard-material-icons';
 import {
   checkSvg,
@@ -39,5 +40,6 @@ export const iconMap: { [icon: string]: string } = {
   remove: removeSvg,
   'arrow-down': arrowDownSvg,
   'empty-state-whiteboard-empty': whiteboardEmptyStateSvg,
-  'empty-state-whiteboard-drop': whiteboardDropSvg
+  'empty-state-whiteboard-drop': whiteboardDropSvg,
+  'return-to-shelf': returnToShelfSvg
 };

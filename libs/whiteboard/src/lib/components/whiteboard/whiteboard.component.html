@@ -74,7 +74,8 @@
           "
           class="whiteboard__card_toolbar"
           [mode]="card.mode"
-          (clickDeleteIcon)="onDeleteCard(card)"
+          (clickDeleteIcon)="onDeleteCard(card, true)"
+          (clickReturnToShelfIcon)="onDeleteCard(card)"
           (clickEditIcon)="cardEditIconClicked(card)"
           (clickFlipIcon)="cardFlipIconClicked(card)"
           (clickConfirmIcon)="cardConfirmIconClicked(card)"
@@ -127,6 +128,7 @@
     ></div>
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
+      (deleteCard)="onDeleteCard($event, true)"
       [class.minimizedShelf]="isShelfMinimized"
       [cards]="shelfCards"
       [(isMinimized)]="isShelfMinimized"
