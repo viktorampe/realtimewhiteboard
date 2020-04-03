@@ -9,7 +9,7 @@
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool toolbar__delete"
       (tap)="deleteIconClicked()"
-      *ngIf="canManage || cardType === 0"
+      *ngIf="canManage || cardType === CardType.TEACHERCARD"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -20,7 +20,7 @@
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool toolbar__delete"
       (tap)="returnToShelfIconClicked()"
-      *ngIf="!inShelf && cardType !== 0"
+      *ngIf="!inShelf && cardType !== CardType.TEACHERCARD"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"

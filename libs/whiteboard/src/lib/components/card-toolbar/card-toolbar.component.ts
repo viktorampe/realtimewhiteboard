@@ -70,6 +70,10 @@ export class CardToolbarComponent implements OnInit {
     return ModeEnum;
   }
 
+  get CardType() {
+    return CardTypeEnum;
+  }
+
   ngOnInit() {}
 
   deleteIconClicked() {
