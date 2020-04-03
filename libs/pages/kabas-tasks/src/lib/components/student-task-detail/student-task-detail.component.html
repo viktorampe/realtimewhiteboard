@@ -1,4 +1,11 @@
-<campus-backdrop *ngIf="task$ | async as task" [title]="task.name" static>
+<campus-backdrop
+  *ngIf="task$ | async as task"
+  [title]="task.name"
+  [static]="true"
+>
+  <backdrop-reveal-action>
+    <mat-icon svgIcon="arrow-back" (click)="clickBack()"></mat-icon>
+  </backdrop-reveal-action>
   <front-layer-content>
     <div class="student-task-detail__content">
       <ng-container
@@ -25,6 +32,7 @@
           <section-content>
             <mat-list>
               <mat-list-item
+                class="ui-list-item-3-line"
                 *ngFor="let requiredTaskContent of requiredTaskContents"
                 data-cy="required-task-content"
               >
@@ -61,6 +69,7 @@
               <mat-list-item
                 *ngFor="let optionalTaskContent of optionalTaskContents"
                 data-cy="optional-task-content"
+                class="ui-list-item-3-line"
               >
                 <campus-student-task-content-list-item
                   [fileIcon]="optionalTaskContent.icon"
@@ -88,11 +97,18 @@
       <section-title>Over deze taak</section-title>
 
       <section-content>
-        <campus-person-badge [person]="task.assigner"></campus-person-badge>
-        <div data-cy="task-name" class="ui-title">{{ task.name }}</div>
-        <div data-cy="task-learning-area-name" class="ui-headline">{{
-          task.learningAreaName
-        }}</div>
+        <div class="student-task-detail__side__task-info">
+          <campus-person-badge
+            [person]="task.assigner"
+            size="large"
+          ></campus-person-badge>
+          <div class="task-info__general">
+            <div data-cy="task-name" class="ui-title">{{ task.name }}</div>
+            <div data-cy="task-learning-area-name" class="ui-headline">{{
+              task.learningAreaName
+            }}</div>
+          </div>
+        </div>
         <div
           *ngIf="task.isFinished"
           data-cy="task-finished-on"

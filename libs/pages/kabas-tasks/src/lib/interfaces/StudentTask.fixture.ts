@@ -17,6 +17,7 @@ export class StudentTaskFixture implements StudentTaskInterface {
   endDate = new Date();
   actions = [];
   task = null;
+  taskInstanceId = 1;
 
   constructor(props: Partial<StudentTaskInterface> = {}) {
     // overwrite defaults

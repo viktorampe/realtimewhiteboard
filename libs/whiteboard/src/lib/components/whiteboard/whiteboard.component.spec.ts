@@ -1,87 +1,30 @@
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatCardModule,
-  MatDialogModule,
-  MatIconModule,
-  MatIconRegistry,
-  MatInputModule,
-  MatProgressBarModule
-} from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
-import CardInterface from '../../models/card.interface';
-import { WhiteboardFixture } from '../../models/whiteboard.fixture';
-import {
-  WhiteboardHttpService,
-  WhiteboardHttpServiceInterface
-} from '../../services/whiteboard-http.service';
-import { CardImageComponent } from '../card-image/card-image.component';
-import { CardTextComponent } from '../card-text/card-text.component';
-import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
-import { CardComponent } from '../card/card.component';
-import { ColorListComponent } from '../color-list/color-list.component';
-import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
-import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
-import { ShelfComponent } from '../shelf/shelf.component';
-import { WhiteboardToolbarComponent } from '../whiteboard-toolbar/whiteboard-toolbar.component';
+import { SettingsInterface } from '../../models/settings.interface';
+import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
 
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
-  let httpService: WhiteboardHttpServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MatCardModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatIconModule,
-        MatDialogModule,
-        BrowserAnimationsModule,
-        MatProgressBarModule,
-        MatInputModule,
-        DragDropModule,
-        UiModule
-      ],
-      declarations: [
-        WhiteboardComponent,
-        CardComponent,
-        CardToolbarComponent,
-        ColorListComponent,
-        WhiteboardToolbarComponent,
-        ProgressBarComponent,
-        ShelfComponent,
-        CardImageComponent,
-        CardTextComponent,
-        ImageToolbarComponent
-      ],
+      imports: [NoopAnimationsModule, WhiteboardModule],
+      declarations: [],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
-        },
-        {
-          provide: WhiteboardHttpService,
-          useValue: {
-            uploadFile: () => of('imageUrl').pipe(delay(500)),
-            getJson: () => of(),
-            setJson: () => of()
-          }
         }
       ]
     });
@@ -90,38 +33,13 @@ describe('WhiteboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(WhiteboardComponent);
     component = fixture.componentInstance;
-    httpService = TestBed.get(WhiteboardHttpService);
 
-    const card1: CardInterface = {
-      id: uuidv4(),
-      mode: ModeEnum.IDLE,
-      cardType: CardTypeEnum.PUBLISHERCARD,
-      description: '',
-      image: {},
-      color: null,
-      top: 0,
-      left: 0,
-      viewModeImage: false
-    };
-
-    const card2: CardInterface = {
-      id: uuidv4(),
-      mode: ModeEnum.IDLE,
-      cardType: CardTypeEnum.PUBLISHERCARD,
-      description: '',
-      image: {},
-      color: null,
-      top: 0,
-      left: 0,
-      viewModeImage: false
-    };
-
-    component.whiteboard$.next({
-      title: '',
-      cards: [card1, card2],
-      shelfCards: []
-    });
-
+    component.title = '';
+    component.cards = [
+      new CardFixture({ cardType: CardTypeEnum.PUBLISHERCARD }),
+      new CardFixture({ cardType: CardTypeEnum.PUBLISHERCARD })
+    ];
+    component.shelfCards = [];
     component.canManage = true;
 
     fixture.detectChanges();
@@ -132,34 +50,77 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should create a card on plus button clicked', () => {
-    const cardsSizeBeforeClicked = component.whiteboard$.value.cards.length;
+    const cardsSizeBeforeClicked = component.cards.length;
 
     component.btnPlusClicked();
 
-    expect(component.whiteboard$.value.cards.length).toBe(
-      cardsSizeBeforeClicked + 1
-    );
+    expect(component.cards.length).toBe(cardsSizeBeforeClicked + 1);
   });
 
   it('should set card mode to ShelfMode when card is added to the shelf', () => {
-    const [card] = component.whiteboard$.value.cards;
+    const [card] = component.cards;
 
     component.addCardToShelf(card);
 
     expect(card.mode).toBe(ModeEnum.SHELF);
-    expect(component.whiteboard$.value.shelfCards).toContain(card);
+    expect(component.shelfCards).toContain(card);
   });
 
   it('should delete a card from the list of cards when the user clicks delete', () => {
-    const cardSizeBeforeDelete = component.whiteboard$.value.cards.length;
-    const [card] = component.whiteboard$.value.cards;
+    const cardSizeBeforeDelete = component.cards.length;
+    const [card] = component.cards;
 
-    component.deleteCard(card);
+    component.onDeleteCard(card);
 
-    expect(component.whiteboard$.value.cards.length).toBe(
-      cardSizeBeforeDelete - 1
-    );
-    expect(component.whiteboard$.value.cards).not.toContain(card);
+    expect(component.cards.length).toBe(cardSizeBeforeDelete - 1);
+    expect(component.cards).not.toContain(card);
+  });
+
+  describe('updateSettings()', () => {
+    it('should update whiteboard title and defaultColor', () => {
+      component.title = 'beforeTitle';
+      component.defaultColor = '#FFFFFFFF';
+
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+
+      component.updateSettings(settings);
+
+      expect(component.title).toBe('afterTitle');
+      expect(component.defaultColor).toBe('#00000000');
+    });
+    it('should save the whiteboard', () => {
+      const saveWhiteboardSpy = jest.spyOn(component, 'saveWhiteboard');
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+      expect(saveWhiteboardSpy).toHaveBeenCalled();
+    });
+    it('should set lastColor', () => {
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+
+      expect(component.lastColor).toBe('#00000000');
+    });
+    it('should toggle settings visibility', () => {
+      const toggleSettingsSpy = jest.spyOn(component, 'toggleSettings');
+      const visibilityBefore = component.isSettingsActive;
+      const settings: SettingsInterface = {
+        title: 'afterTitle',
+        defaultColor: '#00000000'
+      };
+      component.updateSettings(settings);
+      const visibilityAfter = component.isSettingsActive;
+      expect(visibilityBefore).not.toBe(visibilityAfter);
+      expect(toggleSettingsSpy).toHaveBeenCalled();
+    });
   });
 
   // TODO: fix these tests after refactor to dumb component
@@ -198,37 +159,9 @@ describe('WhiteboardComponent', () => {
     });
   });
 
-  describe('showTitleInput()', () => {
-    it('should set isTitleInputSelected to true', () => {
-      component.isTitleInputSelected = false;
-
-      component.showTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(true);
-    });
-
-    it('should set isTitleInputSelected to false if title is not empty', () => {
-      component.isTitleInputSelected = true;
-      component.titleFC.patchValue('test');
-
-      component.hideTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(false);
-    });
-
-    it('should set isTitleInputSelected to true if title is empty', () => {
-      component.isTitleInputSelected = true;
-      component.titleFC.patchValue('');
-
-      component.hideTitleInput();
-
-      expect(component.isTitleInputSelected).toBe(true);
-    });
-  });
-
   describe('onCardTapped()', () => {
     it('should set card mode to IdleMode if previous mode was ZoomMode', () => {
-      const [card] = component.whiteboard$.value.cards;
+      const [card] = component.cards;
       card.mode = <ModeEnum>ModeEnum.ZOOM;
 
       component.onCardTapped(card);
@@ -257,7 +190,7 @@ describe('WhiteboardComponent', () => {
 
   describe('card toolbar handlers', () => {
     it('should set card mode to EditMode when cardEditIconClicked is called', () => {
-      const [card] = component.whiteboard$.value.cards;
+      const [card] = component.cards;
       card.mode = <ModeEnum>ModeEnum.IDLE;
 
       component.cardEditIconClicked(card);
@@ -266,7 +199,7 @@ describe('WhiteboardComponent', () => {
     });
 
     it('should set card mode to IdleMode when cardConfirmIconClicked is called', () => {
-      const [card] = component.whiteboard$.value.cards;
+      const [card] = component.cards;
       card.mode = <ModeEnum>ModeEnum.IDLE;
 
       component.cardConfirmIconClicked(card);
@@ -276,9 +209,9 @@ describe('WhiteboardComponent', () => {
 
     describe('cardFlipIconClicked()', () => {
       it('should toggle viewModeImage', () => {
-        const [card] = component.whiteboard$.value.cards;
+        const [card] = component.cards;
         card.description = 'tekst';
-        card.image.imageUrl = 'imageUrl';
+        card.image = { imageUrl: 'imageUrl' };
         card.viewModeImage = false;
 
         component.cardFlipIconClicked(card);
@@ -289,8 +222,9 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should not change viewMode when there is no image', () => {
-        const [card] = component.whiteboard$.value.cards;
+        const [card] = component.cards;
         card.description = 'tekst';
+        card.image = null;
         card.viewModeImage = false;
 
         component.cardFlipIconClicked(card);
@@ -298,8 +232,9 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should not change viewMode when there is no text', () => {
-        const [card] = component.whiteboard$.value.cards;
-        card.image.imageUrl = 'imageUrl';
+        const [card] = component.cards;
+        card.description = '';
+        card.image = { imageUrl: 'imageUrl' };
         card.viewModeImage = true;
 
         component.cardFlipIconClicked(card);
@@ -307,10 +242,10 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should set card mode to IdleMode if card.mode !== edit', () => {
-        const [card] = component.whiteboard$.value.cards;
+        const [card] = component.cards;
         card.mode = <ModeEnum>ModeEnum.SELECTED;
         card.description = 'tekst';
-        card.image.imageUrl = 'imageUrl';
+        card.image = { imageUrl: 'imageUrl' };
 
         const nonEditModes = Object.keys(ModeEnum).filter(
           key =>
@@ -325,7 +260,7 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should stay in EditMode if card.mode === edit', () => {
-        const [card] = component.whiteboard$.value.cards;
+        const [card] = component.cards;
         card.mode = <ModeEnum>ModeEnum.EDIT;
 
         component.cardFlipIconClicked(card);
@@ -403,52 +338,38 @@ describe('WhiteboardComponent', () => {
       });
     });
 
-    xdescribe('updateImageForCard()', () => {
-      // TODO: check upload flow
-      it('should set card mode to UploadMode when ', () => {
-        const card = new CardFixture({ cardType: CardTypeEnum.PUBLISHERCARD });
+    describe('updateImageForCard()', () => {
+      const card = new CardFixture();
+      const file = new File([''], 'dummy.jpg', {
+        type: ''
+      });
+      let emitSpy: jest.SpyInstance;
 
-        const file = new File([''], 'dummy.jpg', {
-          type: ''
-        });
-
+      beforeEach(() => {
+        emitSpy = jest.spyOn(component.uploadImage, 'next');
         component.uploadImageForCard(card, file);
+      });
 
+      it('should set card mode to UploadMode when ', () => {
         expect(card.mode).toBe(ModeEnum.UPLOAD);
       });
 
-      it('should set card image to url after upload', () => {
-        const file = new File([''], 'dummy.jpg', {
-          type: ''
-        });
-        httpService.uploadFile(file).subscribe(result => {
-          const [card] = component.whiteboard$.value.cards;
-          card.mode = <ModeEnum>ModeEnum.IDLE;
-
-          component.uploadImageForCard(card, file);
-
-          expect(card.image).toBe({ imageUrl: 'test' });
-        });
+      it('should trigger an uploadImage event', () => {
+        expect(emitSpy).toHaveBeenCalledTimes(1);
+        expect(emitSpy).toHaveBeenCalledWith({ card, imageFile: file });
       });
 
-      it('should update shelfcard copy', () => {
+      it('should update shelfcard copy - canManage = true', () => {
+        component.canManage = true;
+
         component.lastColor = 'red';
-        component.whiteboard$.value.cards = [];
-        component.whiteboard$.value.shelfCards = [];
+        component.cards = [];
+        component.shelfCards = [];
         component.addEmptyCard();
 
-        const file = new File([''], 'dummy.jpg', {
-          type: ''
-        });
+        component.uploadImageForCard(component.cards[0], file);
 
-        component.uploadImageForCard(
-          component.whiteboard$.value.cards[0],
-          file
-        );
-
-        expect(component.whiteboard$.value.cards[0].image).toEqual(
-          component.whiteboard$.value.shelfCards[0].image
-        );
+        expect(component.cards[0].image).toEqual(component.shelfCards[0].image);
       });
     });
 
@@ -481,19 +402,16 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should should update color of shelfcard copy', () => {
+        component.canManage = true;
+
         component.lastColor = 'red';
-        component.whiteboard$.value.cards = [];
-        component.whiteboard$.value.shelfCards = [];
+        component.cards = [];
+        component.shelfCards = [];
         component.addEmptyCard();
 
-        component.changeColorForCard(
-          component.whiteboard$.value.cards[0],
-          'black'
-        );
+        component.changeColorForCard(component.cards[0], 'black');
 
-        expect(component.whiteboard$.value.cards[0].color).toEqual(
-          component.whiteboard$.value.shelfCards[0].color
-        );
+        expect(component.cards[0].color).toEqual(component.shelfCards[0].color);
       });
     });
 
@@ -520,22 +438,19 @@ describe('WhiteboardComponent', () => {
         })
       ];
       beforeEach(() => {
-        component.whiteboard$.value.cards = [
-          ...selectedCards,
-          ...nonSelectedCards
-        ];
+        component.cards = [...selectedCards, ...nonSelectedCards];
         component.selectedCards = selectedCards;
       });
 
       it('bulkDelete() should delete multiple cards', () => {
-        component.whiteboard$.value.shelfCards = [];
+        component.shelfCards = [];
 
         component.bulkDeleteClicked();
         selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
 
         expect(component.selectedCards.length).toBe(0);
-        expect(component.whiteboard$.value.cards).toEqual(nonSelectedCards);
-        component.whiteboard$.value.shelfCards.forEach((shelfcard, index) => {
+        expect(component.cards).toEqual(nonSelectedCards);
+        component.shelfCards.forEach((shelfcard, index) => {
           expect({ ...shelfcard, mode: null }).toEqual({
             ...selectedCards[index],
             mode: null,
@@ -565,7 +480,7 @@ describe('WhiteboardComponent', () => {
           mode: ModeEnum.SELECTED,
           id: uuidv4()
         });
-        component.whiteboard$.value.cards = [idleCard, selectedCard];
+        component.cards = [idleCard, selectedCard];
 
         component.onCardPressed(idleCard);
         expect(selectedCard.mode).toEqual(ModeEnum.IDLE);
@@ -587,22 +502,14 @@ describe('WhiteboardComponent', () => {
       });
 
       it("should set all cards' mode to MultiSelectMode", () => {
-        component.whiteboard$.value.cards = [
-          new CardFixture({
-            cardType: CardTypeEnum.PUBLISHERCARD,
-            mode: ModeEnum.SELECTED
-          }),
-          new CardFixture({
-            cardType: CardTypeEnum.PUBLISHERCARD,
-            mode: ModeEnum.IDLE
-          })
+        component.cards = [
+          new CardFixture({ mode: ModeEnum.SELECTED }),
+          new CardFixture({ mode: ModeEnum.IDLE })
         ];
 
-        component.onSelectCard(component.whiteboard$.value.cards[0]);
+        component.onSelectCard(component.cards[0]);
 
-        expect(component.whiteboard$.value.cards[1].mode).toBe(
-          ModeEnum.MULTISELECT
-        );
+        expect(component.cards[1].mode).toBe(ModeEnum.MULTISELECT);
       });
 
       it('should add card to selectedCards when onSelectCard is called', () => {
@@ -632,7 +539,7 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should set card mode to MultiSelectMode when onDeselectCard is called and another card is still selected', () => {
-        const [card1, card2] = component.whiteboard$.value.cards;
+        const [card1, card2] = component.cards;
         card1.mode = <ModeEnum>ModeEnum.MULTISELECTSELECTED;
         card2.mode = <ModeEnum>ModeEnum.MULTISELECTSELECTED;
 
@@ -646,7 +553,7 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should set card mode to Idle when onDeselectCard is called and no other card is selected', () => {
-        const [card] = component.whiteboard$.value.cards;
+        const [card] = component.cards;
         card.mode = <ModeEnum>ModeEnum.MULTISELECTSELECTED;
 
         component.selectedCards = [card];
@@ -658,7 +565,7 @@ describe('WhiteboardComponent', () => {
     });
 
     it('should set selected card to IdleMode when whiteboard is clicked', () => {
-      const [idleCard, selectedCard] = component.whiteboard$.value.cards;
+      const [idleCard, selectedCard] = component.cards;
       idleCard.mode = <ModeEnum>ModeEnum.IDLE;
       selectedCard.mode = <ModeEnum>ModeEnum.SELECTED;
       component.selectedCards = [selectedCard];
@@ -676,88 +583,57 @@ describe('WhiteboardComponent', () => {
       whiteboard.triggerEventHandler('tap', touchEvent);
 
       expect(component.selectedCards.length).toBe(0);
-      component.whiteboard$.value.cards.forEach(c =>
-        expect(c.mode).toBe(ModeEnum.IDLE)
-      );
-    });
-
-    it('should save whiteboard when save button is clicked', () => {
-      const setJsonSpy = jest.spyOn(httpService, 'setJson');
-
-      const [workspaceCard, shelvedCard] = component.whiteboard$.value.cards;
-      workspaceCard.mode = <ModeEnum>ModeEnum.IDLE;
-      shelvedCard.mode = <ModeEnum>ModeEnum.SHELF;
-
-      component.whiteboard$.value.title = 'test board';
-      component.whiteboard$.value.shelfCards = [shelvedCard];
-
-      component.saveWhiteboard();
-
-      const cards = [...component.whiteboard$.value.shelfCards];
-
-      cards.forEach(c => {
-        c.top = null;
-        c.left = null;
-        c.mode = ModeEnum.SHELF;
-      });
-
-      const expected = new WhiteboardFixture({
-        title: 'test board',
-        cards: cards,
-        shelfCards: null
-      });
-
-      expect(setJsonSpy).toHaveBeenCalledWith({ ...expected });
+      component.cards.forEach(c => expect(c.mode).toBe(ModeEnum.IDLE));
     });
 
     describe('addEmptyCard()', () => {
       it('should add an empty card', () => {
         component.lastColor = 'red';
-        component.whiteboard$.value.cards = [];
+        component.cards = [];
         component.addEmptyCard();
-        expect(component.whiteboard$.value.cards[0]).toEqual({
-          id: component.whiteboard$.value.cards[0].id,
+        expect(component.cards[0]).toEqual({
+          id: component.cards[0].id,
           mode: ModeEnum.EDIT,
           cardType: CardTypeEnum.PUBLISHERCARD,
           color: 'red',
           description: '',
-          image: {},
+          image: null,
           top: 0,
           left: 0,
           viewModeImage: false
         });
       });
 
-      it('should add card to shelf and to workspace', () => {
-        component.whiteboard$.value.cards = [];
-        component.whiteboard$.value.shelfCards = [];
+      it('should add card to shelf and to workspace - canManage = true', () => {
+        component.canManage = true;
+
+        component.cards = [];
+        component.shelfCards = [];
         component.addEmptyCard();
-        expect(component.whiteboard$.value.shelfCards.length).toEqual(1);
-        expect(component.whiteboard$.value.cards[0].id).toEqual(
-          component.whiteboard$.value.shelfCards[0].id
-        );
+        expect(component.shelfCards.length).toEqual(1);
+        expect(component.cards[0].id).toEqual(component.shelfCards[0].id);
       });
     });
 
     describe('onDeleteCard()', () => {
       it('should remove card form workspace', () => {
-        component.whiteboard$.value.shelfCards = [];
-        const cardArrayLengthBefore = component.whiteboard$.value.cards.length;
-        const [card] = component.whiteboard$.value.cards;
+        component.shelfCards = [];
+        const cardArrayLengthBefore = component.cards.length;
+        const [card] = component.cards;
         card.mode = ModeEnum.IDLE;
 
-        component.deleteCard(card);
+        component.onDeleteCard(card);
 
-        const cardArrayLengthAfter = component.whiteboard$.value.cards.length;
+        const cardArrayLengthAfter = component.cards.length;
 
         expect(cardArrayLengthAfter).toBe(cardArrayLengthBefore - 1);
-        expect(component.whiteboard$.value.cards).not.toContain(card);
+        expect(component.cards).not.toContain(card);
       });
     });
 
     describe('onFilesDropped()', () => {
       it('should not add a card if file type of dropped file is unsupported', () => {
-        const cardsLengthBeforeAdd = component.whiteboard$.value.cards.length;
+        const cardsLengthBeforeAdd = component.cards.length;
         const file = new File([''], 'dummy.jpg', {
           type: ''
         });
@@ -772,9 +648,7 @@ describe('WhiteboardComponent', () => {
 
         component.onFilesDropped(fileDropEvent);
 
-        expect(component.whiteboard$.value.cards.length).toBe(
-          cardsLengthBeforeAdd
-        );
+        expect(component.cards.length).toBe(cardsLengthBeforeAdd);
       });
 
       it('should add a card to the whiteboard on image drag', () => {

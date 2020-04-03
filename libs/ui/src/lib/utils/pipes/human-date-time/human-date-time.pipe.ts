@@ -24,7 +24,8 @@ export class HumanDateTimePipe implements PipeTransform {
       referenceDate = new Date(),
       rules,
       locale = 'nl-BE',
-      datePrefix
+      datePrefix,
+      addDate
     } = args;
 
     for (const rule of rules) {
@@ -32,7 +33,10 @@ export class HumanDateTimePipe implements PipeTransform {
       const referenceMilliSeconds = referenceDate.getTime();
 
       if (rule.condition(valueMilliSeconds, referenceMilliSeconds)) {
-        return rule.value(valueMilliSeconds, referenceMilliSeconds);
+        return (
+          rule.value(valueMilliSeconds, referenceMilliSeconds) +
+          (addDate ? ' (' + value.toLocaleDateString(locale) + ')' : '')
+        );
       }
     }
 

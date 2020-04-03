@@ -58,7 +58,7 @@ export class ListItemActionsDirective {
 })
 export class ListItemContentDirective {
   @HostBinding('class.ui-list-item__content-right')
-  private isListItemContent = true;
+  public isListItemContent = true;
 }
 
 @Component({
@@ -67,7 +67,7 @@ export class ListItemContentDirective {
   styleUrls: ['./list-item-content.component.scss']
 })
 export class ListItemContentComponent {
-  @HostBinding('class.ui-list-item') private isListItemContent = true;
+  @HostBinding('class.ui-list-item') public isListItemContent = true;
 
   @Input() contentRightSeparated = false;
 }

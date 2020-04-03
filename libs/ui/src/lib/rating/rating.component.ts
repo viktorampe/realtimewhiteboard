@@ -11,7 +11,7 @@ export class RatingComponent {
   @Input() svgIcon: string;
 
   @HostBinding('class.ui-rating')
-  private uiRatingClass = true;
+  public uiRatingClass = true;
 
   constructor() {}
 }

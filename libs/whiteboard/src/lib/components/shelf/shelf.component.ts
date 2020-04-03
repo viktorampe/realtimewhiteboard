@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
 
 @Component({
   selector: 'campus-shelf',

@@ -15,7 +15,7 @@
       <campus-card-image
         *ngIf="viewModeImage; else viewModeText"
         class="card__content__image"
-        [imageUrl]="image.imageUrl"
+        [imageUrl]="image?.imageUrl"
         [mode]="mode"
         (remove)="removeImg()"
         (openFilePicker)="selectImage()"

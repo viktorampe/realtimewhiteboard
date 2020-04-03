@@ -62,7 +62,7 @@ export class LoginpageComponent implements OnInit {
     );
 
     if (this.currentUser) {
-      this.loadStore();
+      // this.loadStore();
     }
 
     this.openModal();
