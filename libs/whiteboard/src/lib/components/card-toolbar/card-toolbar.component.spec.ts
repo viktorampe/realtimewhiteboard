@@ -7,7 +7,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { CardToolbarComponent } from './card-toolbar.component';
-// file.only
+
 describe('CardToolbarComponent', () => {
   let component: CardToolbarComponent;
   let fixture: ComponentFixture<CardToolbarComponent>;
