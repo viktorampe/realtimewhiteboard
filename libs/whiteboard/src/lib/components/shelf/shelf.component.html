@@ -1,16 +1,25 @@
 <div class="shelf" cdkDropList #shelf>
   <ng-container *ngIf="!isMinimized">
-    <campus-card
+    <div
+      class="shelf__container"
+      *ngFor="let card of cards"
       cdkDrag
       (cdkDragDropped)="onCardDragged($event, card)"
       (cdkDragStarted)="onCardDragStart($event)"
-      class="shelf__card"
-      *ngFor="let card of cards"
-      [viewModeImage]="card.viewModeImage"
-      [description]="card.description"
-      [color]="card.color"
-      [image]="card.image"
-      [(mode)]="card.mode"
-    ></campus-card>
+    >
+      <campus-card-toolbar
+        class="shelf__card__toolbar"
+        (clickDeleteIcon)="emitDeleteCard(card)"
+        [inShelf]="true"
+      ></campus-card-toolbar>
+      <campus-card
+        class="shelf__card"
+        [viewModeImage]="card.viewModeImage"
+        [description]="card.description"
+        [color]="card.color"
+        [image]="card.image"
+        [(mode)]="card.mode"
+      ></campus-card>
+    </div>
   </ng-container>
 </div>

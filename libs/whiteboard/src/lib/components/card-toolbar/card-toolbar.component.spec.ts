@@ -40,6 +40,12 @@ describe('CardToolbarComponent', () => {
     expect(component.clickDeleteIcon.emit).toHaveBeenCalled();
   });
 
+  it('should emit clickReturntoshelfIcon when returntoshelfIcon is called', () => {
+    spyOn(component.clickReturnToShelfIcon, 'emit');
+    component.returnToShelfIconClicked();
+    expect(component.clickReturnToShelfIcon.emit).toHaveBeenCalled();
+  });
+
   it('should emit clickEditIcon when editIconClicked is called', () => {
     spyOn(component.clickEditIcon, 'emit');
 

@@ -255,10 +255,18 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDeleteCard(card: CardInterface) {
-    this.updateWhiteboard({
+  onDeleteCard(card: CardInterface, permanent?: boolean) {
+    // always remove from workspace
+    const updates: Partial<WhiteboardInterface> = {
       cards: this.cards.filter(c => c !== card)
-    });
+    };
+
+    if (permanent) {
+      // also remove from shelf
+      updates.shelfCards = this.shelfCards.filter(sc => sc.id !== card.id);
+    }
+
+    this.updateWhiteboard(updates, true);
   }
 
   onCardTapped(card: CardInterface) {
@@ -448,14 +456,15 @@ export class WhiteboardComponent implements OnChanges {
     cardElement: HTMLElement;
     scrollLeft: number;
   }) {
-    // set all non-upload cards to idle mode
+    // card = the currently dragged card
+    const { card, event, cardElement, scrollLeft } = $event;
+
+    // set all cards to IDLE (except cards in UPLOAD)
     this.cards
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => (c.mode = ModeEnum.IDLE));
 
-    // card = the currently dragged card
-    const { card, event, cardElement, scrollLeft } = $event;
-
+    // check if there are currently cards in MULTISELECT
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
       : ModeEnum.IDLE;
@@ -471,10 +480,11 @@ export class WhiteboardComponent implements OnChanges {
         Math.abs(event.distance.y)
     };
 
+    // There are currently cards in MULTISELECT
     if (currentMode === ModeEnum.MULTISELECT) {
-      //return multiselectselected cards to the right mode so the icon is clicked + green
+      // return previously selected cards to multiselectselected
       this.selectedCards.forEach(c => (c.mode = ModeEnum.MULTISELECTSELECTED));
-      //change all cards to multiselect mode
+      // set all cards to multiselect mode
       this.cards
         .filter(
           c =>
@@ -484,6 +494,7 @@ export class WhiteboardComponent implements OnChanges {
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
+    // Add card to workspace
     if (!this.cards.some(c => c.id === workspaceCard.id)) {
       this.updateWhiteboard({
         cards: [...this.cards, workspaceCard]
@@ -505,7 +516,6 @@ export class WhiteboardComponent implements OnChanges {
     );
 
     this.toggleSettings();
-    this.saveWhiteboard();
   }
   //#endregion
 

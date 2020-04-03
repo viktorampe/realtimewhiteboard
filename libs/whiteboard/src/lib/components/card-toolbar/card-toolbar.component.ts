@@ -51,8 +51,10 @@ import { ModeEnum } from '../../enums/mode.enum';
 })
 export class CardToolbarComponent implements OnInit {
   @Input() mode: ModeEnum;
+  @Input() inShelf: boolean;
 
   @Output() clickDeleteIcon = new EventEmitter<void>();
+  @Output() clickReturnToShelfIcon = new EventEmitter<void>();
   @Output() clickEditIcon = new EventEmitter<void>();
   @Output() clickConfirmIcon = new EventEmitter<void>();
   @Output() clickFlipIcon = new EventEmitter<void>();
@@ -69,6 +71,10 @@ export class CardToolbarComponent implements OnInit {
 
   deleteIconClicked() {
     this.clickDeleteIcon.emit();
+  }
+
+  returnToShelfIconClicked() {
+    this.clickReturnToShelfIcon.emit();
   }
 
   editIconClicked() {
