@@ -9,6 +9,7 @@ trigger:
   - master
   - test/mock-master
   - release/*
+  - whiteboard-dev
 
 schedules:
   - cron: '30 23 * * 1-5'
@@ -36,6 +37,11 @@ steps:
       echo '##vso[task.setvariable variable=dkPublish]true'
     condition: and(startsWith(variables['Build.SourceBranch'], 'refs/heads/release'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
     displayName: '(Check) Enable dkBuild and dkPublish (artifacts) if pushing to release branch'
+  - script: |
+      echo '##vso[task.setvariable variable=dkBuild]true'
+      echo '##vso[task.setvariable variable=dkPublish]true'
+    condition: and(startsWith(variables['Build.SourceBranch'], 'whiteboard-dev'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    displayName: '(Check) Enable dkBuild and dkPublish (artifacts) if pushing to whiteboard-dev branch'
   - script: |
       echo '##vso[task.setvariable variable=dkBuild]true'
     condition: eq(variables['Build.Reason'], 'Schedule')
