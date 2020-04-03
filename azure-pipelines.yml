@@ -9,7 +9,6 @@ trigger:
   - master
   - test/mock-master
   - release/*
-  - whiteboard-dev
 
 schedules:
   - cron: '30 23 * * 1-5'
