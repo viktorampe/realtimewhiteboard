@@ -21,6 +21,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
+import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardInterface } from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
@@ -205,10 +206,13 @@ export class WhiteboardComponent implements OnChanges {
       .filter(c => c.mode !== ModeEnum.UPLOAD)
       .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
 
-    // add card to the workspace
+    // add card to the workspace, override values
     const card: CardInterface = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
+      type: this.canManage
+        ? CardTypeEnum.PUBLISHERCARD
+        : CardTypeEnum.TEACHERCARD,
       color: this.lastColor,
       description: '',
       image: null,
@@ -223,7 +227,7 @@ export class WhiteboardComponent implements OnChanges {
       this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
     }
 
-    // Update whiteboardsubject
+    // update workspace cards
     this.updateWhiteboard(
       {
         cards: [...this.cards, card]
