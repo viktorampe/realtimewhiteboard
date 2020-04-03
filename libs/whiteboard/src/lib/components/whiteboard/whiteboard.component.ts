@@ -510,7 +510,6 @@ export class WhiteboardComponent implements OnChanges {
     );
 
     this.toggleSettings();
-    this.saveWhiteboard();
   }
   //#endregion
 
