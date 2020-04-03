@@ -210,7 +210,7 @@ export class WhiteboardComponent implements OnChanges {
     const card: CardInterface = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
-      cardType: this.canManage
+      type: this.canManage
         ? CardTypeEnum.PUBLISHERCARD
         : CardTypeEnum.TEACHERCARD,
       color: this.lastColor,

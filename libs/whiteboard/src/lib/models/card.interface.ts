@@ -5,7 +5,7 @@ import ImageInterface from './image.interface';
 export interface CardInterface {
   id: string;
   mode: ModeEnum;
-  cardType: CardTypeEnum;
+  type: CardTypeEnum;
   color: string;
   description: string;
   image: ImageInterface;
