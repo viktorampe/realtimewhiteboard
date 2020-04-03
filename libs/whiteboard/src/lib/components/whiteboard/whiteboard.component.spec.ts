@@ -120,39 +120,53 @@ describe('WhiteboardComponent', () => {
     });
   });
 
-  // TODO: fix these tests after refactor to dumb component
-  xdescribe('canManage', () => {
-    it('should hide card-colorlist when canMange is true', () => {
-      component.canManage = true;
+  describe('canManage - template', () => {
+    beforeEach(() => {
+      // one card in the workspace
+      component.cards = [new CardFixture({ mode: ModeEnum.EDIT })];
       fixture.detectChanges();
-      const colorlist = fixture.debugElement.query(
-        By.css('.whiteboard__color-list')
-      );
-      expect(colorlist).toBeFalsy();
     });
-    it('should show card-colorlist when canMange is false', () => {
-      component.canManage = false;
-      fixture.detectChanges();
-      const colorlist = fixture.debugElement.query(
-        By.css('.whiteboard__color-list')
-      );
-      expect(colorlist).toBeTruthy();
+
+    describe('canManage = true', () => {
+      beforeEach(() => {
+        component.canManage = true;
+        fixture.detectChanges();
+      });
+
+      it('should hide card-colorlist when canMange is true', () => {
+        const colorlist = fixture.debugElement.query(
+          By.css('.whiteboard__color-list')
+        );
+        expect(colorlist).toBeFalsy();
+      });
+
+      it('should show settingsbutton when canMange is true', () => {
+        const settingsbutton = fixture.debugElement.query(
+          By.css('.whiteboard__workspace__actions__settingsbutton')
+        );
+        expect(settingsbutton).toBeTruthy();
+      });
     });
-    it('should show settingsbutton when canMange is true', () => {
-      component.canManage = true;
-      fixture.detectChanges();
-      const settingsbutton = fixture.debugElement.query(
-        By.css('.whiteboard__workspace__actions__settingsbutton')
-      );
-      expect(settingsbutton).toBeTruthy();
-    });
-    it('should hide settingsbutton when canMange is false', () => {
-      component.canManage = false;
-      fixture.detectChanges();
-      const settingsbutton = fixture.debugElement.query(
-        By.css('.whiteboard__workspace__actions__settingsbutton')
-      );
-      expect(settingsbutton).toBeFalsy();
+
+    describe('canManage = false', () => {
+      beforeEach(() => {
+        component.canManage = false;
+        fixture.detectChanges();
+      });
+
+      it('should show card-colorlist when canMange is false', () => {
+        const colorlist = fixture.debugElement.query(
+          By.css('.whiteboard__color-list')
+        );
+        expect(colorlist).toBeTruthy();
+      });
+
+      it('should hide settingsbutton when canMange is false', () => {
+        const settingsbutton = fixture.debugElement.query(
+          By.css('.whiteboard__workspace__actions__settingsbutton')
+        );
+        expect(settingsbutton).toBeFalsy();
+      });
     });
   });
 
