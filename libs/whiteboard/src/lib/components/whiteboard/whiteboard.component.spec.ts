@@ -725,6 +725,32 @@ describe('WhiteboardComponent', () => {
         shelfCards: [new CardFixture({ id: 'don not delete me plz' })]
       });
     });
+
+    it('should not remove the card from the shelf - permanent = true, canManage = false, card type = teacher', () => {
+      component.canManage = false;
+      cardToBeDeleted.type = CardTypeEnum.PUBLISHERCARD;
+
+      component.onDeleteCard(cardToBeDeleted, true);
+
+      expect(component.cards.length).toBe(
+        numberOfWorkspaceCardsBeforeDelete - 1
+      );
+      expect(component.cards).not.toContain(cardToBeDeleted);
+      expect(component.shelfCards.map(sc => sc.id)).toContain(
+        cardToBeDeleted.id
+      );
+
+      expect(component.changes.emit).toHaveBeenCalled();
+      expect(component.changes.emit).toHaveBeenCalledWith({
+        title: component.title,
+        defaultColor: component.defaultColor,
+        cards: [new CardFixture({ id: 'do not delete me either plz' })],
+        shelfCards: [
+          cardToBeDeleted,
+          new CardFixture({ id: 'don not delete me plz' })
+        ]
+      });
+    });
   });
 
   describe('onFilesDropped()', () => {

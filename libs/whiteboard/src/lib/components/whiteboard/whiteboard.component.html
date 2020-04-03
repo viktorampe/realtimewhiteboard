@@ -74,6 +74,8 @@
           "
           class="whiteboard__card_toolbar"
           [mode]="card.mode"
+          [canManage]="canManage"
+          [cardType]="card.type"
           (clickDeleteIcon)="onDeleteCard(card, true)"
           (clickReturnToShelfIcon)="onDeleteCard(card)"
           (clickEditIcon)="cardEditIconClicked(card)"
