@@ -227,7 +227,7 @@ export class WhiteboardComponent implements OnChanges {
       this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
     }
 
-    // Update whiteboardsubject
+    // update workspace cards
     this.updateWhiteboard(
       {
         cards: [...this.cards, card]

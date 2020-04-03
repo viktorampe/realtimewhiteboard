@@ -35,10 +35,7 @@ describe('WhiteboardComponent', () => {
     component = fixture.componentInstance;
 
     component.title = '';
-    component.cards = [
-      new CardFixture({ type: CardTypeEnum.PUBLISHERCARD }),
-      new CardFixture({ type: CardTypeEnum.PUBLISHERCARD })
-    ];
+    component.cards = [new CardFixture(), new CardFixture()];
     component.shelfCards = [];
     component.canManage = true;
 
@@ -170,7 +167,7 @@ describe('WhiteboardComponent', () => {
     });
 
     it('should set card mode to ZoomMode starting from IdleMode if zoom mode is allowed', () => {
-      const card = new CardFixture({ type: CardTypeEnum.PUBLISHERCARD });
+      const card = new CardFixture();
 
       component.onCardTapped(card);
 
@@ -179,7 +176,6 @@ describe('WhiteboardComponent', () => {
 
     it('should not set card mode to ZoomMode starting from IdleMode if zoom mode is not allowed', () => {
       const card = new CardFixture({
-        type: CardTypeEnum.PUBLISHERCARD,
         viewModeImage: false
       });
       component.onCardTapped(card);
@@ -286,7 +282,6 @@ describe('WhiteboardComponent', () => {
     describe('onCardPressed()', () => {
       it('should not change mode if card.mode = shelf', () => {
         const card = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.SHELF
         });
 
@@ -297,7 +292,6 @@ describe('WhiteboardComponent', () => {
 
       it('should change mode to IdleMode if card.mode = select', () => {
         const card = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.SELECTED
         });
 
@@ -308,7 +302,6 @@ describe('WhiteboardComponent', () => {
 
       it('should change mode to IdleMode if card.mode = EditMode', () => {
         const card = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.EDIT
         });
 
@@ -328,7 +321,6 @@ describe('WhiteboardComponent', () => {
 
         modesForTesting.forEach(mode => {
           const card = new CardFixture({
-            type: CardTypeEnum.PUBLISHERCARD,
             mode: ModeEnum[mode]
           });
           component.onCardPressed(card);
@@ -375,7 +367,7 @@ describe('WhiteboardComponent', () => {
 
     describe('changeColorForCard', () => {
       it('should set color of card', () => {
-        const card = new CardFixture({ type: CardTypeEnum.PUBLISHERCARD });
+        const card = new CardFixture();
 
         component.changeColorForCard(card, 'black');
 
@@ -383,7 +375,7 @@ describe('WhiteboardComponent', () => {
       });
 
       it('should set lastColor of whiteboard', () => {
-        const card = new CardFixture({ type: CardTypeEnum.PUBLISHERCARD });
+        const card = new CardFixture();
 
         component.changeColorForCard(card, 'black');
 
@@ -392,7 +384,6 @@ describe('WhiteboardComponent', () => {
 
       it('should set mode of card to IdleMode', () => {
         const card = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.SELECTED
         });
 
@@ -418,22 +409,18 @@ describe('WhiteboardComponent', () => {
     describe('bulkActions', () => {
       const selectedCards = [
         new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.MULTISELECTSELECTED
         }),
         new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.MULTISELECTSELECTED
         })
       ];
 
       const nonSelectedCards = [
         new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.IDLE
         }),
         new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.IDLE
         })
       ];
@@ -471,12 +458,10 @@ describe('WhiteboardComponent', () => {
     describe('transition to selected mode', () => {
       it('should set other cards to IdleMode when a card mode changes to SelectedMode', () => {
         const idleCard = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.IDLE,
           id: uuidv4()
         });
         const selectedCard = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.SELECTED,
           id: uuidv4()
         });
@@ -492,7 +477,6 @@ describe('WhiteboardComponent', () => {
       it('should set card mode to MultiSelectSelectedMode', () => {
         component.selectedCards = [];
         const card = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.SELECTED
         });
         component.onSelectCard(card);
@@ -514,7 +498,6 @@ describe('WhiteboardComponent', () => {
 
       it('should add card to selectedCards when onSelectCard is called', () => {
         const card = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.SELECTED
         });
 
@@ -527,7 +510,6 @@ describe('WhiteboardComponent', () => {
     describe('onDeselectCard()', () => {
       it('should remove card from selectedCards when onDeselectCard is called', () => {
         const card = new CardFixture({
-          type: CardTypeEnum.PUBLISHERCARD,
           mode: ModeEnum.MULTISELECTSELECTED
         });
 
@@ -587,31 +569,70 @@ describe('WhiteboardComponent', () => {
     });
 
     describe('addEmptyCard()', () => {
-      it('should add an empty card', () => {
-        component.lastColor = 'red';
-        component.cards = [];
-        component.addEmptyCard();
-        expect(component.cards[0]).toEqual({
-          id: component.cards[0].id,
-          mode: ModeEnum.EDIT,
-          type: CardTypeEnum.PUBLISHERCARD,
-          color: 'red',
-          description: '',
-          image: null,
-          top: 0,
-          left: 0,
-          viewModeImage: false
+      describe('publisher card - canManage = true', () => {
+        beforeEach(() => {
+          jest.spyOn(component.changes, 'emit');
+
+          component.canManage = true;
+          component.lastColor = 'red';
+          component.cards = [];
+          component.shelfCards = [];
+
+          component.addEmptyCard();
+        });
+        it('should add an empty publisher card to the shelf and workspace', () => {
+          const expectedCard = {
+            id: component.cards[0].id,
+            mode: ModeEnum.EDIT,
+            type: CardTypeEnum.PUBLISHERCARD,
+            color: 'red',
+            description: '',
+            image: null,
+            top: 0,
+            left: 0,
+            viewModeImage: false
+          };
+
+          expect(component.cards[0]).toEqual(expectedCard);
+
+          expect(component.shelfCards[0]).toEqual({
+            ...expectedCard,
+            mode: ModeEnum.SHELF
+          });
+        });
+
+        it('should emit changes', () => {
+          expect(component.changes.emit).toHaveBeenCalledTimes(2);
         });
       });
+      describe('teacher card - canManage = false', () => {
+        beforeEach(() => {
+          jest.spyOn(component.changes, 'emit');
+          component.canManage = false;
+          component.lastColor = 'red';
+          component.cards = [];
+          component.shelfCards = [];
 
-      it('should add card to shelf and to workspace - canManage = true', () => {
-        component.canManage = true;
+          component.addEmptyCard();
+        });
+        it('should add an empty teacher card to the workspace', () => {
+          expect(component.cards[0]).toEqual({
+            id: component.cards[0].id,
+            mode: ModeEnum.EDIT,
+            type: CardTypeEnum.TEACHERCARD,
+            color: 'red',
+            description: '',
+            image: null,
+            top: 0,
+            left: 0,
+            viewModeImage: false
+          });
 
-        component.cards = [];
-        component.shelfCards = [];
-        component.addEmptyCard();
-        expect(component.shelfCards.length).toEqual(1);
-        expect(component.cards[0].id).toEqual(component.shelfCards[0].id);
+          expect(component.shelfCards.length).toBe(0);
+        });
+        it('should emit changes', () => {
+          expect(component.changes.emit).toHaveBeenCalledTimes(1);
+        });
       });
     });
 
@@ -654,9 +675,7 @@ describe('WhiteboardComponent', () => {
       it('should add a card to the whiteboard on image drag', () => {
         const addEmptySpy = jest
           .spyOn(component, 'addEmptyCard')
-          .mockReturnValue(
-            new CardFixture({ type: CardTypeEnum.PUBLISHERCARD })
-          );
+          .mockReturnValue(new CardFixture());
         const uploadImageForCardSpy = jest
           .spyOn(component, 'uploadImageForCard')
           .mockImplementation(() => {});
@@ -685,11 +704,11 @@ describe('WhiteboardComponent', () => {
           [{ top: 450, left: 450 }]
         ]);
         expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(
-          new CardFixture({ type: CardTypeEnum.PUBLISHERCARD })
+          new CardFixture()
         );
         expect(uploadImageForCardSpy.mock.calls).toEqual([
-          [new CardFixture({ type: CardTypeEnum.PUBLISHERCARD }), file],
-          [new CardFixture({ type: CardTypeEnum.PUBLISHERCARD }), file2]
+          [new CardFixture(), file],
+          [new CardFixture(), file2]
         ]);
       });
     });
