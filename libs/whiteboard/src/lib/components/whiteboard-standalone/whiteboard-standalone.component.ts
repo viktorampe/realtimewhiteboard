@@ -151,12 +151,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       mapTo([]) // always start with an empty workspace
     );
     this.shelfCards$ = this.whiteboard$.pipe(
-      map(whiteboard => {
-        // all cards coming from the API should be added to the shelf
-        const cards = whiteboard.cards || [];
-        const shelfCards = whiteboard.shelfCards || [];
-        return [...cards, ...shelfCards] || [];
-      }),
+      map(whiteboard => whiteboard.shelfCards || []),
       map(shelfCards => {
         return shelfCards.map(c => ({
           ...c,
@@ -171,6 +166,11 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
 
   public saveWhiteboard(data: WhiteboardInterface): void {
     if (!this.canManage) return console.log('You are not authorized to save.');
+
+    // with canManage permission the workspace cards are duplicated in the shelf
+    // without canManage permission, the workspace cards should not be persisted
+    // so we must remove the workspace cards
+    delete data.cards;
     this.whiteboardHttpService.setJson(data).subscribe();
   }
 }
