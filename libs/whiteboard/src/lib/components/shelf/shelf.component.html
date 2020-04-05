@@ -11,6 +11,7 @@
         class="shelf__card__toolbar"
         (clickDeleteIcon)="emitDeleteCard(card)"
         [inShelf]="true"
+        [canManage]="canManage"
       ></campus-card-toolbar>
       <campus-card
         class="shelf__card"
