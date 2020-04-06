@@ -20,6 +20,8 @@ export class ShelfComponent implements OnInit {
 
   @Input() cards: CardInterface[];
   @Input() isMinimized = false;
+  @Input() canManage: boolean;
+
   @Output() isMinimizedChange = new EventEmitter<boolean>();
   @Output() cardDraggedOutsideContainer = new EventEmitter<any>();
   @Output() deleteCard = new EventEmitter<CardInterface>();
