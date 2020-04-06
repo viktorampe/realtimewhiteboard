@@ -31,8 +31,8 @@
     </ng-container>
     <ng-template #uploadMode>
       <campus-progress-bar
-        *ngIf="image.progress"
-        [progressPercentage]="image.progress"
+        *ngIf="image?.progress"
+        [progressPercentage]="image?.progress"
       ></campus-progress-bar>
     </ng-template>
   </div>
