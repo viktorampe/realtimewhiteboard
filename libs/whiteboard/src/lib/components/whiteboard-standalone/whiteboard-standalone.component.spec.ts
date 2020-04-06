@@ -143,12 +143,10 @@ describe('WhiteboardStandaloneComponent', () => {
       expect(component.cards$).toBeObservable(hot('(a|)', { a: [] }));
     });
 
-    it('shelfCards$ should always emit an array containing both shelf and workspace cards', () => {
+    it('shelfCards$ should emit an array containing shelf cards', () => {
       expect(component.shelfCards$).toBeObservable(
         hot('(a|)', {
           a: [
-            new CardFixture({ id: '1', mode: 2 }),
-            new CardFixture({ id: '2', mode: 2 }),
             new CardFixture({ id: '3', mode: 2 }),
             new CardFixture({ id: '4', mode: 2 })
           ]
@@ -176,7 +174,7 @@ describe('WhiteboardStandaloneComponent', () => {
       expect(whiteboardHttpService.setJson).not.toHaveBeenCalled();
     });
 
-    it('should save  if canManage = true', () => {
+    it('should save if canManage = true', () => {
       component.canManage = true;
       component.ngOnInit();
 
@@ -185,6 +183,21 @@ describe('WhiteboardStandaloneComponent', () => {
       expect(whiteboardHttpService.setJson).toHaveBeenCalledTimes(1);
       expect(whiteboardHttpService.setJson).toHaveBeenCalledWith({
         title: 'foo'
+      });
+    });
+
+    it('should remove workspace cards before saving', () => {
+      component.canManage = true;
+      component.ngOnInit();
+
+      component.saveWhiteboard({
+        cards: [new CardFixture()],
+        shelfCards: [new CardFixture()]
+      } as WhiteboardInterface);
+
+      expect(whiteboardHttpService.setJson).toHaveBeenCalledTimes(1);
+      expect(whiteboardHttpService.setJson).toHaveBeenCalledWith({
+        shelfCards: [new CardFixture()]
       });
     });
   });
