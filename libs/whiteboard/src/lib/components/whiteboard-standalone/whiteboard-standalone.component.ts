@@ -39,7 +39,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
   @Input() canManage: boolean;
-  @Input() data: WhiteboardInterface;
+  @Input() whiteboardData: WhiteboardInterface;
 
   private whiteboard$: Observable<WhiteboardInterface>;
 
@@ -80,10 +80,10 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   private setSourceStreams(): void {
-    if (this.data && !this.canManage) {
+    if (this.whiteboardData && !this.canManage) {
       // work locally: the data object is made on the API side and changes to the data are not persisted in the DB
       // this is the case for teachers and students
-      this.whiteboard$ = of(this.data);
+      this.whiteboard$ = of(this.whiteboardData);
     } else {
       this.whiteboard$ = this.whiteboardHttpService.getJson();
     }

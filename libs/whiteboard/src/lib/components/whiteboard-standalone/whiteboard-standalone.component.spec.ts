@@ -72,7 +72,9 @@ describe('WhiteboardStandaloneComponent', () => {
       component.eduContentMetadataId = 666; // this input should not be used
       component.apiBase = 'www.api.foo.com'; // this input should not be used
       component.canManage = false;
-      component.data = { title: 'whiteboard title' } as WhiteboardInterface;
+      component.whiteboardData = {
+        title: 'whiteboard title'
+      } as WhiteboardInterface;
 
       component.ngOnInit();
 
@@ -85,7 +87,7 @@ describe('WhiteboardStandaloneComponent', () => {
 
     it('should use service.getJson() as source stream when canManage = false and data = null', () => {
       component.canManage = false;
-      component.data = null;
+      component.whiteboardData = null;
 
       component.ngOnInit();
 
@@ -98,7 +100,9 @@ describe('WhiteboardStandaloneComponent', () => {
     it('should use service.getJson() as source stream when canManage = true', () => {
       component.eduContentMetadataId = 666;
       component.canManage = true;
-      component.data = { title: 'whiteboard title' } as WhiteboardInterface; // this input should not be used
+      component.whiteboardData = {
+        title: 'whiteboard title'
+      } as WhiteboardInterface; // this input should not be used
 
       component.ngOnInit();
 
