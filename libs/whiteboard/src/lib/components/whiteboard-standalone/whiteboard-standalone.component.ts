@@ -18,6 +18,7 @@ import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
+import ImageInterface from '../../models/image.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from '../../tokens/whiteboard-element-icon-mapping.token';
@@ -155,7 +156,8 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       map(shelfCards => {
         return shelfCards.map(c => ({
           ...c,
-          mode: ModeEnum.SHELF
+          mode: ModeEnum.SHELF,
+          image: this.addApiBaseToImage(c.image)
         }));
       })
     );
@@ -171,6 +173,32 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
     // without canManage permission, the workspace cards should not be persisted
     // so we must remove the workspace cards
     delete data.cards;
+
+    data.shelfCards = data.shelfCards.map(card => {
+      return {
+        ...card,
+        image: this.removeApiBaseFromImageUrl(card.image)
+      };
+    });
     this.whiteboardHttpService.setJson(data).subscribe();
+  }
+
+  private addApiBaseToImage(image: ImageInterface): ImageInterface {
+    const imageUrl =
+      image && image.imageUrl
+        ? { imageUrl: this.apiBase + image.imageUrl }
+        : null;
+
+    return imageUrl;
+  }
+
+  private removeApiBaseFromImageUrl(image: ImageInterface): ImageInterface {
+    let newImage = null;
+    if (image && image.imageUrl) {
+      const url = image.imageUrl as String;
+      newImage = { imageUrl: url.split(this.apiBase)[1] };
+    }
+
+    return newImage;
   }
 }

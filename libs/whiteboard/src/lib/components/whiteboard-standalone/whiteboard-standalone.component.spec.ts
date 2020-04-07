@@ -114,13 +114,16 @@ describe('WhiteboardStandaloneComponent', () => {
   });
 
   describe('presentation streams', () => {
+    const pathToImage = '/relative/path/to/image';
+    const mockApiBase = 'www.api.foo.com';
+
     const mockCards = [
       new CardFixture({ id: '1' }),
       new CardFixture({ id: '2' })
     ];
     const mockShelfCards = [
-      new CardFixture({ id: '3' }),
-      new CardFixture({ id: '4' })
+      new CardFixture({ id: '3', image: { imageUrl: pathToImage } }),
+      new CardFixture({ id: '4', image: null })
     ];
 
     beforeEach(() => {
@@ -134,7 +137,7 @@ describe('WhiteboardStandaloneComponent', () => {
       );
 
       component.eduContentMetadataId = 666;
-      component.apiBase = 'www.api.foo.com';
+      component.apiBase = mockApiBase;
 
       component.ngOnInit();
     });
@@ -151,8 +154,12 @@ describe('WhiteboardStandaloneComponent', () => {
       expect(component.shelfCards$).toBeObservable(
         hot('(a|)', {
           a: [
-            new CardFixture({ id: '3', mode: 2 }),
-            new CardFixture({ id: '4', mode: 2 })
+            new CardFixture({
+              id: '3',
+              mode: 2,
+              image: { imageUrl: `${mockApiBase}${pathToImage}` }
+            }),
+            new CardFixture({ id: '4', mode: 2, image: null })
           ]
         })
       );
@@ -182,11 +189,15 @@ describe('WhiteboardStandaloneComponent', () => {
       component.canManage = true;
       component.ngOnInit();
 
-      component.saveWhiteboard({ title: 'foo' } as WhiteboardInterface);
+      component.saveWhiteboard({
+        title: 'foo',
+        shelfCards: []
+      } as WhiteboardInterface);
 
       expect(whiteboardHttpService.setJson).toHaveBeenCalledTimes(1);
       expect(whiteboardHttpService.setJson).toHaveBeenCalledWith({
-        title: 'foo'
+        title: 'foo',
+        shelfCards: []
       });
     });
 
@@ -196,12 +207,35 @@ describe('WhiteboardStandaloneComponent', () => {
 
       component.saveWhiteboard({
         cards: [new CardFixture()],
-        shelfCards: [new CardFixture()]
+        shelfCards: [new CardFixture({ image: null })]
       } as WhiteboardInterface);
 
       expect(whiteboardHttpService.setJson).toHaveBeenCalledTimes(1);
       expect(whiteboardHttpService.setJson).toHaveBeenCalledWith({
-        shelfCards: [new CardFixture()]
+        shelfCards: [new CardFixture({ image: null })]
+      });
+    });
+
+    it('should remove the apiBase from imageUrls before saving', () => {
+      const mockApibase = 'www.api.foo.com';
+      const pathToImage = '/relative/path/to/image';
+
+      component.canManage = true;
+      component.apiBase = mockApibase;
+
+      component.ngOnInit();
+
+      component.saveWhiteboard({
+        shelfCards: [
+          new CardFixture({
+            image: { imageUrl: `${mockApibase}${pathToImage}` }
+          })
+        ]
+      } as WhiteboardInterface);
+
+      expect(whiteboardHttpService.setJson).toHaveBeenCalledTimes(1);
+      expect(whiteboardHttpService.setJson).toHaveBeenCalledWith({
+        shelfCards: [new CardFixture({ image: { imageUrl: pathToImage } })]
       });
     });
   });
