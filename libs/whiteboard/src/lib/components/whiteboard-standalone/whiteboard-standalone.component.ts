@@ -157,7 +157,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         return shelfCards.map(c => ({
           ...c,
           mode: ModeEnum.SHELF,
-          image: this.addApiBaseToImage(c.image)
+          image: this.addApiBaseToImageUrl(c.image)
         }));
       })
     );
@@ -183,7 +183,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
     this.whiteboardHttpService.setJson(data).subscribe();
   }
 
-  private addApiBaseToImage(image: ImageInterface): ImageInterface {
+  private addApiBaseToImageUrl(image: ImageInterface): ImageInterface {
     const imageUrl =
       image && image.imageUrl
         ? { imageUrl: this.apiBase + image.imageUrl }
