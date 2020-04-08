@@ -167,7 +167,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   public saveWhiteboard(data: WhiteboardInterface): void {
-    if (!this.canManage) return console.log('You are not authorized to save.');
+    if (!this.canManage) return;
 
     // with canManage permission the workspace cards are duplicated in the shelf
     // without canManage permission, the workspace cards should not be persisted
