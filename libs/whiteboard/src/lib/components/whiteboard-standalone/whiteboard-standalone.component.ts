@@ -18,6 +18,7 @@ import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
+import ImageInterface from '../../models/image.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from '../../tokens/whiteboard-element-icon-mapping.token';
@@ -155,7 +156,8 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       map(shelfCards => {
         return shelfCards.map(c => ({
           ...c,
-          mode: ModeEnum.SHELF
+          mode: ModeEnum.SHELF,
+          image: this.addApiBaseToImageUrl(c.image)
         }));
       })
     );
@@ -165,12 +167,35 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   public saveWhiteboard(data: WhiteboardInterface): void {
-    if (!this.canManage) return console.log('You are not authorized to save.');
+    if (!this.canManage) return;
 
     // with canManage permission the workspace cards are duplicated in the shelf
     // without canManage permission, the workspace cards should not be persisted
     // so we must remove the workspace cards
     delete data.cards;
+
+    data.shelfCards = data.shelfCards.map(card => {
+      return {
+        ...card,
+        image: this.removeApiBaseFromImageUrl(card.image)
+      };
+    });
     this.whiteboardHttpService.setJson(data).subscribe();
+  }
+
+  private addApiBaseToImageUrl(image: ImageInterface): ImageInterface {
+    const updatedImageUrl =
+      image && image.imageUrl ? this.apiBase + image.imageUrl : null;
+
+    return { ...image, imageUrl: updatedImageUrl };
+  }
+
+  private removeApiBaseFromImageUrl(image: ImageInterface): ImageInterface {
+    const updatedImageUrl =
+      image && image.imageUrl
+        ? (image.imageUrl as String).split(this.apiBase, 2)[1]
+        : null;
+
+    return { ...image, imageUrl: updatedImageUrl };
   }
 }
