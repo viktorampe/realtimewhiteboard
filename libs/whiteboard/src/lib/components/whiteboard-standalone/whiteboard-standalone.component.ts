@@ -184,21 +184,18 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   }
 
   private addApiBaseToImageUrl(image: ImageInterface): ImageInterface {
-    const imageUrl =
-      image && image.imageUrl
-        ? { imageUrl: this.apiBase + image.imageUrl }
-        : null;
+    const updatedImageUrl =
+      image && image.imageUrl ? this.apiBase + image.imageUrl : null;
 
-    return imageUrl;
+    return { ...image, imageUrl: updatedImageUrl };
   }
 
   private removeApiBaseFromImageUrl(image: ImageInterface): ImageInterface {
-    let newImage = null;
-    if (image && image.imageUrl) {
-      const url = image.imageUrl as String;
-      newImage = { imageUrl: url.split(this.apiBase)[1] };
-    }
+    const updatedImageUrl =
+      image && image.imageUrl
+        ? (image.imageUrl as String).split(this.apiBase)[1]
+        : null;
 
-    return newImage;
+    return { ...image, imageUrl: updatedImageUrl };
   }
 }

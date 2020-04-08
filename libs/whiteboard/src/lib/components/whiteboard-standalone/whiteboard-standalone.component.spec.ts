@@ -159,7 +159,7 @@ describe('WhiteboardStandaloneComponent', () => {
               mode: 2,
               image: { imageUrl: `${mockApiBase}${pathToImage}` }
             }),
-            new CardFixture({ id: '4', mode: 2, image: null })
+            new CardFixture({ id: '4', mode: 2, image: { imageUrl: null } })
           ]
         })
       );
@@ -212,7 +212,7 @@ describe('WhiteboardStandaloneComponent', () => {
 
       expect(whiteboardHttpService.setJson).toHaveBeenCalledTimes(1);
       expect(whiteboardHttpService.setJson).toHaveBeenCalledWith({
-        shelfCards: [new CardFixture({ image: null })]
+        shelfCards: [new CardFixture({ image: { imageUrl: null } })]
       });
     });
 
