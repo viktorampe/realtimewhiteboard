@@ -193,7 +193,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   private removeApiBaseFromImageUrl(image: ImageInterface): ImageInterface {
     const updatedImageUrl =
       image && image.imageUrl
-        ? (image.imageUrl as String).split(this.apiBase)[1]
+        ? (image.imageUrl as String).split(this.apiBase, 1)[1]
         : null;
 
     return { ...image, imageUrl: updatedImageUrl };
