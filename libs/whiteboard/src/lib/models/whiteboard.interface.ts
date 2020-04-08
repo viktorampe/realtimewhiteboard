@@ -1,7 +1,8 @@
-import CardInterface from './card.interface';
+import { CardInterface } from './card.interface';
 
-export default interface WhiteboardInterface {
+export interface WhiteboardInterface {
   title: string;
+  defaultColor: string;
   cards: CardInterface[];
   shelfCards: CardInterface[];
 }

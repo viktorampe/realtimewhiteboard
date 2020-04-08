@@ -20,14 +20,6 @@
       &__learning-area,
       &__dates {
         padding: 0;
-        &:after {
-          margin: auto $pages-magage-kabas-tasks__task-list-item-meta-padding;
-          border-right: solid 1px
-            $pages-manage-kabas-tasks__task-list-item__stroke-color;
-          content: '';
-          display: block;
-          height: 24px;
-        }
       }
     }
   }

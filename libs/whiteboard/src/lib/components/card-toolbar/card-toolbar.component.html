@@ -7,8 +7,10 @@
   <div class="toolbar" *ngIf="mode !== Mode.EDIT; else editModeView">
     <div
       [@showHideToolbarTool]="'select'"
+      data-cy="delete-tool"
       class="toolbar__tool toolbar__delete"
       (tap)="deleteIconClicked()"
+      *ngIf="canManage || cardType === CardType.TEACHERCARD"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -17,8 +19,21 @@
     </div>
     <div
       [@showHideToolbarTool]="'select'"
+      data-cy="return-to-shelf-tool"
+      class="toolbar__tool toolbar__delete"
+      (tap)="returnToShelfIconClicked()"
+      *ngIf="!inShelf && cardType !== CardType.TEACHERCARD"
+    >
+      <mat-icon
+        class="toolbar__tool__icon toolbar__delete__icon"
+        [svgIcon]="'return-to-shelf'"
+      ></mat-icon>
+    </div>
+    <div
+      [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (tap)="multiSelectClicked()"
+      *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
       </mat-icon>
@@ -27,6 +42,7 @@
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (tap)="flipIconClicked()"
+      *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
@@ -34,6 +50,7 @@
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (tap)="editIconClicked()"
+      *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>

@@ -8,6 +8,7 @@ export const icons = {
   magnifier: 'assets/icons/magnifier.svg',
   download: 'assets/icons/material/download.svg',
   exercise: 'assets/icons/gamepad.svg',
+  'ludo.zip': 'assets/icons/gamepad.svg',
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   methods: 'assets/icons/methods.svg', //Temp icon
@@ -61,6 +62,8 @@ export const icons = {
   'task:pending': 'assets/icons/tasks/assignment.svg',
   'task:finished': 'assets/icons/tasks/assignment_done.svg',
   'task:paper': 'assets/icons/tasks/assignment_paper.svg',
+  'sort:date': 'assets/icons/material/sort-date.svg',
+  'sort:learning-area': 'assets/icons/learning_area.svg',
   photolibrary: 'assets/icons/photo_library.svg',
   print: 'assets/icons/printer.svg',
   preview: 'assets/icons/material/monitor_eye.svg',
@@ -71,6 +74,7 @@ export const icons = {
   plus: 'assets/icons/add.svg',
   'rating-star': 'assets/icons/rating-star.svg',
   hourglass: 'assets/icons/material/hourglass_empty.svg',
+  'return-to-shelf': 'assets/icons/material/return-to-shelf.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

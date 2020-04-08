@@ -11,12 +11,11 @@ import {
   EffectFeedback,
   EffectFeedbackActions,
   Priority,
-  TaskInstance,
   TaskInstanceFixture,
+  TaskInstanceInterface,
   TaskInstanceQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
-import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from '@nrwl/angular/testing';
@@ -24,13 +23,12 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StudentTaskOverviewResolver } from '../components/student-task-overview/student-task-overview.resolver';
 import { ValidTaskInstanceGuard } from './valid-task-instance.guard';
-
 describe('ValidTaskInstanceGuard', () => {
   const uuid = '123';
-  const taskId = 5;
+  const taskInstanceId = 5;
   const activatedRouteSnapshot = <ActivatedRouteSnapshot>{
     params: {
-      id: taskId
+      id: taskInstanceId
     } as unknown
   };
   const urlTree: UrlTree = new UrlTree();
@@ -78,13 +76,8 @@ describe('ValidTaskInstanceGuard', () => {
     dateMock.returnRealDate();
   });
 
-  function setGroupedTaskInstances(
-    instancesGrouped: Dictionary<TaskInstance[]>
-  ) {
-    return store.overrideSelector(
-      TaskInstanceQueries.getAllGroupedByTaskId,
-      instancesGrouped
-    );
+  function setTaskInstance(taskInstance: TaskInstanceInterface) {
+    return store.overrideSelector(TaskInstanceQueries.getById, taskInstance);
   }
 
   function canActivate() {
@@ -94,10 +87,8 @@ describe('ValidTaskInstanceGuard', () => {
     ) as Observable<boolean>;
   }
 
-  it('should return the UrlTree to redirect to when the task does not exist', () => {
-    setGroupedTaskInstances({
-      1: []
-    });
+  it('should return the UrlTree to redirect to when the taskInstance does not exist', () => {
+    setTaskInstance(null);
 
     expect(canActivate()).toBeObservable(
       hot('(a|)', {
@@ -106,22 +97,8 @@ describe('ValidTaskInstanceGuard', () => {
     );
   });
 
-  it('should return the UrlTree to redirect to when the task has no TaskInstances', () => {
-    setGroupedTaskInstances({
-      5: []
-    });
-
-    expect(canActivate()).toBeObservable(
-      hot('(a|)', {
-        a: urlTree
-      })
-    );
-  });
-
-  it('should return true when the task exists and has instances', () => {
-    setGroupedTaskInstances({
-      5: [new TaskInstanceFixture()]
-    });
+  it('should return true when the taskInstance exists', () => {
+    setTaskInstance(new TaskInstanceFixture());
 
     expect(canActivate()).toBeObservable(
       hot('(a|)', {
@@ -131,7 +108,7 @@ describe('ValidTaskInstanceGuard', () => {
   });
 
   it('should dispatch EffectFeedback when the guard returns false', done => {
-    setGroupedTaskInstances({});
+    setTaskInstance(null);
     jest.spyOn(store, 'dispatch');
 
     canActivate().subscribe(() => {

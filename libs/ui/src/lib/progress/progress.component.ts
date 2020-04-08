@@ -103,7 +103,7 @@ export class ProgressComponent implements OnChanges {
   @Input() diameter? = 100;
 
   @HostBinding('class.ui-progress')
-  private uiProgressClass = true;
+  public uiProgressClass = true;
 
   @ContentChild(CompletedProgressIconDirective, { static: true })
   completedIcon: ElementRef;

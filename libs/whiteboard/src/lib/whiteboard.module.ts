@@ -11,7 +11,6 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardTextComponent } from './components/card-text/card-text.component';
@@ -22,6 +21,7 @@ import { ImageToolbarComponent } from './components/image-toolbar/image-toolbar.
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { ShelfComponent } from './components/shelf/shelf.component';
+import { WhiteboardStandaloneComponent } from './components/whiteboard-standalone/whiteboard-standalone.component';
 import { WhiteboardToolbarComponent } from './components/whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
 import { ImageDragDirective } from './directives/image-drag.directive';
@@ -34,8 +34,8 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     MatCardModule,
     DragDropModule,
     FormsModule,
-    MatIconModule,
     ReactiveFormsModule,
+    MatIconModule,
     MatButtonModule,
     MatProgressBarModule,
     MatInputModule,
@@ -54,9 +54,9 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     ImageToolbarComponent,
     CardTextComponent,
     ShelfComponent,
-    SettingsComponent
+    SettingsComponent,
+    WhiteboardStandaloneComponent
   ],
-  providers: [{ provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }],
-  exports: [WhiteboardComponent]
+  exports: [WhiteboardStandaloneComponent, ImageDragDirective]
 })
 export class WhiteboardModule {}
