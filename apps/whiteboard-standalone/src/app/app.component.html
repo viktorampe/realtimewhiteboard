@@ -1,3 +1,7 @@
 <div class="app-container">
-  <router-outlet></router-outlet>
+  <campus-whiteboard-standalone
+    [apiBase]="apiBase"
+    [canManage]="canManage"
+    [whiteboardData]="whiteboard"
+  ></campus-whiteboard-standalone>
 </div>
