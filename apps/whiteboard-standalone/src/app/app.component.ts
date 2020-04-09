@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { environment } from '../environments/environment';
+import { WhiteboardConfigService } from './config.service';
 
 @Component({
   selector: 'campus-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'whiteboard-standalone';
   canManage = false;
   apiBase = 'http://api.kabas.localhost:3000/api';
@@ -80,4 +83,25 @@ export class AppComponent {
     cards: [],
     defaultColor: ''
   };
+
+  form: FormGroup;
+
+  eduContentMetadataIds = [22, 123, 124, 125];
+
+  constructor(
+    private fb: FormBuilder,
+    private configService: WhiteboardConfigService
+  ) {}
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      canManage: [true],
+      apiBase: [environment.api.APIBase],
+      eduContentMetadataId: [this.eduContentMetadataIds[0]]
+    });
+  }
+
+  onSubmit() {
+    this.configService.setConfig(this.form.value);
+  }
 }

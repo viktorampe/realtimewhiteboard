@@ -1,4 +1,27 @@
+{{ form.value | json }}
+
 <div class="app-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-input">
+      <p>apiBase:</p>
+      <input type="text" formControlName="apiBase" />
+    </div>
+    <div class="form-input">
+      <p>canManage:</p>
+      <input type="checkbox" formControlName="canManage" />
+    </div>
+    <div class="form-input">
+      <p>EducontentMetadataId:</p>
+      <select formControlName="eduContentMetadataId">
+        <option
+          *ngFor="let metadataId of eduContentMetadataIds"
+          [value]="metadataId"
+          >{{ metadataId }}</option
+        >
+      </select>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
   <campus-whiteboard-standalone
     [apiBase]="apiBase"
     [canManage]="canManage"
