@@ -7,7 +7,7 @@ import { icons } from './icons';
 export const environment = {
   production: false,
   api: {
-    APIBase: 'http://api.kabas.localhost:3000/api'
+    APIBase: 'http://api.kabas.localhost:3000'
   },
   iconMapping: icons
 };

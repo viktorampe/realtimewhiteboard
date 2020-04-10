@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@campus/dal';
+import { take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { WhiteboardConfigService } from '../config.service';
 
 @Component({
   selector: 'campus-play-ground',
@@ -7,15 +10,46 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./play-ground.component.scss']
 })
 export class PlayGroundComponent implements OnInit {
-  metadataIds = [22, 123, 124, 125];
-  metadataId = undefined;
+  loggedIn = false;
+
+  canManage = false;
+  eduContentMetadataId: number;
   apiBase = environment.api.APIBase + '/api';
 
-  constructor() {}
+  eduContentMetadataIds = [22, 123, 124, 125];
 
-  ngOnInit() {}
+  constructor(
+    private authService: AuthService,
+    private configService: WhiteboardConfigService
+  ) {}
 
-  onPickWhiteboard(id: number) {
-    this.metadataId = id;
+  ngOnInit(): void {
+    this.login();
+  }
+
+  login(username?: string, password?: string) {
+    username = 'piet';
+    password = 'testje';
+    this.authService
+      .login({ username, password })
+      .pipe(take(1))
+      .subscribe(response => {
+        if (response.userId) this.loggedIn = true;
+      });
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+
+  toggleCanManage() {
+    this.canManage = !this.canManage;
+  }
+
+  openInWrapper() {
+    this.configService.previewInWrapper(
+      this.apiBase,
+      this.eduContentMetadataId
+    );
   }
 }

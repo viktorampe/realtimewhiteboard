@@ -1,12 +1,26 @@
-<campus-whiteboard
-  *ngIf="metadataId; else whiteboardPicker"
-  [metadataId]="metadataId"
-  [apiBase]="apiBase"
-></campus-whiteboard>
+<!-- <button (click)="login()">Login</button> -->
+<ng-container *ngIf="loggedIn">
+  <div>
+    Kies een whiteboard:
+    <button
+      *ngFor="let id of eduContentMetadataIds"
+      (click)="eduContentMetadataId = id"
+      >{{ id }}</button
+    >
+  </div>
+  <button *ngIf="!!eduContentMetadataId" (click)="toggleCanManage()">{{
+    canManage ? 'Toon als leerkracht' : 'Toon als redacteur'
+  }}</button>
 
-<ng-template #whiteboardPicker>
-  Kies je whiteboard:
-  <button *ngFor="let id of metadataIds" (click)="onPickWhiteboard(id)"
-    >whiteboard {{ id }}</button
+  <button *ngIf="!!eduContentMetadataId" (click)="openInWrapper()"
+    >Toon in de wrapper</button
   >
-</ng-template>
+</ng-container>
+
+<ng-container *ngIf="apiBase && eduContentMetadataId">
+  <campus-whiteboard-standalone
+    [apiBase]="apiBase"
+    [eduContentMetadataId]="eduContentMetadataId"
+    [canManage]="canManage"
+  ></campus-whiteboard-standalone>
+</ng-container>
