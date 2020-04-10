@@ -6,11 +6,10 @@ import { DalModule } from '@campus/dal';
 import { WhiteboardModule } from '@campus/whiteboard';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
 import { PlayGroundComponent } from './play-ground/play-ground.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, PlayGroundComponent],
+  declarations: [AppComponent, PlayGroundComponent],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
