@@ -142,7 +142,7 @@
     *ngIf="cards && !cards.length && !isSettingsActive"
     [title]="title"
     [description]="
-      shelfCards.length
+      shelfCards?.length
         ? 'Sleep kaartjes uit de shelf naar het bord.'
         : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
     "
