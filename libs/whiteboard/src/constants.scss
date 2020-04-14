@@ -1,13 +1,26 @@
+$defaultColor: #d9328a;
 $background: #e0e5ec;
+$buttonColor: rgba(0, 0, 0, 0.54);
 
 $shadow-color-dark: #a3b1c6;
 $shadow-color-light: #ffffff;
 
 $gradient-angle: 135deg;
 
+$buttonBackground: linear-gradient(
+  145deg,
+  lighten($background, 5%),
+  darken($background, 5%)
+);
+
 $input-background: #edf2f7;
 
-$defaultColor: #d9328a;
+$box-shadow-default: 3px 3px 6px $shadow-color-dark,
+  -3px -3px 6px $shadow-color-light;
+$box-shadow-pink: 3px 3px 16px -1px rgba($defaultColor, 0.3),
+  9px 9px 16px $shadow-color-dark, -1px -1px 6px -3px rgba($defaultColor, 0.3),
+  -9px -9px 16px $shadow-color-light;
+
 $L1: #d9328a;
 $L2: #00b3c4;
 $L3: #afcb27;

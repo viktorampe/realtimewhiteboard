@@ -21,7 +21,7 @@
     >
       <mat-icon [svgIcon]="'settings'"></mat-icon>
     </div>
-    <!-- <div class="whiteboard__workspace__actions__zoom">
+    <div class="whiteboard__workspace__actions__zoom">
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'remove'"
@@ -31,7 +31,7 @@
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'plus'"
       ></mat-icon>
-    </div> -->
+    </div>
   </div>
   <div
     class="whiteboard__workspace"
@@ -120,13 +120,15 @@
       [class.plusMinimized]="isShelfMinimized"
       (tap)="btnPlusClicked()"
     >
-      <mat-icon [svgIcon]="'plus'"></mat-icon>
+      <mat-icon [style.color]="defaultColor" [svgIcon]="'plus'"></mat-icon>
     </div>
     <div
       [class.shelfMinimized]="isShelfMinimized"
       class="whiteboard__shelf__button"
       (tap)="toggleShelf()"
-      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
+      ><mat-icon
+        [svgIcon]="isShelfMinimized ? 'arrow-up' : 'arrow-down'"
+      ></mat-icon
     ></div>
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
@@ -140,14 +142,14 @@
   <campus-empty-state
     class="whiteboard__empty"
     *ngIf="cards && !cards.length && !isSettingsActive"
-    [title]="title"
+    [title]="title ? title : 'Geen Titel'"
     [description]="
-      shelfCards.length
+      title
         ? 'Sleep kaartjes uit de shelf naar het bord.'
         : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
     "
     [svgIcon]="
-      true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+      title ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
 </div>

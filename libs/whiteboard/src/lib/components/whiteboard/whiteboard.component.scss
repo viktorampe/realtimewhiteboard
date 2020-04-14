@@ -103,7 +103,7 @@
         }
 
         mat-icon {
-          color: rgba(0, 0, 0, 0.57);
+          color: $buttonColor;
         }
       }
 
@@ -132,7 +132,7 @@
         }
 
         &__button {
-          color: rgba(0, 0, 0, 0.54);
+          color: $buttonColor;
           padding: 6px;
           height: 36px;
           width: 36px;
@@ -159,7 +159,14 @@
     width: 100%;
 
     .ui-empty-state__image {
-      max-width: 300px;
+      width: 300px;
+      max-width: 100%;
+      margin: 0;
+
+      &.mat-icon {
+        width: initial;
+        height: initial;
+      }
     }
 
     .ui-empty-state__title,
@@ -170,10 +177,13 @@
 
     .ui-empty-state__title {
       font-size: 64px;
+      margin: 0;
+      font-weight: 100;
     }
 
     .ui-empty-state__description {
-      font-size: 32px;
+      font-size: 20px;
+      font-weight: 100;
     }
   }
 
@@ -192,8 +202,8 @@
 
     z-index: 3;
 
-    background: #ffffff;
-    box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 18px #ffffff;
+    background: $buttonBackground;
+    box-shadow: $box-shadow-default;
 
     &:active {
       box-shadow: inset 1px 1px 6px darken(#ffffff, 20%),
@@ -202,7 +212,8 @@
     }
 
     mat-icon {
-      color: #d9328a;
+      width: 35px;
+      height: 35px;
     }
 
     &.plusMinimized {
@@ -213,12 +224,8 @@
   &__shelf__button {
     width: 48px;
     height: 32px;
-    background: linear-gradient(
-      145deg,
-      lighten(#e0e5ec, 5%),
-      darken(#e0e5ec, 5%)
-    );
-    box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
+    background: $buttonBackground;
+    box-shadow: $box-shadow-default;
     border-radius: 12px;
     position: absolute;
     z-index: 3;
@@ -227,6 +234,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: $buttonColor;
+
     &:active {
       background: linear-gradient(
         -145deg,
@@ -261,12 +270,14 @@
       darken(#e0e5ec, 5%)
     );
     //$defaultColor -> #a3b1c6 (for the rgba() values)
-    box-shadow: 3px 3px 16px -1px rgba($shadow-color-dark, 0.3),
-      9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba($shadow-color-dark, 0.2),
-      -9px -9px 16px #ffffff;
+    box-shadow: $box-shadow-pink;
   }
 
   .minimizedShelf {
     height: 36px;
+  }
+
+  campus-empty-state {
+    width: 600px;
   }
 }
