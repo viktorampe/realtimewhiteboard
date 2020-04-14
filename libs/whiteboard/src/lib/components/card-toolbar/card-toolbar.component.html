@@ -26,8 +26,10 @@
     <div
       [@showHideToolbarTool]="'select'"
       data-cy="return-to-shelf-tool"
-      class="toolbar__tool toolbar__delete"
+      class="toolbar__tool toolbar__returntoshelf"
       (tap)="returnToShelfIconClicked()"
+      [style.width.px]="defaultWidth * zoomFactor"
+      [style.height.px]="defaultHeight * zoomFactor"
       *ngIf="!inShelf && cardType !== CardType.TEACHERCARD"
     >
       <mat-icon
