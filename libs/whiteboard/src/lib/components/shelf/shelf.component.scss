@@ -1,5 +1,5 @@
 .shelf {
-  height: 108px;
+  height: fit-content;
   padding: 24px;
   display: flex;
   width: 100%;
@@ -8,6 +8,7 @@
   &__container {
     position: relative;
     margin-right: 20px;
+    height: 62px;
 
     &:hover .shelf__card__toolbar {
       display: block;

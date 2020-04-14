@@ -1,5 +1,9 @@
 @import '../../../constants.scss';
 
+* {
+  box-sizing: border-box;
+}
+
 .whiteboard {
   position: relative;
   display: flex;
@@ -134,8 +138,8 @@
         &__button {
           color: $buttonColor;
           padding: 6px;
-          height: 36px;
-          width: 36px;
+          height: 36px !important;
+          width: 36px !important;
         }
       }
     }
@@ -148,43 +152,6 @@
     left: 50%;
     top: 35%;
     transform: translate(-50%, -50%);
-  }
-
-  &__empty {
-    position: absolute;
-    align-self: center;
-
-    pointer-events: none;
-
-    width: 100%;
-
-    .ui-empty-state__image {
-      width: 300px;
-      max-width: 100%;
-      margin: 0;
-
-      &.mat-icon {
-        width: initial;
-        height: initial;
-      }
-    }
-
-    .ui-empty-state__title,
-    .ui-empty-state__description {
-      font-family: 'Open Sans', sans-serif;
-      color: rgba(0, 0, 0, 0.54);
-    }
-
-    .ui-empty-state__title {
-      font-size: 64px;
-      margin: 0;
-      font-weight: 100;
-    }
-
-    .ui-empty-state__description {
-      font-size: 20px;
-      font-weight: 100;
-    }
   }
 
   &__addbutton {
@@ -279,5 +246,46 @@
 
   campus-empty-state {
     width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+  }
+
+  &__empty {
+    position: absolute;
+    align-self: center;
+
+    pointer-events: none;
+
+    width: 100%;
+
+    .ui-empty-state__image {
+      width: 300px;
+      max-width: 100%;
+      margin: 0;
+
+      &.mat-icon {
+        width: initial;
+        height: initial;
+      }
+    }
+
+    .ui-empty-state__title,
+    .ui-empty-state__description {
+      font-family: 'Open Sans', sans-serif;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .ui-empty-state__title {
+      font-size: 64px;
+      margin: 0;
+      font-weight: 100;
+    }
+
+    .ui-empty-state__description {
+      font-size: 20px;
+      font-weight: 100;
+    }
   }
 }
