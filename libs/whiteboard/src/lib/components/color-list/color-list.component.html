@@ -7,12 +7,17 @@
         ? 'edit'
         : 'whiteboard'
     "
-    *ngFor="let colorMap of defaultColors"
+    *ngFor="let colorMap of colorOptions"
     class="color-list__swatches"
     (tap)="clickColor(colorMap.hexCode)"
     [ngClass]="colorMap.colorName"
     [style.height.px]="defaultHeight * zoomFactor"
     [style.width.px]="defaultWidth * zoomFactor"
     [style.left.px]="((1 - this.zoomFactor) / 0.2) * 7"
+    [ngClass]="
+      colorMap.hexCode.includes(activeColor)
+        ? 'default ' + colorMap.colorName
+        : colorMap.colorName
+    "
   ></div>
 </div>

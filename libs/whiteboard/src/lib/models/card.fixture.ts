@@ -1,9 +1,11 @@
+import { CardTypeEnum } from '../enums/cardType.enum';
 import { ModeEnum } from '../enums/mode.enum';
-import CardInterface from './card.interface';
+import { CardInterface } from './card.interface';
 
 export class CardFixture implements CardInterface {
   id = '12345-abcd'; //random id
   mode = ModeEnum.IDLE;
+  type = CardTypeEnum.PUBLISHERCARD;
   color = 'foo color';
   description = 'foo description';
   image = { imageUrl: 'foo image' };

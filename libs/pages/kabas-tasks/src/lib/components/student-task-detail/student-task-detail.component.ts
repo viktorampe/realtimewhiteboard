@@ -1,4 +1,5 @@
 import { Component, HostBinding, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   ContentActionInterface,
   ContentOpenActionsServiceInterface,
@@ -43,7 +44,8 @@ export class StudentTaskDetailComponent {
       humanDateTimeRulesEnum.WEEKDAY,
       humanDateTimeRulesEnum.NEXT_WEEK
     ]),
-    datePrefix: 'op'
+    datePrefix: 'op',
+    addDate: true
   };
 
   @HostBinding('class.student-task-detail')
@@ -51,6 +53,7 @@ export class StudentTaskDetailComponent {
 
   constructor(
     private viewModel: StudentTasksViewModel,
+    private router: Router,
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
     private contentOpenActionsService: ContentOpenActionsServiceInterface
   ) {
@@ -83,5 +86,9 @@ export class StudentTaskDetailComponent {
     taskEduContent: StudentTaskContentInterface
   ) {
     action.handler(taskEduContent.eduContent);
+  }
+
+  public clickBack() {
+    this.router.navigate(['tasks']);
   }
 }

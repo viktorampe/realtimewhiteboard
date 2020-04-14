@@ -354,7 +354,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     action: TaskActionInterface,
     task: TaskWithAssigneesInterface
   ): void {
-    action.handler(task);
+    action.handler({ task });
   }
 
   clickAddDigitalTask() {

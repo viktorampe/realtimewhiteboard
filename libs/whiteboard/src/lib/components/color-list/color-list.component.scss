@@ -1,10 +1,12 @@
-$swatch-size: 40px;
+@import '../../../constants.scss';
 
-$shadow-color-dark: #a3b1c6;
-$shadow-color-light: #ffffff;
+$swatch-size: 40px;
 
 $swatch-shadow: 3px 3px 6px $shadow-color-dark,
   -3px -3px 6px $shadow-color-light;
+
+$swatch-shadow-selected: inset 1px 1px 2px $shadow-color-dark,
+  inset -1px -1px 2px $shadow-color-light;
 
 $gradient-angle: 135deg;
 
@@ -79,6 +81,10 @@ $color-yellow: #fadb48;
       @include box-shadow-active($color-yellow);
     }
   }
+
+  .default {
+    box-shadow: $swatch-shadow-selected;
+  }
 }
 
 :host.whiteboard__color-list .color-list {
@@ -105,4 +111,8 @@ $color-yellow: #fadb48;
     margin-left: 2px;
     margin-right: 2px;
   }
+}
+
+:host.settings__color-list .color-list {
+  justify-content: space-between;
 }

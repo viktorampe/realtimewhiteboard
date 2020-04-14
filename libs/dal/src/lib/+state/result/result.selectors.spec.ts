@@ -1,6 +1,6 @@
 import { ResultQueries } from '.';
 import { ResultFixture } from '../../+fixtures';
-import { ResultInterface } from '../../+models';
+import { ResultInterface, ResultStatus } from '../../+models';
 import { State } from './result.reducer';
 
 describe('Result Selectors', () => {
@@ -178,22 +178,48 @@ describe('Result Selectors', () => {
 
   describe('getBestResultByEduContentId', () => {
     const mockResults = [
-      new ResultFixture({ id: 1, eduContentId: 10, score: 100 }),
-      new ResultFixture({ id: 2, eduContentId: 10, score: 50 }),
+      new ResultFixture({ id: 1, taskId: 1234, eduContentId: 10, score: 100 }),
+      new ResultFixture({ id: 2, taskId: 123, eduContentId: 10, score: 50 }),
       new ResultFixture({ id: 3, eduContentId: 12, score: 30 }),
-      new ResultFixture({ id: 4, eduContentId: 10, score: 0 }),
-      new ResultFixture({ id: 5, eduContentId: 10, score: undefined }),
-      new ResultFixture({ id: 6, eduContentId: 11, score: undefined }),
-      new ResultFixture({ id: 7, eduContentId: 11, score: 0 }),
-      new ResultFixture({ id: 8, eduContentId: 12, score: undefined }),
-      new ResultFixture({ id: 9, eduContentId: 11, score: 50 }),
-      new ResultFixture({ id: 10, eduContentId: 12, score: 95 }),
-      new ResultFixture({ id: 11, eduContentId: 11, score: 100 }),
-      new ResultFixture({ id: 12, eduContentId: 12, score: 0 }),
-      new ResultFixture({ id: 13, eduContentId: 11, score: 100 }),
-      new ResultFixture({ id: 14, eduContentId: 13, score: undefined }),
-      new ResultFixture({ id: 15, eduContentId: 13, score: 0 }),
-      new ResultFixture({ id: 16, eduContentId: 14, score: undefined })
+      new ResultFixture({ id: 4, taskId: 123, eduContentId: 10, score: 0 }),
+      new ResultFixture({
+        id: 5,
+        taskId: 123,
+        eduContentId: 10,
+        score: undefined
+      }),
+      new ResultFixture({
+        id: 6,
+        taskId: 123,
+        eduContentId: 11,
+        score: undefined
+      }),
+      new ResultFixture({ id: 7, taskId: 123, eduContentId: 11, score: 0 }),
+      new ResultFixture({
+        id: 8,
+        taskId: null,
+        eduContentId: 12,
+        score: undefined
+      }),
+      new ResultFixture({ id: 9, taskId: 123, eduContentId: 11, score: 50 }),
+      new ResultFixture({ id: 10, taskId: null, eduContentId: 12, score: 95 }),
+      new ResultFixture({ id: 11, taskId: 123, eduContentId: 11, score: 100 }),
+      new ResultFixture({ id: 12, taskId: null, eduContentId: 12, score: 0 }),
+      new ResultFixture({ id: 13, taskId: 123, eduContentId: 11, score: 100 }),
+      new ResultFixture({
+        id: 14,
+        taskId: 1234,
+        eduContentId: 13,
+        score: undefined
+      }),
+      new ResultFixture({ id: 15, taskId: 123, eduContentId: 13, score: 0 }),
+      new ResultFixture({ id: 16, eduContentId: 14, score: undefined }),
+      new ResultFixture({
+        id: 17,
+        eduContentId: 15,
+        score: 100,
+        status: ResultStatus.STATUS_OPENED
+      })
     ];
 
     beforeEach(() => {
@@ -201,14 +227,25 @@ describe('Result Selectors', () => {
       storeState = { results: resultState };
     });
 
-    it('should return the best results per eduContentId', () => {
-      const result = ResultQueries.getBestResultByEduContentId(storeState);
+    it('should return the best results per eduContentId and ignore results with invalid status', () => {
+      const result = ResultQueries.getBestResultByEduContentId(storeState, {});
       expect(result).toEqual({
         10: mockResults[0],
         11: mockResults[10],
         12: mockResults[9],
         13: mockResults[14],
         14: mockResults[15]
+      });
+    });
+
+    it('should return the best results per eduContentId filtered by taskId', () => {
+      const result = ResultQueries.getBestResultByEduContentId(storeState, {
+        taskId: 123
+      });
+      expect(result).toEqual({
+        10: mockResults[1],
+        11: mockResults[10],
+        13: mockResults[14]
       });
     });
   });

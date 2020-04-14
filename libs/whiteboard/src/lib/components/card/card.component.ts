@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
 import ImageInterface from '../../models/image.interface';
 
 @Component({
@@ -12,7 +12,7 @@ export class CardComponent {
   @Input() mode: ModeEnum;
   @Input() color: string;
   @Input() description: string;
-  @Input() image: ImageInterface;
+  @Input() image: ImageInterface = { imageUrl: null, progress: null };
   @Input() viewModeImage: boolean;
   @Input() zoomFactor: number;
 

@@ -11,11 +11,12 @@ import { WINDOW } from '../window/window';
 })
 export class IframeComponent {
   url: SafeUrl;
+
   constructor(
     sanitizer: DomSanitizer,
-    dialogRef: MatDialogRef<IframeComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { url: string },
-    @Inject(WINDOW) public window: Window
+    private dialogRef: MatDialogRef<IframeComponent>,
+    @Inject(MAT_DIALOG_DATA) public data,
+    @Inject(WINDOW) public window
   ) {
     this.url = sanitizer.bypassSecurityTrustResourceUrl(data.url);
     this.window.addEventListener(
@@ -27,5 +28,9 @@ export class IframeComponent {
       },
       false
     );
+  }
+
+  public onCloseClicked() {
+    this.dialogRef.close();
   }
 }

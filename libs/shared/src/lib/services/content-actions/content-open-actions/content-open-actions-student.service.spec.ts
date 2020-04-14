@@ -12,7 +12,7 @@ import { ContentOpenActionsStudentService } from './content-open-actions-student
 import {
   ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
-  CONTENT_OPENER_TOKEN
+  STUDENT_CONTENT_OPENER_TOKEN
 } from './content-open-actions.service.interface';
 
 describe('ContentOpenActionsStudentServiceInterface', () => {
@@ -30,7 +30,7 @@ describe('ContentOpenActionsStudentServiceInterface', () => {
       providers: [
         ContentOpenActionsStudentService,
         {
-          provide: CONTENT_OPENER_TOKEN,
+          provide: STUDENT_CONTENT_OPENER_TOKEN,
           useValue: {
             openEduContentAsExercise: () => {},
             openEduContentAsSolution: () => {},
@@ -47,7 +47,7 @@ describe('ContentOpenActionsStudentServiceInterface', () => {
     contentOpenActionsStudentService = TestBed.get(
       ContentOpenActionsStudentService
     );
-    contentOpener = TestBed.get(CONTENT_OPENER_TOKEN);
+    contentOpener = TestBed.get(STUDENT_CONTENT_OPENER_TOKEN);
   });
 
   afterAll(() => {

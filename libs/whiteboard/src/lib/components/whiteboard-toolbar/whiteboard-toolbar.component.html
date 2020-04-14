@@ -1,5 +1,6 @@
 <div class="whiteboard__tools">
   <campus-color-list
+    *ngIf="!canManage"
     class="whiteboard__tools__tool"
     (selectedColor)="changeSelectedCardsColor($event)"
   ></campus-color-list>

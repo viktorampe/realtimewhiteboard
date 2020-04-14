@@ -17,23 +17,13 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
 
-export interface ChapterWithStatus {
-  tocId: number;
-  title: string;
-  exercises: {
-    available: number;
-    completed: number;
-  };
-  kwetonsRemaining: number;
-}
-
 export const getChaptersWithStatuses = createSelector(
   [
-    EduContentTocQueries.getTreeForBook,
+    (state, props) => EduContentTocQueries.getTreeForBook(state, props),
     // TODO: this can be more efficient, can't use the count selectors or getAllByType
     // because it doesn't match with the props:
     EduContentTocEduContentQueries.getAll,
-    ResultQueries.getBestResultByEduContentId,
+    (state, props) => ResultQueries.getBestResultByEduContentId(state, props),
     UnlockedFreePracticeQueries.getGroupedByEduContentBookId
   ],
   (
@@ -41,7 +31,7 @@ export const getChaptersWithStatuses = createSelector(
     eduContentTocEduContents: EduContentTOCEduContentInterface[],
     bestResultByEduContentId: { [id: number]: ResultInterface },
     unlockedFreePractices: Dictionary<UnlockedFreePracticeInterface[]>,
-    props: { bookId: number }
+    props: { bookId: number; taskId?: number }
   ) => {
     if (
       !unlockedFreePractices[props.bookId] ||
@@ -109,7 +99,7 @@ export const getChaptersWithStatuses = createSelector(
           completed: completedExercises
         },
         kwetonsRemaining
-      } as ChapterWithStatus;
+      } as ChapterWithStatusInterface;
     });
   }
 );
@@ -121,7 +111,6 @@ export interface UnlockedBookInterface {
   learningAreaName: string;
 }
 
-// copy/paste from selector branch, feel free to overwrite
 export interface ChapterWithStatusInterface {
   tocId: number;
   title: string;

@@ -166,7 +166,7 @@ describe('HumanDateTimePipe rules', () => {
       },
       {
         should: 'not match the condition - difference more than a week',
-        date: referenceDate - 7 * day,
+        date: referenceDate - 8 * day,
         expected: false
       }
     ];
@@ -215,7 +215,7 @@ describe('HumanDateTimePipe rules', () => {
       },
       {
         should: 'not match the condition - difference more than a week',
-        date: referenceDate - 7 * day,
+        date: referenceDate - 8 * day,
         expected: false
       }
     ];
@@ -386,7 +386,7 @@ describe('HumanDateTimePipe rules', () => {
       },
       {
         should: 'not match the condition - difference more than a week',
-        date: referenceDate + 7 * day,
+        date: referenceDate + 8 * day,
         expected: false
       }
     ];

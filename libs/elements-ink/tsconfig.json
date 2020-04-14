@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "target": "es5",
+    "target": "es2015", // https://angular.io/guide/elements#browser-support-for-custom-elements
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
@@ -10,12 +10,16 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "types": ["node"],
-    "lib": ["dom", "es5"],
+    "lib": ["dom", "es2015"],
     "baseUrl": ".",
     "typeRoots": ["node_modules/@types"],
     "paths": {
       "@campus/testing": ["../testing/src/index.ts"],
-      "@campus/timeline": ["../timeline/src/index.ts"]
+      "@campus/timeline": ["../timeline/src/index.ts"],
+      "@campus/whiteboard": ["../whiteboard/src/index.ts"],
+      "@campus/ui": ["../ui/src/index.ts"],
+      "@campus/utils": ["../utils/src/index.ts"],
+      "@campus/browser": ["../browser/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

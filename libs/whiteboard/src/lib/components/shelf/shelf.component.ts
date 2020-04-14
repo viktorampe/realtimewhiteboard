@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import CardInterface from '../../models/card.interface';
+import { CardInterface } from '../../models/card.interface';
 
 @Component({
   selector: 'campus-shelf',
@@ -20,8 +20,11 @@ export class ShelfComponent implements OnInit {
 
   @Input() cards: CardInterface[];
   @Input() isMinimized = false;
+  @Input() canManage: boolean;
+
   @Output() isMinimizedChange = new EventEmitter<boolean>();
   @Output() cardDraggedOutsideContainer = new EventEmitter<any>();
+  @Output() deleteCard = new EventEmitter<CardInterface>();
 
   private cardElementBeingDragged: HTMLElement;
 
@@ -48,5 +51,9 @@ export class ShelfComponent implements OnInit {
       });
     }
     this.cardElementBeingDragged = null;
+  }
+
+  emitDeleteCard(card) {
+    this.deleteCard.emit(card);
   }
 }

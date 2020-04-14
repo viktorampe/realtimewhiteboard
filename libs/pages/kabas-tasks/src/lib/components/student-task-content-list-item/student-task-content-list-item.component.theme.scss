@@ -1,4 +1,4 @@
-@mixin student-task-list-item-content() {
+@mixin student-task-content-list-item-theme() {
   $pages-kabas-tasks__student-task-content-list-item__last-updated-width: 175px !default;
   $pages-kabas-tasks__student-task-content-list-item__status-icon-color--completed: $pages-kabas-tasks-color--accent !default;
   $pages-kabas-tasks__student-task-content-list-item__status-icon-color--opened: $pages-kabas-tasks-color--warning !default;

@@ -11,10 +11,12 @@
   >
     <div
       [@showHideToolbarTool]="'select'"
+      data-cy="delete-tool"
       class="toolbar__tool toolbar__delete"
       (tap)="deleteIconClicked()"
       [style.width.px]="defaultWidth * zoomFactor"
       [style.height.px]="defaultHeight * zoomFactor"
+      *ngIf="canManage || cardType === CardType.TEACHERCARD"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -23,10 +25,23 @@
     </div>
     <div
       [@showHideToolbarTool]="'select'"
+      data-cy="return-to-shelf-tool"
+      class="toolbar__tool toolbar__delete"
+      (tap)="returnToShelfIconClicked()"
+      *ngIf="!inShelf && cardType !== CardType.TEACHERCARD"
+    >
+      <mat-icon
+        class="toolbar__tool__icon toolbar__delete__icon"
+        [svgIcon]="'return-to-shelf'"
+      ></mat-icon>
+    </div>
+    <div
+      [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
       (tap)="multiSelectClicked()"
       [style.width.px]="defaultWidth * zoomFactor"
       [style.height.px]="defaultHeight * zoomFactor"
+      *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
       </mat-icon>
@@ -37,6 +52,7 @@
       (tap)="flipIconClicked()"
       [style.width.px]="defaultWidth * zoomFactor"
       [style.height.px]="defaultHeight * zoomFactor"
+      *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
@@ -46,6 +62,7 @@
       (tap)="editIconClicked()"
       [style.width.px]="defaultWidth * zoomFactor"
       [style.height.px]="defaultHeight * zoomFactor"
+      *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>

@@ -9,6 +9,7 @@ export const FILEREADER_SERVICE_TOKEN = new InjectionToken(
 export interface FileReaderServiceInterface {
   loaded$: Observable<string | ArrayBuffer>;
   error$: Observable<FileReaderError>;
+  progress$: Observable<number>;
 
   // service methods
   isFileTypeAllowed(file: File, regex?: RegExp): boolean;
