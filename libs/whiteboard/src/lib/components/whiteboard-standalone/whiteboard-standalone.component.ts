@@ -87,6 +87,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       this.whiteboard$ = of(this.whiteboardData);
     } else {
       this.whiteboard$ = this.whiteboardHttpService.getJson();
+      this.setPresentationStreams();
     }
   }
 

@@ -1,5 +1,6 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -9,6 +10,7 @@ import {
 } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UiModule } from '@campus/ui';
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardTextComponent } from './components/card-text/card-text.component';
@@ -26,7 +28,9 @@ import { ImageDragDirective } from './directives/image-drag.directive';
 
 @NgModule({
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
+    HttpClientModule,
     MatCardModule,
     DragDropModule,
     FormsModule,
