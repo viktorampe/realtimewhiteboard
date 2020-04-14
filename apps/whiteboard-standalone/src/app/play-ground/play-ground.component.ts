@@ -46,6 +46,10 @@ export class PlayGroundComponent implements OnInit {
     this.canManage = !this.canManage;
   }
 
+  changeEduContentMetadataId(id: number) {
+    this.eduContentMetadataId = id;
+  }
+
   openInWrapper() {
     this.configService.previewInWrapper(
       this.apiBase,

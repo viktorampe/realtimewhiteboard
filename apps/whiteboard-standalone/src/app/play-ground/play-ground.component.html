@@ -4,7 +4,7 @@
     Kies een whiteboard:
     <button
       *ngFor="let id of eduContentMetadataIds"
-      (click)="eduContentMetadataId = id"
+      (click)="changeEduContentMetadataId(id)"
       >{{ id }}</button
     >
   </div>
