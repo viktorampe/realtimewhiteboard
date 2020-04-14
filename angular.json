@@ -1309,6 +1309,132 @@
           }
         }
       }
+    },
+    "whiteboard-standalone": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/whiteboard-standalone",
+      "sourceRoot": "apps/whiteboard-standalone/src",
+      "prefix": "campus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/whiteboard-standalone",
+            "index": "apps/whiteboard-standalone/src/index.html",
+            "main": "apps/whiteboard-standalone/src/main.ts",
+            "polyfills": "apps/whiteboard-standalone/src/polyfills.ts",
+            "tsConfig": "apps/whiteboard-standalone/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "apps/whiteboard-standalone/src/favicon.ico",
+              "apps/whiteboard-standalone/src/assets"
+            ],
+            "styles": ["apps/whiteboard-standalone/src/styles.scss"],
+            "scripts": ["node_modules/hammerjs/hammer.min.js"]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/whiteboard-standalone/src/environments/environment.ts",
+                  "with": "apps/whiteboard-standalone/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "whiteboard-standalone:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "whiteboard-standalone:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "whiteboard-standalone:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/whiteboard-standalone/tsconfig.app.json",
+              "apps/whiteboard-standalone/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/whiteboard-standalone/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/whiteboard-standalone/jest.config.js",
+            "tsConfig": "apps/whiteboard-standalone/tsconfig.spec.json",
+            "setupFile": "apps/whiteboard-standalone/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "whiteboard-standalone-e2e": {
+      "root": "apps/whiteboard-standalone-e2e",
+      "sourceRoot": "apps/whiteboard-standalone-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/whiteboard-standalone-e2e/cypress.json",
+            "tsConfig": "apps/whiteboard-standalone-e2e/tsconfig.e2e.json",
+            "devServerTarget": "whiteboard-standalone:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "whiteboard-standalone:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/whiteboard-standalone-e2e/tsconfig.e2e.json"],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/whiteboard-standalone-e2e/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
@@ -1330,6 +1456,13 @@
     },
     "@nrwl/schematics:node-application": {
       "framework": "express"
+    },
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
     }
   }
 }
