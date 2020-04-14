@@ -8,9 +8,8 @@ describe('PlayGroundComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayGroundComponent ]
-    })
-    .compileComponents();
+      declarations: [PlayGroundComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
