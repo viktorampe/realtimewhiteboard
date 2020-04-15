@@ -260,6 +260,7 @@ export class WhiteboardComponent implements OnChanges {
     const updates: Partial<WhiteboardInterface> = {
       cards: this.cards.filter(c => c !== card)
     };
+    // also remove from shelf
     if (permanent) {
       // a teacher can only remove his own cards
       if (this.canManage || card.type === CardTypeEnum.TEACHERCARD) {
@@ -551,10 +552,20 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region MULTI SELECT ACTIONS
   bulkDeleteClicked() {
-    const cards = this.cards.filter(c => !this.selectedCards.includes(c));
-    cards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+    const unselectedCards = this.cards.filter(
+      c => !this.selectedCards.includes(c)
+    );
+    unselectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+    this.selectedCards.forEach(c => this.onDeleteCard(c, true));
+  }
+
+  bulkReturnCardsToShelfClicked() {
+    const unselectedCards = this.cards.filter(
+      c => !this.selectedCards.includes(c)
+    );
+    unselectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
     this.updateWhiteboard({
-      cards: cards
+      cards: unselectedCards
     });
     this.selectedCards = [];
   }

@@ -12,4 +12,12 @@
       [svgIcon]="'delete'"
     ></mat-icon>
   </div>
+
+  <div class="whiteboard__tools__tool" id="return-to-shelf" *ngIf="canManage">
+    <mat-icon
+      class="toolbar_icon"
+      (tap)="btnReturnToShelfClicked()"
+      [svgIcon]="'return-to-shelf'"
+    ></mat-icon>
+  </div>
 </div>

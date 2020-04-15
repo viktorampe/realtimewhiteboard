@@ -451,6 +451,23 @@ describe('WhiteboardComponent', () => {
         component.bulkDeleteClicked();
         selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
 
+        expect(component.cards).toEqual(nonSelectedCards);
+        component.shelfCards.forEach((shelfcard, index) => {
+          expect({ ...shelfcard, mode: null }).toEqual({
+            ...selectedCards[index],
+            mode: null,
+            top: null,
+            left: null
+          });
+        });
+      });
+
+      it('bulkReturnCardsToShelfClicked() should return cards to shelf', () => {
+        component.shelfCards = [];
+
+        component.bulkReturnCardsToShelfClicked();
+        selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
+
         expect(component.selectedCards.length).toBe(0);
         expect(component.cards).toEqual(nonSelectedCards);
         component.shelfCards.forEach((shelfcard, index) => {

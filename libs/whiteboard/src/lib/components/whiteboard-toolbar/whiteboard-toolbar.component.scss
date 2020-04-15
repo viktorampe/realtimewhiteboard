@@ -24,8 +24,13 @@ $shadow-color-light: #ffffff;
     box-shadow: -1px 0px 1px $shadow-color-dark, 1px 0px 1px $shadow-color-light;
   }
 
-  #delete {
-    width: 90px;
+  &:last-child {
+    margin-right: 25px;
+  }
+
+  #delete,
+  #return-to-shelf {
+    width: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,6 +40,17 @@ $shadow-color-light: #ffffff;
       color: #e22940;
       width: 43px;
       height: 43px;
+
+      svg {
+        fill: #e22940;
+      }
     }
+  }
+
+  #delete {
+    margin: 20px 20px;
+  }
+  #return-to-shelf {
+    margin: 20px 20px 20px 0px;
   }
 }
