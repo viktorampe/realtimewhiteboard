@@ -4,18 +4,14 @@
     else multiSelectView
   "
 >
-  <div
-    class="toolbar"
-    *ngIf="mode !== Mode.EDIT; else editModeView"
-    [style.top.px]="((1 - this.zoomFactor) / 0.2) * 7"
-  >
+  <div class="toolbar" *ngIf="mode !== Mode.EDIT; else editModeView">
     <div
       [@showHideToolbarTool]="'select'"
       data-cy="delete-tool"
       class="toolbar__tool toolbar__delete"
       (tap)="deleteIconClicked()"
-      [style.width.px]="defaultWidth * zoomFactor"
-      [style.height.px]="defaultHeight * zoomFactor"
+      [style.width.px]="defaultToolWidth * zoomFactor"
+      [style.height.px]="defaultToolHeight * zoomFactor"
       *ngIf="canManage || cardType === CardType.TEACHERCARD"
     >
       <mat-icon

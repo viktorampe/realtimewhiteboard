@@ -54,14 +54,6 @@
   }
 }
 
-:host.whiteboard__card .card {
-  &__content {
-    &__text {
-      padding: 20px;
-    }
-  }
-}
-
 :host.shelf__card .card {
   height: 60px;
   width: 89px;
