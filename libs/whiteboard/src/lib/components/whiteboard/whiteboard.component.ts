@@ -30,6 +30,11 @@ import { WhiteboardInterface } from '../../models/whiteboard.interface';
 
 const CARD_HEIGHT = 167; // should be in sync with card.component.scss
 
+const START_ZOOM_LEVEL = 1;
+const ZOOM_TICK = 0.2;
+const MIN_ZOOM_LEVEL = 0.4; // can't be lower than zero
+const MAX_ZOOM_LEVEL = 2;
+
 export interface CardImageUploadInterface {
   card: CardInterface;
   imageFile: File;
@@ -118,7 +123,7 @@ export class WhiteboardComponent implements OnChanges {
 
   lastColor = '#00A7E2';
   isShelfMinimized = false;
-  zoomFactor = 1;
+  zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
 
   constructor() {}
@@ -506,15 +511,18 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   increaseZoom() {
-    Math.ceil(this.zoomFactor) < 2.4
-      ? Math.ceil((this.zoomFactor += 0.2))
-      : Math.ceil((this.zoomFactor = 2.4));
+    const updatedZoomFactor =
+      Math.round((this.zoomFactor + ZOOM_TICK) * 100) / 100;
+    this.zoomFactor =
+      updatedZoomFactor > MAX_ZOOM_LEVEL ? this.zoomFactor : updatedZoomFactor;
   }
 
   decreaseZoom() {
-    Math.floor(this.zoomFactor) > 0.6
-      ? Math.floor((this.zoomFactor -= 0.2))
-      : Math.floor((this.zoomFactor = 0.6));
+    const updatedZoomFactor =
+      Math.round((this.zoomFactor - ZOOM_TICK) * 100) / 100;
+
+    this.zoomFactor =
+      updatedZoomFactor < MIN_ZOOM_LEVEL ? this.zoomFactor : updatedZoomFactor;
   }
 
   updateSettings(settings: SettingsInterface) {
