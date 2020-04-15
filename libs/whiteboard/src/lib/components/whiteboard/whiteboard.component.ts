@@ -162,7 +162,7 @@ export class WhiteboardComponent implements OnChanges {
 
     this.saveWhiteboard();
   }
-  //#region WORKSPACE INTERACTIONS
+  //#region WORKSPACE INTERACTIONS TEST
   createCard(event: any) {
     if (event.target.className.includes('whiteboard__workspace')) {
       if (event.type === 'longpress') {
