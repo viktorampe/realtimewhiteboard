@@ -116,6 +116,7 @@
     </ng-template>
 
     <div
+      *ngIf="!isAnyCardZoomed"
       class="whiteboard__addbutton"
       [class.plusMinimized]="isShelfMinimized"
       (tap)="btnPlusClicked()"
@@ -123,12 +124,14 @@
       <mat-icon [svgIcon]="'plus'"></mat-icon>
     </div>
     <div
+      *ngIf="!isAnyCardZoomed"
       [class.shelfMinimized]="isShelfMinimized"
       class="whiteboard__shelf__button"
       (tap)="toggleShelf()"
       ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
     ></div>
     <campus-shelf
+      *ngIf="!isAnyCardZoomed"
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       (deleteCard)="onDeleteCard($event, true)"
       [class.minimizedShelf]="isShelfMinimized"
