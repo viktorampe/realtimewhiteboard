@@ -12,6 +12,7 @@ import { CardInterface } from '../../models/card.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
+// file.only
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
@@ -72,6 +73,24 @@ describe('WhiteboardComponent', () => {
     expect(component.cards.length).toBe(cardSizeBeforeDelete - 1);
     expect(component.cards).not.toContain(card);
     expect(component.shelfCards.map(sc => sc.id)).toContain(card.id);
+  });
+
+  describe('updateCard()', () => {
+    it('should update the card', () => {
+      const card = new CardFixture({ description: 'foo' });
+      component.updateCard({ description: 'bar' }, card);
+
+      expect(card.description).toEqual('bar');
+    });
+
+    it('should sync updates with the shelf card', () => {
+      const card = new CardFixture({ description: 'foo' });
+      component.shelfCards = [card];
+
+      component.updateCard({ description: 'bar' }, card);
+
+      expect(component.shelfCards[0].description).toEqual('bar');
+    });
   });
 
   describe('updateSettings()', () => {
