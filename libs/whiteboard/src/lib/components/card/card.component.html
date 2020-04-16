@@ -9,8 +9,10 @@
     mode === Mode.EDIT
   "
   [style.border-color]="color"
-  [style.width.px]="defaultWidth * zoomFactor"
-  [style.height.px]="defaultHeight * zoomFactor"
+  [ngStyle]="{
+    width: mode !== Mode.ZOOM ? defaultWidth * zoomFactor + 'px' : 'inherit',
+    height: mode !== Mode.ZOOM ? defaultHeight * zoomFactor + 'px' : 'inherit'
+  }"
 >
   <div class="card__content" [class.zoom]="mode === Mode.ZOOM">
     <ng-container *ngIf="mode !== Mode.UPLOAD; else uploadMode">
