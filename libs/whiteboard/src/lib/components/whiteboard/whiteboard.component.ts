@@ -550,21 +550,34 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region MULTI SELECT ACTIONS
   bulkDeleteClicked() {
-    const unselectedCards = this.cards.filter(
-      c => !this.selectedCards.includes(c)
-    );
-    unselectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+    // set non-selected cards to idle
+    const nonSelectedCards = this.getNonSelectedCards();
+    nonSelectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
+    // delete selected cards
     this.selectedCards.forEach(c => this.onDeleteCard(c, true));
+
+    // clear selection
+    this.selectedCards = [];
   }
 
   bulkReturnCardsToShelfClicked() {
-    const unselectedCards = this.cards.filter(
-      c => !this.selectedCards.includes(c)
-    );
-    unselectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+    // set non-selected cards to idle
+    const nonSelectedCards = this.getNonSelectedCards();
+    nonSelectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
+    // non-publisher cards can not be returned to the shelf
+    // set to idle (= visual deselection)
+    const nonPublisherCards = this.selectedCards
+      .filter(card => card.type !== CardTypeEnum.PUBLISHER)
+      .map(card => ({ ...card, mode: ModeEnum.IDLE }));
+
+    // leave non-selected and non-publisher cards in the workspace
     this.updateWhiteboard({
-      cards: unselectedCards
+      cards: [...nonSelectedCards, ...nonPublisherCards]
     });
+
+    // clear selection
     this.selectedCards = [];
   }
 
@@ -606,5 +619,12 @@ export class WhiteboardComponent implements OnChanges {
   toggleShelf() {
     this.isShelfMinimized = !this.isShelfMinimized;
   }
+  //#endregion
+
+  //#region utility functions
+  private getNonSelectedCards(): CardInterface[] {
+    return this.cards.filter(c => !this.selectedCards.includes(c));
+  }
+
   //#endregion
 }
