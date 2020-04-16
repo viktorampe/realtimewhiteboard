@@ -141,7 +141,7 @@ export class WhiteboardComponent implements OnChanges {
    * @param {Partial<WhiteboardInterface>} updates
    * @memberof WhiteboardComponent
    */
-  private updateWhiteboard(
+  public updateWhiteboard(
     updates: Partial<WhiteboardInterface>,
     shouldPersist = false
   ) {
@@ -258,7 +258,7 @@ export class WhiteboardComponent implements OnChanges {
     const updates: Partial<WhiteboardInterface> = {
       cards: this.cards.filter(c => c !== card)
     };
-    // also remove from shelf
+
     if (permanent) {
       // a teacher can only remove his own cards
       if (this.canManage || card.type === CardTypeEnum.TEACHER) {
@@ -550,7 +550,7 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region MULTI SELECT ACTIONS
   bulkDeleteClicked() {
-    // set non-selected cards to idle
+    // visual update: set non-selected cards to idle
     const nonSelectedCards = this.getNonSelectedCards();
     nonSelectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
 

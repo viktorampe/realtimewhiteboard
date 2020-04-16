@@ -12,7 +12,6 @@ import { CardInterface } from '../../models/card.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
-
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
@@ -456,19 +455,30 @@ describe('WhiteboardComponent', () => {
     describe('bulkActions', () => {
       const selectedCards = [
         new CardFixture({
+          id: '1',
+          type: CardTypeEnum.PUBLISHER,
           mode: ModeEnum.MULTISELECTSELECTED
         }),
         new CardFixture({
+          id: '2',
+          type: CardTypeEnum.TEACHER,
+          mode: ModeEnum.MULTISELECTSELECTED
+        }),
+        new CardFixture({
+          id: '3',
+          type: CardTypeEnum.TEACHER,
           mode: ModeEnum.MULTISELECTSELECTED
         })
       ];
 
       const nonSelectedCards = [
         new CardFixture({
-          mode: ModeEnum.IDLE
+          id: '4',
+          mode: ModeEnum.MULTISELECT
         }),
         new CardFixture({
-          mode: ModeEnum.IDLE
+          id: '5',
+          mode: ModeEnum.MULTISELECT
         })
       ];
       beforeEach(() => {
@@ -477,38 +487,39 @@ describe('WhiteboardComponent', () => {
       });
 
       it('bulkDelete() should delete multiple cards', () => {
-        component.shelfCards = [];
+        jest.spyOn(component, 'onDeleteCard');
 
         component.bulkDeleteClicked();
-        selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
 
-        expect(component.cards).toEqual(nonSelectedCards);
-        component.shelfCards.forEach((shelfcard, index) => {
-          expect({ ...shelfcard, mode: null }).toEqual({
-            ...selectedCards[index],
-            mode: null,
-            top: null,
-            left: null
-          });
-        });
+        expect(nonSelectedCards.every(c => c.mode === ModeEnum.IDLE)).toBe(
+          true
+        );
+
+        expect(component.onDeleteCard).toHaveBeenCalledTimes(
+          selectedCards.length
+        );
+
+        expect(component.selectedCards).toStrictEqual([]);
       });
 
-      it('bulkReturnCardsToShelfClicked() should return cards to shelf', () => {
-        component.shelfCards = [];
+      it('bulkReturnCardsToShelfClicked() should only return publisher cards to shelf', () => {
+        jest.spyOn(component, 'updateWhiteboard');
 
         component.bulkReturnCardsToShelfClicked();
-        selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
 
-        expect(component.selectedCards.length).toBe(0);
-        expect(component.cards).toEqual(nonSelectedCards);
-        component.shelfCards.forEach((shelfcard, index) => {
-          expect({ ...shelfcard, mode: null }).toEqual({
-            ...selectedCards[index],
-            mode: null,
-            top: null,
-            left: null
-          });
+        expect(nonSelectedCards.every(c => c.mode === ModeEnum.IDLE)).toBe(
+          true
+        );
+
+        expect(component.updateWhiteboard).toHaveBeenCalledWith({
+          cards: [
+            ...nonSelectedCards,
+            { ...selectedCards[1], mode: ModeEnum.IDLE }, // teacher card
+            { ...selectedCards[2], mode: ModeEnum.IDLE } // teacher card
+          ]
         });
+
+        expect(component.selectedCards).toStrictEqual([]);
       });
 
       it('changeSelectedCardsColor() should change the colors of the selected cards when a swatch is clicked', () => {
