@@ -7,17 +7,12 @@
   <div class="whiteboard__tools__seperator"></div>
   <div class="whiteboard__tools__tool">
     <mat-icon
-      class="toolbar_icon"
       (tap)="btnReturnToShelfClicked()"
       [svgIcon]="'return-to-shelf'"
     ></mat-icon>
   </div>
   <div class="whiteboard__tools__seperator"></div>
   <div class="whiteboard__tools__tool">
-    <mat-icon
-      class="toolbar_icon"
-      (tap)="btnDeleteClicked()"
-      [svgIcon]="'delete'"
-    ></mat-icon>
+    <mat-icon (tap)="btnDeleteClicked()" [svgIcon]="'delete'"></mat-icon>
   </div>
 </div>
