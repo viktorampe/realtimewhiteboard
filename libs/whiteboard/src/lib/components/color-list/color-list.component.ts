@@ -70,9 +70,6 @@ export class ColorListComponent implements OnInit {
     { colorName: 'yellow', hexCode: '#FADB48' }
   ];
 
-  defaultHeight = 40;
-  defaultWidth = 40;
-  // TODO: fix colorlist position left
   constructor() {}
 
   ngOnInit() {}

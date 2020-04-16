@@ -1,4 +1,4 @@
-<div class="color-list" [style.left.px]="((1 - this.zoomFactor) / 0.2) * 7">
+<div class="color-list">
   <div
     [@showHideColorSwatchOne]="
       mode === Mode.SELECTED
@@ -11,8 +11,6 @@
     class="color-list__swatches"
     (tap)="clickColor(colorMap.hexCode)"
     [ngClass]="colorMap.colorName"
-    [style.height.px]="defaultHeight * zoomFactor"
-    [style.width.px]="defaultWidth * zoomFactor"
     [ngClass]="
       colorMap.hexCode.includes(activeColor)
         ? 'default ' + colorMap.colorName
