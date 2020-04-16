@@ -22,7 +22,10 @@
       [maxlength]="MAX_CHARACTERS"
       [(ngModel)]="text"
     />
-    <mat-hint class="card-input__hint" align="end"
+    <mat-hint
+      [style.font-size.px]="hintFontSize * zoomFactor"
+      class="card-input__hint"
+      align="end"
       >{{ message.value.length }} / {{ MAX_CHARACTERS }}</mat-hint
     >
   </mat-form-field>

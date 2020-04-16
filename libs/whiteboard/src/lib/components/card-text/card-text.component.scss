@@ -32,10 +32,6 @@
     word-break: break-word;
   }
 
-  &__hint {
-    font-size: 14px;
-  }
-
   &::ng-deep .mat-form-field-underline {
     opacity: 1;
   }

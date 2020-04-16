@@ -8,6 +8,8 @@ import { ModeEnum } from '../../enums/mode.enum';
 })
 export class CardTextComponent {
   readonly defaultFontSize = 30;
+  readonly hintFontSize = 14;
+
   readonly MAX_CHARACTERS = 100;
 
   @Input() mode: ModeEnum;
