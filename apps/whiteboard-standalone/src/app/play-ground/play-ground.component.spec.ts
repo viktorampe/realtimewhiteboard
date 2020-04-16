@@ -1,5 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { AuthService } from '@campus/dal';
+import { WhiteboardModule } from '@campus/whiteboard';
+import { of } from 'rxjs';
+import { WhiteboardConfigService } from '../config.service';
 import { PlayGroundComponent } from './play-ground.component';
 
 describe('PlayGroundComponent', () => {
@@ -8,7 +11,15 @@ describe('PlayGroundComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PlayGroundComponent]
+      imports: [WhiteboardModule],
+      declarations: [PlayGroundComponent],
+      providers: [
+        { provide: AuthService, useValue: { login: () => of({ userId: 1 }) } },
+        {
+          provide: WhiteboardConfigService,
+          useValue: { previewInWrapper: () => {} }
+        }
+      ]
     }).compileComponents();
   }));
 
