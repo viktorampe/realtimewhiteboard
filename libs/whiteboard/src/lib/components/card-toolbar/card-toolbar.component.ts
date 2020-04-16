@@ -65,9 +65,6 @@ export class CardToolbarComponent implements OnInit {
   @Output() clickMultiSelectIcon = new EventEmitter<void>();
   @Output() clickMultiSelectSelectedIcon = new EventEmitter<void>();
 
-  defaultToolWidth = 25;
-  defaultToolHeight = 25;
-
   constructor() {}
 
   get Mode() {
