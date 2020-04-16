@@ -1,4 +1,7 @@
-<div class="description-wrapper">
+<div
+  [style.font-size.px]="defaultFontSize * zoomFactor"
+  class="description-wrapper"
+>
   <p
     [class.inShelf]="mode === Mode.SHELF"
     *ngIf="mode !== Mode.EDIT; else editView"

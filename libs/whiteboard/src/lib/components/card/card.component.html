@@ -29,6 +29,7 @@
           class="card__content__text"
           [(text)]="description"
           (textChange)="updateDescription($event)"
+          [zoomFactor]="zoomFactor"
           [mode]="mode"
         ></campus-card-text>
       </ng-template>
