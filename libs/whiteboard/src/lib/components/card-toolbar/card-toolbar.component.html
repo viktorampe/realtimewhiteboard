@@ -10,7 +10,7 @@
       data-cy="delete-tool"
       class="toolbar__tool toolbar__delete"
       (tap)="deleteIconClicked()"
-      *ngIf="canManage || cardType === CardType.TEACHERCARD"
+      *ngIf="canManage || cardType === CardType.TEACHER"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -22,7 +22,7 @@
       data-cy="return-to-shelf-tool"
       class="toolbar__tool toolbar__delete"
       (tap)="returnToShelfIconClicked()"
-      *ngIf="!inShelf && cardType !== CardType.TEACHERCARD"
+      *ngIf="!inShelf && cardType !== CardType.TEACHER"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"

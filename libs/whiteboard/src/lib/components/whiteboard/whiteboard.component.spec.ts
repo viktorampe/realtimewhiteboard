@@ -649,7 +649,7 @@ describe('WhiteboardComponent', () => {
         const expectedCard = {
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
-          type: CardTypeEnum.PUBLISHERCARD,
+          type: CardTypeEnum.PUBLISHER,
           color: 'red',
           description: '',
           image: null,
@@ -684,7 +684,7 @@ describe('WhiteboardComponent', () => {
         expect(component.cards[0]).toEqual({
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
-          type: CardTypeEnum.TEACHERCARD,
+          type: CardTypeEnum.TEACHER,
           color: 'red',
           description: '',
           image: null,
@@ -776,7 +776,7 @@ describe('WhiteboardComponent', () => {
 
     it('should not remove the card from the shelf - permanent = true, canManage = false, card type = teacher', () => {
       component.canManage = false;
-      cardToBeDeleted.type = CardTypeEnum.PUBLISHERCARD;
+      cardToBeDeleted.type = CardTypeEnum.PUBLISHER;
 
       component.onDeleteCard(cardToBeDeleted, true);
 

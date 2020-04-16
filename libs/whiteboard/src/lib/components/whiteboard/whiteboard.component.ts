@@ -210,9 +210,7 @@ export class WhiteboardComponent implements OnChanges {
     const card: CardInterface = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
-      type: this.canManage
-        ? CardTypeEnum.PUBLISHERCARD
-        : CardTypeEnum.TEACHERCARD,
+      type: this.canManage ? CardTypeEnum.PUBLISHER : CardTypeEnum.TEACHER,
       color: this.lastColor,
       description: '',
       image: null,
@@ -263,7 +261,7 @@ export class WhiteboardComponent implements OnChanges {
     // also remove from shelf
     if (permanent) {
       // a teacher can only remove his own cards
-      if (this.canManage || card.type === CardTypeEnum.TEACHERCARD) {
+      if (this.canManage || card.type === CardTypeEnum.TEACHER) {
         // also remove from shelf
         updates.shelfCards = this.shelfCards.filter(sc => sc.id !== card.id);
       }
