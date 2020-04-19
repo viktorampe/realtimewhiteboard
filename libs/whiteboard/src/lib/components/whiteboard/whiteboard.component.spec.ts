@@ -842,4 +842,32 @@ describe('WhiteboardComponent', () => {
       ]);
     });
   });
+
+  describe('whiteboard toolbar handlers', () => {
+    describe('zoom button', () => {
+      beforeEach(() => {
+        component.zoomFactor = 1;
+      });
+
+      it('increaseZoom() should zoom in', () => {
+        const expectedTicks = [1.2, 1.4, 1.6, 1.8, 2, 2];
+
+        for (let i = 0; i < expectedTicks.length; i++) {
+          component.increaseZoom();
+
+          expect(component.zoomFactor).toBe(expectedTicks[i]);
+        }
+      });
+
+      it('decreaseZoom() should zoom out', () => {
+        const expectedTicks = [0.8, 0.6, 0.4, 0.4];
+
+        for (let i = 0; i < expectedTicks.length; i++) {
+          component.decreaseZoom();
+
+          expect(component.zoomFactor).toBe(expectedTicks[i]);
+        }
+      });
+    });
+  });
 });
