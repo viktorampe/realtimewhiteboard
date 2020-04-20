@@ -10,6 +10,8 @@
   flex-direction: column;
   height: 100%;
 
+  font-family: 'Open Sans', sans-serif;
+
   campus-whiteboard-toolbar {
     position: absolute;
     top: 24px;
@@ -245,47 +247,30 @@
   }
 
   campus-empty-state {
-    width: 600px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -70%);
-  }
+    font-weight: 100;
 
-  &__empty {
-    position: absolute;
-    align-self: center;
+    color: rgba(0, 0, 0, 0.54);
 
-    pointer-events: none;
+    .ui-empty-state__title {
+      font-size: 64px;
+    }
 
-    width: 100%;
+    .ui-empty-state__description {
+      font-size: 20px;
+    }
 
     .ui-empty-state__image {
       width: 300px;
       max-width: 100%;
-      margin: 0;
 
       &.mat-icon {
         width: initial;
         height: initial;
       }
-    }
-
-    .ui-empty-state__title,
-    .ui-empty-state__description {
-      font-family: 'Open Sans', sans-serif;
-      color: rgba(0, 0, 0, 0.54);
-    }
-
-    .ui-empty-state__title {
-      font-size: 64px;
-      margin: 0;
-      font-weight: 100;
-    }
-
-    .ui-empty-state__description {
-      font-size: 20px;
-      font-weight: 100;
     }
   }
 }
