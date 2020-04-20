@@ -589,9 +589,10 @@ export class WhiteboardComponent implements OnChanges {
 
     // non-publisher cards can not be returned to the shelf
     // set to idle (= visual deselection)
-    const nonPublisherCards = this.selectedCards
-      .filter(card => card.type !== CardTypeEnum.PUBLISHER)
-      .map(card => ({ ...card, mode: ModeEnum.IDLE }));
+    const nonPublisherCards = this.selectedCards.filter(
+      card => card.type !== CardTypeEnum.PUBLISHER
+    );
+    nonPublisherCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
 
     // leave non-selected and non-publisher cards in the workspace
     this.updateWhiteboard({
