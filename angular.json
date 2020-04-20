@@ -1461,7 +1461,7 @@
               "apps/realtime-whiteboard/src/assets"
             ],
             "styles": ["apps/realtime-whiteboard/src/styles.scss"],
-            "scripts": []
+            "scripts": ["node_modules/hammerjs/hammer.min.js"]
           },
           "configurations": {
             "production": {
