@@ -1,14 +1,26 @@
+:host {
+  font-family: 'Open Sans', sans-serif;
+  color: #242424;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .card-text {
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 30px;
-  line-height: 41px;
-  color: #242424;
   word-break: break-word;
 
   &.inShelf {
     font-size: 10px;
   }
+}
+
+.description-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  padding: 10px;
 }
 
 .card-input {
@@ -17,10 +29,6 @@
 
   &__input {
     text-align: center;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 30px;
-    line-height: 41px;
-    color: #242424;
     word-break: break-word;
   }
 

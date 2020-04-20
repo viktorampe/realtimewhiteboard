@@ -56,9 +56,11 @@ import { ModeEnum } from '../../enums/mode.enum';
   ]
 })
 export class ColorListComponent implements OnInit {
+  @Output() selectedColor = new EventEmitter<string>();
+
+  @Input() zoomFactor: number;
   @Input() activeColor: string;
   @Input() mode: ModeEnum;
-  @Output() selectedColor = new EventEmitter<string>();
 
   colorOptions: { colorName: string; hexCode: string }[] = [
     { colorName: 'blue', hexCode: '#00A7E2' },
@@ -67,6 +69,7 @@ export class ColorListComponent implements OnInit {
     { colorName: 'purple', hexCode: '#5D3284' },
     { colorName: 'yellow', hexCode: '#FADB48' }
   ];
+
   constructor() {}
 
   ngOnInit() {}
