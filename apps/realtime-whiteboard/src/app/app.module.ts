@@ -1,14 +1,23 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { WhiteboardModule } from '@campus/whiteboard';
+import { AppComponent } from './app.component';
+import { RealtimeComponent } from './components/realtime/realtime.component';
+import { SetupComponent } from './components/setup/setup.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SetupComponent, RealtimeComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabled' })
+    WhiteboardModule,
+    RouterModule.forRoot(
+      [
+        { path: '', component: SetupComponent },
+        { path: 'session', component: RealtimeComponent }
+      ],
+      { initialNavigation: 'enabled' }
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]
