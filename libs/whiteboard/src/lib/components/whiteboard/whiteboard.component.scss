@@ -49,7 +49,7 @@
 
       &.zoom {
         position: fixed;
-        z-index: 3; // make sure this is the highest of all classes
+        z-index: 3; // make sure this is the highest of all z-indexes (z-index of shelf and buttons should be lower)
 
         transform: translate3d(0, 0, 0) !important;
 
