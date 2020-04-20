@@ -1,193 +1,115 @@
 # this is an auto generated file. This will be overwritten
-mutation CreateBlog(
-  $input: CreateBlogInput!
-  $condition: ModelBlogConditionInput
+mutation CreateSession(
+  $input: CreateSessionInput!
+  $condition: ModelSessionConditionInput
 ) {
-  createBlog(input: $input, condition: $condition) {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        blogID
-      }
-      nextToken
-    }
-  }
-}
-mutation UpdateBlog(
-  $input: UpdateBlogInput!
-  $condition: ModelBlogConditionInput
-) {
-  updateBlog(input: $input, condition: $condition) {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        blogID
-      }
-      nextToken
-    }
-  }
-}
-mutation DeleteBlog(
-  $input: DeleteBlogInput!
-  $condition: ModelBlogConditionInput
-) {
-  deleteBlog(input: $input, condition: $condition) {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        blogID
-      }
-      nextToken
-    }
-  }
-}
-mutation CreatePost(
-  $input: CreatePostInput!
-  $condition: ModelPostConditionInput
-) {
-  createPost(input: $input, condition: $condition) {
+  createSession(input: $input, condition: $condition) {
     id
     title
-    blogID
-    blog {
-      id
-      name
-      posts {
-        nextToken
-      }
-    }
-    comments {
+    pincode
+    whiteboard
+    players {
       items {
         id
-        postID
-        content
+        sessionID
+        fullName
       }
       nextToken
     }
   }
 }
-mutation UpdatePost(
-  $input: UpdatePostInput!
-  $condition: ModelPostConditionInput
+mutation UpdateSession(
+  $input: UpdateSessionInput!
+  $condition: ModelSessionConditionInput
 ) {
-  updatePost(input: $input, condition: $condition) {
+  updateSession(input: $input, condition: $condition) {
     id
     title
-    blogID
-    blog {
-      id
-      name
-      posts {
-        nextToken
-      }
-    }
-    comments {
+    pincode
+    whiteboard
+    players {
       items {
         id
-        postID
-        content
+        sessionID
+        fullName
       }
       nextToken
     }
   }
 }
-mutation DeletePost(
-  $input: DeletePostInput!
-  $condition: ModelPostConditionInput
+mutation DeleteSession(
+  $input: DeleteSessionInput!
+  $condition: ModelSessionConditionInput
 ) {
-  deletePost(input: $input, condition: $condition) {
+  deleteSession(input: $input, condition: $condition) {
     id
     title
-    blogID
-    blog {
-      id
-      name
-      posts {
-        nextToken
-      }
-    }
-    comments {
+    pincode
+    whiteboard
+    players {
       items {
         id
-        postID
-        content
+        sessionID
+        fullName
       }
       nextToken
     }
   }
 }
-mutation CreateComment(
-  $input: CreateCommentInput!
-  $condition: ModelCommentConditionInput
+mutation CreatePlayer(
+  $input: CreatePlayerInput!
+  $condition: ModelPlayerConditionInput
 ) {
-  createComment(input: $input, condition: $condition) {
+  createPlayer(input: $input, condition: $condition) {
     id
-    postID
-    post {
+    sessionID
+    session {
       id
       title
-      blogID
-      blog {
-        id
-        name
-      }
-      comments {
+      pincode
+      whiteboard
+      players {
         nextToken
       }
     }
-    content
+    fullName
   }
 }
-mutation UpdateComment(
-  $input: UpdateCommentInput!
-  $condition: ModelCommentConditionInput
+mutation UpdatePlayer(
+  $input: UpdatePlayerInput!
+  $condition: ModelPlayerConditionInput
 ) {
-  updateComment(input: $input, condition: $condition) {
+  updatePlayer(input: $input, condition: $condition) {
     id
-    postID
-    post {
+    sessionID
+    session {
       id
       title
-      blogID
-      blog {
-        id
-        name
-      }
-      comments {
+      pincode
+      whiteboard
+      players {
         nextToken
       }
     }
-    content
+    fullName
   }
 }
-mutation DeleteComment(
-  $input: DeleteCommentInput!
-  $condition: ModelCommentConditionInput
+mutation DeletePlayer(
+  $input: DeletePlayerInput!
+  $condition: ModelPlayerConditionInput
 ) {
-  deleteComment(input: $input, condition: $condition) {
+  deletePlayer(input: $input, condition: $condition) {
     id
-    postID
-    post {
+    sessionID
+    session {
       id
       title
-      blogID
-      blog {
-        id
-        name
-      }
-      comments {
+      pincode
+      whiteboard
+      players {
         nextToken
       }
     }
-    content
+    fullName
   }
 }
