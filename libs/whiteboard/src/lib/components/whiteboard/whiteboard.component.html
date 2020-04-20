@@ -123,6 +123,7 @@
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       (deleteCard)="onDeleteCard($event, true)"
+      (addClick)="btnPlusClicked()"
       [class.minimizedShelf]="isShelfMinimized"
       [cards]="shelfCards"
       [(isMinimized)]="isShelfMinimized"
