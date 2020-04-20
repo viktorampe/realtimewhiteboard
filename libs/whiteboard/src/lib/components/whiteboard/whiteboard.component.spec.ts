@@ -517,6 +517,15 @@ describe('WhiteboardComponent', () => {
           selectedCards.length
         );
 
+        for (let i = 0; i < selectedCards.length; i++) {
+          const card = selectedCards[i];
+          expect(component.onDeleteCard).toHaveBeenNthCalledWith(
+            i + 1,
+            card,
+            true
+          );
+        }
+
         expect(component.selectedCards).toStrictEqual([]);
       });
 
