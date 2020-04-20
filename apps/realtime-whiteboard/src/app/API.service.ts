@@ -6,16 +6,20 @@ import API, { graphqlOperation } from "@aws-amplify/api";
 import { GraphQLResult } from "@aws-amplify/api/lib/types";
 import * as Observable from "zen-observable";
 
-export type CreateBlogInput = {
+export type CreateSessionInput = {
   id?: string | null;
-  name: string;
+  title: string;
+  pincode: number;
+  whiteboard: string;
 };
 
-export type ModelBlogConditionInput = {
-  name?: ModelStringInput | null;
-  and?: Array<ModelBlogConditionInput | null> | null;
-  or?: Array<ModelBlogConditionInput | null> | null;
-  not?: ModelBlogConditionInput | null;
+export type ModelSessionConditionInput = {
+  title?: ModelStringInput | null;
+  pincode?: ModelIntInput | null;
+  whiteboard?: ModelStringInput | null;
+  and?: Array<ModelSessionConditionInput | null> | null;
+  or?: Array<ModelSessionConditionInput | null> | null;
+  not?: ModelSessionConditionInput | null;
 };
 
 export type ModelStringInput = {
@@ -57,27 +61,41 @@ export type ModelSizeInput = {
   between?: Array<number | null> | null;
 };
 
-export type UpdateBlogInput = {
+export type ModelIntInput = {
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+};
+
+export type UpdateSessionInput = {
   id: string;
-  name?: string | null;
+  title?: string | null;
+  pincode?: number | null;
+  whiteboard?: string | null;
 };
 
-export type DeleteBlogInput = {
+export type DeleteSessionInput = {
   id?: string | null;
 };
 
-export type CreatePostInput = {
+export type CreatePlayerInput = {
   id?: string | null;
-  title: string;
-  blogID: string;
+  sessionID: string;
+  fullName: string;
 };
 
-export type ModelPostConditionInput = {
-  title?: ModelStringInput | null;
-  blogID?: ModelIDInput | null;
-  and?: Array<ModelPostConditionInput | null> | null;
-  or?: Array<ModelPostConditionInput | null> | null;
-  not?: ModelPostConditionInput | null;
+export type ModelPlayerConditionInput = {
+  sessionID?: ModelIDInput | null;
+  fullName?: ModelStringInput | null;
+  and?: Array<ModelPlayerConditionInput | null> | null;
+  or?: Array<ModelPlayerConditionInput | null> | null;
+  not?: ModelPlayerConditionInput | null;
 };
 
 export type ModelIDInput = {
@@ -96,691 +114,343 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null;
 };
 
-export type UpdatePostInput = {
+export type UpdatePlayerInput = {
   id: string;
-  title?: string | null;
-  blogID?: string | null;
+  sessionID?: string | null;
+  fullName?: string | null;
 };
 
-export type DeletePostInput = {
+export type DeletePlayerInput = {
   id?: string | null;
 };
 
-export type CreateCommentInput = {
-  id?: string | null;
-  postID: string;
-  content: string;
-};
-
-export type ModelCommentConditionInput = {
-  postID?: ModelIDInput | null;
-  content?: ModelStringInput | null;
-  and?: Array<ModelCommentConditionInput | null> | null;
-  or?: Array<ModelCommentConditionInput | null> | null;
-  not?: ModelCommentConditionInput | null;
-};
-
-export type UpdateCommentInput = {
-  id: string;
-  postID?: string | null;
-  content?: string | null;
-};
-
-export type DeleteCommentInput = {
-  id?: string | null;
-};
-
-export type ModelBlogFilterInput = {
-  id?: ModelIDInput | null;
-  name?: ModelStringInput | null;
-  and?: Array<ModelBlogFilterInput | null> | null;
-  or?: Array<ModelBlogFilterInput | null> | null;
-  not?: ModelBlogFilterInput | null;
-};
-
-export type ModelPostFilterInput = {
+export type ModelSessionFilterInput = {
   id?: ModelIDInput | null;
   title?: ModelStringInput | null;
-  blogID?: ModelIDInput | null;
-  and?: Array<ModelPostFilterInput | null> | null;
-  or?: Array<ModelPostFilterInput | null> | null;
-  not?: ModelPostFilterInput | null;
+  pincode?: ModelIntInput | null;
+  whiteboard?: ModelStringInput | null;
+  and?: Array<ModelSessionFilterInput | null> | null;
+  or?: Array<ModelSessionFilterInput | null> | null;
+  not?: ModelSessionFilterInput | null;
 };
 
-export type ModelCommentFilterInput = {
+export type ModelPlayerFilterInput = {
   id?: ModelIDInput | null;
-  postID?: ModelIDInput | null;
-  content?: ModelStringInput | null;
-  and?: Array<ModelCommentFilterInput | null> | null;
-  or?: Array<ModelCommentFilterInput | null> | null;
-  not?: ModelCommentFilterInput | null;
+  sessionID?: ModelIDInput | null;
+  fullName?: ModelStringInput | null;
+  and?: Array<ModelPlayerFilterInput | null> | null;
+  or?: Array<ModelPlayerFilterInput | null> | null;
+  not?: ModelPlayerFilterInput | null;
 };
 
-export type CreateBlogMutation = {
-  __typename: "Blog";
-  id: string;
-  name: string;
-  posts: {
-    __typename: "ModelPostConnection";
-    items: Array<{
-      __typename: "Post";
-      id: string;
-      title: string;
-      blogID: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-};
-
-export type UpdateBlogMutation = {
-  __typename: "Blog";
-  id: string;
-  name: string;
-  posts: {
-    __typename: "ModelPostConnection";
-    items: Array<{
-      __typename: "Post";
-      id: string;
-      title: string;
-      blogID: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-};
-
-export type DeleteBlogMutation = {
-  __typename: "Blog";
-  id: string;
-  name: string;
-  posts: {
-    __typename: "ModelPostConnection";
-    items: Array<{
-      __typename: "Post";
-      id: string;
-      title: string;
-      blogID: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-};
-
-export type CreatePostMutation = {
-  __typename: "Post";
+export type CreateSessionMutation = {
+  __typename: "Session";
   id: string;
   title: string;
-  blogID: string;
-  blog: {
-    __typename: "Blog";
-    id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  comments: {
-    __typename: "ModelCommentConnection";
+  pincode: number;
+  whiteboard: string;
+  players: {
+    __typename: "ModelPlayerConnection";
     items: Array<{
-      __typename: "Comment";
+      __typename: "Player";
       id: string;
-      postID: string;
-      content: string;
+      sessionID: string;
+      fullName: string;
     } | null> | null;
     nextToken: string | null;
   } | null;
 };
 
-export type UpdatePostMutation = {
-  __typename: "Post";
+export type UpdateSessionMutation = {
+  __typename: "Session";
   id: string;
   title: string;
-  blogID: string;
-  blog: {
-    __typename: "Blog";
-    id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  comments: {
-    __typename: "ModelCommentConnection";
+  pincode: number;
+  whiteboard: string;
+  players: {
+    __typename: "ModelPlayerConnection";
     items: Array<{
-      __typename: "Comment";
+      __typename: "Player";
       id: string;
-      postID: string;
-      content: string;
+      sessionID: string;
+      fullName: string;
     } | null> | null;
     nextToken: string | null;
   } | null;
 };
 
-export type DeletePostMutation = {
-  __typename: "Post";
+export type DeleteSessionMutation = {
+  __typename: "Session";
   id: string;
   title: string;
-  blogID: string;
-  blog: {
-    __typename: "Blog";
-    id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  comments: {
-    __typename: "ModelCommentConnection";
+  pincode: number;
+  whiteboard: string;
+  players: {
+    __typename: "ModelPlayerConnection";
     items: Array<{
-      __typename: "Comment";
+      __typename: "Player";
       id: string;
-      postID: string;
-      content: string;
+      sessionID: string;
+      fullName: string;
     } | null> | null;
     nextToken: string | null;
   } | null;
 };
 
-export type CreateCommentMutation = {
-  __typename: "Comment";
+export type CreatePlayerMutation = {
+  __typename: "Player";
   id: string;
-  postID: string;
-  post: {
-    __typename: "Post";
+  sessionID: string;
+  session: {
+    __typename: "Session";
     id: string;
     title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
   } | null;
-  content: string;
+  fullName: string;
 };
 
-export type UpdateCommentMutation = {
-  __typename: "Comment";
+export type UpdatePlayerMutation = {
+  __typename: "Player";
   id: string;
-  postID: string;
-  post: {
-    __typename: "Post";
+  sessionID: string;
+  session: {
+    __typename: "Session";
     id: string;
     title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
   } | null;
-  content: string;
+  fullName: string;
 };
 
-export type DeleteCommentMutation = {
-  __typename: "Comment";
+export type DeletePlayerMutation = {
+  __typename: "Player";
   id: string;
-  postID: string;
-  post: {
-    __typename: "Post";
+  sessionID: string;
+  session: {
+    __typename: "Session";
     id: string;
     title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
   } | null;
-  content: string;
+  fullName: string;
 };
 
-export type GetBlogQuery = {
-  __typename: "Blog";
+export type GetSessionQuery = {
+  __typename: "Session";
   id: string;
-  name: string;
-  posts: {
-    __typename: "ModelPostConnection";
+  title: string;
+  pincode: number;
+  whiteboard: string;
+  players: {
+    __typename: "ModelPlayerConnection";
     items: Array<{
-      __typename: "Post";
+      __typename: "Player";
       id: string;
-      title: string;
-      blogID: string;
+      sessionID: string;
+      fullName: string;
     } | null> | null;
     nextToken: string | null;
   } | null;
 };
 
-export type ListBlogsQuery = {
-  __typename: "ModelBlogConnection";
+export type ListSessionsQuery = {
+  __typename: "ModelSessionConnection";
   items: Array<{
-    __typename: "Blog";
+    __typename: "Session";
     id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
+    title: string;
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
   } | null> | null;
   nextToken: string | null;
 };
 
-export type GetPostQuery = {
-  __typename: "Post";
+export type GetPlayerQuery = {
+  __typename: "Player";
   id: string;
-  title: string;
-  blogID: string;
-  blog: {
-    __typename: "Blog";
-    id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  comments: {
-    __typename: "ModelCommentConnection";
-    items: Array<{
-      __typename: "Comment";
-      id: string;
-      postID: string;
-      content: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-};
-
-export type ListPostsQuery = {
-  __typename: "ModelPostConnection";
-  items: Array<{
-    __typename: "Post";
+  sessionID: string;
+  session: {
+    __typename: "Session";
     id: string;
     title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
+  } | null;
+  fullName: string;
+};
+
+export type ListPlayersQuery = {
+  __typename: "ModelPlayerConnection";
+  items: Array<{
+    __typename: "Player";
+    id: string;
+    sessionID: string;
+    session: {
+      __typename: "Session";
+      id: string;
+      title: string;
+      pincode: number;
+      whiteboard: string;
+    } | null;
+    fullName: string;
   } | null> | null;
   nextToken: string | null;
 };
 
-export type GetCommentQuery = {
-  __typename: "Comment";
-  id: string;
-  postID: string;
-  post: {
-    __typename: "Post";
-    id: string;
-    title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  content: string;
-};
-
-export type ListCommentsQuery = {
-  __typename: "ModelCommentConnection";
-  items: Array<{
-    __typename: "Comment";
-    id: string;
-    postID: string;
-    post: {
-      __typename: "Post";
-      id: string;
-      title: string;
-      blogID: string;
-    } | null;
-    content: string;
-  } | null> | null;
-  nextToken: string | null;
-};
-
-export type OnCreateBlogSubscription = {
-  __typename: "Blog";
-  id: string;
-  name: string;
-  posts: {
-    __typename: "ModelPostConnection";
-    items: Array<{
-      __typename: "Post";
-      id: string;
-      title: string;
-      blogID: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-};
-
-export type OnUpdateBlogSubscription = {
-  __typename: "Blog";
-  id: string;
-  name: string;
-  posts: {
-    __typename: "ModelPostConnection";
-    items: Array<{
-      __typename: "Post";
-      id: string;
-      title: string;
-      blogID: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-};
-
-export type OnDeleteBlogSubscription = {
-  __typename: "Blog";
-  id: string;
-  name: string;
-  posts: {
-    __typename: "ModelPostConnection";
-    items: Array<{
-      __typename: "Post";
-      id: string;
-      title: string;
-      blogID: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-};
-
-export type OnCreatePostSubscription = {
-  __typename: "Post";
+export type OnCreateSessionSubscription = {
+  __typename: "Session";
   id: string;
   title: string;
-  blogID: string;
-  blog: {
-    __typename: "Blog";
-    id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  comments: {
-    __typename: "ModelCommentConnection";
+  pincode: number;
+  whiteboard: string;
+  players: {
+    __typename: "ModelPlayerConnection";
     items: Array<{
-      __typename: "Comment";
+      __typename: "Player";
       id: string;
-      postID: string;
-      content: string;
+      sessionID: string;
+      fullName: string;
     } | null> | null;
     nextToken: string | null;
   } | null;
 };
 
-export type OnUpdatePostSubscription = {
-  __typename: "Post";
+export type OnUpdateSessionSubscription = {
+  __typename: "Session";
   id: string;
   title: string;
-  blogID: string;
-  blog: {
-    __typename: "Blog";
-    id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  comments: {
-    __typename: "ModelCommentConnection";
+  pincode: number;
+  whiteboard: string;
+  players: {
+    __typename: "ModelPlayerConnection";
     items: Array<{
-      __typename: "Comment";
+      __typename: "Player";
       id: string;
-      postID: string;
-      content: string;
+      sessionID: string;
+      fullName: string;
     } | null> | null;
     nextToken: string | null;
   } | null;
 };
 
-export type OnDeletePostSubscription = {
-  __typename: "Post";
+export type OnDeleteSessionSubscription = {
+  __typename: "Session";
   id: string;
   title: string;
-  blogID: string;
-  blog: {
-    __typename: "Blog";
-    id: string;
-    name: string;
-    posts: {
-      __typename: "ModelPostConnection";
-      nextToken: string | null;
-    } | null;
-  } | null;
-  comments: {
-    __typename: "ModelCommentConnection";
+  pincode: number;
+  whiteboard: string;
+  players: {
+    __typename: "ModelPlayerConnection";
     items: Array<{
-      __typename: "Comment";
+      __typename: "Player";
       id: string;
-      postID: string;
-      content: string;
+      sessionID: string;
+      fullName: string;
     } | null> | null;
     nextToken: string | null;
   } | null;
 };
 
-export type OnCreateCommentSubscription = {
-  __typename: "Comment";
+export type OnCreatePlayerSubscription = {
+  __typename: "Player";
   id: string;
-  postID: string;
-  post: {
-    __typename: "Post";
+  sessionID: string;
+  session: {
+    __typename: "Session";
     id: string;
     title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
   } | null;
-  content: string;
+  fullName: string;
 };
 
-export type OnUpdateCommentSubscription = {
-  __typename: "Comment";
+export type OnUpdatePlayerSubscription = {
+  __typename: "Player";
   id: string;
-  postID: string;
-  post: {
-    __typename: "Post";
+  sessionID: string;
+  session: {
+    __typename: "Session";
     id: string;
     title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
   } | null;
-  content: string;
+  fullName: string;
 };
 
-export type OnDeleteCommentSubscription = {
-  __typename: "Comment";
+export type OnDeletePlayerSubscription = {
+  __typename: "Player";
   id: string;
-  postID: string;
-  post: {
-    __typename: "Post";
+  sessionID: string;
+  session: {
+    __typename: "Session";
     id: string;
     title: string;
-    blogID: string;
-    blog: {
-      __typename: "Blog";
-      id: string;
-      name: string;
-    } | null;
-    comments: {
-      __typename: "ModelCommentConnection";
+    pincode: number;
+    whiteboard: string;
+    players: {
+      __typename: "ModelPlayerConnection";
       nextToken: string | null;
     } | null;
   } | null;
-  content: string;
+  fullName: string;
 };
 
 @Injectable({
   providedIn: "root"
 })
 export class APIService {
-  async CreateBlog(
-    input: CreateBlogInput,
-    condition?: ModelBlogConditionInput
-  ): Promise<CreateBlogMutation> {
-    const statement = `mutation CreateBlog($input: CreateBlogInput!, $condition: ModelBlogConditionInput) {
-        createBlog(input: $input, condition: $condition) {
-          __typename
-          id
-          name
-          posts {
-            __typename
-            items {
-              __typename
-              id
-              title
-              blogID
-            }
-            nextToken
-          }
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <CreateBlogMutation>response.data.createBlog;
-  }
-  async UpdateBlog(
-    input: UpdateBlogInput,
-    condition?: ModelBlogConditionInput
-  ): Promise<UpdateBlogMutation> {
-    const statement = `mutation UpdateBlog($input: UpdateBlogInput!, $condition: ModelBlogConditionInput) {
-        updateBlog(input: $input, condition: $condition) {
-          __typename
-          id
-          name
-          posts {
-            __typename
-            items {
-              __typename
-              id
-              title
-              blogID
-            }
-            nextToken
-          }
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <UpdateBlogMutation>response.data.updateBlog;
-  }
-  async DeleteBlog(
-    input: DeleteBlogInput,
-    condition?: ModelBlogConditionInput
-  ): Promise<DeleteBlogMutation> {
-    const statement = `mutation DeleteBlog($input: DeleteBlogInput!, $condition: ModelBlogConditionInput) {
-        deleteBlog(input: $input, condition: $condition) {
-          __typename
-          id
-          name
-          posts {
-            __typename
-            items {
-              __typename
-              id
-              title
-              blogID
-            }
-            nextToken
-          }
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <DeleteBlogMutation>response.data.deleteBlog;
-  }
-  async CreatePost(
-    input: CreatePostInput,
-    condition?: ModelPostConditionInput
-  ): Promise<CreatePostMutation> {
-    const statement = `mutation CreatePost($input: CreatePostInput!, $condition: ModelPostConditionInput) {
-        createPost(input: $input, condition: $condition) {
+  async CreateSession(
+    input: CreateSessionInput,
+    condition?: ModelSessionConditionInput
+  ): Promise<CreateSessionMutation> {
+    const statement = `mutation CreateSession($input: CreateSessionInput!, $condition: ModelSessionConditionInput) {
+        createSession(input: $input, condition: $condition) {
           __typename
           id
           title
-          blogID
-          blog {
-            __typename
-            id
-            name
-            posts {
-              __typename
-              nextToken
-            }
-          }
-          comments {
+          pincode
+          whiteboard
+          players {
             __typename
             items {
               __typename
               id
-              postID
-              content
+              sessionID
+              fullName
             }
             nextToken
           }
@@ -795,34 +465,26 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <CreatePostMutation>response.data.createPost;
+    return <CreateSessionMutation>response.data.createSession;
   }
-  async UpdatePost(
-    input: UpdatePostInput,
-    condition?: ModelPostConditionInput
-  ): Promise<UpdatePostMutation> {
-    const statement = `mutation UpdatePost($input: UpdatePostInput!, $condition: ModelPostConditionInput) {
-        updatePost(input: $input, condition: $condition) {
+  async UpdateSession(
+    input: UpdateSessionInput,
+    condition?: ModelSessionConditionInput
+  ): Promise<UpdateSessionMutation> {
+    const statement = `mutation UpdateSession($input: UpdateSessionInput!, $condition: ModelSessionConditionInput) {
+        updateSession(input: $input, condition: $condition) {
           __typename
           id
           title
-          blogID
-          blog {
-            __typename
-            id
-            name
-            posts {
-              __typename
-              nextToken
-            }
-          }
-          comments {
+          pincode
+          whiteboard
+          players {
             __typename
             items {
               __typename
               id
-              postID
-              content
+              sessionID
+              fullName
             }
             nextToken
           }
@@ -837,34 +499,26 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <UpdatePostMutation>response.data.updatePost;
+    return <UpdateSessionMutation>response.data.updateSession;
   }
-  async DeletePost(
-    input: DeletePostInput,
-    condition?: ModelPostConditionInput
-  ): Promise<DeletePostMutation> {
-    const statement = `mutation DeletePost($input: DeletePostInput!, $condition: ModelPostConditionInput) {
-        deletePost(input: $input, condition: $condition) {
+  async DeleteSession(
+    input: DeleteSessionInput,
+    condition?: ModelSessionConditionInput
+  ): Promise<DeleteSessionMutation> {
+    const statement = `mutation DeleteSession($input: DeleteSessionInput!, $condition: ModelSessionConditionInput) {
+        deleteSession(input: $input, condition: $condition) {
           __typename
           id
           title
-          blogID
-          blog {
-            __typename
-            id
-            name
-            posts {
-              __typename
-              nextToken
-            }
-          }
-          comments {
+          pincode
+          whiteboard
+          players {
             __typename
             items {
               __typename
               id
-              postID
-              content
+              sessionID
+              fullName
             }
             nextToken
           }
@@ -879,33 +533,29 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <DeletePostMutation>response.data.deletePost;
+    return <DeleteSessionMutation>response.data.deleteSession;
   }
-  async CreateComment(
-    input: CreateCommentInput,
-    condition?: ModelCommentConditionInput
-  ): Promise<CreateCommentMutation> {
-    const statement = `mutation CreateComment($input: CreateCommentInput!, $condition: ModelCommentConditionInput) {
-        createComment(input: $input, condition: $condition) {
+  async CreatePlayer(
+    input: CreatePlayerInput,
+    condition?: ModelPlayerConditionInput
+  ): Promise<CreatePlayerMutation> {
+    const statement = `mutation CreatePlayer($input: CreatePlayerInput!, $condition: ModelPlayerConditionInput) {
+        createPlayer(input: $input, condition: $condition) {
           __typename
           id
-          postID
-          post {
+          sessionID
+          session {
             __typename
             id
             title
-            blogID
-            blog {
-              __typename
-              id
-              name
-            }
-            comments {
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
           }
-          content
+          fullName
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -917,33 +567,29 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <CreateCommentMutation>response.data.createComment;
+    return <CreatePlayerMutation>response.data.createPlayer;
   }
-  async UpdateComment(
-    input: UpdateCommentInput,
-    condition?: ModelCommentConditionInput
-  ): Promise<UpdateCommentMutation> {
-    const statement = `mutation UpdateComment($input: UpdateCommentInput!, $condition: ModelCommentConditionInput) {
-        updateComment(input: $input, condition: $condition) {
+  async UpdatePlayer(
+    input: UpdatePlayerInput,
+    condition?: ModelPlayerConditionInput
+  ): Promise<UpdatePlayerMutation> {
+    const statement = `mutation UpdatePlayer($input: UpdatePlayerInput!, $condition: ModelPlayerConditionInput) {
+        updatePlayer(input: $input, condition: $condition) {
           __typename
           id
-          postID
-          post {
+          sessionID
+          session {
             __typename
             id
             title
-            blogID
-            blog {
-              __typename
-              id
-              name
-            }
-            comments {
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
           }
-          content
+          fullName
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -955,33 +601,29 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <UpdateCommentMutation>response.data.updateComment;
+    return <UpdatePlayerMutation>response.data.updatePlayer;
   }
-  async DeleteComment(
-    input: DeleteCommentInput,
-    condition?: ModelCommentConditionInput
-  ): Promise<DeleteCommentMutation> {
-    const statement = `mutation DeleteComment($input: DeleteCommentInput!, $condition: ModelCommentConditionInput) {
-        deleteComment(input: $input, condition: $condition) {
+  async DeletePlayer(
+    input: DeletePlayerInput,
+    condition?: ModelPlayerConditionInput
+  ): Promise<DeletePlayerMutation> {
+    const statement = `mutation DeletePlayer($input: DeletePlayerInput!, $condition: ModelPlayerConditionInput) {
+        deletePlayer(input: $input, condition: $condition) {
           __typename
           id
-          postID
-          post {
+          sessionID
+          session {
             __typename
             id
             title
-            blogID
-            blog {
-              __typename
-              id
-              name
-            }
-            comments {
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
           }
-          content
+          fullName
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -993,21 +635,23 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <DeleteCommentMutation>response.data.deleteComment;
+    return <DeletePlayerMutation>response.data.deletePlayer;
   }
-  async GetBlog(id: string): Promise<GetBlogQuery> {
-    const statement = `query GetBlog($id: ID!) {
-        getBlog(id: $id) {
+  async GetSession(id: string): Promise<GetSessionQuery> {
+    const statement = `query GetSession($id: ID!) {
+        getSession(id: $id) {
           __typename
           id
-          name
-          posts {
+          title
+          pincode
+          whiteboard
+          players {
             __typename
             items {
               __typename
               id
-              title
-              blogID
+              sessionID
+              fullName
             }
             nextToken
           }
@@ -1019,21 +663,23 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <GetBlogQuery>response.data.getBlog;
+    return <GetSessionQuery>response.data.getSession;
   }
-  async ListBlogs(
-    filter?: ModelBlogFilterInput,
+  async ListSessions(
+    filter?: ModelSessionFilterInput,
     limit?: number,
     nextToken?: string
-  ): Promise<ListBlogsQuery> {
-    const statement = `query ListBlogs($filter: ModelBlogFilterInput, $limit: Int, $nextToken: String) {
-        listBlogs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  ): Promise<ListSessionsQuery> {
+    const statement = `query ListSessions($filter: ModelSessionFilterInput, $limit: Int, $nextToken: String) {
+        listSessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
           __typename
           items {
             __typename
             id
-            name
-            posts {
+            title
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
@@ -1054,34 +700,26 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <ListBlogsQuery>response.data.listBlogs;
+    return <ListSessionsQuery>response.data.listSessions;
   }
-  async GetPost(id: string): Promise<GetPostQuery> {
-    const statement = `query GetPost($id: ID!) {
-        getPost(id: $id) {
+  async GetPlayer(id: string): Promise<GetPlayerQuery> {
+    const statement = `query GetPlayer($id: ID!) {
+        getPlayer(id: $id) {
           __typename
           id
-          title
-          blogID
-          blog {
+          sessionID
+          session {
             __typename
             id
-            name
-            posts {
+            title
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
           }
-          comments {
-            __typename
-            items {
-              __typename
-              id
-              postID
-              content
-            }
-            nextToken
-          }
+          fullName
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -1090,30 +728,28 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <GetPostQuery>response.data.getPost;
+    return <GetPlayerQuery>response.data.getPlayer;
   }
-  async ListPosts(
-    filter?: ModelPostFilterInput,
+  async ListPlayers(
+    filter?: ModelPlayerFilterInput,
     limit?: number,
     nextToken?: string
-  ): Promise<ListPostsQuery> {
-    const statement = `query ListPosts($filter: ModelPostFilterInput, $limit: Int, $nextToken: String) {
-        listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  ): Promise<ListPlayersQuery> {
+    const statement = `query ListPlayers($filter: ModelPlayerFilterInput, $limit: Int, $nextToken: String) {
+        listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
           __typename
           items {
             __typename
             id
-            title
-            blogID
-            blog {
+            sessionID
+            session {
               __typename
               id
-              name
+              title
+              pincode
+              whiteboard
             }
-            comments {
-              __typename
-              nextToken
-            }
+            fullName
           }
           nextToken
         }
@@ -1131,327 +767,155 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <ListPostsQuery>response.data.listPosts;
+    return <ListPlayersQuery>response.data.listPlayers;
   }
-  async GetComment(id: string): Promise<GetCommentQuery> {
-    const statement = `query GetComment($id: ID!) {
-        getComment(id: $id) {
-          __typename
-          id
-          postID
-          post {
-            __typename
-            id
-            title
-            blogID
-            blog {
-              __typename
-              id
-              name
-            }
-            comments {
-              __typename
-              nextToken
-            }
-          }
-          content
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      id
-    };
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <GetCommentQuery>response.data.getComment;
-  }
-  async ListComments(
-    filter?: ModelCommentFilterInput,
-    limit?: number,
-    nextToken?: string
-  ): Promise<ListCommentsQuery> {
-    const statement = `query ListComments($filter: ModelCommentFilterInput, $limit: Int, $nextToken: String) {
-        listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
-          __typename
-          items {
-            __typename
-            id
-            postID
-            post {
-              __typename
-              id
-              title
-              blogID
-            }
-            content
-          }
-          nextToken
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {};
-    if (filter) {
-      gqlAPIServiceArguments.filter = filter;
-    }
-    if (limit) {
-      gqlAPIServiceArguments.limit = limit;
-    }
-    if (nextToken) {
-      gqlAPIServiceArguments.nextToken = nextToken;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <ListCommentsQuery>response.data.listComments;
-  }
-  OnCreateBlogListener: Observable<OnCreateBlogSubscription> = API.graphql(
+  OnCreateSessionListener: Observable<
+    OnCreateSessionSubscription
+  > = API.graphql(
     graphqlOperation(
-      `subscription OnCreateBlog {
-        onCreateBlog {
-          __typename
-          id
-          name
-          posts {
-            __typename
-            items {
-              __typename
-              id
-              title
-              blogID
-            }
-            nextToken
-          }
-        }
-      }`
-    )
-  ) as Observable<OnCreateBlogSubscription>;
-
-  OnUpdateBlogListener: Observable<OnUpdateBlogSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnUpdateBlog {
-        onUpdateBlog {
-          __typename
-          id
-          name
-          posts {
-            __typename
-            items {
-              __typename
-              id
-              title
-              blogID
-            }
-            nextToken
-          }
-        }
-      }`
-    )
-  ) as Observable<OnUpdateBlogSubscription>;
-
-  OnDeleteBlogListener: Observable<OnDeleteBlogSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnDeleteBlog {
-        onDeleteBlog {
-          __typename
-          id
-          name
-          posts {
-            __typename
-            items {
-              __typename
-              id
-              title
-              blogID
-            }
-            nextToken
-          }
-        }
-      }`
-    )
-  ) as Observable<OnDeleteBlogSubscription>;
-
-  OnCreatePostListener: Observable<OnCreatePostSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnCreatePost {
-        onCreatePost {
+      `subscription OnCreateSession {
+        onCreateSession {
           __typename
           id
           title
-          blogID
-          blog {
-            __typename
-            id
-            name
-            posts {
-              __typename
-              nextToken
-            }
-          }
-          comments {
+          pincode
+          whiteboard
+          players {
             __typename
             items {
               __typename
               id
-              postID
-              content
+              sessionID
+              fullName
             }
             nextToken
           }
         }
       }`
     )
-  ) as Observable<OnCreatePostSubscription>;
+  ) as Observable<OnCreateSessionSubscription>;
 
-  OnUpdatePostListener: Observable<OnUpdatePostSubscription> = API.graphql(
+  OnUpdateSessionListener: Observable<
+    OnUpdateSessionSubscription
+  > = API.graphql(
     graphqlOperation(
-      `subscription OnUpdatePost {
-        onUpdatePost {
+      `subscription OnUpdateSession {
+        onUpdateSession {
           __typename
           id
           title
-          blogID
-          blog {
-            __typename
-            id
-            name
-            posts {
-              __typename
-              nextToken
-            }
-          }
-          comments {
+          pincode
+          whiteboard
+          players {
             __typename
             items {
               __typename
               id
-              postID
-              content
+              sessionID
+              fullName
             }
             nextToken
           }
         }
       }`
     )
-  ) as Observable<OnUpdatePostSubscription>;
+  ) as Observable<OnUpdateSessionSubscription>;
 
-  OnDeletePostListener: Observable<OnDeletePostSubscription> = API.graphql(
+  OnDeleteSessionListener: Observable<
+    OnDeleteSessionSubscription
+  > = API.graphql(
     graphqlOperation(
-      `subscription OnDeletePost {
-        onDeletePost {
+      `subscription OnDeleteSession {
+        onDeleteSession {
           __typename
           id
           title
-          blogID
-          blog {
-            __typename
-            id
-            name
-            posts {
-              __typename
-              nextToken
-            }
-          }
-          comments {
+          pincode
+          whiteboard
+          players {
             __typename
             items {
               __typename
               id
-              postID
-              content
+              sessionID
+              fullName
             }
             nextToken
           }
         }
       }`
     )
-  ) as Observable<OnDeletePostSubscription>;
+  ) as Observable<OnDeleteSessionSubscription>;
 
-  OnCreateCommentListener: Observable<
-    OnCreateCommentSubscription
-  > = API.graphql(
+  OnCreatePlayerListener: Observable<OnCreatePlayerSubscription> = API.graphql(
     graphqlOperation(
-      `subscription OnCreateComment {
-        onCreateComment {
+      `subscription OnCreatePlayer {
+        onCreatePlayer {
           __typename
           id
-          postID
-          post {
+          sessionID
+          session {
             __typename
             id
             title
-            blogID
-            blog {
-              __typename
-              id
-              name
-            }
-            comments {
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
           }
-          content
+          fullName
         }
       }`
     )
-  ) as Observable<OnCreateCommentSubscription>;
+  ) as Observable<OnCreatePlayerSubscription>;
 
-  OnUpdateCommentListener: Observable<
-    OnUpdateCommentSubscription
-  > = API.graphql(
+  OnUpdatePlayerListener: Observable<OnUpdatePlayerSubscription> = API.graphql(
     graphqlOperation(
-      `subscription OnUpdateComment {
-        onUpdateComment {
+      `subscription OnUpdatePlayer {
+        onUpdatePlayer {
           __typename
           id
-          postID
-          post {
+          sessionID
+          session {
             __typename
             id
             title
-            blogID
-            blog {
-              __typename
-              id
-              name
-            }
-            comments {
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
           }
-          content
+          fullName
         }
       }`
     )
-  ) as Observable<OnUpdateCommentSubscription>;
+  ) as Observable<OnUpdatePlayerSubscription>;
 
-  OnDeleteCommentListener: Observable<
-    OnDeleteCommentSubscription
-  > = API.graphql(
+  OnDeletePlayerListener: Observable<OnDeletePlayerSubscription> = API.graphql(
     graphqlOperation(
-      `subscription OnDeleteComment {
-        onDeleteComment {
+      `subscription OnDeletePlayer {
+        onDeletePlayer {
           __typename
           id
-          postID
-          post {
+          sessionID
+          session {
             __typename
             id
             title
-            blogID
-            blog {
-              __typename
-              id
-              name
-            }
-            comments {
+            pincode
+            whiteboard
+            players {
               __typename
               nextToken
             }
           }
-          content
+          fullName
         }
       }`
     )
-  ) as Observable<OnDeleteCommentSubscription>;
+  ) as Observable<OnDeletePlayerSubscription>;
 }

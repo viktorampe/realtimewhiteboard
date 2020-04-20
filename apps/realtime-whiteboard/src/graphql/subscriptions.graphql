@@ -1,166 +1,97 @@
 # this is an auto generated file. This will be overwritten
-subscription OnCreateBlog {
-  onCreateBlog {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        blogID
-      }
-      nextToken
-    }
-  }
-}
-subscription OnUpdateBlog {
-  onUpdateBlog {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        blogID
-      }
-      nextToken
-    }
-  }
-}
-subscription OnDeleteBlog {
-  onDeleteBlog {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        blogID
-      }
-      nextToken
-    }
-  }
-}
-subscription OnCreatePost {
-  onCreatePost {
+subscription OnCreateSession {
+  onCreateSession {
     id
     title
-    blogID
-    blog {
-      id
-      name
-      posts {
-        nextToken
-      }
-    }
-    comments {
+    pincode
+    whiteboard
+    players {
       items {
         id
-        postID
-        content
+        sessionID
+        fullName
       }
       nextToken
     }
   }
 }
-subscription OnUpdatePost {
-  onUpdatePost {
+subscription OnUpdateSession {
+  onUpdateSession {
     id
     title
-    blogID
-    blog {
-      id
-      name
-      posts {
-        nextToken
-      }
-    }
-    comments {
+    pincode
+    whiteboard
+    players {
       items {
         id
-        postID
-        content
+        sessionID
+        fullName
       }
       nextToken
     }
   }
 }
-subscription OnDeletePost {
-  onDeletePost {
+subscription OnDeleteSession {
+  onDeleteSession {
     id
     title
-    blogID
-    blog {
-      id
-      name
-      posts {
-        nextToken
-      }
-    }
-    comments {
+    pincode
+    whiteboard
+    players {
       items {
         id
-        postID
-        content
+        sessionID
+        fullName
       }
       nextToken
     }
   }
 }
-subscription OnCreateComment {
-  onCreateComment {
+subscription OnCreatePlayer {
+  onCreatePlayer {
     id
-    postID
-    post {
+    sessionID
+    session {
       id
       title
-      blogID
-      blog {
-        id
-        name
-      }
-      comments {
+      pincode
+      whiteboard
+      players {
         nextToken
       }
     }
-    content
+    fullName
   }
 }
-subscription OnUpdateComment {
-  onUpdateComment {
+subscription OnUpdatePlayer {
+  onUpdatePlayer {
     id
-    postID
-    post {
+    sessionID
+    session {
       id
       title
-      blogID
-      blog {
-        id
-        name
-      }
-      comments {
+      pincode
+      whiteboard
+      players {
         nextToken
       }
     }
-    content
+    fullName
   }
 }
-subscription OnDeleteComment {
-  onDeleteComment {
+subscription OnDeletePlayer {
+  onDeletePlayer {
     id
-    postID
-    post {
+    sessionID
+    session {
       id
       title
-      blogID
-      blog {
-        id
-        name
-      }
-      comments {
+      pincode
+      whiteboard
+      players {
         nextToken
       }
     }
-    content
+    fullName
   }
 }
