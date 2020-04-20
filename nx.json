@@ -121,6 +121,12 @@
     },
     "whiteboard-standalone": {
       "tags": []
+    },
+    "realtime-whiteboard-e2e": {
+      "tags": []
+    },
+    "realtime-whiteboard": {
+      "tags": []
     }
   }
 }

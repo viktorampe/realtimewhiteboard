@@ -1435,6 +1435,132 @@
           }
         }
       }
+    },
+    "realtime-whiteboard": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/realtime-whiteboard",
+      "sourceRoot": "apps/realtime-whiteboard/src",
+      "prefix": "campus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/realtime-whiteboard",
+            "index": "apps/realtime-whiteboard/src/index.html",
+            "main": "apps/realtime-whiteboard/src/main.ts",
+            "polyfills": "apps/realtime-whiteboard/src/polyfills.ts",
+            "tsConfig": "apps/realtime-whiteboard/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "apps/realtime-whiteboard/src/favicon.ico",
+              "apps/realtime-whiteboard/src/assets"
+            ],
+            "styles": ["apps/realtime-whiteboard/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/realtime-whiteboard/src/environments/environment.ts",
+                  "with": "apps/realtime-whiteboard/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "realtime-whiteboard:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "realtime-whiteboard:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "realtime-whiteboard:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/realtime-whiteboard/tsconfig.app.json",
+              "apps/realtime-whiteboard/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/realtime-whiteboard/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/realtime-whiteboard/jest.config.js",
+            "tsConfig": "apps/realtime-whiteboard/tsconfig.spec.json",
+            "setupFile": "apps/realtime-whiteboard/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "realtime-whiteboard-e2e": {
+      "root": "apps/realtime-whiteboard-e2e",
+      "sourceRoot": "apps/realtime-whiteboard-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/realtime-whiteboard-e2e/cypress.json",
+            "tsConfig": "apps/realtime-whiteboard-e2e/tsconfig.e2e.json",
+            "devServerTarget": "realtime-whiteboard:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "realtime-whiteboard:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/realtime-whiteboard-e2e/tsconfig.e2e.json"],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/realtime-whiteboard-e2e/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
