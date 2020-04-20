@@ -44,7 +44,7 @@
     <ng-container *ngIf="!isSettingsActive; else settingsView">
       <div
         @showHideCard
-        class="whiteboard__workspace__container"
+        class="whiteboard__workspace__card"
         *ngFor="let card of cards"
         cdkDrag
         [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
