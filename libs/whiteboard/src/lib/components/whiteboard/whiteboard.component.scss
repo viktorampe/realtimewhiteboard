@@ -189,7 +189,7 @@
     justify-content: center;
     align-items: center;
 
-    z-index: 2;
+    z-index: 2; // should be higher than ..whiteboard__workspace and shelf, lower then .zoom
 
     background: #ffffff;
     box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 18px #ffffff;
@@ -220,7 +220,7 @@
     box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
     border-radius: 12px;
     position: absolute;
-    z-index: 2;
+    z-index: 2; // should be higher than .workspace__container and shelf, lower then .zoom
     left: 50%;
     bottom: 115px;
     display: flex;
@@ -246,7 +246,7 @@
     bottom: 24px;
     left: 24px;
     right: 24px;
-    z-index: 1;
+    z-index: 1; // should be lower than .zoom and shelf buttons, higher than .whiteboard__workspace
     width: auto;
     overflow-y: hidden;
     display: flex;
