@@ -52,6 +52,7 @@ import { ModeEnum } from '../../enums/mode.enum';
 })
 export class CardToolbarComponent implements OnInit {
   @Input() mode: ModeEnum;
+  @Input() zoomFactor: number;
   @Input() inShelf: boolean;
   @Input() canManage: boolean;
   @Input() cardType: CardTypeEnum;
