@@ -1,3 +1,4 @@
+//file.only
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -73,6 +74,190 @@ describe('WhiteboardComponent', () => {
     expect(component.cards.length).toBe(cardSizeBeforeDelete - 1);
     expect(component.cards).not.toContain(card);
     expect(component.shelfCards.map(sc => sc.id)).toContain(card.id);
+  });
+
+  describe('createCard', () => {
+    it('should calculate top and use event.center.x as left if event was longpress', () => {
+      const spy = component.workspaceElementRef.nativeElement;
+      jest.spyOn(component, 'addEmptyCard');
+      jest.spyOn(spy, 'getBoundingClientRect').mockReturnValue({ top: 100 });
+      const event = {
+        target: {
+          className: ['whiteboard__workspace']
+        },
+        type: 'longpress',
+        center: {
+          y: 10,
+          x: 5
+        },
+        offsetY: 50,
+        offsetX: 50
+      };
+
+      component.createCard(event);
+      expect(component.addEmptyCard).toHaveBeenCalledWith({
+        top: -90,
+        left: 5
+      });
+    });
+
+    it('should use offset if event was dblclick', () => {
+      jest.spyOn(component, 'addEmptyCard');
+      const event = {
+        target: {
+          className: ['whiteboard__workspace']
+        },
+        type: 'dblclick',
+        offsetY: 50,
+        offsetX: 50
+      };
+      component.createCard(event);
+      expect(component.addEmptyCard).toHaveBeenCalledWith({
+        top: 50,
+        left: 50
+      });
+    });
+  });
+
+  describe('removeImage()', () => {
+    it('should remove the img from the card ', () => {
+      const card = new CardFixture();
+      expect(Object.keys(card.image).length).toEqual(1);
+      component.removeImage(card);
+      expect(Object.keys(card.image).length).toEqual(0);
+    });
+  });
+
+  describe('onFilePickerImageSelected', () => {
+    it('should call uploadImageForCard()', () => {
+      const spy = jest.spyOn(component, 'uploadImageForCard');
+
+      const blob = new Blob([''], { type: 'image/jpeg' });
+      blob['lastModifiedDate'] = '';
+      blob['name'] = 'filename';
+      const fakeF = <File>blob;
+
+      const event = {
+        target: {
+          files: [fakeF]
+        }
+      } as any;
+
+      component.onFilePickerImageSelected(event, new CardFixture());
+      expect(spy).toHaveBeenCalled();
+    });
+    it('should not call uploadImageForCard() because filetype not allowed', () => {
+      const spy = jest.spyOn(component, 'uploadImageForCard');
+
+      const blob = new Blob([''], { type: 'foo' });
+      blob['lastModifiedDate'] = '';
+      blob['name'] = 'filename';
+      const fakeF = <File>blob;
+
+      const event = {
+        target: {
+          files: [fakeF]
+        }
+      } as any;
+
+      component.onFilePickerImageSelected(event, new CardFixture());
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should not call uploadImageForCard() because files doesnt have length', () => {
+      const spy = jest.spyOn(component, 'uploadImageForCard');
+
+      const event = {
+        target: {
+          files: []
+        }
+      } as any;
+
+      component.onFilePickerImageSelected(event, new CardFixture());
+      expect(spy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onDragStarted()', () => {
+    it('should update the whiteboard', () => {
+      const spy = jest.spyOn(component, 'updateWhiteboard' as any);
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+      component.selectedCards = [];
+      component.onDragStarted(new CardFixture({ id: '2' }));
+      expect(spy).toHaveBeenCalledWith({
+        cards: [
+          new CardFixture({
+            mode: ModeEnum.IDLE
+          })
+        ]
+      });
+    });
+    it('should not update the whiteboard', () => {
+      const spy = jest.spyOn(component, 'updateWhiteboard' as any);
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+      component.selectedCards = component.cards;
+      component.onDragStarted(new CardFixture());
+      expect(spy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onDragEnded()', () => {
+    it('should update the whiteboard  and call updateCard() with right parameters', () => {
+      const updateCardSpy = jest.spyOn(component, 'updateCard');
+      const updateWhiteboardSpy = jest.spyOn(
+        component,
+        'updateWhiteboard' as any
+      );
+      const event = {
+        source: {
+          getFreeDragPosition: () => ({ x: 50, y: 50 })
+        }
+      } as any;
+
+      component.onDragEnded(event, new CardFixture());
+      expect(updateCardSpy).toHaveBeenCalled();
+      expect(updateCardSpy).toHaveBeenCalledWith(
+        {
+          top: 50,
+          left: 50
+        },
+        new CardFixture({
+          top: 50,
+          left: 50
+        })
+      );
+
+      expect(updateWhiteboardSpy).toHaveBeenCalled();
+    });
+
+    it('should update the whiteboard with right parameters', () => {
+      const updateWhiteboardSpy = jest.spyOn(
+        component,
+        'updateWhiteboard' as any
+      );
+      const event = {
+        source: {
+          getFreeDragPosition: () => ({ x: 50, y: 50 })
+        }
+      } as any;
+      component.cards = [new CardFixture({ id: 'AZ' }), new CardFixture()];
+      component.onDragEnded(event, new CardFixture({ id: 'AZ' }));
+
+      expect(updateWhiteboardSpy).toHaveBeenCalledWith({
+        cards: [
+          new CardFixture(),
+          new CardFixture({ id: 'AZ', top: 50, left: 50 })
+        ]
+      });
+    });
   });
 
   describe('updateSettings()', () => {

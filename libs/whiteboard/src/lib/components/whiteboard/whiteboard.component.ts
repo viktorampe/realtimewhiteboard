@@ -168,6 +168,7 @@ export class WhiteboardComponent implements OnChanges {
 
     this.saveWhiteboard();
   }
+
   //#region WORKSPACE INTERACTIONS
   createCard(event: any) {
     if (event.target.className.includes('whiteboard__workspace')) {
@@ -363,6 +364,7 @@ export class WhiteboardComponent implements OnChanges {
   onDragEnded(event: CdkDragEnd, card: CardInterface) {
     const cardPosition = event.source.getFreeDragPosition();
     this.updateCard({ top: cardPosition.y, left: cardPosition.x }, card);
+    //gets mutated -> needs a check?
     this.updateWhiteboard({
       cards: [...this.cards.filter(c => c.id !== card.id), card]
     });
