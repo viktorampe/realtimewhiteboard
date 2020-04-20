@@ -1,8 +1,20 @@
+import {
+  animate,
+  animateChild,
+  group,
+  keyframes,
+  query,
+  state,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import {
   Component,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
   OnInit,
   Output,
@@ -13,18 +25,81 @@ import { CardInterface } from '../../models/card.interface';
 @Component({
   selector: 'campus-shelf',
   templateUrl: './shelf.component.html',
-  styleUrls: ['./shelf.component.scss']
+  styleUrls: ['./shelf.component.scss'],
+  animations: [
+    trigger('showHideShelf', [
+      state('visible', style({ transform: 'translateY(0)' })),
+      state('hidden', style({ transform: 'translateY(calc(100% + 24px))' })),
+      transition('hidden => visible', [
+        group([
+          animate(
+            '300ms cubic-bezier(.43,0,.31,1)',
+            keyframes([
+              style({ transform: 'translateY(calc(100% + 24px))', offset: 0 }),
+              style({ transform: 'translateY(-8px)', offset: 0.75 }),
+              style({ transform: 'translateY(5px)', offset: 0.9 }),
+              style({ transform: 'translateY(0)', offset: 1 })
+            ])
+          ),
+          query('@floatActionButtons', [animateChild()])
+        ])
+      ]),
+      transition('visible => hidden', [
+        group([
+          animate(
+            '300ms cubic-bezier(.43,0,.31,1)',
+            style({ transform: 'translateY(calc(100% + 24px))' })
+          ),
+          query('@floatActionButtons', [animateChild()])
+        ])
+      ])
+    ]),
+    trigger('floatActionButtons', [
+      state('attached', style({ top: '-24px' })),
+      state('detached', style({ top: '-66px' })),
+      transition('attached => detached', [
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ top: '-24px', offset: 0 }),
+            style({ top: '-36px', offset: 0.5 }),
+            style({ top: '-72px', offset: 0.9 }),
+            style({ top: '-66px', offset: 1 })
+          ])
+        )
+      ]),
+      transition('detached => attached', [
+        animate(
+          '300ms cubic-bezier(.43,0,.31,1)',
+          keyframes([
+            style({ top: '-66px', offset: 0 }),
+            style({ top: '-24px', offset: 0.5 }),
+            style({ top: '-24px', offset: 0.75 }),
+            style({ top: '-30px', offset: 0.9 }),
+            style({ top: '-24px', offset: 1 })
+          ])
+        )
+      ])
+    ])
+  ]
 })
 export class ShelfComponent implements OnInit {
   @ViewChild('shelf', { static: false }) shelf: ElementRef;
 
   @Input() cards: CardInterface[];
+  @HostBinding('@showHideShelf')
+  get showHideShelf() {
+    return this.isMinimized ? 'hidden' : 'visible';
+  }
+
   @Input() isMinimized = false;
   @Input() canManage: boolean;
+  @Input() defaultColor = '#00A7E2';
 
   @Output() isMinimizedChange = new EventEmitter<boolean>();
   @Output() cardDraggedOutsideContainer = new EventEmitter<any>();
   @Output() deleteCard = new EventEmitter<CardInterface>();
+  @Output() addClick = new EventEmitter();
 
   private cardElementBeingDragged: HTMLElement;
 
@@ -55,5 +130,9 @@ export class ShelfComponent implements OnInit {
 
   emitDeleteCard(card) {
     this.deleteCard.emit(card);
+  }
+
+  clickAdd() {
+    this.addClick.emit();
   }
 }

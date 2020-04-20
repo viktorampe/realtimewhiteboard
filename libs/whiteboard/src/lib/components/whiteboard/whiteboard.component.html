@@ -120,21 +120,6 @@
       </div>
     </ng-template>
 
-    <div
-      class="whiteboard__addbutton"
-      [class.plusMinimized]="isShelfMinimized"
-      (tap)="btnPlusClicked()"
-    >
-      <mat-icon [style.color]="defaultColor" [svgIcon]="'plus'"></mat-icon>
-    </div>
-    <div
-      [class.shelfMinimized]="isShelfMinimized"
-      class="whiteboard__shelf__button"
-      (tap)="toggleShelf()"
-      ><mat-icon
-        [svgIcon]="isShelfMinimized ? 'arrow-up' : 'arrow-down'"
-      ></mat-icon
-    ></div>
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       (deleteCard)="onDeleteCard($event, true)"
@@ -142,6 +127,7 @@
       [cards]="shelfCards"
       [(isMinimized)]="isShelfMinimized"
       [canManage]="canManage"
+      [defaultColor]="defaultColor"
     ></campus-shelf>
   </div>
   <campus-empty-state

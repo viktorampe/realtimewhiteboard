@@ -1,3 +1,27 @@
+@import '../../../constants.scss';
+
+:host {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  z-index: 2;
+  width: auto;
+  overflow-y: visible;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 24px;
+  height: auto;
+  background: linear-gradient(
+    145deg,
+    lighten(#e0e5ec, 5%),
+    darken(#e0e5ec, 5%)
+  );
+  box-shadow: $box-shadow-pink;
+  transform: translateY(0);
+}
+
 .shelf {
   height: fit-content;
   padding: 24px;
@@ -21,5 +45,54 @@
 
   &__card__toolbar {
     display: none;
+  }
+
+  &__button {
+    position: absolute;
+
+    height: 48px;
+    width: 48px;
+    background: $buttonBackground;
+    color: $buttonColor;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    box-shadow: $box-shadow-default;
+    z-index: 3;
+
+    &:active {
+      background: linear-gradient(
+        -145deg,
+        lighten(#e0e5ec, 5%),
+        darken(#e0e5ec, 5%)
+      );
+      box-shadow: inset 1px 1px 6px darken(#e0e5ec, 20%),
+        inset -1px -1px 6px lighten(#e0e5ec, 20%),
+        1px 1px 2px darken(#a3b1c6, 5%), -1px -1px 2px #ffffff;
+    }
+
+    mat-icon {
+      width: 35px;
+      height: 35px;
+    }
+
+    &.plusMinimized {
+      bottom: 35px !important;
+    }
+  }
+
+  &__add {
+    right: 40px;
+  }
+  &__minimize {
+    height: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 12px;
+    margin-top: 8px;
   }
 }
