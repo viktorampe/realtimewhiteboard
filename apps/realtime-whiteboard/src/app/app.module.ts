@@ -14,7 +14,7 @@ import { SetupComponent } from './components/setup/setup.component';
     RouterModule.forRoot(
       [
         { path: '', component: SetupComponent },
-        { path: 'session', component: RealtimeComponent }
+        { path: 'session/:id', component: RealtimeComponent }
       ],
       { initialNavigation: 'enabled' }
     )
