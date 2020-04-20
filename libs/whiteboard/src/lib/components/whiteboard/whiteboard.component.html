@@ -149,12 +149,14 @@
     *ngIf="cards && !cards.length && !isSettingsActive"
     [title]="title ? title : 'Geen Titel'"
     [description]="
-      title
-        ? 'Sleep kaartjes uit de shelf naar het bord.'
-        : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
+      shelfCards?.length
+        ? emptyStateWithShelfCardsText
+        : emptyStateWithoutShelfCardsText
     "
     [svgIcon]="
-      title ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+      shelfCards?.length
+        ? 'empty-state-whiteboard-empty'
+        : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
 </div>
