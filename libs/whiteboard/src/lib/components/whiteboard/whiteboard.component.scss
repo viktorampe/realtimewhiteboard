@@ -49,8 +49,7 @@
 
       &.zoom {
         position: fixed;
-
-        z-index: 2;
+        z-index: 3; // make sure this is the highest of all classes
 
         transform: translate3d(0, 0, 0) !important;
 
@@ -74,7 +73,7 @@
       display: flex;
       top: 24px;
       right: 24px;
-      z-index: 3;
+      z-index: 1;
 
       &__settingsbutton {
         display: flex;
@@ -190,7 +189,7 @@
     justify-content: center;
     align-items: center;
 
-    z-index: 3;
+    z-index: 2;
 
     background: #ffffff;
     box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 18px #ffffff;
@@ -221,7 +220,7 @@
     box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #fff;
     border-radius: 12px;
     position: absolute;
-    z-index: 3;
+    z-index: 2;
     left: 50%;
     bottom: 115px;
     display: flex;
@@ -247,7 +246,7 @@
     bottom: 24px;
     left: 24px;
     right: 24px;
-    z-index: 2;
+    z-index: 1;
     width: auto;
     overflow-y: hidden;
     display: flex;

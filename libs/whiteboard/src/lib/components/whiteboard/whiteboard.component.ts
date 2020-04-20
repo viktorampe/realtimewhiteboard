@@ -125,7 +125,6 @@ export class WhiteboardComponent implements OnChanges {
   isShelfMinimized = false;
   zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
-  isAnyCardZoomed = false;
 
   constructor() {}
 
@@ -281,10 +280,8 @@ export class WhiteboardComponent implements OnChanges {
   onCardTapped(card: CardInterface) {
     if (card.mode === ModeEnum.ZOOM) {
       this.updateCard({ mode: ModeEnum.IDLE }, card);
-      this.isAnyCardZoomed = false;
     } else if (this.isZoomAllowedForCard(card)) {
       this.updateCard({ mode: ModeEnum.ZOOM }, card);
-      this.isAnyCardZoomed = true;
     }
   }
 
