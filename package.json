@@ -50,6 +50,8 @@
     "@angular/platform-browser": "^8.0.0",
     "@angular/platform-browser-dynamic": "^8.0.0",
     "@angular/router": "^8.0.0",
+    "@aws-amplify/api": "^3.1.7",
+    "@aws-amplify/pubsub": "^3.0.8",
     "@diekeure/polpo-api-angular-sdk": "^2.1.28",
     "@ngrx/effects": "8.6.0",
     "@ngrx/entity": "8.6.0",
