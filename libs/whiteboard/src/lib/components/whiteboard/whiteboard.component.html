@@ -21,17 +21,19 @@
     >
       <mat-icon [svgIcon]="'settings'"></mat-icon>
     </div>
-    <!-- <div class="whiteboard__workspace__actions__zoom">
+    <div class="whiteboard__workspace__actions__zoom">
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'remove'"
+        (tap)="decreaseZoom()"
       ></mat-icon>
       <div class="whiteboard__workspace__actions__zoom__separator"></div>
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'plus'"
+        (tap)="increaseZoom()"
       ></mat-icon>
-    </div> -->
+    </div>
   </div>
   <div
     class="whiteboard__workspace"
@@ -58,6 +60,7 @@
           @showHideColorList
           class="whiteboard__color-list"
           [mode]="card.mode"
+          [zoomFactor]="zoomFactor"
           (selectedColor)="changeColorForCard(card, $event)"
           *ngIf="
             (card.mode === Mode.EDIT || card.mode === Mode.SELECTED) &&
@@ -76,6 +79,7 @@
           [mode]="card.mode"
           [canManage]="canManage"
           [cardType]="card.type"
+          [zoomFactor]="zoomFactor"
           (clickDeleteIcon)="onDeleteCard(card, true)"
           (clickReturnToShelfIcon)="onDeleteCard(card)"
           (clickEditIcon)="cardEditIconClicked(card)"
@@ -89,6 +93,7 @@
           [description]="card.description"
           [color]="card.color"
           [image]="card.image"
+          [zoomFactor]="zoomFactor"
           [(mode)]="card.mode"
           [viewModeImage]="card.viewModeImage"
           (update)="updateCard($event, card)"

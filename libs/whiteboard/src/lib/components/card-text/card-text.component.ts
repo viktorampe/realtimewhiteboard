@@ -7,10 +7,14 @@ import { ModeEnum } from '../../enums/mode.enum';
   styleUrls: ['./card-text.component.scss']
 })
 export class CardTextComponent {
+  readonly defaultFontSize = 30;
+  readonly hintFontSize = 14;
+
   readonly MAX_CHARACTERS = 100;
 
   @Input() mode: ModeEnum;
   @Input() text: string;
+  @Input() zoomFactor: number;
 
   @Output() textChange = new EventEmitter<string>();
 
