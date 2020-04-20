@@ -1,5 +1,5 @@
 <div class="settings__formgroup">
-  <label for="title"><h4>Titel: </h4></label>
+  <label for="title">Titel:</label>
   <input
     [(ngModel)]="title"
     id="title"
@@ -9,7 +9,7 @@
   />
 </div>
 <div class="settings__formgroup">
-  <label for="defaultColor"><h4>Kleur: </h4></label>
+  <label for="defaultColor">Kleur:</label>
   <campus-color-list
     class="settings__color-list"
     (selectedColor)="setDefaultColor($event)"
