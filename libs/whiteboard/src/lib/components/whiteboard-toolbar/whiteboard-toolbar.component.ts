@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class WhiteboardToolbarComponent implements OnInit {
   @Input() canManage: boolean;
   @Output() deleteCards = new EventEmitter();
+  @Output() returnCardsToShelf = new EventEmitter();
   @Output() changeSelectedColor = new EventEmitter<string>();
 
   constructor() {}
@@ -20,5 +21,9 @@ export class WhiteboardToolbarComponent implements OnInit {
 
   btnDeleteClicked() {
     this.deleteCards.emit();
+  }
+
+  btnReturnToShelfClicked() {
+    this.returnCardsToShelf.emit();
   }
 }

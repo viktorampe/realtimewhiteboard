@@ -5,11 +5,14 @@
     (selectedColor)="changeSelectedCardsColor($event)"
   ></campus-color-list>
   <div class="whiteboard__tools__seperator"></div>
-  <div class="whiteboard__tools__tool" id="delete">
+  <div class="whiteboard__tools__tool">
     <mat-icon
-      class="toolbar_icon"
-      (tap)="btnDeleteClicked()"
-      [svgIcon]="'delete'"
+      (tap)="btnReturnToShelfClicked()"
+      [svgIcon]="'return-to-shelf'"
     ></mat-icon>
+  </div>
+  <div class="whiteboard__tools__seperator"></div>
+  <div class="whiteboard__tools__tool">
+    <mat-icon (tap)="btnDeleteClicked()" [svgIcon]="'delete'"></mat-icon>
   </div>
 </div>
