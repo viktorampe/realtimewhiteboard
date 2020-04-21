@@ -8,43 +8,44 @@
     @showHideWhiteboardTools
     *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
+    (returnCardsToShelf)="bulkReturnCardsToShelfClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
     [canManage]="canManage"
   ></campus-whiteboard-toolbar>
 
-  <div class="whiteboard__workspace__actions">
-    <div
-      *ngIf="canManage"
-      class="whiteboard__workspace__actions__settingsbutton"
-      color="primary"
-      (tap)="toggleSettings()"
-    >
-      <mat-icon [svgIcon]="'settings'"></mat-icon>
-    </div>
-    <div class="whiteboard__workspace__actions__zoom">
-      <mat-icon
-        class="whiteboard__workspace__actions__zoom__button"
-        [svgIcon]="'remove'"
-        (tap)="decreaseZoom()"
-      ></mat-icon>
-      <div class="whiteboard__workspace__actions__zoom__separator"></div>
-      <mat-icon
-        class="whiteboard__workspace__actions__zoom__button"
-        [svgIcon]="'plus'"
-        (tap)="increaseZoom()"
-      ></mat-icon>
-    </div>
-  </div>
   <div
     class="whiteboard__workspace"
     (dblclick)="createCard($event)"
     (longpress)="createCard($event)"
     #workspace
   >
+    <div class="whiteboard__workspace__actions">
+      <div
+        *ngIf="canManage"
+        class="whiteboard__workspace__actions__settingsbutton"
+        color="primary"
+        (tap)="toggleSettings()"
+      >
+        <mat-icon [svgIcon]="'settings'"></mat-icon>
+      </div>
+      <div class="whiteboard__workspace__actions__zoom">
+        <mat-icon
+          class="whiteboard__workspace__actions__zoom__button"
+          [svgIcon]="'remove'"
+          (tap)="decreaseZoom()"
+        ></mat-icon>
+        <div class="whiteboard__workspace__actions__zoom__separator"></div>
+        <mat-icon
+          class="whiteboard__workspace__actions__zoom__button"
+          [svgIcon]="'plus'"
+          (tap)="increaseZoom()"
+        ></mat-icon>
+      </div>
+    </div>
     <ng-container *ngIf="!isSettingsActive; else settingsView">
       <div
         @showHideCard
-        class="whiteboard__workspace__container"
+        class="whiteboard__workspace__card"
         *ngFor="let card of cards"
         cdkDrag
         [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"

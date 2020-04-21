@@ -5,7 +5,7 @@ import { CardInterface } from './card.interface';
 export class CardFixture implements CardInterface {
   id = '12345-abcd'; //random id
   mode = ModeEnum.IDLE;
-  type = CardTypeEnum.PUBLISHERCARD;
+  type = CardTypeEnum.PUBLISHER;
   color = 'foo color';
   description = 'foo description';
   image = { imageUrl: 'foo image' };

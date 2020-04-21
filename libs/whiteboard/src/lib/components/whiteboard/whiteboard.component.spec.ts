@@ -1,4 +1,3 @@
-//file.only
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -13,7 +12,6 @@ import { CardInterface } from '../../models/card.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
 import { WhiteboardComponent } from './whiteboard.component';
-
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
@@ -389,7 +387,7 @@ describe('WhiteboardComponent', () => {
         'updateWhiteboard' as any
       );
       component.cards = [
-        new CardFixture({ id: 'yes' }),
+        new CardFixture(),
         new CardFixture(),
         new CardFixture()
       ];
@@ -417,7 +415,7 @@ describe('WhiteboardComponent', () => {
         'updateWhiteboard' as any
       );
       component.cards = [
-        new CardFixture({ id: 'yes' }),
+        new CardFixture(),
         new CardFixture(),
         new CardFixture()
       ];
@@ -425,6 +423,23 @@ describe('WhiteboardComponent', () => {
       component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
       component.cardDraggedPosition(event);
       expect(updateWhiteboardSpy).not.toHaveBeenCalled();
+    });
+  });
+  describe('updateCard()', () => {
+    it('should update the card', () => {
+      const card = new CardFixture({ description: 'foo' });
+      component.updateCard({ description: 'bar' }, card);
+
+      expect(card.description).toEqual('bar');
+    });
+
+    it('should sync updates with the shelf card', () => {
+      const card = new CardFixture({ description: 'foo' });
+      component.shelfCards = [card];
+
+      component.updateCard({ description: 'bar' }, card);
+
+      expect(component.shelfCards[0].description).toEqual('bar');
     });
   });
 
@@ -809,19 +824,30 @@ describe('WhiteboardComponent', () => {
     describe('bulkActions', () => {
       const selectedCards = [
         new CardFixture({
+          id: '1',
+          type: CardTypeEnum.PUBLISHER,
           mode: ModeEnum.MULTISELECTSELECTED
         }),
         new CardFixture({
+          id: '2',
+          type: CardTypeEnum.TEACHER,
+          mode: ModeEnum.MULTISELECTSELECTED
+        }),
+        new CardFixture({
+          id: '3',
+          type: CardTypeEnum.TEACHER,
           mode: ModeEnum.MULTISELECTSELECTED
         })
       ];
 
       const nonSelectedCards = [
         new CardFixture({
-          mode: ModeEnum.IDLE
+          id: '4',
+          mode: ModeEnum.MULTISELECT
         }),
         new CardFixture({
-          mode: ModeEnum.IDLE
+          id: '5',
+          mode: ModeEnum.MULTISELECT
         })
       ];
       beforeEach(() => {
@@ -830,21 +856,43 @@ describe('WhiteboardComponent', () => {
       });
 
       it('bulkDelete() should delete multiple cards', () => {
-        component.shelfCards = [];
+        jest.spyOn(component, 'onDeleteCard');
 
         component.bulkDeleteClicked();
-        selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
 
-        expect(component.selectedCards.length).toBe(0);
-        expect(component.cards).toEqual(nonSelectedCards);
-        component.shelfCards.forEach((shelfcard, index) => {
-          expect({ ...shelfcard, mode: null }).toEqual({
-            ...selectedCards[index],
-            mode: null,
-            top: null,
-            left: null
-          });
+        expect(nonSelectedCards.every(c => c.mode === ModeEnum.IDLE)).toBe(
+          true
+        );
+
+        expect(component.onDeleteCard).toHaveBeenCalledTimes(
+          selectedCards.length
+        );
+
+        selectedCards.forEach(card =>
+          expect(component.onDeleteCard).toHaveBeenCalledWith(card, true)
+        );
+
+        expect(component.selectedCards).toEqual([]);
+      });
+
+      it('bulkReturnCardsToShelfClicked() should only return publisher cards to shelf', () => {
+        jest.spyOn(component, 'updateWhiteboard');
+
+        component.bulkReturnCardsToShelfClicked();
+
+        expect(nonSelectedCards.every(c => c.mode === ModeEnum.IDLE)).toBe(
+          true
+        );
+
+        expect(component.updateWhiteboard).toHaveBeenCalledWith({
+          cards: [
+            ...nonSelectedCards,
+            { ...selectedCards[1], mode: ModeEnum.IDLE }, // teacher card
+            { ...selectedCards[2], mode: ModeEnum.IDLE } // teacher card
+          ]
         });
+
+        expect(component.selectedCards).toEqual([]);
       });
 
       it('changeSelectedCardsColor() should change the colors of the selected cards when a swatch is clicked', () => {
@@ -985,7 +1033,7 @@ describe('WhiteboardComponent', () => {
         const expectedCard = {
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
-          type: CardTypeEnum.PUBLISHERCARD,
+          type: CardTypeEnum.PUBLISHER,
           color: 'red',
           description: '',
           image: null,
@@ -1020,7 +1068,7 @@ describe('WhiteboardComponent', () => {
         expect(component.cards[0]).toEqual({
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
-          type: CardTypeEnum.TEACHERCARD,
+          type: CardTypeEnum.TEACHER,
           color: 'red',
           description: '',
           image: null,
@@ -1112,7 +1160,7 @@ describe('WhiteboardComponent', () => {
 
     it('should not remove the card from the shelf - permanent = true, canManage = false, card type = teacher', () => {
       component.canManage = false;
-      cardToBeDeleted.type = CardTypeEnum.PUBLISHERCARD;
+      cardToBeDeleted.type = CardTypeEnum.PUBLISHER;
 
       component.onDeleteCard(cardToBeDeleted, true);
 

@@ -9,8 +9,8 @@
       [@showHideToolbarTool]="'select'"
       data-cy="delete-tool"
       class="toolbar__tool toolbar__delete"
-      (tap)="deleteIconClicked()"
-      *ngIf="canManage || cardType === CardType.TEACHERCARD"
+      (click)="deleteIconClicked()"
+      *ngIf="canManage || cardType === CardType.TEACHER"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -20,9 +20,9 @@
     <div
       [@showHideToolbarTool]="'select'"
       data-cy="return-to-shelf-tool"
-      class="toolbar__tool toolbar__returntoshelf"
-      (tap)="returnToShelfIconClicked()"
-      *ngIf="!inShelf && cardType !== CardType.TEACHERCARD"
+      class="toolbar__tool toolbar__delete"
+      (click)="returnToShelfIconClicked()"
+      *ngIf="!inShelf && cardType !== CardType.TEACHER"
     >
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -32,7 +32,7 @@
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
-      (tap)="multiSelectClicked()"
+      (click)="multiSelectClicked()"
       *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
@@ -41,7 +41,7 @@
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
-      (tap)="flipIconClicked()"
+      (click)="flipIconClicked()"
       *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
@@ -49,7 +49,7 @@
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
-      (tap)="editIconClicked()"
+      (click)="editIconClicked()"
       *ngIf="!inShelf"
     >
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
@@ -60,7 +60,7 @@
       <div
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__delete"
-        (tap)="deleteIconClicked()"
+        (click)="deleteIconClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__delete__icon"
@@ -70,14 +70,14 @@
       <div
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool"
-        (tap)="flipIconClicked()"
+        (click)="flipIconClicked()"
       >
         <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
       </div>
       <div
         [@showHideToolbarTool]="'edit'"
         class="toolbar__tool toolbar__confirm"
-        (tap)="confirmIconClicked()"
+        (click)="confirmIconClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__confirm__icon"
@@ -94,7 +94,7 @@
       [@showHideToolbarTool]="'multiSelect'"
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
-      (tap)="multiSelectClicked()"
+      (click)="multiSelectClicked()"
     >
       <mat-icon class="toolbar__tool__icon " [svgIcon]="'multiselect'">
       </mat-icon>
@@ -104,7 +104,7 @@
         [@showHideToolbarTool]="'multiSelect'"
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
-        (tap)="multiSelectSelectedClicked()"
+        (click)="multiSelectSelectedClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__select__icon"

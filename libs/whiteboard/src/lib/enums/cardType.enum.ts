@@ -1,4 +1,4 @@
 export enum CardTypeEnum {
-  TEACHERCARD,
-  PUBLISHERCARD
+  TEACHER = 'teacher',
+  PUBLISHER = 'publisher'
 }
