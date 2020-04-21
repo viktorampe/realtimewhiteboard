@@ -76,49 +76,80 @@ describe('WhiteboardComponent', () => {
   });
 
   describe('updateSettings()', () => {
-    it('should update whiteboard title and defaultColor', () => {
+    const updatedTitle = 'updatedTitle';
+    const updatedDefaultColor = '#00000000';
+
+    beforeEach(() => {
+      jest.spyOn(component.changes, 'emit');
+      jest.spyOn(component, 'toggleSettings');
+
       component.title = 'beforeTitle';
       component.defaultColor = '#FFFFFFFF';
 
       const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
+        title: updatedTitle,
+        defaultColor: updatedDefaultColor
       };
 
       component.updateSettings(settings);
+    });
 
-      expect(component.title).toBe('afterTitle');
+    it('should update whiteboard title, defaultColor and lastColor', () => {
+      expect(component.title).toBe(updatedTitle);
       expect(component.defaultColor).toBe('#00000000');
+      expect(component.lastColor).toBe(updatedDefaultColor);
     });
+
     it('should save the whiteboard', () => {
-      const saveWhiteboardSpy = jest.spyOn(component, 'saveWhiteboard');
-      const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
-      };
-      component.updateSettings(settings);
-      expect(saveWhiteboardSpy).toHaveBeenCalled();
+      expect(component.changes.emit).toHaveBeenCalled();
+      expect(component.changes.emit).toHaveBeenCalledWith({
+        title: updatedTitle,
+        defaultColor: updatedDefaultColor,
+        cards: component.cards,
+        shelfCards: component.shelfCards
+      });
     });
-    it('should set lastColor', () => {
+
+    it('should change the color of every card to the chosen default color', () => {
+      const defaultColor = 'beepboop';
+      component.cards = [
+        new CardFixture({ color: 'foo color' }),
+        new CardFixture({ color: 'bar color' })
+      ];
+      component.shelfCards = [
+        new CardFixture({ color: 'baz color' }),
+        new CardFixture({ color: 'bob color' })
+      ];
+
       const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
+        title: '',
+        defaultColor: defaultColor
       };
+
       component.updateSettings(settings);
 
-      expect(component.lastColor).toBe('#00000000');
+      expect(
+        [...component.shelfCards, ...component.cards].every(
+          card => card.color === defaultColor
+        )
+      ).toBe(true);
     });
+
     it('should toggle settings visibility', () => {
-      const toggleSettingsSpy = jest.spyOn(component, 'toggleSettings');
-      const visibilityBefore = component.isSettingsActive;
+      component.isSettingsActive = true;
+
       const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
+        title: updatedTitle,
+        defaultColor: updatedDefaultColor
       };
+
       component.updateSettings(settings);
-      const visibilityAfter = component.isSettingsActive;
-      expect(visibilityBefore).not.toBe(visibilityAfter);
-      expect(toggleSettingsSpy).toHaveBeenCalled();
+      expect(component.isSettingsActive).toBe(false);
+
+      component.updateSettings(settings);
+      expect(component.isSettingsActive).toBe(true);
+
+      expect(component.toggleSettings).toHaveBeenCalled();
     });
   });
 
@@ -809,6 +840,34 @@ describe('WhiteboardComponent', () => {
         [new CardFixture(), file],
         [new CardFixture(), file2]
       ]);
+    });
+  });
+
+  describe('whiteboard toolbar handlers', () => {
+    describe('zoom button', () => {
+      beforeEach(() => {
+        component.zoomFactor = 1;
+      });
+
+      it('increaseZoom() should zoom in', () => {
+        const expectedTicks = [1.2, 1.4, 1.6, 1.8, 2, 2];
+
+        for (let i = 0; i < expectedTicks.length; i++) {
+          component.increaseZoom();
+
+          expect(component.zoomFactor).toBe(expectedTicks[i]);
+        }
+      });
+
+      it('decreaseZoom() should zoom out', () => {
+        const expectedTicks = [0.8, 0.6, 0.4, 0.4];
+
+        for (let i = 0; i < expectedTicks.length; i++) {
+          component.decreaseZoom();
+
+          expect(component.zoomFactor).toBe(expectedTicks[i]);
+        }
+      });
     });
   });
 });

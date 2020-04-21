@@ -7,13 +7,10 @@ import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { TimelineModule } from '@campus/timeline';
 import { ManageCollectionComponent, UiModule } from '@campus/ui';
-import { WhiteboardModule } from '@campus/whiteboard';
 import { DemoPageComponent } from './demo-page/demo-page.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
-import { WhiteboardDemoPageComponent } from './whiteboard-demo-page/whiteboard-demo-page.component';
-
 @NgModule({
   imports: [
     FormsModule,
@@ -24,15 +21,10 @@ import { WhiteboardDemoPageComponent } from './whiteboard-demo-page/whiteboard-d
     MatIconModule,
     SearchModule,
     PagesHomeModule,
-    WhiteboardModule,
     TimelineModule
   ],
   providers: [LoginPageViewModel],
-  declarations: [
-    LoginpageComponent,
-    DemoPageComponent,
-    WhiteboardDemoPageComponent
-  ],
+  declarations: [LoginpageComponent, DemoPageComponent],
   exports: [],
   entryComponents: [ManageCollectionComponent]
 })

@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
+  MatFormFieldModule,
   MatIconModule,
   MatInputModule
 } from '@angular/material';
@@ -38,6 +39,7 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     MatIconModule,
     MatButtonModule,
     MatProgressBarModule,
+    MatFormFieldModule,
     MatInputModule,
     UiModule
   ],
