@@ -143,6 +143,11 @@ export type ModelPlayerFilterInput = {
   not?: ModelPlayerFilterInput | null;
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC"
+}
+
 export type CreateSessionMutation = {
   __typename: "Session";
   id: string;
@@ -304,6 +309,24 @@ export type GetPlayerQuery = {
 };
 
 export type ListPlayersQuery = {
+  __typename: "ModelPlayerConnection";
+  items: Array<{
+    __typename: "Player";
+    id: string;
+    sessionID: string;
+    session: {
+      __typename: "Session";
+      id: string;
+      title: string;
+      pincode: number;
+      whiteboard: string;
+    } | null;
+    fullName: string;
+  } | null> | null;
+  nextToken: string | null;
+};
+
+export type PlayerBySessionIdQuery = {
   __typename: "ModelPlayerConnection";
   items: Array<{
     __typename: "Player";
@@ -768,6 +791,53 @@ export class APIService {
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
     return <ListPlayersQuery>response.data.listPlayers;
+  }
+  async PlayerBySessionId(
+    sessionID?: string,
+    sortDirection?: ModelSortDirection,
+    filter?: ModelPlayerFilterInput,
+    limit?: number,
+    nextToken?: string
+  ): Promise<PlayerBySessionIdQuery> {
+    const statement = `query PlayerBySessionId($sessionID: ID, $sortDirection: ModelSortDirection, $filter: ModelPlayerFilterInput, $limit: Int, $nextToken: String) {
+        playerBySessionID(sessionID: $sessionID, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {
+          __typename
+          items {
+            __typename
+            id
+            sessionID
+            session {
+              __typename
+              id
+              title
+              pincode
+              whiteboard
+            }
+            fullName
+          }
+          nextToken
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {};
+    if (sessionID) {
+      gqlAPIServiceArguments.sessionID = sessionID;
+    }
+    if (sortDirection) {
+      gqlAPIServiceArguments.sortDirection = sortDirection;
+    }
+    if (filter) {
+      gqlAPIServiceArguments.filter = filter;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
+    }
+    if (nextToken) {
+      gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <PlayerBySessionIdQuery>response.data.playerBySessionID;
   }
   OnCreateSessionListener: Observable<
     OnCreateSessionSubscription

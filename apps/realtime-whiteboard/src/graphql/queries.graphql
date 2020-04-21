@@ -69,3 +69,31 @@ query ListPlayers(
     nextToken
   }
 }
+query PlayerBySessionId(
+  $sessionID: ID
+  $sortDirection: ModelSortDirection
+  $filter: ModelPlayerFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  playerBySessionID(
+    sessionID: $sessionID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      sessionID
+      session {
+        id
+        title
+        pincode
+        whiteboard
+      }
+      fullName
+    }
+    nextToken
+  }
+}

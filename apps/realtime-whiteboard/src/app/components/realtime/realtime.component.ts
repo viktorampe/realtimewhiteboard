@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
 
@@ -25,14 +26,37 @@ export class RealtimeComponent implements OnInit {
       this.sessionId = params.get('id');
       this.fetchSession();
     });
+
+    // subscribe on session updates
+    this.sessionService.subscribeOnSessionUpdates();
+    this.sessionService.currentRealtimeSession$.subscribe(
+      (realtimeSession: RealtimeSession) => {
+        this.session = realtimeSession;
+      }
+    );
   }
 
+  // triggers when Whiteboard has changed
+  updateWhiteboard(updatedWhiteboard: WhiteboardInterface) {
+    this.sessionService.updateWhiteboardData(updatedWhiteboard);
+  }
+
+  /*
   private fetchSession() {
     this.sessionService
       .getSession(this.sessionId)
       .subscribe((session: RealtimeSession) => {
-        this.session = session;
-        console.log(session);
+        this.sessionService
+          .getPlayersBySession(session.id)
+          .subscribe((players: Player[]) => {
+            session.players = players;
+            this.session = session;
+          });
       });
+  }
+  */
+
+  private fetchSession() {
+    this.sessionService.getSession(this.sessionId);
   }
 }

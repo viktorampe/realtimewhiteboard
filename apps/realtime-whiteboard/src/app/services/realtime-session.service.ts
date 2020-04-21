@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../API.service';
 import RealtimeSession from '../models/realtimesession';
 
-export interface whiteboardDataServiceInterface {
+export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
   updateWhiteboardData(whiteboard: WhiteboardInterface): Observable<Boolean>;
   uploadFile(file: File): Observable<ImageInterface>;
@@ -15,24 +15,114 @@ export interface whiteboardDataServiceInterface {
 @Injectable({
   providedIn: 'root'
 })
-export class RealtimeSessionService implements whiteboardDataServiceInterface {
+export class RealtimeSessionService implements WhiteboardDataServiceInterface {
+  currentRealtimeSession$ = new BehaviorSubject<RealtimeSession>(null);
+  currentRealtimeSession: RealtimeSession;
+
   constructor(private apiService: APIService) {}
 
+  public setCurrentRealtimeSession(realtimeSession: RealtimeSession) {
+    this.currentRealtimeSession$.next(realtimeSession);
+    this.currentRealtimeSession = realtimeSession;
+  }
+
+  /*
   getSession(sessionId: string): Observable<RealtimeSession> {
     return from(this.apiService.GetSession(sessionId)).pipe(
-      map((response: any) => {
-        return new RealtimeSession(response);
+      map(sessionResponse => {
+        return new RealtimeSession(sessionResponse);
+      })
+    );
+  }
+  */
+
+  /*
+  updateSession(realtimeSession: RealtimeSession): Observable<boolean> {
+    return from(
+      this.apiService.UpdateSession({
+        id: realtimeSession.id,
+        title: realtimeSession.title,
+        pincode: realtimeSession.pincode,
+        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+      })
+    ).pipe(mapTo(true));
+  }
+  */
+
+  /*
+
+  getPlayersBySession(sessionId: string): Observable<Player[]> {
+    return from(this.apiService.PlayerBySessionId(sessionId)).pipe(
+      map(playersResponse => {
+        const players: Player[] = [];
+        playersResponse.items.forEach(pr => {
+          players.push(new Player(pr));
+        });
+        return players;
       })
     );
   }
 
+  */
+
+  getSession(sessionId: string) {
+    this.apiService
+      .GetSession(sessionId)
+      .then(sessionResponse => {
+        this.apiService.PlayerBySessionId(sessionResponse.id).then(players => {
+          sessionResponse.players = players;
+          this.setCurrentRealtimeSession(new RealtimeSession(sessionResponse));
+        });
+      })
+      .catch(err => console.log(err));
+  }
+
+  updateSession(realtimeSession: RealtimeSession) {
+    this.apiService
+      .UpdateSession({
+        id: realtimeSession.id,
+        title: realtimeSession.title,
+        pincode: realtimeSession.pincode,
+        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
+  subscribeOnSessionUpdates() {
+    this.apiService.OnUpdateSessionListener.subscribe((evt: any) => {
+      this.setCurrentRealtimeSession(
+        new RealtimeSession(evt.value.data.onUpdateSession)
+      );
+    });
+  }
+
+  /* ============== Interface Implementation ============== */
+
   getWhiteboardData(): Observable<WhiteboardInterface> {
-    throw new Error('Method not implemented.');
+    return from(
+      this.apiService.GetSession(this.currentRealtimeSession.id)
+    ).pipe(
+      map(sessionResponse => {
+        return new RealtimeSession(sessionResponse).whiteboard;
+      })
+    );
   }
+
   updateWhiteboardData(whiteboard: WhiteboardInterface): Observable<Boolean> {
-    throw new Error('Method not implemented.');
+    return from(
+      this.apiService.UpdateSession({
+        id: this.currentRealtimeSession.id,
+        title: this.currentRealtimeSession.title,
+        pincode: this.currentRealtimeSession.pincode,
+        whiteboard: JSON.stringify(whiteboard)
+      })
+    ).pipe(mapTo(true));
   }
+
   uploadFile(file: File): Observable<ImageInterface> {
     throw new Error('Method not implemented.');
   }
+
+  /* ============== Interface Implementation ============== */
 }
