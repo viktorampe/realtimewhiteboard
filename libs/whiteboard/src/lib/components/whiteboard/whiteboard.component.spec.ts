@@ -162,7 +162,7 @@ describe('WhiteboardComponent', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should not call uploadImageForCard() because files doesnt have length', () => {
+    it('should not call uploadImageForCard() because no files', () => {
       const spy = jest.spyOn(component, 'uploadImageForCard');
 
       const event = {
@@ -194,7 +194,7 @@ describe('WhiteboardComponent', () => {
         ]
       });
     });
-    it('should not update the whiteboard', () => {
+    it('should not update the whiteboard because there are selectedCards', () => {
       const spy = jest.spyOn(component, 'updateWhiteboard' as any);
       component.cards = [
         new CardFixture({
