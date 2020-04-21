@@ -1,0 +1,12 @@
+@import '../../../constants.scss';
+
+nav {
+  height: 70px;
+  border-bottom: 1px solid $primary;
+
+  #nav_container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
