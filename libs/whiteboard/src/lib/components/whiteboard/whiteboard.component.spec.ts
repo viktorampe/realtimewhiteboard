@@ -1,3 +1,4 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -7,10 +8,10 @@ import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
-import { CardFixture } from '../../models/card.fixture';
 import { CardInterface } from '../../models/card.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
+import { CardFixture } from './../../models/card.fixture';
 import { WhiteboardComponent } from './whiteboard.component';
 
 describe('WhiteboardComponent', () => {
@@ -377,16 +378,22 @@ describe('WhiteboardComponent', () => {
       });
     });
 
-    describe('updateImageForCard()', () => {
+    describe('onFilePickerImageSelected()', () => {
       const card = new CardFixture();
       const file = new File([''], 'dummy.jpg', {
-        type: ''
+        type: 'image/jpeg'
       });
       let emitSpy: jest.SpyInstance;
 
+      const imagePickedEvent: any = {
+        target: {
+          files: [file]
+        }
+      };
+
       beforeEach(() => {
         emitSpy = jest.spyOn(component.uploadImage, 'next');
-        component.uploadImageForCard(card, file);
+        component.onFilePickerImageSelected(imagePickedEvent, card);
       });
 
       it('should set card mode to UploadMode when ', () => {
@@ -396,19 +403,6 @@ describe('WhiteboardComponent', () => {
       it('should trigger an uploadImage event', () => {
         expect(emitSpy).toHaveBeenCalledTimes(1);
         expect(emitSpy).toHaveBeenCalledWith({ card, imageFile: file });
-      });
-
-      it('should update shelfcard copy - canManage = true', () => {
-        component.canManage = true;
-
-        component.lastColor = 'red';
-        component.cards = [];
-        component.shelfCards = [];
-        component.addEmptyCard();
-
-        component.uploadImageForCard(component.cards[0], file);
-
-        expect(component.cards[0].image).toEqual(component.shelfCards[0].image);
       });
     });
 
@@ -808,21 +802,21 @@ describe('WhiteboardComponent', () => {
       const addEmptySpy = jest
         .spyOn(component, 'addEmptyCard')
         .mockReturnValue(new CardFixture());
-      const uploadImageForCardSpy = jest
-        .spyOn(component, 'uploadImageForCard')
+      const emitSpy = jest
+        .spyOn(component.uploadImage, 'next')
         .mockImplementation(() => {});
 
-      const file = new File([''], 'dummy.jpg', {
+      const file1 = new File([''], 'dummy1.jpg', {
         type: component.allowedFileTypes[0]
       });
-      const file2 = new File([''], 'dummy.jpg', {
+      const file2 = new File([''], 'dummy2.jpg', {
         type: component.allowedFileTypes[0]
       });
 
       const fileDropEvent = {
         preventDefault: () => {},
         stopPropagation: () => {},
-        dataTransfer: { files: [file, file2] },
+        dataTransfer: { files: [file1, file2] },
         offsetX: 400,
         offsetY: 400
       };
@@ -830,16 +824,18 @@ describe('WhiteboardComponent', () => {
       component.onFilesDropped(fileDropEvent);
 
       expect(addEmptySpy).toHaveBeenCalledTimes(2);
-      expect(uploadImageForCardSpy).toHaveBeenCalledTimes(2);
       expect(addEmptySpy.mock.calls).toEqual([
         [{ top: 400, left: 400 }],
         [{ top: 450, left: 450 }]
       ]);
-      expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(new CardFixture());
-      expect(uploadImageForCardSpy.mock.calls).toEqual([
-        [new CardFixture(), file],
-        [new CardFixture(), file2]
-      ]);
+
+      expect(emitSpy).toHaveBeenCalledTimes(2);
+      [file1, file2].forEach(file =>
+        expect(emitSpy).toHaveBeenCalledWith({
+          card: new CardFixture({ mode: ModeEnum.UPLOAD }),
+          imageFile: file
+        })
+      );
     });
   });
 
@@ -867,6 +863,78 @@ describe('WhiteboardComponent', () => {
 
           expect(component.zoomFactor).toBe(expectedTicks[i]);
         }
+      });
+    });
+  });
+  //file.only
+  describe('file upload response', () => {
+    // The first part of upload files, picking/dragging files has been tested in the event handlers
+    // Those tests assert that the correct event has been emitted
+    // These tests are about handling the response of the service via input
+
+    const fileUploadResponse = (card, progress?, imageUrl?) => {
+      const response = {
+        card,
+        image: { progress, imageUrl }
+      };
+
+      const uploadImageResponse = {
+        currentValue: response,
+        previousValue: null,
+        firstChange: false,
+        isFirstChange: () => false
+      } as SimpleChange;
+
+      component.ngOnChanges({ uploadImageResponse });
+    };
+
+    let mockCard: CardInterface;
+    beforeEach(() => {
+      mockCard = new CardFixture({ mode: ModeEnum.UPLOAD });
+      component.cards = [mockCard];
+    });
+
+    describe('progress', () => {
+      beforeEach(() => {
+        component.changes.emit = jest.fn();
+        fileUploadResponse(mockCard, 15);
+      });
+
+      it('should show the upload progress', () => {
+        expect(mockCard.image.progress).toBe(15);
+        expect(mockCard.mode).toBe(ModeEnum.UPLOAD);
+      });
+
+      it('should not emit a whiteboard change', () => {
+        expect(component.changes.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('upload finished', () => {
+      beforeEach(() => {
+        component.changes.emit = jest.fn();
+        fileUploadResponse(mockCard, undefined, 'some.image.url');
+      });
+
+      it('should show the image', () => {
+        expect(mockCard.image.imageUrl).toBe('some.image.url');
+        expect(mockCard.mode).toBe(ModeEnum.IDLE);
+        expect(mockCard.viewModeImage).toBe(true);
+      });
+
+      it('should emit a whiteboard change', () => {
+        const expected = jasmine.objectContaining({ cards: [mockCard] });
+
+        expect(component.changes.emit).toHaveBeenCalledWith(expected);
+      });
+
+      it('should reset the selection', () => {
+        component.selectedCards = [mockCard];
+
+        fileUploadResponse(mockCard, undefined, 'some.image.url');
+
+        expect(mockCard.mode).toBe(ModeEnum.MULTISELECT);
+        expect(mockCard.viewModeImage).toBe(true);
       });
     });
   });
