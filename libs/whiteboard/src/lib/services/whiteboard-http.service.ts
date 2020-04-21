@@ -21,6 +21,7 @@ export interface WhiteboardHttpServiceInterface {
   getJson(): Observable<WhiteboardInterface>;
   setJson(whiteboard: WhiteboardInterface): Observable<Boolean>;
   uploadFile(file: File): Observable<ImageInterface>;
+  setSettings(settings: WhiteboardHttpSettingsInterface): void;
 }
 
 export interface WhiteboardHttpSettingsInterface {
