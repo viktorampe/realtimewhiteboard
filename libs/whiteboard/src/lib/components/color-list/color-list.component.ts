@@ -7,11 +7,7 @@ import {
 } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
-
-export interface ColorInterface {
-  label: string;
-  hexCode: string;
-}
+import { ColorInterface } from '../../models/color.interface';
 
 const defaultColorOptions: ColorInterface[] = [
   { label: 'blue', hexCode: '#00A7E2' },

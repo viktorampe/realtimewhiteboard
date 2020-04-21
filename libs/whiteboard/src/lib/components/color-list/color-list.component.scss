@@ -61,5 +61,8 @@ $gradient-angle: 135deg;
 
 // settings color-list
 :host.settings__color-list .color-list {
-  justify-content: space-between;
+  justify-content: start;
+  .color-list__swatch {
+    margin-right: 10px;
+  }
 }

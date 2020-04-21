@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { ColorInterface } from '../../models/color.interface';
 import { SettingsInterface } from '../../models/settings.interface';
-import { ColorInterface } from '../color-list/color-list.component';
 
 const defaultColorPaletteMap = {
   wouw: [
@@ -55,12 +55,13 @@ export class SettingsComponent implements OnInit {
   @Output() update = new EventEmitter<SettingsInterface>();
 
   settingsForm: FormGroup;
-  colorPaletteOptions = Object.keys(this.colorPalettes);
+  colorPaletteOptions: string[];
   pickedColorPalette$: Observable<string>;
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.colorPaletteOptions = Object.keys(this.colorPalettes);
     this.settingsForm = this.buildForm();
     this.pickedColorPalette$ = this.settingsForm.get(
       'colorPalette'
