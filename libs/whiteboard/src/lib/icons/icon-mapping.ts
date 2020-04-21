@@ -5,6 +5,7 @@ import {
 import {
   addSvg,
   arrowDownSvg,
+  colorLensSvg,
   deleteSvg,
   editSvg,
   flipCameraSvg,
@@ -41,5 +42,6 @@ export const iconMap: { [icon: string]: string } = {
   'arrow-down': arrowDownSvg,
   'empty-state-whiteboard-empty': whiteboardEmptyStateSvg,
   'empty-state-whiteboard-drop': whiteboardDropSvg,
-  'return-to-shelf': returnToShelfSvg
+  'return-to-shelf': returnToShelfSvg,
+  'color-lens': colorLensSvg
 };

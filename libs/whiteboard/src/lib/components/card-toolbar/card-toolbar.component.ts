@@ -56,6 +56,7 @@ export class CardToolbarComponent implements OnInit {
   @Input() inShelf: boolean;
   @Input() canManage: boolean;
   @Input() cardType: CardTypeEnum;
+  @Input() activeColor: string;
 
   @Output() clickDeleteIcon = new EventEmitter<void>();
   @Output() clickReturnToShelfIcon = new EventEmitter<void>();
@@ -64,6 +65,7 @@ export class CardToolbarComponent implements OnInit {
   @Output() clickFlipIcon = new EventEmitter<void>();
   @Output() clickMultiSelectIcon = new EventEmitter<void>();
   @Output() clickMultiSelectSelectedIcon = new EventEmitter<void>();
+  @Output() selectedColor = new EventEmitter<string>();
 
   constructor() {}
 
@@ -103,5 +105,10 @@ export class CardToolbarComponent implements OnInit {
 
   multiSelectSelectedClicked() {
     this.clickMultiSelectSelectedIcon.emit();
+  }
+
+  colorSelected(color) {
+    console.log(color);
+    this.selectedColor.emit(color);
   }
 }
