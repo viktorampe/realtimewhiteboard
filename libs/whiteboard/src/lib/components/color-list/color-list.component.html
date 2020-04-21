@@ -7,14 +7,10 @@
         ? 'edit'
         : 'whiteboard'
     "
-    *ngFor="let colorMap of colorOptions"
-    class="color-list__swatches"
-    (tap)="clickColor(colorMap.hexCode)"
-    [ngClass]="colorMap.colorName"
-    [ngClass]="
-      colorMap.hexCode.includes(activeColor)
-        ? 'default ' + colorMap.colorName
-        : colorMap.colorName
-    "
+    *ngFor="let color of colorOptions"
+    class="color-list__swatch"
+    (tap)="clickColor(color.hexCode)"
+    [style.background-color]="color.hexCode"
+    [class.color-list__swatch--selected]="color.hexCode.includes(activeColor)"
   ></div>
 </div>
