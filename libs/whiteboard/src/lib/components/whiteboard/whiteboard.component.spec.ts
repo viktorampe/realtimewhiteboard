@@ -224,6 +224,7 @@ describe('WhiteboardComponent', () => {
 
       component.onDragEnded(event, new CardFixture());
       expect(updateCardSpy).toHaveBeenCalled();
+      // card already gets mutated
       expect(updateCardSpy).toHaveBeenCalledWith(
         {
           top: 50,
@@ -257,6 +258,173 @@ describe('WhiteboardComponent', () => {
           new CardFixture({ id: 'AZ', top: 50, left: 50 })
         ]
       });
+    });
+  });
+
+  describe('onClickWhiteboard()', () => {
+    it('should call saveWhiteboard(), updateViewMode(), updateCard() if card is in edit mode', () => {
+      const updateCardSpy = jest.spyOn(component, 'updateCard');
+      const updateViewModeSpy = jest.spyOn(component, 'updateViewMode' as any);
+      const saveWhiteBoardSpy = jest.spyOn(component, 'saveWhiteboard' as any);
+
+      const event = {
+        target: {
+          classList: {
+            contains: jest.fn().mockReturnValue(true)
+          }
+        }
+      } as any;
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({
+          mode: ModeEnum.EDIT
+        })
+      ];
+
+      component.onClickWhiteboard(event);
+      expect(updateCardSpy).toHaveBeenCalledWith(
+        { description: new CardFixture().description },
+        new CardFixture()
+      );
+      // card is mutated already
+      expect(updateViewModeSpy).toHaveBeenCalledWith(
+        new CardFixture({ mode: ModeEnum.IDLE })
+      );
+      expect(saveWhiteBoardSpy).toHaveBeenCalled();
+    });
+
+    it('should set all non upload-idle-zoom to idle ', () => {
+      const event = {
+        target: {
+          classList: {
+            contains: jest.fn().mockReturnValue(true)
+          }
+        }
+      } as any;
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({
+          mode: ModeEnum.EDIT
+        }),
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+
+      component.onClickWhiteboard(event);
+      component.cards.forEach(card => {
+        expect(card).toEqual(jasmine.objectContaining({ mode: ModeEnum.IDLE }));
+      });
+    });
+  });
+
+  describe('cardDraggedPosition()', () => {
+    let event;
+    beforeEach(() => {
+      event = {
+        event: {
+          distance: {
+            x: 50,
+            y: 50
+          }
+        } as any,
+        card: new CardFixture(),
+        cardElement: {
+          offsetLeft: 5,
+          offsetTop: 5
+        } as any,
+        scrollLeft: 40
+      };
+    });
+
+    it('should set all cards to idle', () => {
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({ mode: ModeEnum.SELECTED }),
+        new CardFixture({ mode: ModeEnum.EDIT })
+      ];
+      component.cardDraggedPosition(event);
+      component.cards.forEach(card => {
+        expect(card).toEqual(jasmine.objectContaining({ mode: ModeEnum.IDLE }));
+      });
+    });
+    it('should set all cards to idle, except upload', () => {
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({ mode: ModeEnum.SELECTED }),
+        new CardFixture({ mode: ModeEnum.EDIT }),
+        new CardFixture({ mode: ModeEnum.UPLOAD })
+      ];
+      component.cardDraggedPosition(event);
+      expect(
+        component.cards.filter(card => card.mode === ModeEnum.UPLOAD).length
+      ).toBe(1);
+    });
+
+    it('should set all regular cards to multiselect and the selectedcards back to multiselectselected', () => {
+      component.cards = [
+        new CardFixture(),
+        new CardFixture(),
+        new CardFixture()
+      ];
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      component.cards.forEach(card => {
+        expect(card).toEqual(
+          jasmine.objectContaining({ mode: ModeEnum.MULTISELECT })
+        );
+      });
+      expect(component.selectedCards[0]).toEqual(
+        jasmine.objectContaining({ mode: ModeEnum.MULTISELECTSELECTED })
+      );
+    });
+
+    it('should call updateWhiteboard if the workspacecard not already in cards', () => {
+      const spy = component.workspaceElementRef.nativeElement;
+      jest.spyOn(spy, 'getBoundingClientRect').mockReturnValue({ height: 400 });
+      const updateWhiteboardSpy = jest.spyOn(
+        component,
+        'updateWhiteboard' as any
+      );
+      component.cards = [
+        new CardFixture({ id: 'yes' }),
+        new CardFixture(),
+        new CardFixture()
+      ];
+
+      event.card = new CardFixture({ id: 'newId' });
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      // card that was added (see below) it's already mutated so have to call with component.cards
+      // new CardFixture({
+      //   id: 'newId',
+      //   mode: ModeEnum.MULTISELECT,
+      //   top: 178,
+      //   left: 15
+      // })
+      expect(updateWhiteboardSpy).toHaveBeenCalledWith({
+        cards: component.cards
+      });
+    });
+
+    it('should not call updateWhiteboard if workspacecard is already in cards', () => {
+      const spy = component.workspaceElementRef.nativeElement;
+      jest.spyOn(spy, 'getBoundingClientRect').mockReturnValue({ height: 400 });
+      const updateWhiteboardSpy = jest.spyOn(
+        component,
+        'updateWhiteboard' as any
+      );
+      component.cards = [
+        new CardFixture({ id: 'yes' }),
+        new CardFixture(),
+        new CardFixture()
+      ];
+
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      expect(updateWhiteboardSpy).not.toHaveBeenCalled();
     });
   });
 
