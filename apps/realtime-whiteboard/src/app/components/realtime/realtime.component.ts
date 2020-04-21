@@ -29,6 +29,7 @@ export class RealtimeComponent implements OnInit {
 
     // subscribe on session updates
     this.sessionService.subscribeOnSessionUpdates();
+    // subscribe on behaviorSubject
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimeSession: RealtimeSession) => {
         this.session = realtimeSession;
@@ -40,21 +41,6 @@ export class RealtimeComponent implements OnInit {
   updateWhiteboard(updatedWhiteboard: WhiteboardInterface) {
     this.sessionService.updateWhiteboardData(updatedWhiteboard);
   }
-
-  /*
-  private fetchSession() {
-    this.sessionService
-      .getSession(this.sessionId)
-      .subscribe((session: RealtimeSession) => {
-        this.sessionService
-          .getPlayersBySession(session.id)
-          .subscribe((players: Player[]) => {
-            session.players = players;
-            this.session = session;
-          });
-      });
-  }
-  */
 
   private fetchSession() {
     this.sessionService.getSession(this.sessionId);

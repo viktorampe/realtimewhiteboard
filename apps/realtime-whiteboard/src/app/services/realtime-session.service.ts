@@ -26,45 +26,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.currentRealtimeSession = realtimeSession;
   }
 
-  /*
-  getSession(sessionId: string): Observable<RealtimeSession> {
-    return from(this.apiService.GetSession(sessionId)).pipe(
-      map(sessionResponse => {
-        return new RealtimeSession(sessionResponse);
-      })
-    );
-  }
-  */
-
-  /*
-  updateSession(realtimeSession: RealtimeSession): Observable<boolean> {
-    return from(
-      this.apiService.UpdateSession({
-        id: realtimeSession.id,
-        title: realtimeSession.title,
-        pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
-      })
-    ).pipe(mapTo(true));
-  }
-  */
-
-  /*
-
-  getPlayersBySession(sessionId: string): Observable<Player[]> {
-    return from(this.apiService.PlayerBySessionId(sessionId)).pipe(
-      map(playersResponse => {
-        const players: Player[] = [];
-        playersResponse.items.forEach(pr => {
-          players.push(new Player(pr));
-        });
-        return players;
-      })
-    );
-  }
-
-  */
-
   getSession(sessionId: string) {
     this.apiService
       .GetSession(sessionId)
@@ -89,6 +50,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       .catch(err => console.log(err));
   }
 
+  // fetches session each time someone calls updateSession, sets behaviorSubject
   subscribeOnSessionUpdates() {
     this.apiService.OnUpdateSessionListener.subscribe((evt: any) => {
       this.setCurrentRealtimeSession(
@@ -126,3 +88,42 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   /* ============== Interface Implementation ============== */
 }
+
+/*
+
+
+  getSession(sessionId: string): Observable<RealtimeSession> {
+    return from(this.apiService.GetSession(sessionId)).pipe(
+      map(sessionResponse => {
+        return new RealtimeSession(sessionResponse);
+      })
+    );
+  }
+
+
+  updateSession(realtimeSession: RealtimeSession): Observable<boolean> {
+    return from(
+      this.apiService.UpdateSession({
+        id: realtimeSession.id,
+        title: realtimeSession.title,
+        pincode: realtimeSession.pincode,
+        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+      })
+    ).pipe(mapTo(true));
+  }
+
+
+  getPlayersBySession(sessionId: string): Observable<Player[]> {
+    return from(this.apiService.PlayerBySessionId(sessionId)).pipe(
+      map(playersResponse => {
+        const players: Player[] = [];
+        playersResponse.items.forEach(pr => {
+          players.push(new Player(pr));
+        });
+        return players;
+      })
+    );
+  }
+
+
+*/
