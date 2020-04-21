@@ -89,7 +89,7 @@ describe('CardToolbarComponent', () => {
         description: 'should be available',
         data: {
           canManage: true,
-          cardType: CardTypeEnum.PUBLISHERCARD
+          cardType: CardTypeEnum.PUBLISHER
         },
         shouldBeAvailable: true
       },
@@ -97,7 +97,7 @@ describe('CardToolbarComponent', () => {
         description: 'should be available',
         data: {
           canManage: true,
-          cardType: CardTypeEnum.TEACHERCARD
+          cardType: CardTypeEnum.TEACHER
         },
         shouldBeAvailable: true
       },
@@ -105,7 +105,7 @@ describe('CardToolbarComponent', () => {
         description: 'should be available',
         data: {
           canManage: false,
-          cardType: CardTypeEnum.TEACHERCARD
+          cardType: CardTypeEnum.TEACHER
         },
         shouldBeAvailable: true
       },
@@ -113,7 +113,7 @@ describe('CardToolbarComponent', () => {
         description: 'should not be available',
         data: {
           canManage: false,
-          cardType: CardTypeEnum.PUBLISHERCARD
+          cardType: CardTypeEnum.PUBLISHER
         },
         shouldBeAvailable: false
       }
@@ -143,7 +143,7 @@ describe('CardToolbarComponent', () => {
         description: 'should be available',
         data: {
           inShelf: false,
-          cardType: CardTypeEnum.PUBLISHERCARD
+          cardType: CardTypeEnum.PUBLISHER
         },
         shouldBeAvailable: true
       },
@@ -151,7 +151,7 @@ describe('CardToolbarComponent', () => {
         description: 'should not be available',
         data: {
           inShelf: true,
-          cardType: CardTypeEnum.PUBLISHERCARD
+          cardType: CardTypeEnum.PUBLISHER
         },
         shouldBeAvailable: false
       },
@@ -159,7 +159,7 @@ describe('CardToolbarComponent', () => {
         description: 'should not be available',
         data: {
           inShelf: true,
-          cardType: CardTypeEnum.PUBLISHERCARD
+          cardType: CardTypeEnum.PUBLISHER
         },
         shouldBeAvailable: false
       },
@@ -167,7 +167,7 @@ describe('CardToolbarComponent', () => {
         description: 'should not be available',
         data: {
           inShelf: false,
-          cardType: CardTypeEnum.TEACHERCARD
+          cardType: CardTypeEnum.TEACHER
         },
         shouldBeAvailable: false
       }

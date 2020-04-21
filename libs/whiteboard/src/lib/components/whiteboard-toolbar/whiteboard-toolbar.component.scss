@@ -24,17 +24,29 @@ $shadow-color-light: #ffffff;
     box-shadow: -1px 0px 1px $shadow-color-dark, 1px 0px 1px $shadow-color-light;
   }
 
-  #delete {
-    width: 90px;
+  campus-color-list {
+    width: 100%;
+    margin: 0px;
+  }
+
+  &__tool {
+    &:last-of-type {
+      margin-right: 25px;
+    }
+    width: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 0px;
+    margin: 0px 20px;
 
-    .toolbar_icon {
+    mat-icon {
       color: #e22940;
       width: 43px;
       height: 43px;
+
+      svg {
+        fill: #e22940;
+      }
     }
   }
 }
