@@ -866,7 +866,7 @@ describe('WhiteboardComponent', () => {
       });
     });
   });
-  //file.only
+
   describe('file upload response', () => {
     // The first part of upload files, picking/dragging files has been tested in the event handlers
     // Those tests assert that the correct event has been emitted
