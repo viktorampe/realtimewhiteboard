@@ -396,7 +396,7 @@ describe('WhiteboardComponent', () => {
         component.onFilePickerImageSelected(imagePickedEvent, card);
       });
 
-      it('should set card mode to UploadMode when ', () => {
+      it('should set card mode to UploadMode', () => {
         expect(card.mode).toBe(ModeEnum.UPLOAD);
       });
 
