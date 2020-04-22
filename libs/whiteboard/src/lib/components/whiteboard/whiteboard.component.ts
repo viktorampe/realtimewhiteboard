@@ -29,7 +29,7 @@ import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 
 const CARD_HEIGHT = 167; // should be in sync with card.component.scss
-
+const CARD_WIDTH = 250;
 const START_ZOOM_LEVEL = 1;
 const ZOOM_TICK = 0.2;
 const MIN_ZOOM_LEVEL = 0.4; // can't be lower than zero
@@ -205,6 +205,8 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    const whiteboard = document.getElementsByClassName('whiteboard')[0];
+
     //deselect all selected cards
     this.selectedCards = [];
     // set idle mode
@@ -220,8 +222,8 @@ export class WhiteboardComponent implements OnChanges {
       color: this.lastColor,
       description: '',
       image: null,
-      top: 0,
-      left: 0,
+      top: whiteboard.clientHeight / 2 - CARD_HEIGHT / 2,
+      left: whiteboard.clientWidth / 2 - CARD_WIDTH / 2,
       viewModeImage: false,
       ...values
     };

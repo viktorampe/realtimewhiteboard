@@ -686,8 +686,8 @@ describe('WhiteboardComponent', () => {
           color: 'red',
           description: '',
           image: null,
-          top: 0,
-          left: 0,
+          top: -83.5,
+          left: -125,
           viewModeImage: false
         };
 
@@ -721,8 +721,8 @@ describe('WhiteboardComponent', () => {
           color: 'red',
           description: '',
           image: null,
-          top: 0,
-          left: 0,
+          top: -83.5,
+          left: -125,
           viewModeImage: false
         });
 
