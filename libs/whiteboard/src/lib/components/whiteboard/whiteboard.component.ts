@@ -36,6 +36,8 @@ const ZOOM_TICK = 0.2;
 const MIN_ZOOM_LEVEL = 0.4; // can't be lower than zero
 const MAX_ZOOM_LEVEL = 2;
 
+const DEFAULT_COLOR = '#00A7E2';
+
 const defaultColorPaletteMap = {
   wouw: [
     {
@@ -147,7 +149,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() themeColorPalettes: {
     [paletteName: string]: ColorInterface[];
   } = defaultColorPaletteMap;
-  @Input() defaultColor = '#00A7E2'; // TODO: rename to 'themeColor' which is semantically more correct
+  @Input() defaultColor = DEFAULT_COLOR; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
 
@@ -161,7 +163,7 @@ export class WhiteboardComponent implements OnChanges {
 
   selectedCards: CardInterface[] = [];
 
-  lastColor = '#00A7E2'; // used to give a new card the last picked color
+  lastColor = DEFAULT_COLOR; // used to give a new card the last picked color
   isShelfMinimized = false;
   zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;

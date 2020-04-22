@@ -11,6 +11,6 @@
     class="color-list__swatch"
     (tap)="clickColor(color.hexCode)"
     [style.background-color]="color.hexCode"
-    [class.color-list__swatch--selected]="color.hexCode.includes(activeColor)"
+    [class.color-list__swatch--selected]="color.hexCode === activeColor"
   ></div>
 </div>
