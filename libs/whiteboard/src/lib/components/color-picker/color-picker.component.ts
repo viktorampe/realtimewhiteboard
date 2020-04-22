@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostBinding,
   Input,
   OnInit,
   Output
@@ -11,6 +12,10 @@ import {
 export interface ColorInterface {
   colorName: string;
   hexCode: string;
+}
+export enum ColorPickerModeEnum {
+  WHEEL,
+  LIST
 }
 
 @Component({
@@ -37,21 +42,37 @@ export interface ColorInterface {
   ]
 })
 export class ColorPickerComponent implements OnInit {
-  @Input() activeColor: string;
+  public active = false;
+  public modes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
+  private _mode: ColorPickerModeEnum;
+
+  public activeColor: string;
+
+  @Input()
+  public get mode(): ColorPickerModeEnum {
+    return this._mode;
+  }
+  public set mode(value: ColorPickerModeEnum) {
+    this._mode = value;
+    this.isList = this._mode === ColorPickerModeEnum.LIST;
+    this.isWheel = this._mode === ColorPickerModeEnum.WHEEL;
+  }
+
+  @HostBinding('class.list') public isList = false;
+  @HostBinding('class.wheel') public isWheel = true;
+
   @Input() colors: ColorInterface[] = [
     { colorName: 'blue', hexCode: '#00A7E2' },
-    { colorName: 'green', hexCode: '#2EA03D' },
     { colorName: 'red', hexCode: '#E22940' },
-    { colorName: 'purple', hexCode: '#5D3284' },
     { colorName: 'yellow', hexCode: '#FADB48' },
     { colorName: 'green', hexCode: '#2EA03D' },
-    { colorName: 'red', hexCode: '#E22940' },
-    { colorName: 'purple', hexCode: '#5D3284' }
+    { colorName: 'purple', hexCode: '#5D3284' },
+    { colorName: 'pink', hexCode: '#FF33CE' },
+    { colorName: 'black', hexCode: '#222222' },
+    { colorName: 'orange', hexCode: '#FF5733' }
   ];
 
   @Output() selectedColor = new EventEmitter<string>();
-
-  public active = false;
 
   constructor(private cdRef: ChangeDetectorRef) {}
 
@@ -59,6 +80,7 @@ export class ColorPickerComponent implements OnInit {
 
   clickColor(color: string) {
     this.toggleActive();
+    this.activeColor = color;
     this.cdRef.detectChanges();
     this.selectedColor.emit(color);
   }

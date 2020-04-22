@@ -18,8 +18,8 @@
       ></mat-icon>
     </div>
     <campus-color-picker
+      [mode]="colorPickerModes.WHEEL"
       [@showHideToolbarTool]="'select'"
-      [activeColor]="activeColor"
       (selectedColor)="colorSelected($event)"
       *ngIf="!inShelf"
     ></campus-color-picker>

@@ -8,6 +8,7 @@ import {
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
+import { ColorPickerModeEnum } from '../color-picker/color-picker.component';
 
 @Component({
   selector: 'campus-card-toolbar',
@@ -51,6 +52,8 @@ import { ModeEnum } from '../../enums/mode.enum';
   ]
 })
 export class CardToolbarComponent implements OnInit {
+  public colorPickerModes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
+
   @Input() mode: ModeEnum;
   @Input() zoomFactor: number;
   @Input() inShelf: boolean;
