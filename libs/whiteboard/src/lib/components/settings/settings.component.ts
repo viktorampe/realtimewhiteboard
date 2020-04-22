@@ -4,42 +4,6 @@ import { Observable } from 'rxjs';
 import { ColorInterface } from '../../models/color.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 
-const defaultColorPaletteMap = {
-  wouw: [
-    {
-      label: 'L1',
-      hexCode: '#d9328a'
-    },
-    {
-      label: 'L2',
-      hexCode: '#00b3c4'
-    },
-    {
-      label: 'L3',
-      hexCode: '#afcb27'
-    },
-    {
-      label: 'L4',
-      hexCode: '#ea9d04'
-    },
-    {
-      label: 'L5',
-      hexCode: '#963a8e'
-    },
-    {
-      label: 'L6',
-      hexCode: '#e40521'
-    }
-  ],
-  passepartout: [
-    { label: 'L5', hexCode: '#6ec3c1' },
-    {
-      label: 'L6',
-      hexCode: '#e94b2b'
-    }
-  ]
-};
-
 @Component({
   selector: 'campus-settings',
   templateUrl: './settings.component.html',
@@ -50,7 +14,7 @@ export class SettingsComponent implements OnInit {
   @Input() title: string;
   @Input() colorPalettes: {
     [paletteName: string]: ColorInterface[];
-  } = defaultColorPaletteMap;
+  };
 
   @Output() update = new EventEmitter<SettingsInterface>();
 

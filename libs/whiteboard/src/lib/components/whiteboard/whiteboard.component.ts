@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardInterface } from '../../models/card.interface';
+import { ColorInterface } from '../../models/color.interface';
 import ImageInterface from '../../models/image.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
@@ -34,6 +35,42 @@ const START_ZOOM_LEVEL = 1;
 const ZOOM_TICK = 0.2;
 const MIN_ZOOM_LEVEL = 0.4; // can't be lower than zero
 const MAX_ZOOM_LEVEL = 2;
+
+const defaultColorPaletteMap = {
+  wouw: [
+    {
+      label: 'L1',
+      hexCode: '#d9328a'
+    },
+    {
+      label: 'L2',
+      hexCode: '#00b3c4'
+    },
+    {
+      label: 'L3',
+      hexCode: '#afcb27'
+    },
+    {
+      label: 'L4',
+      hexCode: '#ea9d04'
+    },
+    {
+      label: 'L5',
+      hexCode: '#963a8e'
+    },
+    {
+      label: 'L6',
+      hexCode: '#e40521'
+    }
+  ],
+  passepartout: [
+    { label: 'L5', hexCode: '#6ec3c1' },
+    {
+      label: 'L6',
+      hexCode: '#e94b2b'
+    }
+  ]
+};
 
 export interface CardImageUploadInterface {
   card: CardInterface;
@@ -107,6 +144,9 @@ export class WhiteboardComponent implements OnChanges {
   @Input() title = 'Deze sorteeroefening heeft nog geen titel.';
   @Input() cards: CardInterface[];
   @Input() shelfCards: CardInterface[];
+  @Input() themeColorPalettes: {
+    [paletteName: string]: ColorInterface[];
+  } = defaultColorPaletteMap;
   @Input() defaultColor = '#00A7E2';
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
