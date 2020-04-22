@@ -122,6 +122,17 @@
           darken($background, 5%)
         );
 
+        &:active {
+          box-shadow: 1px 1px 8px -1px rgba($defaultColor, 0.3),
+            3px 3px 8px $shadow-color-dark,
+            -1px -1px 6px -3px rgba($defaultColor, 0.2),
+            -3px -3px 8px $shadow-color-light;
+
+          .whiteboard__workspace__actions__zoom__separator {
+            opacity: 0;
+          }
+        }
+
         &__separator {
           width: 1px;
           align-self: stretch;
@@ -135,6 +146,17 @@
           padding: 6px;
           height: 36px;
           width: 36px;
+
+          &:active {
+            &:first-child {
+              border-radius: 12px 0 0 12px;
+            }
+            &:last-child {
+              border-radius: 0 12px 12px 0;
+            }
+            box-shadow: inset 1px 1px 4px $shadow-color-dark,
+              inset -1px -1px 4px $shadow-color-light;
+          }
         }
       }
     }
