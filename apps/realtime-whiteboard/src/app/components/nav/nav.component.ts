@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
 
@@ -10,13 +11,21 @@ import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/session
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
+  session: RealtimeSession;
+
   constructor(
     private router: Router,
     private sessionService: RealtimeSessionService,
     public dialog: MatDialog
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sessionService.currentRealtimeSession$.subscribe(
+      (realtimesession: RealtimeSession) => {
+        this.session = realtimesession;
+      }
+    );
+  }
 
   setupSession() {
     const dialogRef = this.dialog.open(SessionsetupdialogComponent, {
@@ -32,10 +41,14 @@ export class NavComponent implements OnInit {
     });
   }
 
-  startSession() {
+  private startSession() {
     // create session
     this.sessionService.createNewSession().subscribe(realtimeSession => {
       this.router.navigate(['realtimesession', realtimeSession.id]);
     });
+  }
+
+  stopSession() {
+    console.log('remove active session');
   }
 }

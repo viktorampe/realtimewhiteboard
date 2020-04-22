@@ -1,7 +1,10 @@
 <nav>
   <div class="content_container" id="nav_container">
-    <button class="btn btnPrimary" (click)="setupSession()"
+    <button class="btn btnPrimary" (click)="setupSession()" *ngIf="!session"
       >start session</button
+    >
+    <button class="btn btnPrimary" (click)="stopSession()" *ngIf="session"
+      >Stop session</button
     >
   </div>
 </nav>

@@ -27,8 +27,6 @@ export class RealtimeComponent implements OnInit {
       this.fetchSession();
     });
 
-    // subscribe on session updates
-    this.sessionService.subscribeOnSessionUpdates();
     // subscribe on behaviorSubject
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimeSession: RealtimeSession) => {
