@@ -4,11 +4,9 @@ import { cold } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { CardFixture } from '../models/card.fixture';
+import ImageInterface from '../models/image.interface';
 import { WhiteboardFixture } from '../models/whiteboard.fixture';
-import {
-  WhiteboardHttpService,
-  WhiteboardHttpServiceInterface
-} from './whiteboard-http.service';
+import { WhiteboardHttpService, WhiteboardHttpServiceInterface } from './whiteboard-http.service';
 
 describe('WhiteboardHttpService', () => {
   let whiteboardHttpService: WhiteboardHttpServiceInterface;
@@ -93,5 +91,80 @@ describe('WhiteboardHttpService', () => {
         { withCredentials: true }
       );
     });
+  });
+
+  describe('uploadFile', () => {
+    const file = new File([], 'image');
+
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    const responseEvent = {
+      type: 4,
+      body: {
+        storageInfo: {
+          eduFileId: 1
+        }
+      }
+    };
+    const expectedResponse = {
+      imageUrl: APIBase + '/EduFiles/' + 1 + '/redirectUrl'
+    };
+
+    // const uploadProgressEvent = {
+    //   type: 1,
+    //   loaded: 8,
+    //   total: 10
+    // };
+
+    const image: ImageInterface = {
+      progress: 8,
+      imageUrl: 'www.test.be'
+    };
+
+    beforeEach(() => {
+      httpClient.request = jest.fn().mockReturnValue(of(responseEvent));
+    });
+
+    it('should make the correct api call and return the response', () => {
+      expect(whiteboardHttpService.uploadFile(file)).toBeObservable(
+        cold('(a|)', { a: expectedResponse })
+      );
+
+      expect(httpClient.request).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          url: APIBase + '/EduContentFiles/' + 1 + '/store',
+          method: 'POST',
+          reportProgress: true, withCredentials: true 
+        })
+      );
+
+    });
+
+    // it('should make the correct api call and return the response', () => {
+    //   const uploadProgressEvent = {
+    //     type: 1,
+    //     loaded: 8,
+    //     total: 10
+    //   };
+    //   beforeEach(() => {
+    //     httpClient.request = jest.fn().mockReturnValue(of(uploadProgressEvent));
+    //   });
+
+    //   expect(whiteboardHttpService.uploadFile(file)).toBeObservable(
+    //     cold('(a|)', { a: expectedResponse })
+    //   );
+    //   expect(httpClient.request).toHaveBeenCalledWith(
+    //     jasmine.objectContaining({
+    //       url: 'http://some.website.address/api/EduContentFiles/1/store'
+    //     })
+    //   );
+
+    //   expect(httpClient.request).toHaveBeenCalledWith(
+    //     APIBase + '/EduContentFiles/' + 1 + '/store',
+    //     formData,
+    //     { reportProgress: true, withCredentials: true }
+    //   );
+    // });
   });
 });
