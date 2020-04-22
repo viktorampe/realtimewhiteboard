@@ -56,7 +56,9 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         whiteboard: JSON.stringify(realtimeSession.whiteboard)
       })
     ).pipe(
+      // get created session
       map(sessionResponse => {
+        // add players to session
         realtimeSession.players.forEach(player => {
           this.apiService
             .CreatePlayer({
@@ -65,28 +67,13 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
             })
             .catch(err => console.log(err));
         });
-
-        return new RealtimeSession(sessionResponse);
+        // update behaviorSubject
+        const currentSession = new RealtimeSession(sessionResponse);
+        this.setCurrentRealtimeSession(currentSession);
+        // return session (id is required for navigation)
+        return currentSession;
       })
     );
-
-    // create session
-    this.apiService
-      .CreateSession({
-        title: realtimeSession.id,
-        pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
-      })
-      .then(session => {
-        // add players to session
-        realtimeSession.players.forEach(player => {
-          this.apiService.CreatePlayer({
-            sessionID: session.id,
-            fullName: player.fullName
-          });
-        });
-      })
-      .catch(err => console.log(err));
   }
 
   getSession(sessionId: string) {
