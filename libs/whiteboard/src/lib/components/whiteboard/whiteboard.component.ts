@@ -205,7 +205,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
-    const whiteboard = document.getElementsByClassName('whiteboard')[0];
+    const whiteboard = this.workspaceElementRef.nativeElement;
 
     //deselect all selected cards
     this.selectedCards = [];
