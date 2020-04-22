@@ -129,8 +129,11 @@ export class WhiteboardComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.uploadImageResponse) {
-      this.handleImageUploadResponse(this.uploadImageResponse);
+    if (
+      changes.uploadImageResponse &&
+      !changes.uploadImageResponse.firstChange
+    ) {
+      this.handleImageUploadResponse(changes.uploadImageResponse.currentValue);
     }
   }
 
@@ -313,8 +316,7 @@ export class WhiteboardComponent implements OnChanges {
     input.value = '';
   }
 
-  // TODO: check upload flow
-  uploadImageForCard(card: CardInterface, imageFile: File) {
+  private uploadImageForCard(card: CardInterface, imageFile: File) {
     this.updateCard({ mode: ModeEnum.UPLOAD }, card);
     this.uploadImage.next({ card, imageFile: imageFile });
   }
@@ -322,9 +324,13 @@ export class WhiteboardComponent implements OnChanges {
   private handleImageUploadResponse(
     response: CardImageUploadResponseInterface
   ) {
-    if (response.image) {
-      // update card
-      this.updateCard({ image: response.image }, response.card);
+    if (!response.image) return;
+
+    // update card
+    this.updateCard({ image: response.image }, response.card);
+
+    // when upload is complete
+    if (response.image.imageUrl) {
       // set mode to MUTLISELECT when mutliple cards are selected
       if (this.selectedCards.length) {
         this.updateCard(
@@ -339,6 +345,7 @@ export class WhiteboardComponent implements OnChanges {
           response.card
         );
       }
+
       this.saveWhiteboard();
     }
   }
