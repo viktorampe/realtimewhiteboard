@@ -8,6 +8,7 @@ export default class RealtimeSession {
   pincode: number;
   whiteboard: WhiteboardInterface;
   players: Player[];
+  deleted: boolean;
 
   constructor(sessionResponse?: any) {
     this.id = sessionResponse ? sessionResponse.id : null;
@@ -19,6 +20,7 @@ export default class RealtimeSession {
     this.whiteboard = sessionResponse
       ? SessionHelper.parseWhiteboard(sessionResponse.whiteboard)
       : null;
+    this.deleted = false;
   }
 
   setPlayers(playerResponse: any[]): Player[] {

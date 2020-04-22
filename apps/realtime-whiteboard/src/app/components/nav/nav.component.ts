@@ -22,7 +22,13 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
-        this.session = realtimesession;
+        if (realtimesession !== null) {
+          if (realtimesession.deleted === true) {
+            this.router.navigate(['']);
+          } else {
+            this.session = realtimesession;
+          }
+        }
       }
     );
   }
@@ -69,6 +75,6 @@ export class NavComponent implements OnInit {
   }
 
   stopSession() {
-    console.log('remove active session');
+    this.sessionService.DeleteSession(this.session.id);
   }
 }
