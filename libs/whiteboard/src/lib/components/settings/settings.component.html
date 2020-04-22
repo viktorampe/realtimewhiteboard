@@ -16,17 +16,17 @@
       <select formControlName="colorPalette" id="methods">
         <option value="" disabled selected>Kies een kleurenpalet</option>
         <option
-          *ngFor="let colorPalette of colorPaletteOptions"
+          *ngFor="let colorPalette of colorPaletteNames"
           [value]="colorPalette"
           >{{ colorPalette }}</option
         >
       </select>
       <campus-color-list
-        *ngIf="pickedColorPalette$ | async as colorPalette"
+        *ngIf="paletteColors$ | async as colors"
         class="settings__color-list"
         [activeColor]="themeColor"
-        [colorOptions]="colorPalettes[colorPalette]"
-        (selectedColor)="setDefaultColor($event)"
+        [colorOptions]="colors"
+        (selectedColor)="setThemeColor($event)"
       ></campus-color-list>
     </div>
   </div>

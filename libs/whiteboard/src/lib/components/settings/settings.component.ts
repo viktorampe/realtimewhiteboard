@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ColorInterface } from '../../models/color.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 
@@ -19,17 +20,19 @@ export class SettingsComponent implements OnInit {
   @Output() update = new EventEmitter<SettingsInterface>();
 
   settingsForm: FormGroup;
-  colorPaletteOptions: string[];
-  pickedColorPalette$: Observable<string>;
+  colorPaletteNames: string[];
+  paletteColors$: Observable<ColorInterface[]>;
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.colorPaletteOptions = Object.keys(this.colorPalettes);
+    this.colorPaletteNames = Object.keys(this.colorPalettes);
     this.settingsForm = this.buildForm();
-    this.pickedColorPalette$ = this.settingsForm.get(
-      'colorPalette'
-    ).valueChanges;
+    this.paletteColors$ = this.settingsForm
+      .get('colorPalette')
+      .valueChanges.pipe(
+        map(colorPaletteName => this.colorPalettes[colorPaletteName])
+      );
   }
 
   private buildForm(): FormGroup {
@@ -39,7 +42,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  setDefaultColor(color: string) {
+  setThemeColor(color: string) {
     this.themeColor = color;
   }
 
