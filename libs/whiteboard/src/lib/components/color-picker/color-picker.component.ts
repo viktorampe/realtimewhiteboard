@@ -46,7 +46,7 @@ export class ColorPickerComponent implements OnInit {
   public modes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
   private _mode: ColorPickerModeEnum;
 
-  public activeColor: string;
+  @Input() activeColor: string;
 
   @Input()
   public get mode(): ColorPickerModeEnum {

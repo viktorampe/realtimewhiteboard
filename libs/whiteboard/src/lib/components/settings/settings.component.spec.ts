@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { HAMMER_LOADER } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { SettingsInterface } from '../../models/settings.interface';
-import { ColorListComponent } from '../color-list/color-list.component';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { SettingsComponent } from './settings.component';
 
 describe('SettingsComponent', () => {
@@ -13,13 +15,14 @@ describe('SettingsComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [SettingsComponent, ColorListComponent],
-      imports: [FormsModule, BrowserAnimationsModule],
+      declarations: [SettingsComponent, ColorPickerComponent],
+      imports: [FormsModule, NoopAnimationsModule, MatIconModule],
       providers: [
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
-        }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
   });

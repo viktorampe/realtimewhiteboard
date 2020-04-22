@@ -22,6 +22,7 @@
   >
     <li
       class="color-picker__color"
+      [ngClass]="{ active: activeColor === color.hexCode }"
       *ngFor="let color of colors; index as i"
       [ngStyle]="{
         'background-color': color.hexCode,

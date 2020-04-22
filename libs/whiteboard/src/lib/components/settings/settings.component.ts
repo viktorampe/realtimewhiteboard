@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SettingsInterface } from '../../models/settings.interface';
+import { ColorPickerModeEnum } from '../color-picker/color-picker.component';
 
 @Component({
   selector: 'campus-settings',
@@ -7,6 +8,8 @@ import { SettingsInterface } from '../../models/settings.interface';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent {
+  public colorPickerModes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
+
   @Input() activeColor: string;
   @Input() title: string;
   @Output() update = new EventEmitter<SettingsInterface>();
