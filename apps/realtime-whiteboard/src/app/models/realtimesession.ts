@@ -17,7 +17,7 @@ export default class RealtimeSession {
     this.whiteboard = SessionHelper.parseWhiteboard(sessionResponse.whiteboard);
   }
 
-  private setPlayers(playerResponse: any[]): Player[] {
+  setPlayers(playerResponse: any[]): Player[] {
     const players: Player[] = [];
     playerResponse.forEach(pr => players.push(new Player(pr)));
     return players;

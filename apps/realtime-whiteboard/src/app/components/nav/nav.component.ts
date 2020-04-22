@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { APIService } from '../../API.service';
+import { RealtimeSessionService } from '../../services/realtime-session.service';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
-import { SessionHelper } from '../../util/sessionhelper';
 
 @Component({
   selector: 'campus-nav',
@@ -11,20 +10,9 @@ import { SessionHelper } from '../../util/sessionhelper';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-  players: string[] = [
-    'Viktor',
-    'Frederic',
-    'Thomas',
-    'Tom',
-    'Karl',
-    'David',
-    'Bert',
-    'Yannis'
-  ];
-
   constructor(
     private router: Router,
-    private apiService: APIService,
+    private sessionService: RealtimeSessionService,
     public dialog: MatDialog
   ) {}
 
@@ -46,23 +34,8 @@ export class NavComponent implements OnInit {
 
   startSession() {
     // create session
-    this.apiService
-      .CreateSession({
-        title: 'My first session',
-        pincode: 123456,
-        whiteboard: SessionHelper.getEmptyWhiteboardString()
-      })
-      .then(session => {
-        // add players to session
-        this.players.forEach(playerName => {
-          this.apiService.CreatePlayer({
-            sessionID: session.id,
-            fullName: playerName
-          });
-        });
-        // navigate to session
-        this.router.navigate(['session', session.id]);
-      })
-      .catch(err => console.log(err));
+    this.sessionService.createNewSession().subscribe(realtimeSession => {
+      //this.router.navigate(['realtime', realtimeSession.id]);
+    });
   }
 }

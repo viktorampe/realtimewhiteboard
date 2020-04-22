@@ -26,14 +26,75 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.currentRealtimeSession = realtimeSession;
   }
 
+  createNewSession(): Observable<RealtimeSession> {
+    const realtimeSession = {
+      id: null,
+      title: 'New Realtime Session',
+      pincode: 555555,
+      whiteboard: {
+        title: 'realtime whiteboard',
+        defaultColor: '#5D3284',
+        cards: [],
+        shelfCards: []
+      },
+      players: [
+        { id: null, sessionId: null, fullName: 'Vitkor' },
+        { id: null, sessionId: null, fullName: 'Frederic' },
+        { id: null, sessionId: null, fullName: 'Thomas' },
+        { id: null, sessionId: null, fullName: 'Tom' },
+        { id: null, sessionId: null, fullName: 'Karl' },
+        { id: null, sessionId: null, fullName: 'David' },
+        { id: null, sessionId: null, fullName: 'Bert' },
+        { id: null, sessionId: null, fullName: 'Yannis' }
+      ]
+    };
+
+    return from(
+      this.apiService.CreateSession({
+        title: realtimeSession.id,
+        pincode: realtimeSession.pincode,
+        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+      })
+    ).pipe(
+      map(sessionResponse => {
+        /*
+        realtimeSession.players.forEach(player => {
+          this.apiService
+            .CreatePlayer({
+              sessionID: sessionResponse.id,
+              fullName: player.fullName
+            })
+            .catch(err => console.log(err));
+        });
+        */
+        return new RealtimeSession(sessionResponse);
+      })
+    );
+
+    // create session
+    this.apiService
+      .CreateSession({
+        title: realtimeSession.id,
+        pincode: realtimeSession.pincode,
+        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+      })
+      .then(session => {
+        // add players to session
+        realtimeSession.players.forEach(player => {
+          this.apiService.CreatePlayer({
+            sessionID: session.id,
+            fullName: player.fullName
+          });
+        });
+      })
+      .catch(err => console.log(err));
+  }
+
   getSession(sessionId: string) {
     this.apiService
       .GetSession(sessionId)
       .then(sessionResponse => {
-        this.apiService.PlayerBySessionId(sessionResponse.id).then(players => {
-          sessionResponse.players = players;
-          this.setCurrentRealtimeSession(new RealtimeSession(sessionResponse));
-        });
+        this.setCurrentRealtimeSession(new RealtimeSession(sessionResponse));
       })
       .catch(err => console.log(err));
   }
