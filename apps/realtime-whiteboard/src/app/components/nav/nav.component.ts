@@ -41,7 +41,6 @@ export class NavComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        console.log(result);
         const realtimeSession = new RealtimeSession();
         realtimeSession.id = null;
         realtimeSession.title = result.sessionTitle;
