@@ -1,9 +1,15 @@
 <nav>
   <div class="content_container" id="nav_container">
-    <button class="btn btnPrimary" (click)="setupSession()" *ngIf="!session"
+    <button
+      class="btn btnPrimary"
+      (click)="setupSession()"
+      *ngIf="!session?.lives"
       >start session</button
     >
-    <button class="btn btnPrimary" (click)="stopSession()" *ngIf="session"
+    <button
+      class="btn btnPrimary"
+      (click)="stopSession()"
+      *ngIf="session?.lives"
       >Stop session</button
     >
   </div>
