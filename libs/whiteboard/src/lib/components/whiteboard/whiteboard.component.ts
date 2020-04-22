@@ -147,7 +147,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() themeColorPalettes: {
     [paletteName: string]: ColorInterface[];
   } = defaultColorPaletteMap;
-  @Input() defaultColor = '#00A7E2';
+  @Input() defaultColor = '#00A7E2'; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
 
@@ -161,7 +161,7 @@ export class WhiteboardComponent implements OnChanges {
 
   selectedCards: CardInterface[] = [];
 
-  lastColor = '#00A7E2';
+  lastColor = '#00A7E2'; // used to give a new card the last picked color
   isShelfMinimized = false;
   zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
