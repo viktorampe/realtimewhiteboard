@@ -10,12 +10,16 @@ export default class RealtimeSession {
   players: Player[];
   deleted: boolean;
 
-  constructor(sessionResponse: any) {
-    this.id = sessionResponse.id;
-    this.title = sessionResponse.title;
-    this.pincode = sessionResponse.pincode;
-    this.players = this.setPlayers(sessionResponse.players.items);
-    this.whiteboard = SessionHelper.parseWhiteboard(sessionResponse.whiteboard);
+  constructor(sessionResponse?: any) {
+    this.id = sessionResponse ? sessionResponse.id : null;
+    this.title = sessionResponse ? sessionResponse.title : null;
+    this.pincode = sessionResponse ? sessionResponse.pincode : null;
+    this.players = sessionResponse
+      ? this.setPlayers(sessionResponse.players.items)
+      : null;
+    this.whiteboard = sessionResponse
+      ? SessionHelper.parseWhiteboard(sessionResponse.whiteboard)
+      : null;
     this.deleted = false;
   }
 

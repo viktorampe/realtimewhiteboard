@@ -26,29 +26,9 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.currentRealtimeSession = realtimeSession;
   }
 
-  createNewSession(): Observable<RealtimeSession> {
-    const realtimeSession = {
-      id: null,
-      title: 'New Realtime Session',
-      pincode: 555555,
-      whiteboard: {
-        title: 'realtime whiteboard',
-        defaultColor: '#5D3284',
-        cards: [],
-        shelfCards: []
-      },
-      players: [
-        { id: null, sessionId: null, fullName: 'Vitkor' },
-        { id: null, sessionId: null, fullName: 'Frederic' },
-        { id: null, sessionId: null, fullName: 'Thomas' },
-        { id: null, sessionId: null, fullName: 'Tom' },
-        { id: null, sessionId: null, fullName: 'Karl' },
-        { id: null, sessionId: null, fullName: 'David' },
-        { id: null, sessionId: null, fullName: 'Bert' },
-        { id: null, sessionId: null, fullName: 'Yannis' }
-      ]
-    };
-
+  createNewSession(
+    realtimeSession: RealtimeSession
+  ): Observable<RealtimeSession> {
     return from(
       this.apiService.CreateSession({
         title: realtimeSession.title,
