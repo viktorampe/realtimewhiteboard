@@ -13,7 +13,8 @@
       color: $text-color--high-emphasis;
     }
 
-    input {
+    input,
+    select {
       font: $font-default;
       color: $text-color--high-emphasis;
       background: $input-background;
@@ -26,8 +27,17 @@
       padding: 8px;
     }
 
-    campus-color-list {
+    select {
+      height: 35px;
+    }
+
+    &__color-picker {
+      display: flex;
+      flex-direction: column;
       width: 100%;
+      campus-color-list {
+        margin: 15px 0px;
+      }
     }
   }
 
