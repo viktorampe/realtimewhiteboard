@@ -23,8 +23,9 @@ export class AppComponent {
     private sessionService: RealtimeSessionService
   ) {
     this.setupIconRegistry();
-    // subscribe on session updates
+    // subscribe on session updates/deletes
     this.sessionService.subscribeOnSessionUpdates();
+    this.sessionService.subscribeOnSessonDeletes();
   }
 
   private setupIconRegistry() {

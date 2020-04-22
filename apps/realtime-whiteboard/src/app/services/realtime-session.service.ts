@@ -97,12 +97,34 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       .catch(err => console.log(err));
   }
 
+  DeleteSessino(sessionId: string) {
+    this.apiService
+      .DeleteSession({ id: sessionId })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
   // fetches session each time someone calls updateSession, sets behaviorSubject
   subscribeOnSessionUpdates() {
     this.apiService.OnUpdateSessionListener.subscribe((evt: any) => {
-      this.setCurrentRealtimeSession(
-        new RealtimeSession(evt.value.data.onUpdateSession)
-      );
+      // check if update is for currect session
+      if (
+        evt.value.data.onUpdateSession.id === this.currentRealtimeSession.id
+      ) {
+        this.setCurrentRealtimeSession(
+          new RealtimeSession(evt.value.data.onUpdateSession)
+        );
+      }
+    });
+  }
+
+  subscribeOnSessonDeletes() {
+    this.apiService.OnDeleteSessionListener.subscribe((evt: any) => {
+      if (
+        evt.value.data.onDeleteSession.id === this.currentRealtimeSession.id
+      ) {
+        this.setCurrentRealtimeSession(null);
+      }
     });
   }
 

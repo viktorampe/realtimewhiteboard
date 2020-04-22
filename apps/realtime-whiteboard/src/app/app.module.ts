@@ -23,6 +23,7 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     RouterModule.forRoot(
       [
         { path: '', component: HomeComponent },
+        { path: 'home', component: HomeComponent },
         { path: 'realtimesession/:id', component: RealtimeComponent }
       ],
       { initialNavigation: 'enabled' }
