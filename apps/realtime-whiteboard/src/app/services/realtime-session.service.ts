@@ -103,7 +103,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       if (
         evt.value.data.onDeleteSession.id === this.currentRealtimeSession.id
       ) {
-        this.currentRealtimeSession.deleted = true;
+        this.currentRealtimeSession.lives = false;
         this.setCurrentRealtimeSession(this.currentRealtimeSession);
       }
     });

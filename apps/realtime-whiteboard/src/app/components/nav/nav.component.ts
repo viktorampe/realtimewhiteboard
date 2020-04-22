@@ -22,8 +22,9 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
+        console.log(realtimesession);
         if (realtimesession !== null) {
-          if (realtimesession.deleted === true) {
+          if (realtimesession.lives === false) {
             this.router.navigate(['']);
           } else {
             this.session = realtimesession;
