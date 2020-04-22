@@ -41,11 +41,11 @@ export class NavComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        console.log(result.sessionTitle);
+        console.log(result);
         const realtimeSession = new RealtimeSession();
         realtimeSession.id = null;
         realtimeSession.title = result.sessionTitle;
-        realtimeSession.pincode = 555555;
+        realtimeSession.pincode = result.sessionPincode;
         realtimeSession.whiteboard = {
           title: 'realtime whiteboard',
           defaultColor: '#5D3284',

@@ -9,10 +9,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class SessionsetupdialogComponent implements OnInit {
   sessionTitle: String = '';
+  sessionPincode: number;
 
   titleFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3)
+  ]);
+
+  pincodeFormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    Validators.max(999999)
   ]);
 
   constructor(
@@ -23,7 +30,10 @@ export class SessionsetupdialogComponent implements OnInit {
   ngOnInit() {}
 
   createSession() {
-    this.dialogRef.close({ sessionTitle: this.sessionTitle });
+    this.dialogRef.close({
+      sessionTitle: this.sessionTitle,
+      sessionPincode: this.sessionPincode
+    });
   }
 
   cancel() {
