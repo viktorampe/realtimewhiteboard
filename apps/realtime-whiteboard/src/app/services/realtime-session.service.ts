@@ -97,7 +97,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       .catch(err => console.log(err));
   }
 
-  DeleteSessino(sessionId: string) {
+  DeleteSession(sessionId: string) {
     this.apiService
       .DeleteSession({ id: sessionId })
       .then(() => {})
@@ -118,12 +118,13 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
-  subscribeOnSessonDeletes() {
+  subscribeOnSessionDeletes() {
     this.apiService.OnDeleteSessionListener.subscribe((evt: any) => {
       if (
         evt.value.data.onDeleteSession.id === this.currentRealtimeSession.id
       ) {
-        this.setCurrentRealtimeSession(null);
+        this.currentRealtimeSession.deleted = true;
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
       }
     });
   }
