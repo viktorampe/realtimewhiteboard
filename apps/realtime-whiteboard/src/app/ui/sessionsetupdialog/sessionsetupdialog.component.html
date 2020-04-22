@@ -1,1 +1,30 @@
-<p>sessionsetupdialog works!</p>
+<h2>Create a new session</h2>
+<h4>Fill in the session details</h4>
+<hr />
+<form>
+  <div class="form_group">
+    <mat-form-field>
+      <mat-label><h4>Title</h4></mat-label>
+      <input
+        matInput
+        [(ngModel)]="sessionTitle"
+        [formControl]="titleFormControl"
+      />
+      <mat-error *ngIf="titleFormControl.hasError('minlength')">
+        Title should be at least 3 characters long
+      </mat-error>
+      <mat-error *ngIf="titleFormControl.hasError('required')">
+        Title is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+</form>
+<div class="sessionsettup_dialog_actions">
+  <button
+    class="btn btnPrimary"
+    (click)="createSession()"
+    *ngIf="titleFormControl.touched && titleFormControl.valid"
+    >Create</button
+  >
+  <button class="btn btnSecundary" (click)="cancel()">cancel</button>
+</div>

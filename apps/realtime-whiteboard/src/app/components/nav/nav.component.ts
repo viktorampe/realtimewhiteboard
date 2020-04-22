@@ -33,18 +33,38 @@ export class NavComponent implements OnInit {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        console.log(result);
+        console.log(result.sessionTitle);
+        const realtimeSession = new RealtimeSession();
+        realtimeSession.id = null;
+        realtimeSession.title = result.sessionTitle;
+        realtimeSession.pincode = 555555;
+        realtimeSession.whiteboard = {
+          title: 'realtime whiteboard',
+          defaultColor: '#5D3284',
+          cards: [],
+          shelfCards: []
+        };
+        realtimeSession.players = [
+          { id: null, sessionId: null, fullName: 'Vitkor' },
+          { id: null, sessionId: null, fullName: 'Frederic' },
+          { id: null, sessionId: null, fullName: 'Thomas' },
+          { id: null, sessionId: null, fullName: 'Tom' },
+          { id: null, sessionId: null, fullName: 'Karl' },
+          { id: null, sessionId: null, fullName: 'David' },
+          { id: null, sessionId: null, fullName: 'Bert' },
+          { id: null, sessionId: null, fullName: 'Yannis' }
+        ];
+        this.startSession(realtimeSession);
       }
-      this.startSession();
     });
   }
 
-  private startSession() {
+  private startSession(realtimeSession: RealtimeSession) {
     // create session
-    this.sessionService.createNewSession().subscribe(realtimeSession => {
-      this.router.navigate(['realtimesession', realtimeSession.id]);
+    this.sessionService.createNewSession(realtimeSession).subscribe(session => {
+      this.router.navigate(['realtimesession', session.id]);
     });
   }
 

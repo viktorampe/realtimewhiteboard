@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { WhiteboardModule } from '@campus/whiteboard';
@@ -27,7 +30,11 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
       ],
       { initialNavigation: 'enabled' }
     ),
-    MatDialogModule
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   entryComponents: [SessionsetupdialogComponent],
   providers: [],
