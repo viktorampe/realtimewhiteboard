@@ -51,13 +51,12 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
     return from(
       this.apiService.CreateSession({
-        title: realtimeSession.id,
+        title: realtimeSession.title,
         pincode: realtimeSession.pincode,
         whiteboard: JSON.stringify(realtimeSession.whiteboard)
       })
     ).pipe(
       map(sessionResponse => {
-        /*
         realtimeSession.players.forEach(player => {
           this.apiService
             .CreatePlayer({
@@ -66,7 +65,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
             })
             .catch(err => console.log(err));
         });
-        */
+
         return new RealtimeSession(sessionResponse);
       })
     );

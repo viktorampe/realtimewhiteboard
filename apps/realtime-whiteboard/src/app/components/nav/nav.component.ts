@@ -35,7 +35,7 @@ export class NavComponent implements OnInit {
   startSession() {
     // create session
     this.sessionService.createNewSession().subscribe(realtimeSession => {
-      //this.router.navigate(['realtime', realtimeSession.id]);
+      this.router.navigate(['realtimesession', realtimeSession.id]);
     });
   }
 }
