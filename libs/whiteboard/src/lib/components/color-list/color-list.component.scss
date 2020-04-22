@@ -61,6 +61,7 @@ $gradient-angle: 135deg;
 
 // settings color-list
 :host.settings__color-list .color-list {
+  flex-wrap: nowrap;
   justify-content: start;
   .color-list__swatch {
     margin-right: 10px;
