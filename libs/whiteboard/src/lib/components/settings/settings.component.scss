@@ -3,14 +3,20 @@
   &__formgroup {
     display: flex;
     align-items: center;
+    margin: 16px;
 
     label {
       min-width: 50px;
       text-align: right;
       margin-right: 20px;
+      font: $font-heavy;
+      color: $text-color--high-emphasis;
     }
 
-    input {
+    input,
+    select {
+      font: $font-default;
+      color: $text-color--high-emphasis;
       background: $input-background;
       width: 100%;
       height: 30px;
@@ -18,25 +24,33 @@
         inset -1px -1px 2px $shadow-color-light;
       border: 0px;
       border-radius: 4px;
-      padding-left: 10px;
-
-      &:focus {
-        outline: none;
-      }
+      padding: 8px;
     }
 
-    campus-color-list {
+    select {
+      height: 35px;
+    }
+
+    &__color-picker {
+      display: flex;
+      flex-direction: column;
       width: 100%;
+      campus-color-list {
+        margin: 15px 0px;
+      }
     }
   }
 
   &__submitButton {
-    margin-left: 70px;
+    margin-left: 85px;
 
     button {
-      padding: 10px 20px;
+      font: $font-heavy;
+      color: $defaultColor;
+      padding: 12px 24px;
       margin-top: 20px;
       background: linear-gradient(135deg, #f0f2f6, #d0d8e2);
+      border: none;
       border-radius: 12px;
       box-shadow: 3px 3px 16px -1px rgba(217, 50, 138, 0.3),
         9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba(217, 50, 138, 0.2),
@@ -44,6 +58,16 @@
 
       &:focus {
         outline: none;
+      }
+
+      &:active {
+        box-shadow: inset 1px 1px 6px darken(#e0e5ec, 20%),
+          inset -2px -2px 3px #fff, 3px 3px 8px #a3b1c6, -3px -3px 8px #ffffff;
+        background: linear-gradient(
+          145deg,
+          darken(#e0e5ec, 5%),
+          lighten(#e0e5ec, 5%)
+        );
       }
     }
   }

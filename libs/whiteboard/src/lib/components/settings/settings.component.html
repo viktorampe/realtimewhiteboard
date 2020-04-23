@@ -1,21 +1,36 @@
-<div class="settings__formgroup">
-  <label for="title"><h4>Titel: </h4></label>
-  <input
-    [(ngModel)]="title"
-    id="title"
-    name="title"
-    type="text"
-    [placeholder]="title"
-  />
-</div>
-<div class="settings__formgroup">
-  <label for="defaultColor"><h4>Kleur: </h4></label>
-  <campus-color-list
-    class="settings__color-list"
-    (selectedColor)="setDefaultColor($event)"
-    [activeColor]="activeColor"
-  ></campus-color-list>
-</div>
-<div class="settings__submitButton">
-  <button (tap)="onSubmit()">Klaar</button>
+<div [formGroup]="settingsForm">
+  <div class="settings__formgroup">
+    <label for="title">Titel:</label>
+    <input
+      formControlName="title"
+      id="title"
+      name="title"
+      type="text"
+      placeholder="Titel van de sorteeroefening"
+    />
+  </div>
+  <div class="settings__formgroup">
+    <label for="defaultColor">Kleur:</label>
+
+    <div class="settings__formgroup__color-picker">
+      <select formControlName="colorPalette" id="methods">
+        <option value="" disabled selected>Kies een kleurenpalet</option>
+        <option
+          *ngFor="let colorPalette of colorPaletteNames"
+          [value]="colorPalette"
+          >{{ colorPalette }}</option
+        >
+      </select>
+      <campus-color-list
+        *ngIf="paletteColors$ | async as colors"
+        class="settings__color-list"
+        [activeColor]="themeColor"
+        [colorOptions]="colors"
+        (selectedColor)="setThemeColor($event)"
+      ></campus-color-list>
+    </div>
+  </div>
+  <div class="settings__submitButton">
+    <button (tap)="onSubmit()">Klaar</button>
+  </div>
 </div>
