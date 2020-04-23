@@ -18,6 +18,7 @@ import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
+import { ColorInterface } from '../../models/color.interface';
 import ImageInterface from '../../models/image.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
@@ -43,6 +44,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() whiteboardData: WhiteboardInterface;
 
   private whiteboard$: Observable<WhiteboardInterface>;
+  colorPalettes$: Observable<{ [key: string]: ColorInterface[] }>;
 
   title$: Observable<string>;
   cards$: Observable<CardInterface[]>;
@@ -87,6 +89,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       this.whiteboard$ = of(this.whiteboardData);
     } else {
       this.whiteboard$ = this.whiteboardHttpService.getJson();
+      this.colorPalettes$ = this.whiteboardHttpService.getColors();
       this.setPresentationStreams();
     }
   }
