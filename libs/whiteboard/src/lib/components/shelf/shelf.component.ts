@@ -102,7 +102,6 @@ export class ShelfComponent implements OnInit {
   @Output() addClick = new EventEmitter();
 
   private cardElementBeingDragged: HTMLElement;
-
   constructor() {}
 
   ngOnInit() {}

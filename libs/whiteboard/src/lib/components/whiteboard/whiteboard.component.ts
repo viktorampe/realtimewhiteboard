@@ -20,6 +20,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { ColorFunctions } from '@campus/utils';
 import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
@@ -168,6 +169,8 @@ export class WhiteboardComponent implements OnChanges {
   zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
 
+  public settingsBoxShadow = '';
+
   readonly emptyStateWithShelfCardsText =
     'Sleep voorgemaakte kaartjes op het bord of voeg zelf nieuwe kaartjes toe.';
   readonly emptyStateWithoutShelfCardsText =
@@ -175,12 +178,24 @@ export class WhiteboardComponent implements OnChanges {
 
   constructor() {}
 
+  private setBoxShadow() {
+    if (!this.defaultColor) {
+      return;
+    }
+    const { r, g, b } = ColorFunctions.hexToRgb(this.defaultColor);
+    this.settingsBoxShadow = `3px 3px 16px -1px rgba(${r}, ${g}, ${b}, 0.3), 9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba(${r}, ${g}, ${b}, 0.2), -9px -9px 16px #ffffff`;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (
       changes.uploadImageResponse &&
       !changes.uploadImageResponse.firstChange
     ) {
       this.handleImageUploadResponse(changes.uploadImageResponse.currentValue);
+    }
+
+    if (changes.defaultColor) {
+      this.setBoxShadow();
     }
   }
 
@@ -590,6 +605,8 @@ export class WhiteboardComponent implements OnChanges {
       },
       true
     );
+
+    this.setBoxShadow();
 
     this.toggleSettings();
   }
