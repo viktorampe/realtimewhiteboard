@@ -1,26 +1,38 @@
+<div
+  [@floatActionButtons]="isMinimized ? 'detached' : 'attached'"
+  class="shelf__button shelf__add"
+  [class.plusMinimized]="isMinimized"
+  (tap)="clickAdd()"
+>
+  <mat-icon [style.color]="defaultColor" [svgIcon]="'plus'"></mat-icon>
+</div>
+<div
+  [@floatActionButtons]="isMinimized ? 'detached' : 'attached'"
+  class="shelf__button shelf__minimize"
+  (tap)="toggleShelf()"
+  ><mat-icon [svgIcon]="isMinimized ? 'arrow-up' : 'arrow-down'"></mat-icon
+></div>
 <div class="shelf" cdkDropList #shelf>
-  <ng-container *ngIf="!isMinimized">
-    <div
-      class="shelf__container"
-      *ngFor="let card of cards"
-      cdkDrag
-      (cdkDragDropped)="onCardDragged($event, card)"
-      (cdkDragStarted)="onCardDragStart($event)"
-    >
-      <campus-card-toolbar
-        class="shelf__card__toolbar"
-        (clickDeleteIcon)="emitDeleteCard(card)"
-        [inShelf]="true"
-        [canManage]="canManage"
-      ></campus-card-toolbar>
-      <campus-card
-        class="shelf__card"
-        [viewModeImage]="card.viewModeImage"
-        [description]="card.description"
-        [color]="card.color"
-        [image]="card.image"
-        [(mode)]="card.mode"
-      ></campus-card>
-    </div>
-  </ng-container>
+  <div
+    class="shelf__container"
+    *ngFor="let card of cards"
+    cdkDrag
+    (cdkDragDropped)="onCardDragged($event, card)"
+    (cdkDragStarted)="onCardDragStart($event)"
+  >
+    <campus-card-toolbar
+      class="shelf__card__toolbar"
+      (clickDeleteIcon)="emitDeleteCard(card)"
+      [inShelf]="true"
+      [canManage]="canManage"
+    ></campus-card-toolbar>
+    <campus-card
+      class="shelf__card"
+      [viewModeImage]="card.viewModeImage"
+      [description]="card.description"
+      [color]="card.color"
+      [image]="card.image"
+      [(mode)]="card.mode"
+    ></campus-card>
+  </div>
 </div>

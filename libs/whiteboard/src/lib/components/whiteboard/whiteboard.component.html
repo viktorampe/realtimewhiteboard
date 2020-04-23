@@ -122,39 +122,29 @@
       </div>
     </ng-template>
 
-    <div
-      class="whiteboard__addbutton"
-      [class.plusMinimized]="isShelfMinimized"
-      (tap)="btnPlusClicked()"
-    >
-      <mat-icon [svgIcon]="'plus'"></mat-icon>
-    </div>
-    <div
-      [class.shelfMinimized]="isShelfMinimized"
-      class="whiteboard__shelf__button"
-      (tap)="toggleShelf()"
-      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
-    ></div>
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       (deleteCard)="onDeleteCard($event, true)"
+      (addClick)="btnPlusClicked()"
       [class.minimizedShelf]="isShelfMinimized"
       [cards]="shelfCards"
       [(isMinimized)]="isShelfMinimized"
       [canManage]="canManage"
+      [defaultColor]="defaultColor"
     ></campus-shelf>
   </div>
   <campus-empty-state
-    class="whiteboard__empty"
     *ngIf="cards && !cards.length && !isSettingsActive"
-    [title]="title"
+    [title]="title ? title : 'Geen Titel'"
     [description]="
       shelfCards?.length
-        ? 'Sleep kaartjes uit de shelf naar het bord.'
-        : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
+        ? emptyStateWithShelfCardsText
+        : emptyStateWithoutShelfCardsText
     "
     [svgIcon]="
-      true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+      shelfCards?.length
+        ? 'empty-state-whiteboard-empty'
+        : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
 </div>

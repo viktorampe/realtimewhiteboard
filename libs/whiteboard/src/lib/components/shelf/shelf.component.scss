@@ -1,7 +1,11 @@
+@import '../../../constants.scss';
+
+:host {
+}
+
 .shelf {
-  height: 108px;
-  padding-top: 24px;
-  padding-left: 24px;
+  height: fit-content;
+  padding: 24px;
   display: flex;
   width: 100%;
   overflow-x: scroll;
@@ -9,6 +13,7 @@
   &__container {
     position: relative;
     margin-right: 20px;
+    height: 62px;
 
     &:hover .shelf__card__toolbar {
       display: block;
@@ -21,5 +26,50 @@
 
   &__card__toolbar {
     display: none;
+  }
+
+  &__button {
+    position: absolute;
+
+    height: 48px;
+    width: 48px;
+    background: $buttonBackground;
+    color: $buttonColor;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    box-shadow: $box-shadow-default;
+    z-index: 2; // should be higher than ..whiteboard__workspace and shelf, lower then .zoom
+
+    &:active {
+      background: linear-gradient(
+        -145deg,
+        lighten(#e0e5ec, 5%),
+        darken(#e0e5ec, 5%)
+      );
+      box-shadow: inset 1px 1px 6px darken(#e0e5ec, 20%),
+        inset -1px -1px 6px lighten(#e0e5ec, 20%),
+        1px 1px 2px darken(#a3b1c6, 5%), -1px -1px 2px #ffffff;
+    }
+
+    mat-icon {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__add {
+    right: 40px;
+  }
+  &__minimize {
+    height: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 12px;
+    margin-top: 8px;
   }
 }

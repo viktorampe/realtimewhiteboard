@@ -168,6 +168,11 @@ export class WhiteboardComponent implements OnChanges {
   zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
 
+  readonly emptyStateWithShelfCardsText =
+    'Sleep voorgemaakte kaartjes op het bord of voeg zelf nieuwe kaartjes toe.';
+  readonly emptyStateWithoutShelfCardsText =
+    'Sleep afbeeldingen naar dit bord om kaartjes te maken.';
+
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
