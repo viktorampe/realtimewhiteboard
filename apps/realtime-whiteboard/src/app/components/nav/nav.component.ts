@@ -77,4 +77,8 @@ export class NavComponent implements OnInit {
   stopSession() {
     this.sessionService.DeleteSession(this.session.id);
   }
+
+  addPlayer() {
+    this.sessionService.createPlayer('new player');
+  }
 }

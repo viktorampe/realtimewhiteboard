@@ -26,6 +26,8 @@ export class AppComponent {
     // subscribe on session updates/deletes
     this.sessionService.subscribeOnSessionUpdates();
     this.sessionService.subscribeOnSessionDeletes();
+    // subscribe on player creation
+    this.sessionService.subscribeOnCreatePlayer();
   }
 
   private setupIconRegistry() {

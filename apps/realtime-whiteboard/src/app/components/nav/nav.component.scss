@@ -13,5 +13,9 @@ nav {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
+    .nav_item {
+      margin-right: 35px;
+    }
   }
 }
