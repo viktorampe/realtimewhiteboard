@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { WhiteboardModule } from '@campus/whiteboard';
@@ -11,6 +12,7 @@ import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
 import { RealtimeComponent } from './components/realtime/realtime.component';
 import { ActiveplayersdialogComponent } from './ui/activeplayersdialog/activeplayersdialog.component';
+import { PlayertableComponent } from './ui/playertable/playertable.component';
 import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetupdialog.component';
 
 @NgModule({
@@ -20,7 +22,8 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     SessionsetupdialogComponent,
     NavComponent,
     HomeComponent,
-    ActiveplayersdialogComponent
+    ActiveplayersdialogComponent,
+    PlayertableComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,8 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule
   ],
   entryComponents: [SessionsetupdialogComponent, ActiveplayersdialogComponent],
   providers: [],
