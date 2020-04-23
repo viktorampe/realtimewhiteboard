@@ -10,43 +10,12 @@ $swatch-shadow-selected: inset 1px 1px 2px $shadow-color-dark,
 
 $gradient-angle: 135deg;
 
-$color-blue: #00a7e2;
-$color-green: #2ea03d;
-$color-red: #e22940;
-$color-purple: #5d3284;
-$color-yellow: #fadb48;
-
-@mixin box-shadow-active($color) {
-  &:active {
-    box-shadow: inset 1px 1px 6px darken($color, 20%),
-      inset -1px -1px 6px lighten($color, 20%),
-      1px 1px 2px darken($shadow-color-dark, 5%),
-      -1px -1px 2px $shadow-color-light;
-  }
-}
-
-@mixin background-gradient($color) {
-  background: linear-gradient(
-    $gradient-angle,
-    lighten($color, 5%),
-    darken($color, 5%)
-  );
-
-  &:active {
-    background: linear-gradient(
-      $gradient-angle,
-      darken($color, 5%),
-      lighten($color, 5%)
-    );
-  }
-}
-
 .color-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 
-  &__swatches {
+  &__swatch {
     height: $swatch-size;
     width: $swatch-size;
     box-sizing: border-box;
@@ -56,37 +25,13 @@ $color-yellow: #fadb48;
 
     transition: box-shadow 150ms cubic-bezier(0.43, 0, 0.31, 1);
 
-    &.blue {
-      @include background-gradient($color-blue);
-      @include box-shadow-active($color-blue);
+    &--selected {
+      box-shadow: $swatch-shadow-selected;
     }
-
-    &.green {
-      @include background-gradient($color-green);
-      @include box-shadow-active($color-green);
-    }
-
-    &.red {
-      @include background-gradient($color-red);
-      @include box-shadow-active($color-red);
-    }
-
-    &.purple {
-      @include background-gradient($color-purple);
-      @include box-shadow-active($color-purple);
-    }
-
-    &.yellow {
-      @include background-gradient($color-yellow);
-      @include box-shadow-active($color-yellow);
-    }
-  }
-
-  .default {
-    box-shadow: $swatch-shadow-selected;
   }
 }
 
+// whiteboard-toolbar color-list
 :host.whiteboard__color-list .color-list {
   flex-direction: column;
   position: absolute;
@@ -95,7 +40,7 @@ $color-yellow: #fadb48;
 
   z-index: 1;
 
-  &__swatches {
+  &__swatch {
     margin-bottom: 4px;
     &:last-child {
       margin-bottom: 0px;
@@ -103,16 +48,22 @@ $color-yellow: #fadb48;
   }
 }
 
+// card color-list
 :host.whiteboard__tools__tool .color-list {
   justify-content: space-between;
   align-items: center;
   padding: 25px;
-  &__swatches {
+  &__swatch {
     margin-left: 2px;
     margin-right: 2px;
   }
 }
 
+// settings color-list
 :host.settings__color-list .color-list {
-  justify-content: space-between;
+  flex-wrap: nowrap;
+  justify-content: start;
+  .color-list__swatch {
+    margin-right: 10px;
+  }
 }

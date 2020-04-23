@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
-import { HAMMER_LOADER } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { SettingsInterface } from '../../models/settings.interface';
@@ -13,10 +13,20 @@ describe('SettingsComponent', () => {
   let component: SettingsComponent;
   let fixture: ComponentFixture<SettingsComponent>;
 
+  const mockColorPalettes = {
+    dark: [
+      { label: 'black', hexCode: '#000000' },
+      { label: 'white', hexCode: '#FFFFFF' }
+    ]
+  };
+
+  const mockThemeColor = 'this is a theme color';
+  const mockTitle = 'this is a title';
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsComponent, ColorPickerComponent],
-      imports: [FormsModule, NoopAnimationsModule, MatIconModule],
+      imports: [ReactiveFormsModule, BrowserAnimationsModule, MatIconModule],
       providers: [
         {
           provide: HAMMER_LOADER,
@@ -30,6 +40,12 @@ describe('SettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SettingsComponent);
     component = fixture.componentInstance;
+    component.themeColor = mockThemeColor;
+    component.title = mockTitle;
+    component.colorPalettes = mockColorPalettes;
+
+    component.ngOnInit();
+
     fixture.detectChanges();
   });
 
@@ -37,22 +53,54 @@ describe('SettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set defaut color', () => {
-    const defaultColorBefore = component.activeColor;
-    component.setDefaultColor('#00000000');
-    const defaultColorAfter = component.activeColor;
-    expect(defaultColorBefore).not.toBe(defaultColorAfter);
-    expect(component.activeColor).toBe(defaultColorAfter);
+  describe('color-palette', () => {
+    let colorPaletteFormControl: FormControl;
+
+    beforeEach(() => {
+      colorPaletteFormControl = component.settingsForm.get(
+        'colorPalette'
+      ) as FormControl;
+    });
+
+    it('should show a color-list when a color-palette is picked', async(() => {
+      const colorList = fixture.debugElement.query(
+        By.directive(ColorPickerComponent)
+      );
+      expect(colorList).toBeFalsy();
+
+      colorPaletteFormControl.setValue('dark');
+      fixture.detectChanges();
+
+      fixture.whenStable().then(() => {
+        const cList = fixture.debugElement.query(
+          By.directive(ColorPickerComponent)
+        );
+        expect(cList).toBeTruthy();
+
+        expect(cList.componentInstance.colorOptions).toEqual(
+          mockColorPalettes.dark
+        );
+      });
+    }));
+  });
+
+  it('setThemeColor() should set theme color', () => {
+    component.setThemeColor('#00000000');
+
+    expect(component.themeColor).toBe('#00000000');
   });
 
   describe('event handlers', () => {
     it('onSubmit() should emit settings', () => {
       spyOn(component.update, 'emit');
-      component.title = 'title';
-      component.activeColor = '#FFFFFFFF';
+
+      component.settingsForm.get('title').setValue('foo title');
+      component.themeColor = '#FFFFFFFF';
+
       component.onSubmit();
+
       const settings: SettingsInterface = {
-        title: 'title',
+        title: 'foo title',
         defaultColor: '#FFFFFFFF'
       };
       expect(component.update.emit).toHaveBeenCalledWith(settings);

@@ -4,8 +4,8 @@
     [mode]="colorPickerModes.LIST"
     (selectedColor)="changeSelectedCardsColor($event)"
   ></campus-color-picker>
-  <div class="whiteboard__tools__seperator"></div>
-  <div class="whiteboard__tools__tool">
+  <div class="whiteboard__tools__seperator" *ngIf="!canManage"></div>
+  <div class="whiteboard__tools__tool" id="delete">
     <mat-icon
       (tap)="btnReturnToShelfClicked()"
       [svgIcon]="'return-to-shelf'"
