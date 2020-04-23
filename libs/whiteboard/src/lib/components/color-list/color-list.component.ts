@@ -5,8 +5,17 @@ import {
   transition,
   trigger
 } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
+import { ColorInterface } from '../../models/color.interface';
+
+const defaultColorOptions: ColorInterface[] = [
+  { label: 'blue', hexCode: '#00A7E2' },
+  { label: 'green', hexCode: '#2EA03D' },
+  { label: 'red', hexCode: '#E22940' },
+  { label: 'purple', hexCode: '#5D3284' },
+  { label: 'yellow', hexCode: '#FADB48' }
+];
 
 @Component({
   selector: 'campus-color-list',
@@ -55,24 +64,15 @@ import { ModeEnum } from '../../enums/mode.enum';
     ])
   ]
 })
-export class ColorListComponent implements OnInit {
-  @Output() selectedColor = new EventEmitter<string>();
-
+export class ColorListComponent {
   @Input() zoomFactor: number;
   @Input() activeColor: string;
   @Input() mode: ModeEnum;
+  @Input() colorOptions: ColorInterface[] = defaultColorOptions;
 
-  colorOptions: { colorName: string; hexCode: string }[] = [
-    { colorName: 'blue', hexCode: '#00A7E2' },
-    { colorName: 'green', hexCode: '#2EA03D' },
-    { colorName: 'red', hexCode: '#E22940' },
-    { colorName: 'purple', hexCode: '#5D3284' },
-    { colorName: 'yellow', hexCode: '#FADB48' }
-  ];
+  @Output() selectedColor = new EventEmitter<string>();
 
   constructor() {}
-
-  ngOnInit() {}
 
   get Mode() {
     return ModeEnum;
