@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
+import { ActiveplayersdialogComponent } from '../../ui/activeplayersdialog/activeplayersdialog.component';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
 
 @Component({
@@ -52,16 +53,6 @@ export class NavComponent implements OnInit {
           cards: [],
           shelfCards: []
         };
-        realtimeSession.players = [
-          { id: null, sessionId: null, fullName: 'Vitkor' },
-          { id: null, sessionId: null, fullName: 'Frederic' },
-          { id: null, sessionId: null, fullName: 'Thomas' },
-          { id: null, sessionId: null, fullName: 'Tom' },
-          { id: null, sessionId: null, fullName: 'Karl' },
-          { id: null, sessionId: null, fullName: 'David' },
-          { id: null, sessionId: null, fullName: 'Bert' },
-          { id: null, sessionId: null, fullName: 'Yannis' }
-        ];
         this.startSession(realtimeSession);
       }
     });
@@ -80,5 +71,17 @@ export class NavComponent implements OnInit {
 
   addPlayer() {
     this.sessionService.createPlayer('new player');
+  }
+
+  openActivePlayersModal() {
+    const dialogRef = this.dialog.open(ActiveplayersdialogComponent, {
+      width: '75%',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+      }
+    });
   }
 }

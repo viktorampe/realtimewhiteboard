@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
 import { RealtimeComponent } from './components/realtime/realtime.component';
+import { ActiveplayersdialogComponent } from './ui/activeplayersdialog/activeplayersdialog.component';
 import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetupdialog.component';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     RealtimeComponent,
     SessionsetupdialogComponent,
     NavComponent,
-    HomeComponent
+    HomeComponent,
+    ActiveplayersdialogComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,7 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     MatFormFieldModule,
     MatInputModule
   ],
-  entryComponents: [SessionsetupdialogComponent],
+  entryComponents: [SessionsetupdialogComponent, ActiveplayersdialogComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
