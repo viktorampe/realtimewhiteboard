@@ -43,6 +43,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() whiteboardData: WhiteboardInterface;
 
   private whiteboard$: Observable<WhiteboardInterface>;
+  public isSaving = false;
 
   title$: Observable<string>;
   cards$: Observable<CardInterface[]>;
@@ -170,6 +171,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   public saveWhiteboard(data: WhiteboardInterface): void {
     if (!this.canManage) return;
 
+    this.isSaving = true;
     // with canManage permission the workspace cards are duplicated in the shelf
     // without canManage permission, the workspace cards should not be persisted
     // so we must remove the workspace cards
@@ -181,7 +183,9 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         image: this.removeApiBaseFromImageUrl(card.image)
       };
     });
-    this.whiteboardHttpService.setJson(data).subscribe();
+    this.whiteboardHttpService.setJson(data).subscribe(() => {
+      this.isSaving = false;
+    });
   }
 
   private addApiBaseToImageUrl(image: ImageInterface): ImageInterface {

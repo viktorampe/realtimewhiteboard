@@ -152,6 +152,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() defaultColor = DEFAULT_COLOR; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
+  @Input() isSaving = false;
 
   @Output() changes = new EventEmitter<WhiteboardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
