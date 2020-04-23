@@ -148,7 +148,10 @@
     "
   ></campus-empty-state>
 
-  <div *ngIf="isSaving" class="whiteboard-feedback feedback__saving"
+  <div
+    @showHideFeedback
+    *ngIf="isSaving"
+    class="whiteboard-feedback feedback__saving"
     >Bezig met opslaan...</div
   >
 </div>

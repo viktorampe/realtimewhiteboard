@@ -13,7 +13,14 @@ import {
   FileReaderServiceInterface,
   FILEREADER_SERVICE_TOKEN
 } from '@campus/browser';
-import { BehaviorSubject, merge, Observable, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  Observable,
+  of,
+  timer
+} from 'rxjs';
 import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
@@ -183,9 +190,10 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         image: this.removeApiBaseFromImageUrl(card.image)
       };
     });
-    this.whiteboardHttpService.setJson(data).subscribe(() => {
-      this.isSaving = false;
-    });
+    combineLatest(
+      timer(1000), // set at least isSaving for one second
+      this.whiteboardHttpService.setJson(data)
+    ).subscribe(() => (this.isSaving = false));
   }
 
   private addApiBaseToImageUrl(image: ImageInterface): ImageInterface {

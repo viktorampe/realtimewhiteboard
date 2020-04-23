@@ -88,6 +88,22 @@ export interface CardImageUploadResponseInterface {
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
   animations: [
+    trigger('showHideFeedback', [
+      transition(':enter', [
+        style({ transform: 'scale(0)', opacity: 0 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(1)', opacity: '1' })
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
+      ])
+    ]),
     trigger('showHideCard', [
       transition(':leave', [
         style({ opacity: '1' }),
