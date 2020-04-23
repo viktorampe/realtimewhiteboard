@@ -26,6 +26,8 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.currentRealtimeSession = realtimeSession;
   }
 
+  //#region SESSOINS
+
   createNewSession(
     realtimeSession: RealtimeSession
   ): Observable<RealtimeSession> {
@@ -38,15 +40,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     ).pipe(
       // get created session
       map(sessionResponse => {
-        // add players to session
-        realtimeSession.players.forEach(player => {
-          this.apiService
-            .CreatePlayer({
-              sessionID: sessionResponse.id,
-              fullName: player.fullName
-            })
-            .catch(err => console.log(err));
-        });
         // update behaviorSubject
         const currentSession = new RealtimeSession(sessionResponse);
         this.setCurrentRealtimeSession(currentSession);
@@ -109,7 +102,35 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
-  /* ============== Interface Implementation ============== */
+  //#endregion
+
+  //#region PLAYERS
+
+  createPlayer(fullName: string) {
+    this.apiService
+      .CreatePlayer({
+        sessionID: this.currentRealtimeSession.id,
+        fullName: fullName
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
+  subscribeOnCreatePlayer() {
+    this.apiService.OnCreatePlayerListener.subscribe((evt: any) => {
+      if (
+        evt.value.data.onCreatePlayer.sessionID ===
+        this.currentRealtimeSession.id
+      ) {
+        // refetch session -> will contain player and update behavior subject
+        this.getSession(this.currentRealtimeSession.id);
+      }
+    });
+  }
+
+  //#endregion
+
+  //#region INTERFACE IMPLEMENTATION
 
   getWhiteboardData(): Observable<WhiteboardInterface> {
     return from(
@@ -136,7 +157,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     throw new Error('Method not implemented.');
   }
 
-  /* ============== Interface Implementation ============== */
+  //#endregion
 }
 
 /*

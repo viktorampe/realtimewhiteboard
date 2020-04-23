@@ -1,16 +1,17 @@
 <nav>
   <div class="content_container" id="nav_container">
-    <button
-      class="btn btnPrimary"
-      (click)="setupSession()"
-      *ngIf="!session?.lives"
-      >start session</button
-    >
-    <button
-      class="btn btnPrimary"
-      (click)="stopSession()"
-      *ngIf="session?.lives"
-      >Stop session</button
-    >
+    <div class="nav_item" *ngIf="!session?.lives">
+      <button class="btn btnPrimary" (click)="setupSession()"
+        >start session</button
+      >
+    </div>
+    <div class="nav_item" *ngIf="session?.lives">
+      <button class="btn btnPrimary" (click)="stopSession()"
+        >Stop session</button
+      >
+    </div>
+    <div class="nav_item" *ngIf="session?.lives">
+      <button class="btn btnSecundary" (click)="addPlayer()">Add player</button>
+    </div>
   </div>
 </nav>
