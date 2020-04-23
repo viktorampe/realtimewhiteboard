@@ -13,12 +13,7 @@
     [canManage]="canManage"
   ></campus-whiteboard-toolbar>
 
-  <div
-    class="whiteboard__workspace"
-    (dblclick)="createCard($event)"
-    (longpress)="createCard($event)"
-    #workspace
-  >
+  <div class="whiteboard__workspace" #workspace>
     <div class="whiteboard__workspace__actions">
       <div
         *ngIf="canManage"
