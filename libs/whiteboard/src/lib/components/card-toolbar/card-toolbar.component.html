@@ -91,7 +91,6 @@
 <ng-template #multiSelectView>
   <div class="toolbar toolbar_multiSelect">
     <div
-      [@showHideToolbarTool]="'multiSelect'"
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
       (click)="multiSelectClicked()"
@@ -101,7 +100,6 @@
     </div>
     <ng-template #notSelectView>
       <div
-        [@showHideToolbarTool]="'multiSelect'"
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
         (click)="multiSelectSelectedClicked()"
