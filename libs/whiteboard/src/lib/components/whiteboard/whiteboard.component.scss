@@ -151,8 +151,8 @@
         &__button {
           color: $buttonColor;
           padding: 6px;
-          height: 36px;
-          width: 36px;
+          height: 36px !important;
+          width: 36px !important;
 
           &:active {
             &:first-child {
