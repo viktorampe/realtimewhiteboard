@@ -88,18 +88,19 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
     return response$;
   }
 
-  public getColors(): Observable<{ [key: string]: ColorInterface[] }> {
+  public getColorPalettes(): Observable<{
+    [paletteName: string]: ColorInterface[];
+  }> {
     return this.apiSettings$.pipe(
       filter(settings => !!settings),
       take(1),
       switchMap(settings =>
-        this.http.get<{ [key: string]: ColorInterface[] }>(
+        this.http.get<{ [paletteName: string]: ColorInterface[] }>(
           settings.apiBase + '/whiteboard/colors'
         )
       ),
       retry(RETRY_AMOUNT),
       catchError(this.handleError.bind(this)),
-      map((response: { [key: string]: ColorInterface[] }) => response),
       shareReplay(1)
     );
   }

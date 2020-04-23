@@ -44,7 +44,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() whiteboardData: WhiteboardInterface;
 
   private whiteboard$: Observable<WhiteboardInterface>;
-  colorPalettes$: Observable<{ [key: string]: ColorInterface[] }>;
+  colorPalettes$: Observable<{ [paletteName: string]: ColorInterface[] }>;
 
   title$: Observable<string>;
   cards$: Observable<CardInterface[]>;
@@ -89,7 +89,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
       this.whiteboard$ = of(this.whiteboardData);
     } else {
       this.whiteboard$ = this.whiteboardHttpService.getJson();
-      this.colorPalettes$ = this.whiteboardHttpService.getColors();
+      this.colorPalettes$ = this.whiteboardHttpService.getColorPalettes();
       this.setPresentationStreams();
     }
   }
