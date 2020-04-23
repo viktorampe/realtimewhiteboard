@@ -18,8 +18,10 @@ import {
   Input,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { CardInterface } from '../../models/card.interface';
 
 @Component({
@@ -80,13 +82,31 @@ import { CardInterface } from '../../models/card.interface';
           ])
         )
       ])
+    ]),
+    trigger('appear', [
+      transition(':enter', [
+        style({ transform: 'scale(0)', opacity: 0 }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(1)', opacity: 1 })
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: 0 })
+        )
+      ])
     ])
   ]
 })
 export class ShelfComponent implements OnInit {
   @ViewChild('shelf', { static: false }) shelf: ElementRef;
 
-  @Input() cards: CardInterface[];
+  @Input() cards: CardInterface[] = [];
+  @Input() activeCards: CardInterface[] = [];
+
   @HostBinding('@showHideShelf')
   get showHideShelf() {
     return this.isMinimized ? 'hidden' : 'visible';
@@ -102,9 +122,18 @@ export class ShelfComponent implements OnInit {
   @Output() addClick = new EventEmitter();
 
   private cardElementBeingDragged: HTMLElement;
+
+  public activeCardsIds$ = new BehaviorSubject<string[]>([]);
+
   constructor() {}
 
   ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes.activeCards || changes.cards) && this.activeCards) {
+      this.activeCardsIds$.next(this.activeCards.map(card => card.id));
+    }
+  }
 
   toggleShelf() {
     this.isMinimized = !this.isMinimized;

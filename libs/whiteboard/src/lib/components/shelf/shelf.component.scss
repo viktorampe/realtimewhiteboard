@@ -1,8 +1,5 @@
 @import '../../../constants.scss';
 
-:host {
-}
-
 .shelf {
   height: fit-content;
   padding: 24px;
@@ -71,5 +68,16 @@
     transform: translateX(-50%);
     border-radius: 12px;
     margin-top: 8px;
+  }
+
+  .active-card {
+    position: absolute;
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    bottom: -8px;
+    left: calc(50% - 3px);
+    border-radius: 50%;
   }
 }
