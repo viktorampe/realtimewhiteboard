@@ -184,7 +184,7 @@
     bottom: 24px;
     left: 24px;
     right: 24px;
-    z-index: 1; // should be lower than .zoom and shelf buttons, higher than .whiteboard__workspace
+    z-index: 2;
     width: auto;
     overflow-y: visible;
     display: flex;
@@ -197,9 +197,7 @@
       lighten(#e0e5ec, 5%),
       darken(#e0e5ec, 5%)
     );
-    //$defaultColor -> #a3b1c6 (for the rgba() values)
-    box-shadow: 3px 3px 16px -1px rgba($shadow-color-dark, 0.3),
-      9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba($shadow-color-dark, 0.2),
-      -9px -9px 16px #ffffff;
+    box-shadow: $box-shadow-pink;
+    transform: translateY(0);
   }
 }
