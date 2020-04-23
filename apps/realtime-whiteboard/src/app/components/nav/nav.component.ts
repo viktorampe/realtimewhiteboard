@@ -76,11 +76,12 @@ export class NavComponent implements OnInit {
   openActivePlayersModal() {
     const dialogRef = this.dialog.open(ActiveplayersdialogComponent, {
       width: '75%',
-      data: {}
+      data: { players: this.session.players }
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
+        // do something with result
       }
     });
   }
