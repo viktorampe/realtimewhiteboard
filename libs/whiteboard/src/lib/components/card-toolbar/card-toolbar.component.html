@@ -34,7 +34,9 @@
       [mode]="colorPickerModes.WHEEL"
       [@showHideToolbarTool]="'select'"
       (selectedColor)="colorSelected($event)"
-      *ngIf="!inShelf"
+      *ngIf="
+        !inShelf && (mode === Mode.EDIT || mode === Mode.SELECTED) && !canManage
+      "
     ></campus-color-picker>
 
     <div
