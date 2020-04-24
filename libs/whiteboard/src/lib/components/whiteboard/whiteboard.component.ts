@@ -88,6 +88,22 @@ export interface CardImageUploadResponseInterface {
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
   animations: [
+    trigger('showHideFeedback', [
+      transition(':enter', [
+        style({ transform: 'scale(0)', opacity: 0 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(1)', opacity: '1' })
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
+      ])
+    ]),
     trigger('showHideCard', [
       transition(':leave', [
         style({ opacity: '1' }),
@@ -152,6 +168,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() defaultColor = DEFAULT_COLOR; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
+  @Input() isSaving = false;
 
   @Output() changes = new EventEmitter<WhiteboardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
