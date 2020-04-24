@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { SettingsInterface } from '../../models/settings.interface';
-import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { ColorListComponent } from '../color-list/color-list.component';
 import { SettingsComponent } from './settings.component';
 
 describe('SettingsComponent', () => {
@@ -25,7 +25,7 @@ describe('SettingsComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [SettingsComponent, ColorPickerComponent],
+      declarations: [SettingsComponent, ColorListComponent],
       imports: [ReactiveFormsModule, BrowserAnimationsModule, MatIconModule],
       providers: [
         {
@@ -64,7 +64,7 @@ describe('SettingsComponent', () => {
 
     it('should show a color-list when a color-palette is picked', async(() => {
       const colorList = fixture.debugElement.query(
-        By.directive(ColorPickerComponent)
+        By.directive(ColorListComponent)
       );
       expect(colorList).toBeFalsy();
 
@@ -73,7 +73,7 @@ describe('SettingsComponent', () => {
 
       fixture.whenStable().then(() => {
         const cList = fixture.debugElement.query(
-          By.directive(ColorPickerComponent)
+          By.directive(ColorListComponent)
         );
         expect(cList).toBeTruthy();
 
