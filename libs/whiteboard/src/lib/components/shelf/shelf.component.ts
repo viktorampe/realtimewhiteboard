@@ -16,6 +16,7 @@ import {
   EventEmitter,
   HostBinding,
   Input,
+  OnChanges,
   OnInit,
   Output,
   SimpleChanges,
@@ -101,7 +102,7 @@ import { CardInterface } from '../../models/card.interface';
     ])
   ]
 })
-export class ShelfComponent implements OnInit {
+export class ShelfComponent implements OnInit, OnChanges {
   @ViewChild('shelf', { static: false }) shelf: ElementRef;
 
   @Input() cards: CardInterface[] = [];
