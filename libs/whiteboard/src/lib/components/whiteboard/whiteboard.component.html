@@ -138,4 +138,11 @@
         : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
+
+  <div
+    @showHideFeedback
+    *ngIf="isSaving"
+    class="whiteboard-feedback feedback__saving"
+    >Bezig met opslaan...</div
+  >
 </div>

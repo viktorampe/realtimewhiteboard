@@ -12,6 +12,7 @@ export interface FileReaderServiceInterface {
   progress$: Observable<number>;
 
   // service methods
+  getFileReader(): FileReaderServiceInterface;
   isFileTypeAllowed(file: File, regex?: RegExp): boolean;
   reset(): void;
 
