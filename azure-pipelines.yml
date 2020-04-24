@@ -27,6 +27,7 @@ variables:
   dkPublish: false
   dkE2E: false
   dkFeaturePR: false
+  dkTargetBase: develop
 
 steps:
   - script: |
@@ -56,6 +57,7 @@ steps:
     displayName: '(Check) Enable dkFeaturePR (nx affected) if starting a pull request from a feature branch'
   - script: |
       echo '##vso[task.setvariable variable=dkFeaturePR]true'
+      echo '##vso[task.setvariable variable=dkTargetBase]whiteboard-dev'
     condition: and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/whiteboard-dev'), startsWith(variables['System.PullRequest.SourceBranch'], 'refs/heads/feature'))
     displayName: '(Check) Enable dkFeaturePR (nx affected) if starting a pull request from a feature branch to whiteboard-dev'
   - script: |
@@ -69,6 +71,7 @@ steps:
       echo dkRanTests = $(dkRanTests)
       echo dkBuild = $(dkBuild)
       echo dkPublish = $(dkPublish)
+      echo dkTargetBase = $(dkTargetBase)
       echo
       echo Environment
       echo -----------
@@ -96,7 +99,7 @@ steps:
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop
+  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/$(dkTargetBase)
     displayName: 'Lint affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
@@ -116,7 +119,7 @@ steps:
     displayName: 'Clear junit, coverage reports, build output'
 
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/develop --passWithNoTests
+  - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/$(dkTargetBase) --passWithNoTests
     displayName: 'Test affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
