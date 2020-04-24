@@ -62,7 +62,7 @@ describe('SettingsComponent', () => {
       ) as FormControl;
     });
 
-    it('should show a color-list when a color-palette is picked', async(() => {
+    it('should show a color-picker when a color-palette is picked', async(() => {
       const colorList = fixture.debugElement.query(
         By.directive(ColorPickerComponent)
       );

@@ -5,7 +5,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { ColorPickerComponent } from './color-picker.component';
-
 describe('ColorPickerComponent', () => {
   let component: ColorPickerComponent;
   let fixture: ComponentFixture<ColorPickerComponent>;

@@ -5,7 +5,6 @@ import { HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { ColorListComponent } from '../color-list/color-list.component';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { WhiteboardToolbarComponent } from './whiteboard-toolbar.component';
 
@@ -24,11 +23,7 @@ describe('WhiteboardToolbarComponent', () => {
         { provide: ChangeDetectorRef, useValue: {} },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
-      declarations: [
-        WhiteboardToolbarComponent,
-        ColorListComponent,
-        ColorPickerComponent
-      ]
+      declarations: [WhiteboardToolbarComponent, ColorPickerComponent]
     });
   });
 
