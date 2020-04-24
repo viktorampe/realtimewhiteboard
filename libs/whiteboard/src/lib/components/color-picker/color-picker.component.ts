@@ -8,11 +8,8 @@ import {
   OnInit,
   Output
 } from '@angular/core';
+import { ColorInterface } from '../../models/color.interface';
 
-export interface ColorInterface {
-  colorName: string;
-  hexCode: string;
-}
 export enum ColorPickerModeEnum {
   WHEEL,
   LIST
@@ -62,14 +59,14 @@ export class ColorPickerComponent implements OnInit {
   @HostBinding('class.wheel') public isWheel = true;
 
   @Input() colors: ColorInterface[] = [
-    { colorName: 'blue', hexCode: '#00A7E2' },
-    { colorName: 'red', hexCode: '#E22940' },
-    { colorName: 'yellow', hexCode: '#FADB48' },
-    { colorName: 'green', hexCode: '#2EA03D' },
-    { colorName: 'purple', hexCode: '#5D3284' },
-    { colorName: 'pink', hexCode: '#FF33CE' },
-    { colorName: 'black', hexCode: '#222222' },
-    { colorName: 'orange', hexCode: '#FF5733' }
+    { label: 'blue', hexCode: '#00A7E2' },
+    { label: 'red', hexCode: '#E22940' },
+    { label: 'yellow', hexCode: '#FADB48' },
+    { label: 'green', hexCode: '#2EA03D' },
+    { label: 'purple', hexCode: '#5D3284' },
+    { label: 'pink', hexCode: '#FF33CE' },
+    { label: 'black', hexCode: '#222222' },
+    { label: 'orange', hexCode: '#FF5733' }
   ];
 
   @Output() selectedColor = new EventEmitter<string>();
