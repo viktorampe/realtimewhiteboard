@@ -93,10 +93,12 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
 
   public uploadImageForCard(cardImage: CardImageUploadInterface): void {
     if (!this.canManage) {
-      // if you don't have permission to manage, you should still be able to see images locally
-      this.fileReaderService.readAsDataURL(cardImage.imageFile);
+      const fileReader = this.fileReaderService.getFileReader();
 
-      const imageUrl$ = this.fileReaderService.loaded$.pipe(
+      // if you don't have permission to manage, you should still be able to see images locally
+      fileReader.readAsDataURL(cardImage.imageFile);
+
+      const imageUrl$ = fileReader.loaded$.pipe(
         filter(imageUrl => !!imageUrl),
         map(imageUrl => ({
           card: cardImage.card,
@@ -104,7 +106,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         })),
         take(1)
       );
-      const progress$ = this.fileReaderService.progress$.pipe(
+      const progress$ = fileReader.progress$.pipe(
         filter(progress => progress !== null),
         map(progress => ({
           card: cardImage.card,
