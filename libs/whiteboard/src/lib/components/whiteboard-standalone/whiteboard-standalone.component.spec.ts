@@ -208,7 +208,7 @@ describe('WhiteboardStandaloneComponent', () => {
 
     it('should toggle isSaving while saving', fakeAsync(() => {
       jest.spyOn(whiteboardHttpService, 'setJson').mockReturnValue(of(true));
-      let saving: boolean = false;
+      let saving = false;
       component.canManage = true;
       component.ngOnInit();
 
