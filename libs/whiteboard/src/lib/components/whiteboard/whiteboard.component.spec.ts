@@ -655,10 +655,27 @@ describe('WhiteboardComponent', () => {
         component.lastColor = 'red';
         component.cards = [];
         component.shelfCards = [];
-
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientWidth',
+          {
+            writable: true,
+            configurable: true,
+            value: 1400
+          }
+        );
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientHeight',
+          {
+            writable: true,
+            configurable: true,
+            value: 600
+          }
+        );
         component.addEmptyCard();
       });
-      it('should add an empty publisher card to the shelf and workspace', () => {
+      it('should add an empty publisher card to the shelf and workspace and center it', () => {
         const expectedCard = {
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
@@ -666,8 +683,8 @@ describe('WhiteboardComponent', () => {
           color: 'red',
           description: '',
           image: null,
-          top: 0,
-          left: 0,
+          top: 216.5,
+          left: 575,
           viewModeImage: false
         };
 
@@ -690,10 +707,27 @@ describe('WhiteboardComponent', () => {
         component.lastColor = 'red';
         component.cards = [];
         component.shelfCards = [];
-
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientWidth',
+          {
+            writable: true,
+            configurable: true,
+            value: 1800
+          }
+        );
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientHeight',
+          {
+            writable: true,
+            configurable: true,
+            value: 1000
+          }
+        );
         component.addEmptyCard();
       });
-      it('should add an empty teacher card to the workspace', () => {
+      it('should add an empty teacher card to the workspace and center it', () => {
         expect(component.cards[0]).toEqual({
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
@@ -701,8 +735,8 @@ describe('WhiteboardComponent', () => {
           color: 'red',
           description: '',
           image: null,
-          top: 0,
-          left: 0,
+          top: 416.5,
+          left: 775,
           viewModeImage: false
         });
 
