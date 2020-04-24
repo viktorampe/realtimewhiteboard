@@ -21,13 +21,15 @@
           >{{ colorPalette }}</option
         >
       </select>
-      <campus-color-list
+      <campus-color-picker
         *ngIf="paletteColors$ | async as colors"
         class="settings__color-list"
+        [mode]="colorPickerModes.LIST"
+        [active]="true"
         [activeColor]="themeColor"
-        [colorOptions]="colors"
+        [colors]="colors"
         (selectedColor)="setThemeColor($event)"
-      ></campus-color-list>
+      ></campus-color-picker>
     </div>
   </div>
   <div class="settings__submitButton">
