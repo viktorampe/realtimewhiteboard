@@ -41,7 +41,7 @@ $tool-dark-light: #515151;
       padding: 0;
       margin: 0;
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     &__color {
       margin: 8px;
