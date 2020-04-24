@@ -24,7 +24,6 @@ import {
 import { WhiteboardModule } from '../../whiteboard.module';
 import { CardImageUploadInterface } from '../whiteboard/whiteboard.component';
 import { WhiteboardStandaloneComponent } from './whiteboard-standalone.component';
-// file.only
 describe('WhiteboardStandaloneComponent', () => {
   let component: WhiteboardStandaloneComponent;
   let fixture: ComponentFixture<WhiteboardStandaloneComponent>;
@@ -217,7 +216,6 @@ describe('WhiteboardStandaloneComponent', () => {
       } as WhiteboardInterface);
 
       const subscription = component.isSaving$.subscribe(isSaving => {
-        console.log(isSaving);
         saving = isSaving;
       });
 
