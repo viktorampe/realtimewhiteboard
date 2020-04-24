@@ -111,7 +111,6 @@ export class CardToolbarComponent implements OnInit {
   }
 
   colorSelected(color) {
-    console.log(color);
     this.selectedColor.emit(color);
   }
 }
