@@ -21,7 +21,7 @@ import {
   of,
   timer
 } from 'rxjs';
-import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
+import { filter, map, mapTo, startWith, take, takeUntil } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
@@ -50,7 +50,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() whiteboardData: WhiteboardInterface;
 
   private whiteboard$: Observable<WhiteboardInterface>;
-  public isSaving = false;
+  public isSaving$: Observable<boolean>;
 
   title$: Observable<string>;
   cards$: Observable<CardInterface[]>;
@@ -178,7 +178,6 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   public saveWhiteboard(data: WhiteboardInterface): void {
     if (!this.canManage) return;
 
-    this.isSaving = true;
     // with canManage permission the workspace cards are duplicated in the shelf
     // without canManage permission, the workspace cards should not be persisted
     // so we must remove the workspace cards
@@ -190,10 +189,11 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         image: this.removeApiBaseFromImageUrl(card.image)
       };
     });
-    combineLatest(
+
+    this.isSaving$ = combineLatest(
       timer(1000), // set at least isSaving for one second
       this.whiteboardHttpService.setJson(data)
-    ).subscribe(() => (this.isSaving = false));
+    ).pipe(mapTo(false), startWith(true));
   }
 
   private addApiBaseToImageUrl(image: ImageInterface): ImageInterface {

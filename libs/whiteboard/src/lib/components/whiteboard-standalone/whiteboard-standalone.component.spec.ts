@@ -201,6 +201,26 @@ describe('WhiteboardStandaloneComponent', () => {
       });
     });
 
+    // it('should toggle isSaving while saving', fakeAsync(() => {
+    //   let saving: boolean = false;
+    //   component.canManage = true;
+    //   component.ngOnInit();
+
+    //   component.saveWhiteboard({
+    //     title: 'foo',
+    //     shelfCards: []
+    //   } as WhiteboardInterface);
+    //   const subscription = component.isSaving$.subscribe(isSaving => {
+    //     console.log(isSaving);
+    //     saving = isSaving;
+    //   });
+    //   tick(0); //starts at true
+    //   expect(saving).toBeTruthy();
+    //   tick(1500); //saving should last at lease one second
+    //   expect(saving).toBeFalsy();
+    //   subscription.unsubscribe();
+    // }));
+
     it('should remove workspace cards before saving', () => {
       component.canManage = true;
       component.ngOnInit();
