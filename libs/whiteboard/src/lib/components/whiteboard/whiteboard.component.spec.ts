@@ -156,6 +156,21 @@ describe('WhiteboardComponent', () => {
       component.onDragStarted(new CardFixture());
       expect(component.cards[0].mode).toBe(ModeEnum.SELECTED);
     });
+
+    it('should leave cards in upload state unaffected', () => {
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        }),
+        new CardFixture(),
+        new CardFixture({
+          mode: ModeEnum.UPLOAD
+        })
+      ];
+
+      component.onDragStarted(new CardFixture());
+      expect(component.cards[2].mode).toBe(ModeEnum.UPLOAD);
+    });
   });
 
   describe('onDragEnded()', () => {
@@ -191,7 +206,7 @@ describe('WhiteboardComponent', () => {
   });
 
   describe('onClickWhiteboard()', () => {
-    it('should call saveWhiteboard(), updateViewMode(), updateCard() if card is in edit mode', () => {
+    it('should call update the card description if card is in edit mode', () => {
       const updateCardSpy = jest.spyOn(component, 'onUpdateCard');
 
       const event = {
@@ -271,18 +286,10 @@ describe('WhiteboardComponent', () => {
         new CardFixture({ mode: ModeEnum.UPLOAD })
       ];
       component.cardDraggedPosition(event);
-      expect(component.cards[0]).toEqual(
-        jasmine.objectContaining({ mode: ModeEnum.IDLE })
-      );
-      expect(component.cards[1]).toEqual(
-        jasmine.objectContaining({ mode: ModeEnum.IDLE })
-      );
-      expect(component.cards[2]).toEqual(
-        jasmine.objectContaining({ mode: ModeEnum.IDLE })
-      );
-      expect(component.cards[3]).toEqual(
-        jasmine.objectContaining({ mode: ModeEnum.UPLOAD })
-      );
+      expect(component.cards[0].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[1].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[2].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[3].mode).toBe(ModeEnum.UPLOAD);
     });
 
     it('should set all cards to multiselect mode and the selectedcards[] to multiselectselected', () => {
@@ -294,12 +301,10 @@ describe('WhiteboardComponent', () => {
       component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
       component.cardDraggedPosition(event);
       component.cards.forEach(card => {
-        expect(card).toEqual(
-          jasmine.objectContaining({ mode: ModeEnum.MULTISELECT })
-        );
+        expect(card.mode).toBe(ModeEnum.MULTISELECT);
       });
-      expect(component.selectedCards[0]).toEqual(
-        jasmine.objectContaining({ mode: ModeEnum.MULTISELECTSELECTED })
+      expect(component.selectedCards[0].mode).toBe(
+        ModeEnum.MULTISELECTSELECTED
       );
     });
 
@@ -341,6 +346,7 @@ describe('WhiteboardComponent', () => {
       expect(component.cards.length).toEqual(3);
     });
   });
+
   describe('updateCard()', () => {
     it('should update the card', () => {
       const card = new CardFixture({ description: 'foo' });
@@ -688,22 +694,29 @@ describe('WhiteboardComponent', () => {
         expect(emitSpy).toHaveBeenCalledWith({ card, imageFile: file });
       });
 
-      // it('should not call uploadImageForCard() because filetype not allowed', () => {
-      //   const wrongFile = new File([''], 'dummy.jpg', {
-      //     type: 'XGD'
-      //   });
+      it('should not call uploadImageForCard() because filetype not allowed', () => {
+        const wrongFile = new File([''], 'dummy.jpg', {
+          type: 'nop'
+        });
 
-      //   const event = {
-      //     target: {
-      //       files: [wrongFile]
-      //     }
-      //   } as any;
-      //   component.onFilePickerImageSelected(event, new CardFixture());
-      //   expect(emitSpy).not.toHaveBeenCalledWith({
-      //     card,
-      //     imageFile: wrongFile
-      //   });
-      // });
+        const event = {
+          target: {
+            files: [wrongFile]
+          }
+        } as any;
+
+        component.onFilePickerImageSelected(event, new CardFixture());
+
+        // the only call is from the beforeEach
+        expect(emitSpy).toHaveBeenCalledTimes(1);
+
+        expect(emitSpy).not.toHaveBeenCalledWith(
+          card,
+          jasmine.objectContaining({
+            imageFile: wrongFile
+          })
+        );
+      });
     });
 
     describe('changeColorForCard', () => {
