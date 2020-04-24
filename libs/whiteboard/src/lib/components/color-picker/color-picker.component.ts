@@ -39,10 +39,10 @@ export enum ColorPickerModeEnum {
   ]
 })
 export class ColorPickerComponent implements OnInit {
-  public active = false;
   public modes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
   private _mode: ColorPickerModeEnum;
 
+  @Input() active = false;
   @Input() activeColor: string;
 
   @Input()

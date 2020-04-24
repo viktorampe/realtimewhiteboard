@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { SettingsInterface } from '../../models/settings.interface';
-import { ColorListComponent } from '../color-list/color-list.component';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { SettingsComponent } from './settings.component';
 
 describe('SettingsComponent', () => {
@@ -25,7 +25,7 @@ describe('SettingsComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [SettingsComponent, ColorListComponent],
+      declarations: [SettingsComponent, ColorPickerComponent],
       imports: [ReactiveFormsModule, BrowserAnimationsModule, MatIconModule],
       providers: [
         {
@@ -64,7 +64,7 @@ describe('SettingsComponent', () => {
 
     it('should show a color-list when a color-palette is picked', async(() => {
       const colorList = fixture.debugElement.query(
-        By.directive(ColorListComponent)
+        By.directive(ColorPickerComponent)
       );
       expect(colorList).toBeFalsy();
 
@@ -72,14 +72,12 @@ describe('SettingsComponent', () => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
-        const cList = fixture.debugElement.query(
-          By.directive(ColorListComponent)
-        );
-        expect(cList).toBeTruthy();
+        const colorPicker: ColorPickerComponent = fixture.debugElement.query(
+          By.directive(ColorPickerComponent)
+        ).componentInstance;
+        expect(colorPicker).toBeTruthy();
 
-        expect(cList.componentInstance.colorOptions).toEqual(
-          mockColorPalettes.dark
-        );
+        expect(colorPicker.colors).toEqual(mockColorPalettes.dark);
       });
     }));
   });
