@@ -13,6 +13,11 @@ import { ColorPickerModeEnum } from '../color-picker/color-picker.component';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+  public settingsBoxShadow =
+    '3px 3px 16px -1px rgba(217, 50, 138, 0.3), 9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba(217, 50, 138, 0.2), -9px -9px 16px #ffffff';
+
+  public colorPickerModes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
+
   @Input() activeColor: string;
   @Input() themeColor: string;
   @Input() title: string;
@@ -22,10 +27,6 @@ export class SettingsComponent implements OnInit {
 
   @Output() update = new EventEmitter<SettingsInterface>();
 
-  public settingsBoxShadow =
-    '3px 3px 16px -1px rgba(217, 50, 138, 0.3), 9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba(217, 50, 138, 0.2), -9px -9px 16px #ffffff';
-
-  public colorPickerModes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
   settingsForm: FormGroup;
   colorPaletteNames: string[];
   paletteColors$: Observable<ColorInterface[]>;
