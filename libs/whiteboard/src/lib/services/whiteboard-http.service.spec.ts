@@ -48,7 +48,6 @@ describe('WhiteboardHttpService', () => {
       apiBase: APIBase,
       metadataId: metadataId
     });
-    whiteboardHttpService['eduContentId'] = apiData.eduContentId;
   });
 
   afterEach(() => {
@@ -96,6 +95,10 @@ describe('WhiteboardHttpService', () => {
   });
 
   describe('uploadFile', () => {
+    beforeEach(() => {
+      whiteboardHttpService['eduContentId'] = apiData.eduContentId;
+    });
+
     const file = new File([], 'image');
 
     const formData = new FormData();
