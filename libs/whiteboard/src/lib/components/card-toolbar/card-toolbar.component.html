@@ -17,12 +17,6 @@
         [svgIcon]="'delete'"
       ></mat-icon>
     </div>
-    <campus-color-picker
-      [mode]="colorPickerModes.WHEEL"
-      [@showHideToolbarTool]="'select'"
-      (selectedColor)="colorSelected($event)"
-      *ngIf="!inShelf"
-    ></campus-color-picker>
     <div
       [@showHideToolbarTool]="'select'"
       data-cy="return-to-shelf-tool"
@@ -35,6 +29,14 @@
         [svgIcon]="'return-to-shelf'"
       ></mat-icon>
     </div>
+
+    <campus-color-picker
+      [mode]="colorPickerModes.WHEEL"
+      [@showHideToolbarTool]="'select'"
+      (selectedColor)="colorSelected($event)"
+      *ngIf="!inShelf"
+    ></campus-color-picker>
+
     <div
       [@showHideToolbarTool]="'select'"
       class="toolbar__tool"
