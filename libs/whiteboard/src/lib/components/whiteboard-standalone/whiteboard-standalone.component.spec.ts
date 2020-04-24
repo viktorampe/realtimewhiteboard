@@ -1,5 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { HAMMER_LOADER } from '@angular/platform-browser';
 import {
   FileReaderServiceInterface,
@@ -200,6 +205,28 @@ describe('WhiteboardStandaloneComponent', () => {
         shelfCards: []
       });
     });
+
+    it('should toggle isSaving while saving', fakeAsync(() => {
+      jest.spyOn(whiteboardHttpService, 'setJson').mockReturnValue(of(true));
+      let saving: boolean = false;
+      component.canManage = true;
+      component.ngOnInit();
+
+      component.saveWhiteboard({
+        title: 'foo',
+        shelfCards: []
+      } as WhiteboardInterface);
+
+      const subscription = component.isSaving$.subscribe(isSaving => {
+        console.log(isSaving);
+        saving = isSaving;
+      });
+
+      expect(saving).toBeTruthy();
+      tick(1200); //saving should last at lease one second
+      expect(saving).toBeFalsy();
+      subscription.unsubscribe();
+    }));
 
     it('should remove workspace cards before saving', () => {
       component.canManage = true;
