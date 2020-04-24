@@ -184,13 +184,6 @@ describe('WhiteboardComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should hide card-colorlist when canMange is true', () => {
-        const colorlist = fixture.debugElement.query(
-          By.css('.whiteboard__color-list')
-        );
-        expect(colorlist).toBeFalsy();
-      });
-
       it('should show settingsbutton when canMange is true', () => {
         const settingsbutton = fixture.debugElement.query(
           By.css('.whiteboard__workspace__actions__settingsbutton')
@@ -203,13 +196,6 @@ describe('WhiteboardComponent', () => {
       beforeEach(() => {
         component.canManage = false;
         fixture.detectChanges();
-      });
-
-      it('should show card-colorlist when canMange is false', () => {
-        const colorlist = fixture.debugElement.query(
-          By.css('.whiteboard__color-list')
-        );
-        expect(colorlist).toBeTruthy();
       });
 
       it('should hide settingsbutton when canMange is false', () => {

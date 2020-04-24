@@ -4,6 +4,7 @@
     display: flex;
     align-items: center;
     margin: 16px;
+    width: 100%;
 
     label {
       min-width: 50px;
@@ -35,8 +36,9 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      campus-color-list {
-        margin: 15px 0px;
+
+      campus-color-picker {
+        margin-top: 15px;
       }
     }
   }
