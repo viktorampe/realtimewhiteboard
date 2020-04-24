@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ColorInterface } from '../../models/color.interface';
 import { SettingsInterface } from '../../models/settings.interface';
+import { ColorPickerModeEnum } from '../color-picker/color-picker.component';
 
 @Component({
   selector: 'campus-settings',
@@ -11,6 +12,9 @@ import { SettingsInterface } from '../../models/settings.interface';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+  public colorPickerModes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
+
+  @Input() activeColor: string;
   @Input() themeColor: string;
   @Input() title: string;
   @Input() colorPalettes: {

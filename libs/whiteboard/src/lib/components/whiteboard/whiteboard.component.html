@@ -58,17 +58,6 @@
         (cdkDragStarted)="onDragStarted(card)"
         (tap)="onCardTapped(card)"
       >
-        <campus-color-list
-          @showHideColorList
-          class="whiteboard__color-list"
-          [mode]="card.mode"
-          [zoomFactor]="zoomFactor"
-          (selectedColor)="changeColorForCard(card, $event)"
-          *ngIf="
-            (card.mode === Mode.EDIT || card.mode === Mode.SELECTED) &&
-            !canManage
-          "
-        ></campus-color-list>
         <campus-card-toolbar
           @showHideToolbar
           *ngIf="
@@ -89,6 +78,8 @@
           (clickConfirmIcon)="cardConfirmIconClicked(card)"
           (clickMultiSelectIcon)="onSelectCard(card)"
           (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
+          (selectedColor)="changeColorForCard(card, $event)"
+          [activeColor]="card.color"
         ></campus-card-toolbar>
         <campus-card
           class="whiteboard__card"
