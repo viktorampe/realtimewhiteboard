@@ -1,4 +1,3 @@
-//file.only
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
@@ -207,8 +206,8 @@ describe('WhiteboardComponent', () => {
 
   describe('onClickWhiteboard()', () => {
     it('should call update the card description if card is in edit mode', () => {
-      const updateCardSpy = jest.spyOn(component, 'onUpdateCard');
-
+      const updateCardSpy = jest.spyOn(component, 'updateCard' as any);
+      // reason for using the spy here is to really just check if it calls the function, cant otherwise check the status of card
       const event = {
         target: {
           classList: {
@@ -292,7 +291,7 @@ describe('WhiteboardComponent', () => {
       expect(component.cards[3].mode).toBe(ModeEnum.UPLOAD);
     });
 
-    it('should set all cards to multiselect mode and the selectedcards[] to multiselectselected', () => {
+    it('if there are selected cards it should set all cards to multiselect mode and the selectedcards[] to multiselectselected', () => {
       component.cards = [
         new CardFixture(),
         new CardFixture(),
