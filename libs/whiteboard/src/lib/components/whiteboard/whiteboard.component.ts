@@ -107,8 +107,11 @@ export interface CardImageUploadResponseInterface {
     ]),
     trigger('showHideCard', [
       transition(':leave', [
-        style({ opacity: '1' }),
-        animate('150ms cubic-bezier(.43,0,.31,1)', style({ opacity: '0' }))
+        style({ transform: 'scale(1)', opacity: '1' }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
       ])
     ]),
     trigger('showHideWhiteboardTools', [
@@ -132,26 +135,14 @@ export interface CardImageUploadResponseInterface {
         )
       ])
     ]),
-    trigger('showHideColorList', [
-      transition(':enter', [
-        query('@showHideColorSwatchOne', stagger(50, [animateChild()]), {
-          optional: true
-        })
-      ]),
-      transition(':leave', [
-        query('@showHideColorSwatchOne', stagger(-50, [animateChild()]), {
-          optional: true
-        })
-      ])
-    ]),
     trigger('showHideToolbar', [
       transition(':enter', [
-        query('@showHideToolbarTool', stagger(-50, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(-20, [animateChild()]), {
           optional: true
         })
       ]),
       transition(':leave', [
-        query('@showHideToolbarTool', stagger(50, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(20, [animateChild()]), {
           optional: true
         })
       ])
