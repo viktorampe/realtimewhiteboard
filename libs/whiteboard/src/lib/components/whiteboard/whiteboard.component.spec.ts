@@ -113,7 +113,6 @@ describe('WhiteboardComponent', () => {
         offsetX: 50
       };
       component.createCard(event);
-      console.log('log: event', event);
       expect(component.addEmptyCard).toHaveBeenCalledWith({
         top: 50,
         left: 50

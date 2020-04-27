@@ -244,10 +244,6 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region WORKSPACE INTERACTIONS
   createCard(event: any) {
-    console.log(
-      'log: WhiteboardComponent -> createCard -> event voor classname if',
-      event
-    );
     if (event.target.className.includes('whiteboard__workspace')) {
       if (event.type === 'longpress') {
         const top =
@@ -256,13 +252,8 @@ export class WhiteboardComponent implements OnChanges {
         const left = event.center.x;
         this.addEmptyCard({ top, left });
       }
-      console.log(
-        'log: WhiteboardComponent -> createCard -> event.type voor type if',
-        event.type
-      );
-      if (event.type === 'dblclick') {
-        console.log('log: WhiteboardComponent -> createCard -> event', event);
 
+      if (event.type === 'dblclick') {
         const top = event.offsetY;
         const left = event.offsetX;
         this.addEmptyCard({ top, left });
