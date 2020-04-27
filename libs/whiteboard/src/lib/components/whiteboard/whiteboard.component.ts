@@ -1,6 +1,25 @@
-import { animate, animateChild, keyframes, query, stagger, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  animateChild,
+  keyframes,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
