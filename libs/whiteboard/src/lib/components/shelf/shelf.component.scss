@@ -10,7 +10,7 @@
     display: flex;
     align-items: center;
     height: 120px;
-    overflow-x: scroll;
+    overflow-x: auto;
     /* total width */
     &::-webkit-scrollbar {
       background-color: #fff;
