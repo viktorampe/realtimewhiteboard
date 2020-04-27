@@ -25,23 +25,23 @@ $shadow-color-light: #ffffff;
   }
 
   &__tool {
-    &:last-of-type {
-      margin-right: 25px;
-    }
-    width: 45px;
+    width: 40px;
+    height: 40px;
+    border: solid 1px #e22940;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0px 20px;
+    margin: 8px 20px;
+    background: #fff;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.32), -2px -2px 6px #fff,
+      1px 1px 0 rgba(0, 0, 0, 0.12), -1px -1px 0 #fff,
+      inset -2px -2px 6px rgba(0, 0, 0, 0.12);
 
-    mat-icon {
-      color: #e22940;
-      width: 43px;
-      height: 43px;
-
-      svg {
-        fill: #e22940;
-      }
+    &:active {
+      box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.32),
+        inset -2px -2px 2px #fff, inset 1px 1px 0 rgba(0, 0, 0, 0.12),
+        inset -1px -1px 0 #fff;
     }
   }
 }
