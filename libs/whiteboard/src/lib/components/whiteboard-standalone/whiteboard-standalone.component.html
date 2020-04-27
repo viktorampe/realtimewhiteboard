@@ -7,4 +7,5 @@
   [uploadImageResponse]="imageUploadResponse$ | async"
   (uploadImage)="uploadImageForCard($event)"
   (changes)="saveWhiteboard($event)"
+  [isSaving]="isSaving$ | async"
 ></campus-whiteboard>

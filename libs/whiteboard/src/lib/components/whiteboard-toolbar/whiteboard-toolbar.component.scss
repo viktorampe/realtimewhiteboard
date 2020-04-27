@@ -24,11 +24,6 @@ $shadow-color-light: #ffffff;
     box-shadow: -1px 0px 1px $shadow-color-dark, 1px 0px 1px $shadow-color-light;
   }
 
-  campus-color-list {
-    width: 100%;
-    margin: 0px;
-  }
-
   &__tool {
     &:last-of-type {
       margin-right: 25px;

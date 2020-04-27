@@ -13,8 +13,15 @@ import {
   FileReaderServiceInterface,
   FILEREADER_SERVICE_TOKEN
 } from '@campus/browser';
-import { BehaviorSubject, merge, Observable, of } from 'rxjs';
-import { filter, map, mapTo, take, takeUntil } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  Observable,
+  of,
+  timer
+} from 'rxjs';
+import { filter, map, mapTo, startWith, take, takeUntil } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
 import { iconMap } from '../../icons/icon-mapping';
 import { CardInterface } from '../../models/card.interface';
@@ -43,6 +50,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
   @Input() whiteboardData: WhiteboardInterface;
 
   private whiteboard$: Observable<WhiteboardInterface>;
+  public isSaving$: Observable<boolean>;
 
   title$: Observable<string>;
   cards$: Observable<CardInterface[]>;
@@ -93,10 +101,12 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
 
   public uploadImageForCard(cardImage: CardImageUploadInterface): void {
     if (!this.canManage) {
-      // if you don't have permission to manage, you should still be able to see images locally
-      this.fileReaderService.readAsDataURL(cardImage.imageFile);
+      const fileReader = this.fileReaderService.getFileReader();
 
-      const imageUrl$ = this.fileReaderService.loaded$.pipe(
+      // if you don't have permission to manage, you should still be able to see images locally
+      fileReader.readAsDataURL(cardImage.imageFile);
+
+      const imageUrl$ = fileReader.loaded$.pipe(
         filter(imageUrl => !!imageUrl),
         map(imageUrl => ({
           card: cardImage.card,
@@ -104,7 +114,7 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         })),
         take(1)
       );
-      const progress$ = this.fileReaderService.progress$.pipe(
+      const progress$ = fileReader.progress$.pipe(
         filter(progress => progress !== null),
         map(progress => ({
           card: cardImage.card,
@@ -181,7 +191,11 @@ export class WhiteboardStandaloneComponent implements OnChanges, OnInit {
         image: this.removeApiBaseFromImageUrl(card.image)
       };
     });
-    this.whiteboardHttpService.setJson(data).subscribe();
+
+    this.isSaving$ = combineLatest(
+      timer(1000), // set at least isSaving for one second
+      this.whiteboardHttpService.setJson(data)
+    ).pipe(mapTo(false), startWith(true));
   }
 
   private addApiBaseToImageUrl(image: ImageInterface): ImageInterface {

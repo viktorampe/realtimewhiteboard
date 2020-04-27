@@ -11,7 +11,7 @@ import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 
 const CARD_HEIGHT = 167; // should be in sync with card.component.scss
-
+const CARD_WIDTH = 250;
 const START_ZOOM_LEVEL = 1;
 const ZOOM_TICK = 0.2;
 const MIN_ZOOM_LEVEL = 0.4; // can't be lower than zero
@@ -69,6 +69,22 @@ export interface CardImageUploadResponseInterface {
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
   animations: [
+    trigger('showHideFeedback', [
+      transition(':enter', [
+        style({ transform: 'scale(0)', opacity: 0 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(1)', opacity: '1' })
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
+      ])
+    ]),
     trigger('showHideCard', [
       transition(':leave', [
         style({ transform: 'scale(1)', opacity: '1' }),
@@ -124,6 +140,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() defaultColor = DEFAULT_COLOR; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
+  @Input() isSaving = false;
 
   @Output() changes = new EventEmitter<WhiteboardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
@@ -200,11 +217,6 @@ export class WhiteboardComponent implements OnChanges {
         const left = event.center.x;
         this.addEmptyCard({ top, left });
       }
-      if (event.type === 'dblclick') {
-        const top = event.offsetY;
-        const left = event.offsetX;
-        this.addEmptyCard({ top, left });
-      }
     }
   }
 
@@ -227,6 +239,8 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    const whiteboard = this.workspaceElementRef.nativeElement;
+
     //deselect all selected cards
     this.selectedCards = [];
     // set idle mode
@@ -242,8 +256,8 @@ export class WhiteboardComponent implements OnChanges {
       color: this.lastColor,
       description: '',
       image: null,
-      top: 0,
-      left: 0,
+      top: whiteboard.clientHeight / 2 - CARD_HEIGHT / 2,
+      left: whiteboard.clientWidth / 2 - CARD_WIDTH / 2,
       viewModeImage: false,
       ...values
     };

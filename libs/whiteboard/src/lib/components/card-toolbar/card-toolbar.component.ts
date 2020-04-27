@@ -8,6 +8,7 @@ import {
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
+import { ColorPickerModeEnum } from '../color-picker/color-picker.component';
 
 @Component({
   selector: 'campus-card-toolbar',
@@ -50,11 +51,14 @@ import { ModeEnum } from '../../enums/mode.enum';
   ]
 })
 export class CardToolbarComponent implements OnInit {
+  public colorPickerModes: typeof ColorPickerModeEnum = ColorPickerModeEnum;
+
   @Input() mode: ModeEnum;
   @Input() zoomFactor: number;
   @Input() inShelf: boolean;
   @Input() canManage: boolean;
   @Input() cardType: CardTypeEnum;
+  @Input() activeColor: string;
 
   @Output() clickDeleteIcon = new EventEmitter<void>();
   @Output() clickReturnToShelfIcon = new EventEmitter<void>();
@@ -63,6 +67,7 @@ export class CardToolbarComponent implements OnInit {
   @Output() clickFlipIcon = new EventEmitter<void>();
   @Output() clickMultiSelectIcon = new EventEmitter<void>();
   @Output() clickMultiSelectSelectedIcon = new EventEmitter<void>();
+  @Output() selectedColor = new EventEmitter<string>();
 
   constructor() {}
 
@@ -102,5 +107,9 @@ export class CardToolbarComponent implements OnInit {
 
   multiSelectSelectedClicked() {
     this.clickMultiSelectSelectedIcon.emit();
+  }
+
+  colorSelected(color) {
+    this.selectedColor.emit(color);
   }
 }

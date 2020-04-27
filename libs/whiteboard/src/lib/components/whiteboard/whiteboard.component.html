@@ -13,35 +13,36 @@
     [canManage]="canManage"
   ></campus-whiteboard-toolbar>
 
+  <div class="whiteboard__workspace__actions">
+    <div
+      click-stop-propagation
+      *ngIf="canManage"
+      class="whiteboard__workspace__actions__settingsbutton"
+      color="primary"
+      (tap)="toggleSettings()"
+    >
+      <mat-icon [svgIcon]="'settings'"></mat-icon>
+    </div>
+    <div class="whiteboard__workspace__actions__zoom">
+      <mat-icon
+        class="whiteboard__workspace__actions__zoom__button"
+        [svgIcon]="'remove'"
+        (tap)="decreaseZoom()"
+      ></mat-icon>
+      <div class="whiteboard__workspace__actions__zoom__separator"></div>
+      <mat-icon
+        class="whiteboard__workspace__actions__zoom__button"
+        [svgIcon]="'plus'"
+        (tap)="increaseZoom()"
+      ></mat-icon>
+    </div>
+  </div>
+
   <div
     class="whiteboard__workspace"
-    (dblclick)="createCard($event)"
     (longpress)="createCard($event)"
     #workspace
   >
-    <div class="whiteboard__workspace__actions">
-      <div
-        *ngIf="canManage"
-        class="whiteboard__workspace__actions__settingsbutton"
-        color="primary"
-        (tap)="toggleSettings()"
-      >
-        <mat-icon [svgIcon]="'settings'"></mat-icon>
-      </div>
-      <div class="whiteboard__workspace__actions__zoom">
-        <mat-icon
-          class="whiteboard__workspace__actions__zoom__button"
-          [svgIcon]="'remove'"
-          (tap)="decreaseZoom()"
-        ></mat-icon>
-        <div class="whiteboard__workspace__actions__zoom__separator"></div>
-        <mat-icon
-          class="whiteboard__workspace__actions__zoom__button"
-          [svgIcon]="'plus'"
-          (tap)="increaseZoom()"
-        ></mat-icon>
-      </div>
-    </div>
     <ng-container *ngIf="!isSettingsActive; else settingsView">
       <div
         @showHideCard
@@ -57,16 +58,6 @@
         (cdkDragStarted)="onDragStarted(card)"
         (tap)="onCardTapped(card)"
       >
-        <campus-color-list
-          class="whiteboard__color-list"
-          [mode]="card.mode"
-          [zoomFactor]="zoomFactor"
-          (selectedColor)="changeColorForCard(card, $event)"
-          *ngIf="
-            (card.mode === Mode.EDIT || card.mode === Mode.SELECTED) &&
-            !canManage
-          "
-        ></campus-color-list>
         <campus-card-toolbar
           @showHideToolbar
           *ngIf="
@@ -87,6 +78,8 @@
           (clickConfirmIcon)="cardConfirmIconClicked(card)"
           (clickMultiSelectIcon)="onSelectCard(card)"
           (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
+          (selectedColor)="changeColorForCard(card, $event)"
+          [activeColor]="card.color"
         ></campus-card-toolbar>
         <campus-card
           class="whiteboard__card"
@@ -120,7 +113,6 @@
         ></campus-settings>
       </div>
     </ng-template>
-
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       (deleteCard)="onDeleteCard($event, true)"
@@ -146,4 +138,11 @@
         : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
+
+  <div
+    @showHideFeedback
+    *ngIf="isSaving"
+    class="whiteboard-feedback feedback__saving"
+    >Bezig met opslaan...</div
+  >
 </div>
