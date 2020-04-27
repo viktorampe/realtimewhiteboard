@@ -230,6 +230,8 @@ export class WhiteboardComponent implements OnChanges {
         this.addEmptyCard({ top, left });
       }
       if (event.type === 'dblclick') {
+        console.log('log: WhiteboardComponent -> createCard -> event', event);
+
         const top = event.offsetY;
         const left = event.offsetX;
         this.addEmptyCard({ top, left });
