@@ -28,6 +28,10 @@ export class FileReaderService implements FileReaderServiceInterface {
     this.setEventHandlers();
   }
 
+  getFileReader(): FileReaderServiceInterface {
+    return new FileReaderService(new FileReader());
+  }
+
   // service methods
   isFileTypeAllowed(
     file: File,

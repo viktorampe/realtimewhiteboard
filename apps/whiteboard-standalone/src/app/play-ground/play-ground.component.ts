@@ -13,7 +13,7 @@ export class PlayGroundComponent implements OnInit {
   loggedIn = false;
 
   canManage = false;
-  eduContentMetadataId: number = 22;
+  eduContentMetadataId = 22;
   apiBase = environment.api.APIBase + '/api';
 
   eduContentMetadataIds = [22, 123, 124, 125];

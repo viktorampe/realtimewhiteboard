@@ -1,0 +1,39 @@
+<div
+  class="color-picker__activator toolbar__tool__icon"
+  [ngClass]="{ active: active }"
+  (click)="toggleActive()"
+>
+  <mat-icon svgIcon="color-lens"></mat-icon>
+
+  <ul class="color-picker__container" *ngIf="mode === modes.LIST">
+    <li
+      class="color-picker__color"
+      *ngFor="let color of colors; index as i"
+      [ngClass]="{ active: activeColor === color.hexCode }"
+      [ngStyle]="{ 'background-color': color.hexCode }"
+      (click)="clickColor(color.hexCode)"
+    ></li>
+  </ul>
+
+  <ul
+    class="color-picker__container"
+    *ngIf="mode === modes.WHEEL && active"
+    @showHideSwatch
+  >
+    <li
+      class="color-picker__color"
+      [ngClass]="{ active: activeColor === color.hexCode }"
+      *ngFor="let color of colors; index as i"
+      [ngStyle]="{
+        'background-color': color.hexCode,
+        transform:
+          'rotate(' +
+          (360 / colors.length) * (i + 1) +
+          'deg) translate(0, -75px) rotate(-' +
+          (360 / colors.length) * (i + 1) +
+          'deg)'
+      }"
+      (click)="clickColor(color.hexCode)"
+    ></li>
+  </ul>
+</div>

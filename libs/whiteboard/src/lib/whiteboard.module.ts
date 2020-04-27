@@ -17,7 +17,7 @@ import { CardImageComponent } from './components/card-image/card-image.component
 import { CardTextComponent } from './components/card-text/card-text.component';
 import { CardToolbarComponent } from './components/card-toolbar/card-toolbar.component';
 import { CardComponent } from './components/card/card.component';
-import { ColorListComponent } from './components/color-list/color-list.component';
+import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { ImageToolbarComponent } from './components/image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import { SettingsComponent } from './components/settings/settings.component';
@@ -47,7 +47,7 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     WhiteboardComponent,
     CardComponent,
     CardToolbarComponent,
-    ColorListComponent,
+    ColorPickerComponent,
     WhiteboardToolbarComponent,
     ProgressBarComponent,
     CardImageComponent,
