@@ -20,10 +20,14 @@
       class="whiteboard__workspace__actions__settingsbutton"
       color="primary"
       (tap)="toggleSettings()"
+      [ngStyle]="{ 'box-shadow': settingsBoxShadow }"
     >
       <mat-icon [svgIcon]="'settings'"></mat-icon>
     </div>
-    <div class="whiteboard__workspace__actions__zoom">
+    <div
+      class="whiteboard__workspace__actions__zoom"
+      [ngStyle]="{ 'box-shadow': settingsBoxShadow }"
+    >
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'remove'"
@@ -119,9 +123,11 @@
       (addClick)="btnPlusClicked()"
       [class.minimizedShelf]="isShelfMinimized"
       [cards]="shelfCards"
+      [activeCards]="cards"
       [(isMinimized)]="isShelfMinimized"
       [canManage]="canManage"
       [defaultColor]="defaultColor"
+      [ngStyle]="{ 'box-shadow': settingsBoxShadow }"
     ></campus-shelf>
   </div>
   <campus-empty-state

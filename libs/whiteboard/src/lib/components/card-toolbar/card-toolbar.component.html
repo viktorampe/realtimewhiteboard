@@ -34,7 +34,9 @@
       [mode]="colorPickerModes.WHEEL"
       [@showHideToolbarTool]="'select'"
       (selectedColor)="colorSelected($event)"
-      *ngIf="!inShelf"
+      *ngIf="
+        !inShelf && (mode === Mode.EDIT || mode === Mode.SELECTED) && !canManage
+      "
     ></campus-color-picker>
 
     <div
@@ -100,7 +102,6 @@
 <ng-template #multiSelectView>
   <div class="toolbar toolbar_multiSelect">
     <div
-      [@showHideToolbarTool]="'multiSelect'"
       *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
       (click)="multiSelectClicked()"
@@ -110,7 +111,6 @@
     </div>
     <ng-template #notSelectView>
       <div
-        [@showHideToolbarTool]="'multiSelect'"
         *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
         (click)="multiSelectSelectedClicked()"

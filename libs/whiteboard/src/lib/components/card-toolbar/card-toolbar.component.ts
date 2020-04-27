@@ -17,35 +17,34 @@ import { ColorPickerModeEnum } from '../color-picker/color-picker.component';
   animations: [
     trigger('showHideToolbarTool', [
       transition(':enter', [
-        style({ transform: 'scale(0) translateY(0px)' }),
+        style({ transform: 'scale(0)' }),
         animate(
-          '150ms cubic-bezier(.43,0,.31,1)',
+          '200ms cubic-bezier(.43,0,.31,1)',
           keyframes([
-            style({ transform: 'translateY(48px) scale(0)', offset: 0 }),
-            style({ transform: 'translateY(10px)', offset: 0.65 }),
-            style({ transform: 'translateY(-6px)', offset: 0.8 }),
-            style({ transform: 'translateY(4px)', offset: 0.85 }),
-            style({ transform: 'translateY(-2px)', offset: 0.9 }),
-            style({ transform: 'translateY(0) scale(1)', offset: 1 })
+            style({ transform: 'scale(0)', offset: 0 }),
+            style({ transform: 'scale(1.1)', offset: 0.75 }),
+            style({ transform: 'scale(0.95)', offset: 0.9 }),
+            style({ transform: 'scale(1.02)', offset: 0.95 }),
+            style({ transform: 'scale(1)', offset: 1 })
           ])
         )
       ]),
       transition('multiSelect => void', [
         style({
-          transform: 'translateY(0) scale(1)'
+          transform: 'scale(1)'
         }),
         animate(
           '150ms cubic-bezier(.43,0,.31,1)',
-          style({ transform: 'translateY(48px) scale(0)' })
+          style({ transform: 'scale(0)' })
         )
       ]),
       transition(':leave', [
         style({
-          transform: 'translateY(0) scale(1)'
+          transform: 'scale(1)'
         }),
         animate(
-          '150ms 450ms cubic-bezier(.43,0,.31,1)',
-          style({ transform: 'translateY(48px) scale(0)' })
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)' })
         )
       ])
     ])
