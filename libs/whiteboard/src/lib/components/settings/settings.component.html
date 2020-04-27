@@ -33,6 +33,12 @@
     </div>
   </div>
   <div class="settings__submitButton">
-    <button (tap)="onSubmit()">Klaar</button>
+    <button
+      (tap)="onSubmit()"
+      [ngStyle]="{
+        'box-shadow': settingsBoxShadow
+      }"
+      >Klaar</button
+    >
   </div>
 </div>
