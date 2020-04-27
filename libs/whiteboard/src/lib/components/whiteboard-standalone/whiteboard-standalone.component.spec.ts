@@ -1,7 +1,13 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { HAMMER_LOADER } from '@angular/platform-browser';
 import {
+  FileReaderService,
   FileReaderServiceInterface,
   FILEREADER_SERVICE_TOKEN
 } from '@campus/browser';
@@ -18,7 +24,6 @@ import {
 import { WhiteboardModule } from '../../whiteboard.module';
 import { CardImageUploadInterface } from '../whiteboard/whiteboard.component';
 import { WhiteboardStandaloneComponent } from './whiteboard-standalone.component';
-
 describe('WhiteboardStandaloneComponent', () => {
   let component: WhiteboardStandaloneComponent;
   let fixture: ComponentFixture<WhiteboardStandaloneComponent>;
@@ -30,7 +35,7 @@ describe('WhiteboardStandaloneComponent', () => {
       imports: [WhiteboardModule, HttpClientTestingModule],
       declarations: [],
       providers: [
-        { provide: FILEREADER_SERVICE_TOKEN, useValue: {} },
+        { provide: FILEREADER_SERVICE_TOKEN, useClass: FileReaderService },
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
@@ -38,9 +43,7 @@ describe('WhiteboardStandaloneComponent', () => {
       ]
     }).overrideProvider(FILEREADER_SERVICE_TOKEN, {
       useValue: {
-        readAsDataURL: jest.fn(),
-        loaded$: new BehaviorSubject<string>(null),
-        progress$: new BehaviorSubject<number>(null)
+        getFileReader: jest.fn()
       }
     });
   });
@@ -201,6 +204,27 @@ describe('WhiteboardStandaloneComponent', () => {
       });
     });
 
+    it('should toggle isSaving while saving', fakeAsync(() => {
+      jest.spyOn(whiteboardHttpService, 'setJson').mockReturnValue(of(true));
+      let saving = false;
+      component.canManage = true;
+      component.ngOnInit();
+
+      component.saveWhiteboard({
+        title: 'foo',
+        shelfCards: []
+      } as WhiteboardInterface);
+
+      const subscription = component.isSaving$.subscribe(isSaving => {
+        saving = isSaving;
+      });
+
+      expect(saving).toBeTruthy();
+      tick(1200); //saving should last at lease one second
+      expect(saving).toBeFalsy();
+      subscription.unsubscribe();
+    }));
+
     it('should remove workspace cards before saving', () => {
       component.canManage = true;
       component.ngOnInit();
@@ -280,16 +304,21 @@ describe('WhiteboardStandaloneComponent', () => {
     });
 
     describe('canManage = false', () => {
-      let progress$: BehaviorSubject<number>;
-      let loaded$: BehaviorSubject<string>;
       let spy: jest.SpyInstance;
+
+      const mockFileReader = {
+        readAsDataURL: jest.fn(),
+        loaded$: new BehaviorSubject<string>(null),
+        progress$: new BehaviorSubject<number>(null)
+      };
 
       beforeEach(() => {
         jest.spyOn(whiteboardHttpService, 'uploadFile');
         spy = jest.spyOn(component.imageUploadResponse$, 'next');
 
-        progress$ = fileReaderService.progress$ as BehaviorSubject<number>;
-        loaded$ = fileReaderService.loaded$ as BehaviorSubject<string>;
+        fileReaderService.getFileReader = jest
+          .fn()
+          .mockReturnValue(mockFileReader);
 
         component.canManage = false;
         component.ngOnInit();
@@ -298,16 +327,16 @@ describe('WhiteboardStandaloneComponent', () => {
       });
 
       it('should call fileReaderService.readAsDataUrl()', () => {
-        expect(fileReaderService.readAsDataURL).toHaveBeenCalledTimes(1);
-        expect(fileReaderService.readAsDataURL).toHaveBeenCalledWith(
+        expect(mockFileReader.readAsDataURL).toHaveBeenCalledTimes(1);
+        expect(mockFileReader.readAsDataURL).toHaveBeenCalledWith(
           mockImageToUpload.imageFile
         );
       });
 
       it('the uploadImageResponse stream to emit the file read response', () => {
-        progress$.next(10);
-        progress$.next(100);
-        loaded$.next('www.urltoimage.com');
+        mockFileReader.progress$.next(10);
+        mockFileReader.progress$.next(100);
+        mockFileReader.loaded$.next('www.urltoimage.com');
 
         expect(component.imageUploadResponse$.next).toHaveBeenCalledTimes(3);
 

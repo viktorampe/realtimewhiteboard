@@ -20,6 +20,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { ColorFunctions } from '@campus/utils';
 import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
@@ -30,7 +31,7 @@ import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 
 const CARD_HEIGHT = 167; // should be in sync with card.component.scss
-
+const CARD_WIDTH = 250;
 const START_ZOOM_LEVEL = 1;
 const ZOOM_TICK = 0.2;
 const MIN_ZOOM_LEVEL = 0.4; // can't be lower than zero
@@ -89,10 +90,29 @@ export interface CardImageUploadResponseInterface {
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
   animations: [
+    trigger('showHideFeedback', [
+      transition(':enter', [
+        style({ transform: 'scale(0)', opacity: 0 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(1)', opacity: '1' })
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
+      ])
+    ]),
     trigger('showHideCard', [
       transition(':leave', [
-        style({ opacity: '1' }),
-        animate('150ms cubic-bezier(.43,0,.31,1)', style({ opacity: '0' }))
+        style({ transform: 'scale(1)', opacity: '1' }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
       ])
     ]),
     trigger('showHideWhiteboardTools', [
@@ -116,26 +136,14 @@ export interface CardImageUploadResponseInterface {
         )
       ])
     ]),
-    trigger('showHideColorList', [
-      transition(':enter', [
-        query('@showHideColorSwatchOne', stagger(50, [animateChild()]), {
-          optional: true
-        })
-      ]),
-      transition(':leave', [
-        query('@showHideColorSwatchOne', stagger(-50, [animateChild()]), {
-          optional: true
-        })
-      ])
-    ]),
     trigger('showHideToolbar', [
       transition(':enter', [
-        query('@showHideToolbarTool', stagger(-50, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(-20, [animateChild()]), {
           optional: true
         })
       ]),
       transition(':leave', [
-        query('@showHideToolbarTool', stagger(50, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(20, [animateChild()]), {
           optional: true
         })
       ])
@@ -153,6 +161,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() defaultColor = DEFAULT_COLOR; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
+  @Input() isSaving = false;
 
   @Output() changes = new EventEmitter<WhiteboardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
@@ -169,6 +178,8 @@ export class WhiteboardComponent implements OnChanges {
   zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
 
+  public settingsBoxShadow = '';
+
   readonly emptyStateWithShelfCardsText =
     'Sleep voorgemaakte kaartjes op het bord of voeg zelf nieuwe kaartjes toe.';
   readonly emptyStateWithoutShelfCardsText =
@@ -176,12 +187,24 @@ export class WhiteboardComponent implements OnChanges {
 
   constructor() {}
 
+  private setBoxShadow() {
+    if (!this.defaultColor) {
+      return;
+    }
+    const { r, g, b } = ColorFunctions.hexToRgb(this.defaultColor);
+    this.settingsBoxShadow = `3px 3px 16px -1px rgba(${r}, ${g}, ${b}, 0.3), 9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba(${r}, ${g}, ${b}, 0.2), -9px -9px 16px #ffffff`;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (
       changes.uploadImageResponse &&
       !changes.uploadImageResponse.firstChange
     ) {
       this.handleImageUploadResponse(changes.uploadImageResponse.currentValue);
+    }
+
+    if (changes.defaultColor) {
+      this.setBoxShadow();
     }
   }
 
@@ -229,11 +252,6 @@ export class WhiteboardComponent implements OnChanges {
         const left = event.center.x;
         this.addEmptyCard({ top, left });
       }
-      if (event.type === 'dblclick') {
-        const top = event.offsetY;
-        const left = event.offsetX;
-        this.addEmptyCard({ top, left });
-      }
     }
   }
 
@@ -256,6 +274,8 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    const whiteboard = this.workspaceElementRef.nativeElement;
+
     //deselect all selected cards
     this.selectedCards = [];
     // set idle mode
@@ -271,8 +291,8 @@ export class WhiteboardComponent implements OnChanges {
       color: this.lastColor,
       description: '',
       image: null,
-      top: 0,
-      left: 0,
+      top: whiteboard.clientHeight / 2 - CARD_HEIGHT / 2,
+      left: whiteboard.clientWidth / 2 - CARD_WIDTH / 2,
       viewModeImage: false,
       ...values
     };
@@ -591,6 +611,8 @@ export class WhiteboardComponent implements OnChanges {
       },
       true
     );
+
+    this.setBoxShadow();
 
     this.toggleSettings();
   }

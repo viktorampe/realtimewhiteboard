@@ -151,8 +151,8 @@
         &__button {
           color: $buttonColor;
           padding: 6px;
-          height: 36px;
-          width: 36px;
+          height: 36px !important;
+          width: 36px !important;
 
           &:active {
             &:first-child {
@@ -221,5 +221,18 @@
     );
     box-shadow: $box-shadow-pink;
     transform: translateY(0);
+  }
+
+  &-feedback {
+    display: block;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.85);
+    color: rgba(0, 0, 0, 0.54);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 9px;
   }
 }

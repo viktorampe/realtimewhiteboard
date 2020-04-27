@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { CardTypeEnum } from '../../enums/cardType.enum';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CardToolbarComponent } from './card-toolbar.component';
 
 describe('CardToolbarComponent', () => {
@@ -15,7 +16,7 @@ describe('CardToolbarComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule, BrowserAnimationsModule],
-      declarations: [CardToolbarComponent],
+      declarations: [CardToolbarComponent, ColorPickerComponent],
       providers: [
         {
           provide: HAMMER_LOADER,
