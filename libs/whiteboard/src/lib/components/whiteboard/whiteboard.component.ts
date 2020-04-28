@@ -153,7 +153,7 @@ export interface CardImageUploadResponseInterface {
 })
 export class WhiteboardComponent implements OnChanges {
   @Input() title = 'Deze sorteeroefening heeft nog geen titel.';
-  @Input() cards: CardInterface[];
+  @Input() cards: CardInterface[]; // workspace
   @Input() shelfCards: CardInterface[];
   @Input() themeColorPalettes: {
     [paletteName: string]: ColorInterface[];
@@ -215,7 +215,7 @@ export class WhiteboardComponent implements OnChanges {
   /**
    * Update whiteboard data.
    * When shouldPersist flag is true,
-   * the current whiteboard data is also emitted in the save output.
+   * the current whiteboard data is also emitted in the changes output.
    *
    * @private
    * @param {Partial<WhiteboardInterface>} updates
@@ -522,6 +522,7 @@ export class WhiteboardComponent implements OnChanges {
       const cardInEditMode = cards.find(c => c.mode === ModeEnum.EDIT);
 
       if (cardInEditMode) {
+        // if a card's description is being edited when loosing focus, it should be saved
         this.updateCard(
           { description: cardInEditMode.description },
           cardInEditMode

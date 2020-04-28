@@ -136,7 +136,7 @@ describe('WhiteboardHttpService', () => {
       );
     });
 
-    it('should make the correct api call and return the response', () => {
+    it('should make the correct api call and return the upload progress response', () => {
       const uploadProgressEvent = {
         type: 1,
         loaded: 8,
