@@ -75,10 +75,265 @@ describe('WhiteboardComponent', () => {
     expect(component.shelfCards.map(sc => sc.id)).toContain(card.id);
   });
 
+  describe('createCard', () => {
+    it('should set the correct position - longpress', () => {
+      const workspace = component.workspaceElementRef.nativeElement;
+      jest.spyOn(component, 'addEmptyCard');
+      jest
+        .spyOn(workspace, 'getBoundingClientRect')
+        .mockReturnValue({ top: 100 });
+      const event = {
+        target: {
+          className: ['whiteboard__workspace']
+        },
+        type: 'longpress',
+        center: {
+          y: 10,
+          x: 5
+        },
+        offsetY: 50,
+        offsetX: 50
+      };
+
+      component.createCard(event);
+      expect(component.addEmptyCard).toHaveBeenCalledWith({
+        top: -90,
+        left: 5
+      });
+    });
+  });
+
+  describe('removeImage()', () => {
+    it('should remove the img from the card ', () => {
+      const card = new CardFixture({ image: { imageUrl: 'foo' } });
+      component.removeImage(card);
+      expect(Object.keys(card.image).length).toEqual(0);
+    });
+  });
+
+  describe('onDragStarted()', () => {
+    it('should put the other cards on the whiteboard in idle state', () => {
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+      //clear selected card
+      component.selectedCards = [];
+      component.onDragStarted(new CardFixture({ id: '2' }));
+      expect(
+        component.cards.forEach(card => {
+          expect(card.mode).toBe(ModeEnum.IDLE);
+        })
+      );
+    });
+
+    it('cards states should not change because there are selected cards', () => {
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+      component.selectedCards = component.cards;
+      component.onDragStarted(new CardFixture());
+      expect(component.cards[0].mode).toBe(ModeEnum.SELECTED);
+    });
+
+    it('should leave cards in upload state unaffected', () => {
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        }),
+        new CardFixture(),
+        new CardFixture({
+          mode: ModeEnum.UPLOAD
+        })
+      ];
+
+      component.onDragStarted(new CardFixture());
+      expect(component.cards[2].mode).toBe(ModeEnum.UPLOAD);
+    });
+  });
+
+  describe('onDragEnded()', () => {
+    it('should update the card position', () => {
+      const event = {
+        source: {
+          getFreeDragPosition: () => ({ x: 50, y: 50 })
+        }
+      } as any;
+
+      component.onDragEnded(event, new CardFixture());
+
+      expect(component.cards[0]).toEqual(
+        jasmine.objectContaining({ top: 50, left: 50 })
+      );
+    });
+
+    it('should update the whiteboard with right parameters', () => {
+      const event = {
+        source: {
+          getFreeDragPosition: () => ({ x: 50, y: 50 })
+        }
+      } as any;
+      component.cards = [new CardFixture({ id: 'AZ' }), new CardFixture()];
+      component.onDragEnded(event, new CardFixture({ id: 'AZ' }));
+      expect(component.cards.find(card => card.id === 'AZ')).toEqual(
+        jasmine.objectContaining({
+          top: 50,
+          left: 50
+        })
+      );
+    });
+  });
+
+  describe('onClickWhiteboard()', () => {
+    it('should save the card description if card is in edit mode', () => {
+      const changesSpy = jest.spyOn(component.changes, 'emit');
+
+      const event = {
+        target: {
+          classList: {
+            contains: jest.fn().mockReturnValue(true)
+          }
+        }
+      } as any;
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({
+          id: 'toChange',
+          mode: ModeEnum.EDIT
+        })
+      ];
+
+      component.onClickWhiteboard(event);
+      expect(changesSpy).toHaveBeenCalledWith({
+        title: component.title,
+        defaultColor: component.defaultColor,
+        cards: component.cards,
+        shelfCards: component.shelfCards
+      });
+    });
+
+    it('should set all non upload-idle-zoom to idle ', () => {
+      const event = {
+        target: {
+          classList: {
+            contains: jest.fn().mockReturnValue(true)
+          }
+        }
+      } as any;
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({
+          mode: ModeEnum.EDIT
+        }),
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+
+      component.onClickWhiteboard(event);
+      component.cards.forEach(card => {
+        expect(card.mode).toBe(ModeEnum.IDLE);
+      });
+    });
+  });
+
+  describe('cardDraggedPosition()', () => {
+    let event;
+    beforeEach(() => {
+      event = {
+        event: {
+          distance: {
+            x: 50,
+            y: 50
+          }
+        } as any,
+        card: new CardFixture(),
+        cardElement: {
+          offsetLeft: 5,
+          offsetTop: 5
+        } as any,
+        scrollLeft: 40
+      };
+    });
+
+    it('should set all cards to idle, except upload', () => {
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({ mode: ModeEnum.SELECTED }),
+        new CardFixture({ mode: ModeEnum.EDIT }),
+        new CardFixture({ mode: ModeEnum.UPLOAD })
+      ];
+      component.cardDraggedPosition(event);
+      expect(component.cards[0].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[1].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[2].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[3].mode).toBe(ModeEnum.UPLOAD);
+    });
+
+    it('restore multi-selection state', () => {
+      component.cards = [
+        new CardFixture(),
+        new CardFixture(),
+        new CardFixture()
+      ];
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      component.cards.forEach(card => {
+        expect(card.mode).toBe(ModeEnum.MULTISELECT);
+      });
+      expect(component.selectedCards[0].mode).toBe(
+        ModeEnum.MULTISELECTSELECTED
+      );
+    });
+
+    it('should add the card if the workspacecard not already in cards', () => {
+      const spy = component.workspaceElementRef.nativeElement;
+      jest.spyOn(spy, 'getBoundingClientRect').mockReturnValue({ height: 400 });
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture(),
+        new CardFixture()
+      ];
+
+      event.card = new CardFixture({ id: 'newId' });
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      //check if the card is added + position
+      expect(component.cards.find(card => card.id === 'newId')).toEqual(
+        jasmine.objectContaining({
+          top: 178,
+          left: 15,
+          mode: ModeEnum.MULTISELECT
+        })
+      );
+    });
+
+    it('should not update cards if workspacecard is already in cards', () => {
+      const spy = component.workspaceElementRef.nativeElement;
+      jest.spyOn(spy, 'getBoundingClientRect').mockReturnValue({ height: 400 });
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture(),
+        new CardFixture()
+      ];
+
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      expect(component.cards.length).toEqual(3);
+    });
+  });
+
   describe('updateCard()', () => {
     it('should update the card', () => {
       const card = new CardFixture({ description: 'foo' });
-      component.updateCard({ description: 'bar' }, card);
+      component.onUpdateCard({ description: 'bar' }, card);
 
       expect(card.description).toEqual('bar');
     });
@@ -87,7 +342,7 @@ describe('WhiteboardComponent', () => {
       const card = new CardFixture({ description: 'foo' });
       component.shelfCards = [card];
 
-      component.updateCard({ description: 'bar' }, card);
+      component.onUpdateCard({ description: 'bar' }, card);
 
       expect(component.shelfCards[0].description).toEqual('bar');
     });
@@ -407,6 +662,30 @@ describe('WhiteboardComponent', () => {
         expect(emitSpy).toHaveBeenCalledTimes(1);
         expect(emitSpy).toHaveBeenCalledWith({ card, imageFile: file });
       });
+
+      it('should not call uploadImageForCard() because filetype not allowed', () => {
+        const wrongFile = new File([''], 'dummy.jpg', {
+          type: 'nop'
+        });
+
+        const event = {
+          target: {
+            files: [wrongFile]
+          }
+        } as any;
+
+        component.onFilePickerImageSelected(event, new CardFixture());
+
+        // the only call is from the beforeEach
+        expect(emitSpy).toHaveBeenCalledTimes(1);
+
+        expect(emitSpy).not.toHaveBeenCalledWith(
+          card,
+          jasmine.objectContaining({
+            imageFile: wrongFile
+          })
+        );
+      });
     });
 
     describe('changeColorForCard', () => {
@@ -501,11 +780,11 @@ describe('WhiteboardComponent', () => {
           expect(component.onDeleteCard).toHaveBeenCalledWith(card, true)
         );
 
-        expect(component.selectedCards).toStrictEqual([]);
+        expect(component.selectedCards).toEqual([]);
       });
 
       it('bulkReturnCardsToShelfClicked() should only return publisher cards to shelf', () => {
-        jest.spyOn(component, 'updateWhiteboard');
+        jest.spyOn(component, 'updateWhiteboard' as any);
 
         component.bulkReturnCardsToShelfClicked();
 
@@ -513,7 +792,7 @@ describe('WhiteboardComponent', () => {
           true
         );
 
-        expect(component.updateWhiteboard).toHaveBeenCalledWith({
+        expect(component['updateWhiteboard']).toHaveBeenCalledWith({
           cards: [
             ...nonSelectedCards,
             { ...selectedCards[1], mode: ModeEnum.IDLE }, // teacher card
@@ -521,7 +800,7 @@ describe('WhiteboardComponent', () => {
           ]
         });
 
-        expect(component.selectedCards).toStrictEqual([]);
+        expect(component.selectedCards).toEqual([]);
       });
 
       it('changeSelectedCardsColor() should change the colors of the selected cards when a swatch is clicked', () => {

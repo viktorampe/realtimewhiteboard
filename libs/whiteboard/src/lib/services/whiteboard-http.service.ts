@@ -22,6 +22,10 @@ export interface WhiteboardHttpServiceInterface {
   getJson(): Observable<WhiteboardInterface>;
   setJson(whiteboard: WhiteboardInterface): Observable<Boolean>;
   uploadFile(file: File): Observable<ImageInterface>;
+  setSettings(settings: WhiteboardHttpSettingsInterface): void;
+  getColorPalettes(): Observable<{
+    [paletteName: string]: ColorInterface[];
+  }>;
 }
 
 export interface WhiteboardHttpSettingsInterface {

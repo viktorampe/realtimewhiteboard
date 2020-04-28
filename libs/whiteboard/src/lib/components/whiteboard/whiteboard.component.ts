@@ -153,7 +153,7 @@ export interface CardImageUploadResponseInterface {
 })
 export class WhiteboardComponent implements OnChanges {
   @Input() title = 'Deze sorteeroefening heeft nog geen titel.';
-  @Input() cards: CardInterface[];
+  @Input() cards: CardInterface[]; // workspace
   @Input() shelfCards: CardInterface[];
   @Input() themeColorPalettes: {
     [paletteName: string]: ColorInterface[];
@@ -215,13 +215,13 @@ export class WhiteboardComponent implements OnChanges {
   /**
    * Update whiteboard data.
    * When shouldPersist flag is true,
-   * the current whiteboard data is also emitted in the save output.
+   * the current whiteboard data is also emitted in the changes output.
    *
    * @private
    * @param {Partial<WhiteboardInterface>} updates
    * @memberof WhiteboardComponent
    */
-  public updateWhiteboard(
+  private updateWhiteboard(
     updates: Partial<WhiteboardInterface>,
     shouldPersist = false
   ) {
@@ -242,6 +242,7 @@ export class WhiteboardComponent implements OnChanges {
 
     this.saveWhiteboard();
   }
+
   //#region WORKSPACE INTERACTIONS
   createCard(event: any) {
     if (event.target.className.includes('whiteboard__workspace')) {
@@ -260,8 +261,12 @@ export class WhiteboardComponent implements OnChanges {
   }
   //#endregion
 
+  public onUpdateCard(updates: Partial<CardInterface>, card: CardInterface) {
+    this.updateCard(updates, card);
+  }
+
   //#region CARD ACTIONS
-  updateCard(updates: Partial<CardInterface>, card: CardInterface) {
+  private updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     // update card
     Object.assign(card, updates);
     // sync shelfcard
@@ -511,6 +516,7 @@ export class WhiteboardComponent implements OnChanges {
       const cardInEditMode = cards.find(c => c.mode === ModeEnum.EDIT);
 
       if (cardInEditMode) {
+        // if a card's description is being edited when loosing focus, it should be saved
         this.updateCard(
           { description: cardInEditMode.description },
           cardInEditMode
