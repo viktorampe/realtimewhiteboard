@@ -47,22 +47,28 @@ export class NavComponent implements OnInit {
         realtimeSession.id = null;
         realtimeSession.title = result.sessionTitle;
         realtimeSession.pincode = result.sessionPincode;
-        realtimeSession.whiteboard = {
-          title: 'realtime whiteboard',
-          defaultColor: '#5D3284',
-          cards: [],
-          shelfCards: []
-        };
         this.startSession(realtimeSession);
       }
     });
   }
 
   private startSession(realtimeSession: RealtimeSession) {
-    // create session
-    this.sessionService.createNewSession(realtimeSession).subscribe(session => {
-      this.router.navigate(['realtimesession', session.id]);
-    });
+    // create whiteboard
+    this.sessionService
+      .createWhiteboard({
+        title: 'realtime whiteboard',
+        defaultColor: '#5D3284',
+        cards: [],
+        shelfCards: []
+      })
+      .subscribe((whiteboardResponse: any) => {
+        // create session
+        this.sessionService
+          .createNewSession(realtimeSession, whiteboardResponse.id)
+          .subscribe((sessionResponse: any) => {
+            this.router.navigate(['realtimesession', sessionResponse.id]);
+          });
+      });
   }
 
   stopSession() {

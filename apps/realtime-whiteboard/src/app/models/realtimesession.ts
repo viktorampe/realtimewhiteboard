@@ -1,5 +1,4 @@
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import { SessionHelper } from '../util/sessionhelper';
 import Player from './player';
 
 export default class RealtimeSession {
@@ -17,9 +16,7 @@ export default class RealtimeSession {
     this.players = sessionResponse
       ? this.setPlayers(sessionResponse.players.items)
       : null;
-    this.whiteboard = sessionResponse
-      ? SessionHelper.parseWhiteboard(sessionResponse.whiteboard)
-      : null;
+    this.whiteboard = sessionResponse ? sessionResponse.whiteboard : null;
     this.lives = true;
   }
 

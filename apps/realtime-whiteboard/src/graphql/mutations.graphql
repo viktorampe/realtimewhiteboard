@@ -7,15 +7,34 @@ mutation CreateSession(
     id
     title
     pincode
-    whiteboard
     players {
       items {
         id
         sessionID
         fullName
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 mutation UpdateSession(
@@ -26,15 +45,34 @@ mutation UpdateSession(
     id
     title
     pincode
-    whiteboard
     players {
       items {
         id
         sessionID
         fullName
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 mutation DeleteSession(
@@ -45,15 +83,130 @@ mutation DeleteSession(
     id
     title
     pincode
-    whiteboard
     players {
       items {
         id
         sessionID
         fullName
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation CreateWhiteboard(
+  $input: CreateWhiteboardInput!
+  $condition: ModelWhiteboardConditionInput
+) {
+  createWhiteboard(input: $input, condition: $condition) {
+    id
+    title
+    defaultColor
+    cards {
+      items {
+        id
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation UpdateWhiteboard(
+  $input: UpdateWhiteboardInput!
+  $condition: ModelWhiteboardConditionInput
+) {
+  updateWhiteboard(input: $input, condition: $condition) {
+    id
+    title
+    defaultColor
+    cards {
+      items {
+        id
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation DeleteWhiteboard(
+  $input: DeleteWhiteboardInput!
+  $condition: ModelWhiteboardConditionInput
+) {
+  deleteWhiteboard(input: $input, condition: $condition) {
+    id
+    title
+    defaultColor
+    cards {
+      items {
+        id
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 mutation CreatePlayer(
@@ -67,12 +220,27 @@ mutation CreatePlayer(
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     fullName
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 mutation UpdatePlayer(
@@ -86,12 +254,27 @@ mutation UpdatePlayer(
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     fullName
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 mutation DeletePlayer(
@@ -105,11 +288,122 @@ mutation DeletePlayer(
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     fullName
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation CreateCard(
+  $input: CreateCardInput!
+  $condition: ModelCardConditionInput
+) {
+  createCard(input: $input, condition: $condition) {
+    id
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation UpdateCard(
+  $input: UpdateCardInput!
+  $condition: ModelCardConditionInput
+) {
+  updateCard(input: $input, condition: $condition) {
+    id
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation DeleteCard(
+  $input: DeleteCardInput!
+  $condition: ModelCardConditionInput
+) {
+  deleteCard(input: $input, condition: $condition) {
+    id
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    _version
+    _deleted
+    _lastChangedAt
   }
 }

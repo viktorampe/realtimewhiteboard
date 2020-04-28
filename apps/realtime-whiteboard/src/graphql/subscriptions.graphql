@@ -4,15 +4,34 @@ subscription OnCreateSession {
     id
     title
     pincode
-    whiteboard
     players {
       items {
         id
         sessionID
         fullName
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnUpdateSession {
@@ -20,15 +39,34 @@ subscription OnUpdateSession {
     id
     title
     pincode
-    whiteboard
     players {
       items {
         id
         sessionID
         fullName
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnDeleteSession {
@@ -36,15 +74,121 @@ subscription OnDeleteSession {
     id
     title
     pincode
-    whiteboard
     players {
       items {
         id
         sessionID
         fullName
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateWhiteboard {
+  onCreateWhiteboard {
+    id
+    title
+    defaultColor
+    cards {
+      items {
+        id
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateWhiteboard {
+  onUpdateWhiteboard {
+    id
+    title
+    defaultColor
+    cards {
+      items {
+        id
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteWhiteboard {
+  onDeleteWhiteboard {
+    id
+    title
+    defaultColor
+    cards {
+      items {
+        id
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnCreatePlayer {
@@ -55,12 +199,27 @@ subscription OnCreatePlayer {
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     fullName
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnUpdatePlayer {
@@ -71,12 +230,27 @@ subscription OnUpdatePlayer {
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     fullName
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnDeletePlayer {
@@ -87,11 +261,113 @@ subscription OnDeletePlayer {
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     fullName
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateCard {
+  onCreateCard {
+    id
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateCard {
+  onUpdateCard {
+    id
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteCard {
+  onDeleteCard {
+    id
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    _version
+    _deleted
+    _lastChangedAt
   }
 }

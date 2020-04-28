@@ -1,5 +1,5 @@
 {
-    "projectName": "realtime-whiteboard",
+    "projectName": "realtimewhiteboard",
     "version": "3.0",
     "frontend": "javascript",
     "javascript": {
@@ -7,7 +7,7 @@
         "config": {
             "SourceDir": "src",
             "DistributionDir": "dist/realtime-whiteboard",
-            "BuildCommand": "npm run-script build",
+            "BuildCommand": "npm.cmd run-script build",
             "StartCommand": "ng serve"
         }
     },

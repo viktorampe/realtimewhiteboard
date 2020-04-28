@@ -1,18 +1,74 @@
 # this is an auto generated file. This will be overwritten
+query SyncSessions(
+  $filter: ModelSessionFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncSessions(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      title
+      pincode
+      players {
+        nextToken
+        startedAt
+      }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
 query GetSession($id: ID!) {
   getSession(id: $id) {
     id
     title
     pincode
-    whiteboard
     players {
       items {
         id
         sessionID
         fullName
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListSessions(
@@ -25,12 +81,137 @@ query ListSessions(
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncWhiteboards(
+  $filter: ModelWhiteboardFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncWhiteboards(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query GetWhiteboard($id: ID!) {
+  getWhiteboard(id: $id) {
+    id
+    title
+    defaultColor
+    cards {
+      items {
+        id
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+query ListWhiteboards(
+  $filter: ModelWhiteboardFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listWhiteboards(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query SyncPlayers(
+  $filter: ModelPlayerFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncPlayers(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      sessionID
+      session {
+        id
+        title
+        pincode
+        whiteboardID
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      fullName
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query GetPlayer($id: ID!) {
@@ -41,12 +222,27 @@ query GetPlayer($id: ID!) {
       id
       title
       pincode
-      whiteboard
       players {
         nextToken
+        startedAt
       }
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
     }
     fullName
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListPlayers(
@@ -62,11 +258,119 @@ query ListPlayers(
         id
         title
         pincode
-        whiteboard
+        whiteboardID
+        _version
+        _deleted
+        _lastChangedAt
       }
       fullName
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncCards(
+  $filter: ModelCardFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncCards(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      mode
+      type
+      color
+      description
+      image
+      top
+      left
+      viewModeImage
+      inShelf
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query GetCard($id: ID!) {
+  getCard(id: $id) {
+    id
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+query ListCards(
+  $filter: ModelCardFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCards(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      mode
+      type
+      color
+      description
+      image
+      top
+      left
+      viewModeImage
+      inShelf
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query PlayerBySessionId(
@@ -90,10 +394,17 @@ query PlayerBySessionId(
         id
         title
         pincode
-        whiteboard
+        whiteboardID
+        _version
+        _deleted
+        _lastChangedAt
       }
       fullName
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
   }
 }

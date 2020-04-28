@@ -17,7 +17,7 @@ export interface WhiteboardDataServiceInterface {
 })
 export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession$ = new BehaviorSubject<RealtimeSession>(null);
-  currentRealtimeSession: RealtimeSession;
+  currentRealtimeSession: RealtimeSession = new RealtimeSession();
 
   constructor(private apiService: APIService) {}
 
@@ -29,13 +29,14 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   //#region SESSOINS
 
   createNewSession(
-    realtimeSession: RealtimeSession
+    realtimeSession: RealtimeSession,
+    whiteboardID: string
   ): Observable<RealtimeSession> {
     return from(
       this.apiService.CreateSession({
         title: realtimeSession.title,
         pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+        whiteboardID: whiteboardID
       })
     ).pipe(
       // get created session
@@ -63,8 +64,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       .UpdateSession({
         id: realtimeSession.id,
         title: realtimeSession.title,
-        pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+        pincode: realtimeSession.pincode
       })
       .then(() => {})
       .catch(err => console.log(err));
@@ -130,6 +130,61 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#endregion
 
+  //#region WHITEBOARD
+
+  createWhiteboard(whiteboard: WhiteboardInterface): Observable<any> {
+    return from(
+      this.apiService.CreateWhiteboard({
+        title: whiteboard.title,
+        defaultColor: whiteboard.defaultColor
+      })
+    ).pipe(
+      map(whiteboardResponse => {
+        this.currentRealtimeSession.whiteboard = {
+          title: whiteboardResponse.title,
+          defaultColor: whiteboardResponse.defaultColor,
+          cards: whiteboardResponse.cards.items
+            .filter(c => c.inShelf === false)
+            .map(c => {
+              return {
+                id: c.id,
+                mode: c.mode,
+                type: c.type,
+                color: c.color,
+                description: c.description,
+                image: {
+                  imageUrl: c.image
+                },
+                top: c.top,
+                left: c.left,
+                viewModeImage: c.viewModeImage
+              };
+            }),
+          shelfCards: whiteboardResponse.cards.items
+            .filter(c => c.inShelf === true)
+            .map(c => {
+              return {
+                id: c.id,
+                mode: c.mode,
+                type: c.type,
+                color: c.color,
+                description: c.description,
+                image: {
+                  imageUrl: c.image
+                },
+                top: c.top,
+                left: c.left,
+                viewModeImage: c.viewModeImage
+              };
+            })
+        };
+        return whiteboardResponse;
+      })
+    );
+  }
+
+  ////#endregion
+
   //#region INTERFACE IMPLEMENTATION
 
   getWhiteboardData(): Observable<WhiteboardInterface> {
@@ -147,8 +202,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       this.apiService.UpdateSession({
         id: this.currentRealtimeSession.id,
         title: this.currentRealtimeSession.title,
-        pincode: this.currentRealtimeSession.pincode,
-        whiteboard: JSON.stringify(whiteboard)
+        pincode: this.currentRealtimeSession.pincode
       })
     ).pipe(mapTo(true));
   }
@@ -159,42 +213,3 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#endregion
 }
-
-/*
-
-
-  getSession(sessionId: string): Observable<RealtimeSession> {
-    return from(this.apiService.GetSession(sessionId)).pipe(
-      map(sessionResponse => {
-        return new RealtimeSession(sessionResponse);
-      })
-    );
-  }
-
-
-  updateSession(realtimeSession: RealtimeSession): Observable<boolean> {
-    return from(
-      this.apiService.UpdateSession({
-        id: realtimeSession.id,
-        title: realtimeSession.title,
-        pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
-      })
-    ).pipe(mapTo(true));
-  }
-
-
-  getPlayersBySession(sessionId: string): Observable<Player[]> {
-    return from(this.apiService.PlayerBySessionId(sessionId)).pipe(
-      map(playersResponse => {
-        const players: Player[] = [];
-        playersResponse.items.forEach(pr => {
-          players.push(new Player(pr));
-        });
-        return players;
-      })
-    );
-  }
-
-
-*/
