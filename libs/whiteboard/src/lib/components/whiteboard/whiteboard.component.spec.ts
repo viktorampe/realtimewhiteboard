@@ -188,9 +188,9 @@ describe('WhiteboardComponent', () => {
   });
 
   describe('onClickWhiteboard()', () => {
-    it('should call update the card description if card is in edit mode', () => {
+    it('should save the card description if card is in edit mode', () => {
       const changesSpy = jest.spyOn(component.changes, 'emit');
-      // reason for using the spy here is to really just check if it calls the function, cant otherwise check the status of card
+
       const event = {
         target: {
           classList: {
@@ -275,7 +275,7 @@ describe('WhiteboardComponent', () => {
       expect(component.cards[3].mode).toBe(ModeEnum.UPLOAD);
     });
 
-    it('keep/restore/preserve multi-selection state', () => {
+    it('restore multi-selection state', () => {
       component.cards = [
         new CardFixture(),
         new CardFixture(),
