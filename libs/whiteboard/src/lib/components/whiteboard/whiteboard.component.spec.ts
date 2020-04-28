@@ -101,23 +101,6 @@ describe('WhiteboardComponent', () => {
         left: 5
       });
     });
-
-    it('should set the correct position - dblclick', () => {
-      jest.spyOn(component, 'addEmptyCard');
-      const event = {
-        target: {
-          className: ['whiteboard__workspace']
-        },
-        type: 'dblclick',
-        offsetY: 50,
-        offsetX: 50
-      };
-      component.createCard(event);
-      expect(component.addEmptyCard).toHaveBeenCalledWith({
-        top: 50,
-        left: 50
-      });
-    });
   });
 
   describe('removeImage()', () => {
@@ -173,7 +156,7 @@ describe('WhiteboardComponent', () => {
   });
 
   describe('onDragEnded()', () => {
-    it('should update the whiteboard  and call updateCard() with right parameters', () => {
+    it('should update the card position', () => {
       const event = {
         source: {
           getFreeDragPosition: () => ({ x: 50, y: 50 })
@@ -206,7 +189,7 @@ describe('WhiteboardComponent', () => {
 
   describe('onClickWhiteboard()', () => {
     it('should call update the card description if card is in edit mode', () => {
-      const updateCardSpy = jest.spyOn(component, 'updateCard' as any);
+      const changesSpy = jest.spyOn(component.changes, 'emit');
       // reason for using the spy here is to really just check if it calls the function, cant otherwise check the status of card
       const event = {
         target: {
@@ -225,11 +208,12 @@ describe('WhiteboardComponent', () => {
       ];
 
       component.onClickWhiteboard(event);
-      const cardToUpdate = component.cards.find(card => card.id === 'toChange');
-      expect(updateCardSpy).toHaveBeenCalledWith(
-        { description: cardToUpdate.description },
-        cardToUpdate
-      );
+      expect(changesSpy).toHaveBeenCalledWith({
+        title: component.title,
+        defaultColor: component.defaultColor,
+        cards: component.cards,
+        shelfCards: component.shelfCards
+      });
     });
 
     it('should set all non upload-idle-zoom to idle ', () => {
@@ -291,7 +275,7 @@ describe('WhiteboardComponent', () => {
       expect(component.cards[3].mode).toBe(ModeEnum.UPLOAD);
     });
 
-    it('if there are selected cards it should set all cards to multiselect mode and the selectedcards[] to multiselectselected', () => {
+    it('keep/restore/preserve multi-selection state', () => {
       component.cards = [
         new CardFixture(),
         new CardFixture(),
