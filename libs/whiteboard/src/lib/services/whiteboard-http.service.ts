@@ -12,6 +12,7 @@ import {
   take,
   tap
 } from 'rxjs/operators';
+import { ColorInterface } from '../models/color.interface';
 import ImageInterface from '../models/image.interface';
 import { WhiteboardInterface } from '../models/whiteboard.interface';
 
@@ -85,6 +86,23 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
       );
 
     return response$;
+  }
+
+  public getColorPalettes(): Observable<{
+    [paletteName: string]: ColorInterface[];
+  }> {
+    return this.apiSettings$.pipe(
+      filter(settings => !!settings),
+      take(1),
+      switchMap(settings =>
+        this.http.get<{ [paletteName: string]: ColorInterface[] }>(
+          settings.apiBase + '/whiteboard/colors'
+        )
+      ),
+      retry(RETRY_AMOUNT),
+      catchError(this.handleError.bind(this)),
+      shareReplay(1)
+    );
   }
 
   private getEventMessage(event) {
