@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
+import { UpdateHelper } from '../../util/updateHelper';
 
 @Component({
   selector: 'campus-realtime',
@@ -38,7 +39,8 @@ export class RealtimeComponent implements OnInit {
 
   // triggers when Whiteboard has changed
   updateWhiteboard(updatedWhiteboard: WhiteboardInterface) {
-    this.sessionService.updateWhiteboardData(updatedWhiteboard);
+    UpdateHelper.checkForUpdates(this.session.whiteboard, updatedWhiteboard);
+    // this.sessionService.updateWhiteboardData(updatedWhiteboard);
   }
 
   private fetchSession() {
