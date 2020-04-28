@@ -106,7 +106,8 @@ export class WhiteboardComponent implements OnChanges {
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
 
-  @Output() changes = new EventEmitter<WhiteboardInterface>();
+  @Output() whiteboardChange = new EventEmitter<WhiteboardInterface>();
+  @Output() cardChange = new EventEmitter<CardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
 
   @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
@@ -154,10 +155,10 @@ export class WhiteboardComponent implements OnChanges {
 
   private updateViewMode(card: CardInterface) {
     if (!card.image) {
-      this.updateCard({ viewModeImage: false }, card);
+      this.updateCard({ viewModeImage: false }, card, true);
     }
     if (!card.description) {
-      this.updateCard({ viewModeImage: true }, card);
+      this.updateCard({ viewModeImage: true }, card, true);
     }
 
     this.saveWhiteboard();
@@ -186,7 +187,11 @@ export class WhiteboardComponent implements OnChanges {
   //#endregion
 
   //#region CARD ACTIONS
-  updateCard(updates: Partial<CardInterface>, card: CardInterface) {
+  updateCard(
+    updates: Partial<CardInterface>,
+    card: CardInterface,
+    shouldPersist = false
+  ) {
     // update card
     Object.assign(card, updates);
     // sync shelfcard
@@ -195,6 +200,10 @@ export class WhiteboardComponent implements OnChanges {
     );
     if (shelfCard) {
       Object.assign(shelfCard, updates, { mode: ModeEnum.SHELF });
+    }
+    // emit change if shouldPersist = true
+    if (shouldPersist) {
+      this.cardChange.emit(card);
     }
   }
 
@@ -414,7 +423,7 @@ export class WhiteboardComponent implements OnChanges {
       shelfCards: this.shelfCards,
       defaultColor: this.lastColor
     };
-    this.changes.emit(whiteboard);
+    this.whiteboardChange.emit(whiteboard);
   }
 
   onClickWhiteboard(event: MouseEvent) {
