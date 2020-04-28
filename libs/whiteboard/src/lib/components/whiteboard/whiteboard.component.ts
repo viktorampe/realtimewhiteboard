@@ -39,7 +39,7 @@ const MAX_ZOOM_LEVEL = 2;
 
 const DEFAULT_COLOR = '#00A7E2';
 
-const defaultColorPaletteMap = {
+const DEFAULT_COLOR_PALETTES = {
   wouw: [
     {
       label: 'L1',
@@ -84,6 +84,7 @@ export interface CardImageUploadResponseInterface {
   card: CardInterface;
   image: ImageInterface;
 }
+
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -156,7 +157,7 @@ export class WhiteboardComponent implements OnChanges {
   @Input() shelfCards: CardInterface[];
   @Input() themeColorPalettes: {
     [paletteName: string]: ColorInterface[];
-  } = defaultColorPaletteMap;
+  } = DEFAULT_COLOR_PALETTES;
   @Input() defaultColor = DEFAULT_COLOR; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
