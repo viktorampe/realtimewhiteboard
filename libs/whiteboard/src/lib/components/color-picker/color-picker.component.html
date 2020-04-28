@@ -3,7 +3,7 @@
   [ngClass]="{ active: active }"
   (click)="toggleActive()"
 >
-  <mat-icon svgIcon="color-lens"></mat-icon>
+  <mat-icon [svgIcon]="'color-lens'"></mat-icon>
 
   <ul class="color-picker__container" *ngIf="mode === modes.LIST">
     <li

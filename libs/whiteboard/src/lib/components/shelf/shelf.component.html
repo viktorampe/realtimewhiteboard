@@ -13,32 +13,34 @@
   ><mat-icon [svgIcon]="isMinimized ? 'arrow-up' : 'arrow-down'"></mat-icon
 ></div>
 <div class="shelf" cdkDropList #shelf>
-  <div
-    class="shelf__container"
-    *ngFor="let card of cards"
-    cdkDrag
-    (cdkDragDropped)="onCardDragged($event, card)"
-    (cdkDragStarted)="onCardDragStart($event)"
-  >
-    <campus-card-toolbar
-      class="shelf__card__toolbar"
-      (clickDeleteIcon)="emitDeleteCard(card)"
-      [inShelf]="true"
-      [canManage]="canManage"
-    ></campus-card-toolbar>
-    <campus-card
-      class="shelf__card"
-      [viewModeImage]="card.viewModeImage"
-      [description]="card.description"
-      [color]="card.color"
-      [image]="card.image"
-      [(mode)]="card.mode"
-    ></campus-card>
+  <div class="scroll-bar-container">
     <div
-      *ngIf="(activeCardsIds$ | async)?.includes(card.id)"
-      class="active-card"
-      @appear
-      [ngStyle]="{ 'background-color': defaultColor }"
-    ></div>
+      class="shelf__container"
+      *ngFor="let card of cards"
+      cdkDrag
+      (cdkDragDropped)="onCardDragged($event, card)"
+      (cdkDragStarted)="onCardDragStart($event)"
+    >
+      <campus-card-toolbar
+        class="shelf__card__toolbar"
+        (clickDeleteIcon)="emitDeleteCard(card)"
+        [inShelf]="true"
+        [canManage]="canManage"
+      ></campus-card-toolbar>
+      <campus-card
+        class="shelf__card"
+        [viewModeImage]="card.viewModeImage"
+        [description]="card.description"
+        [color]="card.color"
+        [image]="card.image"
+        [(mode)]="card.mode"
+      ></campus-card>
+      <div
+        *ngIf="(activeCardsIds$ | async)?.includes(card.id)"
+        class="active-card"
+        @appear
+        [ngStyle]="{ 'background-color': defaultColor }"
+      ></div>
+    </div>
   </div>
 </div>
