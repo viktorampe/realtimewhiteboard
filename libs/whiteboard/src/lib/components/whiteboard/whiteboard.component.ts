@@ -20,15 +20,60 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { ColorFunctions } from '@campus/utils';
 import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardInterface } from '../../models/card.interface';
+import { ColorInterface } from '../../models/color.interface';
 import ImageInterface from '../../models/image.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardInterface } from '../../models/whiteboard.interface';
 
 const CARD_HEIGHT = 167; // should be in sync with card.component.scss
+const CARD_WIDTH = 250;
+const START_ZOOM_LEVEL = 1;
+const ZOOM_TICK = 0.2;
+const MIN_ZOOM_LEVEL = 0.4; // can't be lower than zero
+const MAX_ZOOM_LEVEL = 2;
+
+const DEFAULT_COLOR = '#00A7E2';
+
+const DEFAULT_COLOR_PALETTES = {
+  wouw: [
+    {
+      label: 'L1',
+      hexCode: '#d9328a'
+    },
+    {
+      label: 'L2',
+      hexCode: '#00b3c4'
+    },
+    {
+      label: 'L3',
+      hexCode: '#afcb27'
+    },
+    {
+      label: 'L4',
+      hexCode: '#ea9d04'
+    },
+    {
+      label: 'L5',
+      hexCode: '#963a8e'
+    },
+    {
+      label: 'L6',
+      hexCode: '#e40521'
+    }
+  ],
+  passepartout: [
+    { label: 'L5', hexCode: '#6ec3c1' },
+    {
+      label: 'L6',
+      hexCode: '#e94b2b'
+    }
+  ]
+};
 
 export interface CardImageUploadInterface {
   card: CardInterface;
@@ -39,15 +84,35 @@ export interface CardImageUploadResponseInterface {
   card: CardInterface;
   image: ImageInterface;
 }
+
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss'],
   animations: [
+    trigger('showHideFeedback', [
+      transition(':enter', [
+        style({ transform: 'scale(0)', opacity: 0 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(1)', opacity: '1' })
+        )
+      ]),
+      transition(':leave', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '250ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
+      ])
+    ]),
     trigger('showHideCard', [
       transition(':leave', [
-        style({ opacity: '1' }),
-        animate('150ms cubic-bezier(.43,0,.31,1)', style({ opacity: '0' }))
+        style({ transform: 'scale(1)', opacity: '1' }),
+        animate(
+          '150ms cubic-bezier(.43,0,.31,1)',
+          style({ transform: 'scale(0)', opacity: '0' })
+        )
       ])
     ]),
     trigger('showHideWhiteboardTools', [
@@ -71,26 +136,14 @@ export interface CardImageUploadResponseInterface {
         )
       ])
     ]),
-    trigger('showHideColorList', [
-      transition(':enter', [
-        query('@showHideColorSwatchOne', stagger(50, [animateChild()]), {
-          optional: true
-        })
-      ]),
-      transition(':leave', [
-        query('@showHideColorSwatchOne', stagger(-50, [animateChild()]), {
-          optional: true
-        })
-      ])
-    ]),
     trigger('showHideToolbar', [
       transition(':enter', [
-        query('@showHideToolbarTool', stagger(-50, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(-20, [animateChild()]), {
           optional: true
         })
       ]),
       transition(':leave', [
-        query('@showHideToolbarTool', stagger(50, [animateChild()]), {
+        query('@showHideToolbarTool', stagger(20, [animateChild()]), {
           optional: true
         })
       ])
@@ -100,11 +153,15 @@ export interface CardImageUploadResponseInterface {
 })
 export class WhiteboardComponent implements OnChanges {
   @Input() title = 'Deze sorteeroefening heeft nog geen titel.';
-  @Input() cards: CardInterface[];
+  @Input() cards: CardInterface[]; // workspace
   @Input() shelfCards: CardInterface[];
-  @Input() defaultColor = '#00A7E2';
+  @Input() themeColorPalettes: {
+    [paletteName: string]: ColorInterface[];
+  } = DEFAULT_COLOR_PALETTES;
+  @Input() defaultColor = DEFAULT_COLOR; // TODO: rename to 'themeColor' which is semantically more correct
   @Input() canManage: boolean;
   @Input() uploadImageResponse: CardImageUploadResponseInterface;
+  @Input() isSaving = false;
 
   @Output() changes = new EventEmitter<WhiteboardInterface>();
   @Output() uploadImage = new EventEmitter<CardImageUploadInterface>();
@@ -116,15 +173,38 @@ export class WhiteboardComponent implements OnChanges {
 
   selectedCards: CardInterface[] = [];
 
-  lastColor = '#00A7E2';
+  lastColor = DEFAULT_COLOR; // used to give a new card the last picked color
   isShelfMinimized = false;
+  zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
+
+  public settingsBoxShadow = '';
+
+  readonly emptyStateWithShelfCardsText =
+    'Sleep voorgemaakte kaartjes op het bord of voeg zelf nieuwe kaartjes toe.';
+  readonly emptyStateWithoutShelfCardsText =
+    'Sleep afbeeldingen naar dit bord om kaartjes te maken.';
 
   constructor() {}
 
+  private setBoxShadow() {
+    if (!this.defaultColor) {
+      return;
+    }
+    const { r, g, b } = ColorFunctions.hexToRgb(this.defaultColor);
+    this.settingsBoxShadow = `3px 3px 16px -1px rgba(${r}, ${g}, ${b}, 0.3), 9px 9px 16px #a3b1c6, -1px -1px 6px -3px rgba(${r}, ${g}, ${b}, 0.2), -9px -9px 16px #ffffff`;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.uploadImageResponse) {
-      this.handleImageUploadResponse(this.uploadImageResponse);
+    if (
+      changes.uploadImageResponse &&
+      !changes.uploadImageResponse.firstChange
+    ) {
+      this.handleImageUploadResponse(changes.uploadImageResponse.currentValue);
+    }
+
+    if (changes.defaultColor) {
+      this.setBoxShadow();
     }
   }
 
@@ -135,7 +215,7 @@ export class WhiteboardComponent implements OnChanges {
   /**
    * Update whiteboard data.
    * When shouldPersist flag is true,
-   * the current whiteboard data is also emitted in the save output.
+   * the current whiteboard data is also emitted in the changes output.
    *
    * @private
    * @param {Partial<WhiteboardInterface>} updates
@@ -162,6 +242,7 @@ export class WhiteboardComponent implements OnChanges {
 
     this.saveWhiteboard();
   }
+
   //#region WORKSPACE INTERACTIONS
   createCard(event: any) {
     if (event.target.className.includes('whiteboard__workspace')) {
@@ -172,11 +253,6 @@ export class WhiteboardComponent implements OnChanges {
         const left = event.center.x;
         this.addEmptyCard({ top, left });
       }
-      if (event.type === 'dblclick') {
-        const top = event.offsetY;
-        const left = event.offsetX;
-        this.addEmptyCard({ top, left });
-      }
     }
   }
 
@@ -185,8 +261,12 @@ export class WhiteboardComponent implements OnChanges {
   }
   //#endregion
 
+  public onUpdateCard(updates: Partial<CardInterface>, card: CardInterface) {
+    this.updateCard(updates, card);
+  }
+
   //#region CARD ACTIONS
-  updateCard(updates: Partial<CardInterface>, card: CardInterface) {
+  private updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     // update card
     Object.assign(card, updates);
     // sync shelfcard
@@ -199,6 +279,8 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
+    const whiteboard = this.workspaceElementRef.nativeElement;
+
     //deselect all selected cards
     this.selectedCards = [];
     // set idle mode
@@ -210,14 +292,12 @@ export class WhiteboardComponent implements OnChanges {
     const card: CardInterface = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
-      type: this.canManage
-        ? CardTypeEnum.PUBLISHERCARD
-        : CardTypeEnum.TEACHERCARD,
+      type: this.canManage ? CardTypeEnum.PUBLISHER : CardTypeEnum.TEACHER,
       color: this.lastColor,
       description: '',
       image: null,
-      top: 0,
-      left: 0,
+      top: whiteboard.clientHeight / 2 - CARD_HEIGHT / 2,
+      left: whiteboard.clientWidth / 2 - CARD_WIDTH / 2,
       viewModeImage: false,
       ...values
     };
@@ -260,9 +340,10 @@ export class WhiteboardComponent implements OnChanges {
     const updates: Partial<WhiteboardInterface> = {
       cards: this.cards.filter(c => c !== card)
     };
+
     if (permanent) {
       // a teacher can only remove his own cards
-      if (this.canManage || card.type === CardTypeEnum.TEACHERCARD) {
+      if (this.canManage || card.type === CardTypeEnum.TEACHER) {
         // also remove from shelf
         updates.shelfCards = this.shelfCards.filter(sc => sc.id !== card.id);
       }
@@ -308,8 +389,7 @@ export class WhiteboardComponent implements OnChanges {
     input.value = '';
   }
 
-  // TODO: check upload flow
-  uploadImageForCard(card: CardInterface, imageFile: File) {
+  private uploadImageForCard(card: CardInterface, imageFile: File) {
     this.updateCard({ mode: ModeEnum.UPLOAD }, card);
     this.uploadImage.next({ card, imageFile: imageFile });
   }
@@ -317,9 +397,13 @@ export class WhiteboardComponent implements OnChanges {
   private handleImageUploadResponse(
     response: CardImageUploadResponseInterface
   ) {
-    if (response.image) {
-      // update card
-      this.updateCard({ image: response.image }, response.card);
+    if (!response.image) return;
+
+    // update card
+    this.updateCard({ image: response.image }, response.card);
+
+    // when upload is complete
+    if (response.image.imageUrl) {
       // set mode to MUTLISELECT when mutliple cards are selected
       if (this.selectedCards.length) {
         this.updateCard(
@@ -334,6 +418,7 @@ export class WhiteboardComponent implements OnChanges {
           response.card
         );
       }
+
       this.saveWhiteboard();
     }
   }
@@ -431,6 +516,7 @@ export class WhiteboardComponent implements OnChanges {
       const cardInEditMode = cards.find(c => c.mode === ModeEnum.EDIT);
 
       if (cardInEditMode) {
+        // if a card's description is being edited when loosing focus, it should be saved
         this.updateCard(
           { description: cardInEditMode.description },
           cardInEditMode
@@ -504,6 +590,21 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
+  increaseZoom() {
+    const updatedZoomFactor =
+      Math.round((this.zoomFactor + ZOOM_TICK) * 100) / 100;
+    this.zoomFactor =
+      updatedZoomFactor > MAX_ZOOM_LEVEL ? this.zoomFactor : updatedZoomFactor;
+  }
+
+  decreaseZoom() {
+    const updatedZoomFactor =
+      Math.round((this.zoomFactor - ZOOM_TICK) * 100) / 100;
+
+    this.zoomFactor =
+      updatedZoomFactor < MIN_ZOOM_LEVEL ? this.zoomFactor : updatedZoomFactor;
+  }
+
   updateSettings(settings: SettingsInterface) {
     this.cards.forEach(c => (c.color = settings.defaultColor));
     this.shelfCards.forEach(c => (c.color = settings.defaultColor));
@@ -516,6 +617,8 @@ export class WhiteboardComponent implements OnChanges {
       },
       true
     );
+
+    this.setBoxShadow();
 
     this.toggleSettings();
   }
@@ -551,11 +654,35 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region MULTI SELECT ACTIONS
   bulkDeleteClicked() {
-    const cards = this.cards.filter(c => !this.selectedCards.includes(c));
-    cards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+    // visual update: set non-selected cards to idle
+    const nonSelectedCards = this.getNonSelectedCards();
+    nonSelectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
+    // delete selected cards
+    this.selectedCards.forEach(c => this.onDeleteCard(c, true));
+
+    // clear selection
+    this.selectedCards = [];
+  }
+
+  bulkReturnCardsToShelfClicked() {
+    // set non-selected cards to idle
+    const nonSelectedCards = this.getNonSelectedCards();
+    nonSelectedCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
+    // non-publisher cards can not be returned to the shelf
+    // set to idle (= visual deselection)
+    const nonPublisherCards = this.selectedCards.filter(
+      card => card.type !== CardTypeEnum.PUBLISHER
+    );
+    nonPublisherCards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, c));
+
+    // leave non-selected and non-publisher cards in the workspace
     this.updateWhiteboard({
-      cards: cards
+      cards: [...nonSelectedCards, ...nonPublisherCards]
     });
+
+    // clear selection
     this.selectedCards = [];
   }
 
@@ -597,5 +724,12 @@ export class WhiteboardComponent implements OnChanges {
   toggleShelf() {
     this.isShelfMinimized = !this.isShelfMinimized;
   }
+  //#endregion
+
+  //#region utility functions
+  private getNonSelectedCards(): CardInterface[] {
+    return this.cards.filter(c => !this.selectedCards.includes(c));
+  }
+
   //#endregion
 }

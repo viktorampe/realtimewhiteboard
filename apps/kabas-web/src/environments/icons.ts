@@ -107,5 +107,6 @@ export const icons = {
   'multiselect-selected': 'assets/icons/whiteboard/multiselect-selected.svg',
   'open-in-new': 'assets/icons/material/open_in_new.svg',
   remove: 'assets/icons/material/remove.svg',
-  'arrow-down': 'assets/icons/material/arrow_down.svg'
+  'arrow-down': 'assets/icons/material/arrow_down.svg',
+  'arrow-up': 'assets/icons/material/arrow-up.svg'
 };

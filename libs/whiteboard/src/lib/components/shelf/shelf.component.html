@@ -1,5 +1,19 @@
+<div
+  [@floatActionButtons]="isMinimized ? 'detached' : 'attached'"
+  class="shelf__button shelf__add"
+  [class.plusMinimized]="isMinimized"
+  (tap)="clickAdd()"
+>
+  <mat-icon [style.color]="defaultColor" [svgIcon]="'plus'"></mat-icon>
+</div>
+<div
+  [@floatActionButtons]="isMinimized ? 'detached' : 'attached'"
+  class="shelf__button shelf__minimize"
+  (tap)="toggleShelf()"
+  ><mat-icon [svgIcon]="isMinimized ? 'arrow-up' : 'arrow-down'"></mat-icon
+></div>
 <div class="shelf" cdkDropList #shelf>
-  <ng-container *ngIf="!isMinimized">
+  <div class="scroll-bar-container">
     <div
       class="shelf__container"
       *ngFor="let card of cards"
@@ -21,6 +35,12 @@
         [image]="card.image"
         [(mode)]="card.mode"
       ></campus-card>
+      <div
+        *ngIf="(activeCardsIds$ | async)?.includes(card.id)"
+        class="active-card"
+        @appear
+        [ngStyle]="{ 'background-color': defaultColor }"
+      ></div>
     </div>
-  </ng-container>
+  </div>
 </div>

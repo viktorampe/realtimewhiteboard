@@ -8,41 +8,49 @@
     @showHideWhiteboardTools
     *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
+    (returnCardsToShelf)="bulkReturnCardsToShelfClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
     [canManage]="canManage"
   ></campus-whiteboard-toolbar>
 
   <div class="whiteboard__workspace__actions">
     <div
+      click-stop-propagation
       *ngIf="canManage"
       class="whiteboard__workspace__actions__settingsbutton"
       color="primary"
       (tap)="toggleSettings()"
+      [ngStyle]="{ 'box-shadow': settingsBoxShadow }"
     >
       <mat-icon [svgIcon]="'settings'"></mat-icon>
     </div>
-    <!-- <div class="whiteboard__workspace__actions__zoom">
+    <div
+      class="whiteboard__workspace__actions__zoom"
+      [ngStyle]="{ 'box-shadow': settingsBoxShadow }"
+    >
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'remove'"
+        (tap)="decreaseZoom()"
       ></mat-icon>
       <div class="whiteboard__workspace__actions__zoom__separator"></div>
       <mat-icon
         class="whiteboard__workspace__actions__zoom__button"
         [svgIcon]="'plus'"
+        (tap)="increaseZoom()"
       ></mat-icon>
-    </div> -->
+    </div>
   </div>
+
   <div
     class="whiteboard__workspace"
-    (dblclick)="createCard($event)"
     (longpress)="createCard($event)"
     #workspace
   >
     <ng-container *ngIf="!isSettingsActive; else settingsView">
       <div
         @showHideCard
-        class="whiteboard__workspace__container"
+        class="whiteboard__workspace__card"
         *ngFor="let card of cards"
         cdkDrag
         [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
@@ -54,16 +62,6 @@
         (cdkDragStarted)="onDragStarted(card)"
         (tap)="onCardTapped(card)"
       >
-        <campus-color-list
-          @showHideColorList
-          class="whiteboard__color-list"
-          [mode]="card.mode"
-          (selectedColor)="changeColorForCard(card, $event)"
-          *ngIf="
-            (card.mode === Mode.EDIT || card.mode === Mode.SELECTED) &&
-            !canManage
-          "
-        ></campus-color-list>
         <campus-card-toolbar
           @showHideToolbar
           *ngIf="
@@ -76,6 +74,7 @@
           [mode]="card.mode"
           [canManage]="canManage"
           [cardType]="card.type"
+          [zoomFactor]="zoomFactor"
           (clickDeleteIcon)="onDeleteCard(card, true)"
           (clickReturnToShelfIcon)="onDeleteCard(card)"
           (clickEditIcon)="cardEditIconClicked(card)"
@@ -83,15 +82,18 @@
           (clickConfirmIcon)="cardConfirmIconClicked(card)"
           (clickMultiSelectIcon)="onSelectCard(card)"
           (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
+          (selectedColor)="changeColorForCard(card, $event)"
+          [activeColor]="card.color"
         ></campus-card-toolbar>
         <campus-card
           class="whiteboard__card"
           [description]="card.description"
           [color]="card.color"
           [image]="card.image"
+          [zoomFactor]="zoomFactor"
           [(mode)]="card.mode"
           [viewModeImage]="card.viewModeImage"
-          (update)="updateCard($event, card)"
+          (update)="onUpdateCard($event, card)"
           (removeImage)="removeImage(card)"
           (openFilePicker)="openFilePicker(filePicker)"
           (press)="onCardPressed(card)"
@@ -109,45 +111,44 @@
       <div class="whiteboard__settings">
         <campus-settings
           (update)="updateSettings($event)"
-          [activeColor]="defaultColor"
+          [themeColor]="defaultColor"
+          [colorPalettes]="themeColorPalettes"
           [title]="title"
         ></campus-settings>
       </div>
     </ng-template>
-
-    <div
-      class="whiteboard__addbutton"
-      [class.plusMinimized]="isShelfMinimized"
-      (tap)="btnPlusClicked()"
-    >
-      <mat-icon [svgIcon]="'plus'"></mat-icon>
-    </div>
-    <div
-      [class.shelfMinimized]="isShelfMinimized"
-      class="whiteboard__shelf__button"
-      (tap)="toggleShelf()"
-      ><mat-icon [svgIcon]="'arrow-down'"></mat-icon
-    ></div>
     <campus-shelf
       (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
       (deleteCard)="onDeleteCard($event, true)"
+      (addClick)="btnPlusClicked()"
       [class.minimizedShelf]="isShelfMinimized"
       [cards]="shelfCards"
+      [activeCards]="cards"
       [(isMinimized)]="isShelfMinimized"
       [canManage]="canManage"
+      [defaultColor]="defaultColor"
+      [ngStyle]="{ 'box-shadow': settingsBoxShadow }"
     ></campus-shelf>
   </div>
   <campus-empty-state
-    class="whiteboard__empty"
     *ngIf="cards && !cards.length && !isSettingsActive"
-    [title]="title"
+    [title]="title ? title : 'Geen Titel'"
     [description]="
       shelfCards?.length
-        ? 'Sleep kaartjes uit de shelf naar het bord.'
-        : 'Sleep afbeeldingen naar dit bord om kaartjes te maken.'
+        ? emptyStateWithShelfCardsText
+        : emptyStateWithoutShelfCardsText
     "
     [svgIcon]="
-      true ? 'empty-state-whiteboard-empty' : 'empty-state-whiteboard-drop'
+      shelfCards?.length
+        ? 'empty-state-whiteboard-empty'
+        : 'empty-state-whiteboard-drop'
     "
   ></campus-empty-state>
+
+  <div
+    @showHideFeedback
+    *ngIf="isSaving"
+    class="whiteboard-feedback feedback__saving"
+    >Bezig met opslaan...</div
+  >
 </div>

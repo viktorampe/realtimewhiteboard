@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
-import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
@@ -80,37 +80,5 @@ describe('CardComponent', () => {
     const openFilePickerSpy = spyOn(component.openFilePicker, 'emit');
     component.selectImage();
     expect(openFilePickerSpy).toHaveBeenCalled();
-  });
-
-  it('should show toolbar when mode is set to SelectedMode', () => {
-    component.mode = ModeEnum.SELECTED;
-    fixture.detectChanges();
-    const toolbar = fixture.debugElement.queryAll(
-      By.css('card__header__toolbar')
-    );
-    expect(toolbar).not.toBeNull();
-  });
-
-  it('should show toolbar when mode is set to EditMode', () => {
-    component.mode = ModeEnum.EDIT;
-    fixture.detectChanges();
-    const toolbar = fixture.debugElement.queryAll(
-      By.css('card__header__toolbar')
-    );
-    expect(toolbar).not.toBeNull();
-  });
-
-  it('should show colorlist when mode is set to SelectedMode', () => {
-    component.mode = ModeEnum.SELECTED;
-    fixture.detectChanges();
-    const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
-    expect(toolbar).not.toBeNull();
-  });
-
-  it('should show colorlist when mode is set to EditMode', () => {
-    component.mode = ModeEnum.EDIT;
-    fixture.detectChanges();
-    const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
-    expect(toolbar).not.toBeNull();
   });
 });

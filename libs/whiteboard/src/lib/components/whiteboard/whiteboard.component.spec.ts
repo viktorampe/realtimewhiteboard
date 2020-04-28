@@ -1,3 +1,4 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -7,12 +8,11 @@ import { configureTestSuite } from 'ng-bullet';
 import { v4 as uuidv4 } from 'uuid';
 import { CardTypeEnum } from '../../enums/cardType.enum';
 import { ModeEnum } from '../../enums/mode.enum';
-import { CardFixture } from '../../models/card.fixture';
 import { CardInterface } from '../../models/card.interface';
 import { SettingsInterface } from '../../models/settings.interface';
 import { WhiteboardModule } from '../../whiteboard.module';
+import { CardFixture } from './../../models/card.fixture';
 import { WhiteboardComponent } from './whiteboard.component';
-
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
@@ -75,50 +75,354 @@ describe('WhiteboardComponent', () => {
     expect(component.shelfCards.map(sc => sc.id)).toContain(card.id);
   });
 
+  describe('createCard', () => {
+    it('should set the correct position - longpress', () => {
+      const workspace = component.workspaceElementRef.nativeElement;
+      jest.spyOn(component, 'addEmptyCard');
+      jest
+        .spyOn(workspace, 'getBoundingClientRect')
+        .mockReturnValue({ top: 100 });
+      const event = {
+        target: {
+          className: ['whiteboard__workspace']
+        },
+        type: 'longpress',
+        center: {
+          y: 10,
+          x: 5
+        },
+        offsetY: 50,
+        offsetX: 50
+      };
+
+      component.createCard(event);
+      expect(component.addEmptyCard).toHaveBeenCalledWith({
+        top: -90,
+        left: 5
+      });
+    });
+  });
+
+  describe('removeImage()', () => {
+    it('should remove the img from the card ', () => {
+      const card = new CardFixture({ image: { imageUrl: 'foo' } });
+      component.removeImage(card);
+      expect(Object.keys(card.image).length).toEqual(0);
+    });
+  });
+
+  describe('onDragStarted()', () => {
+    it('should put the other cards on the whiteboard in idle state', () => {
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+      //clear selected card
+      component.selectedCards = [];
+      component.onDragStarted(new CardFixture({ id: '2' }));
+      expect(
+        component.cards.forEach(card => {
+          expect(card.mode).toBe(ModeEnum.IDLE);
+        })
+      );
+    });
+
+    it('cards states should not change because there are selected cards', () => {
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+      component.selectedCards = component.cards;
+      component.onDragStarted(new CardFixture());
+      expect(component.cards[0].mode).toBe(ModeEnum.SELECTED);
+    });
+
+    it('should leave cards in upload state unaffected', () => {
+      component.cards = [
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        }),
+        new CardFixture(),
+        new CardFixture({
+          mode: ModeEnum.UPLOAD
+        })
+      ];
+
+      component.onDragStarted(new CardFixture());
+      expect(component.cards[2].mode).toBe(ModeEnum.UPLOAD);
+    });
+  });
+
+  describe('onDragEnded()', () => {
+    it('should update the card position', () => {
+      const event = {
+        source: {
+          getFreeDragPosition: () => ({ x: 50, y: 50 })
+        }
+      } as any;
+
+      component.onDragEnded(event, new CardFixture());
+
+      expect(component.cards[0]).toEqual(
+        jasmine.objectContaining({ top: 50, left: 50 })
+      );
+    });
+
+    it('should update the whiteboard with right parameters', () => {
+      const event = {
+        source: {
+          getFreeDragPosition: () => ({ x: 50, y: 50 })
+        }
+      } as any;
+      component.cards = [new CardFixture({ id: 'AZ' }), new CardFixture()];
+      component.onDragEnded(event, new CardFixture({ id: 'AZ' }));
+      expect(component.cards.find(card => card.id === 'AZ')).toEqual(
+        jasmine.objectContaining({
+          top: 50,
+          left: 50
+        })
+      );
+    });
+  });
+
+  describe('onClickWhiteboard()', () => {
+    it('should save the card description if card is in edit mode', () => {
+      const changesSpy = jest.spyOn(component.changes, 'emit');
+
+      const event = {
+        target: {
+          classList: {
+            contains: jest.fn().mockReturnValue(true)
+          }
+        }
+      } as any;
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({
+          id: 'toChange',
+          mode: ModeEnum.EDIT
+        })
+      ];
+
+      component.onClickWhiteboard(event);
+      expect(changesSpy).toHaveBeenCalledWith({
+        title: component.title,
+        defaultColor: component.defaultColor,
+        cards: component.cards,
+        shelfCards: component.shelfCards
+      });
+    });
+
+    it('should set all non upload-idle-zoom to idle ', () => {
+      const event = {
+        target: {
+          classList: {
+            contains: jest.fn().mockReturnValue(true)
+          }
+        }
+      } as any;
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({
+          mode: ModeEnum.EDIT
+        }),
+        new CardFixture({
+          mode: ModeEnum.SELECTED
+        })
+      ];
+
+      component.onClickWhiteboard(event);
+      component.cards.forEach(card => {
+        expect(card.mode).toBe(ModeEnum.IDLE);
+      });
+    });
+  });
+
+  describe('cardDraggedPosition()', () => {
+    let event;
+    beforeEach(() => {
+      event = {
+        event: {
+          distance: {
+            x: 50,
+            y: 50
+          }
+        } as any,
+        card: new CardFixture(),
+        cardElement: {
+          offsetLeft: 5,
+          offsetTop: 5
+        } as any,
+        scrollLeft: 40
+      };
+    });
+
+    it('should set all cards to idle, except upload', () => {
+      component.cards = [
+        new CardFixture(),
+        new CardFixture({ mode: ModeEnum.SELECTED }),
+        new CardFixture({ mode: ModeEnum.EDIT }),
+        new CardFixture({ mode: ModeEnum.UPLOAD })
+      ];
+      component.cardDraggedPosition(event);
+      expect(component.cards[0].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[1].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[2].mode).toBe(ModeEnum.IDLE);
+      expect(component.cards[3].mode).toBe(ModeEnum.UPLOAD);
+    });
+
+    it('restore multi-selection state', () => {
+      component.cards = [
+        new CardFixture(),
+        new CardFixture(),
+        new CardFixture()
+      ];
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      component.cards.forEach(card => {
+        expect(card.mode).toBe(ModeEnum.MULTISELECT);
+      });
+      expect(component.selectedCards[0].mode).toBe(
+        ModeEnum.MULTISELECTSELECTED
+      );
+    });
+
+    it('should add the card if the workspacecard not already in cards', () => {
+      const spy = component.workspaceElementRef.nativeElement;
+      jest.spyOn(spy, 'getBoundingClientRect').mockReturnValue({ height: 400 });
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture(),
+        new CardFixture()
+      ];
+
+      event.card = new CardFixture({ id: 'newId' });
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      //check if the card is added + position
+      expect(component.cards.find(card => card.id === 'newId')).toEqual(
+        jasmine.objectContaining({
+          top: 178,
+          left: 15,
+          mode: ModeEnum.MULTISELECT
+        })
+      );
+    });
+
+    it('should not update cards if workspacecard is already in cards', () => {
+      const spy = component.workspaceElementRef.nativeElement;
+      jest.spyOn(spy, 'getBoundingClientRect').mockReturnValue({ height: 400 });
+
+      component.cards = [
+        new CardFixture(),
+        new CardFixture(),
+        new CardFixture()
+      ];
+
+      component.selectedCards = [new CardFixture({ mode: ModeEnum.SELECTED })];
+      component.cardDraggedPosition(event);
+      expect(component.cards.length).toEqual(3);
+    });
+  });
+
+  describe('updateCard()', () => {
+    it('should update the card', () => {
+      const card = new CardFixture({ description: 'foo' });
+      component.onUpdateCard({ description: 'bar' }, card);
+
+      expect(card.description).toEqual('bar');
+    });
+
+    it('should sync updates with the shelf card', () => {
+      const card = new CardFixture({ description: 'foo' });
+      component.shelfCards = [card];
+
+      component.onUpdateCard({ description: 'bar' }, card);
+
+      expect(component.shelfCards[0].description).toEqual('bar');
+    });
+  });
+
   describe('updateSettings()', () => {
-    it('should update whiteboard title and defaultColor', () => {
+    const updatedTitle = 'updatedTitle';
+    const updatedDefaultColor = '#00000000';
+
+    beforeEach(() => {
+      jest.spyOn(component.changes, 'emit');
+      jest.spyOn(component, 'toggleSettings');
+
       component.title = 'beforeTitle';
       component.defaultColor = '#FFFFFFFF';
 
       const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
+        title: updatedTitle,
+        defaultColor: updatedDefaultColor
       };
 
       component.updateSettings(settings);
+    });
 
-      expect(component.title).toBe('afterTitle');
+    it('should update whiteboard title, defaultColor and lastColor', () => {
+      expect(component.title).toBe(updatedTitle);
       expect(component.defaultColor).toBe('#00000000');
+      expect(component.lastColor).toBe(updatedDefaultColor);
     });
+
     it('should save the whiteboard', () => {
-      const saveWhiteboardSpy = jest.spyOn(component, 'saveWhiteboard');
-      const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
-      };
-      component.updateSettings(settings);
-      expect(saveWhiteboardSpy).toHaveBeenCalled();
+      expect(component.changes.emit).toHaveBeenCalled();
+      expect(component.changes.emit).toHaveBeenCalledWith({
+        title: updatedTitle,
+        defaultColor: updatedDefaultColor,
+        cards: component.cards,
+        shelfCards: component.shelfCards
+      });
     });
-    it('should set lastColor', () => {
+
+    it('should change the color of every card to the chosen default color', () => {
+      const defaultColor = 'beepboop';
+      component.cards = [
+        new CardFixture({ color: 'foo color' }),
+        new CardFixture({ color: 'bar color' })
+      ];
+      component.shelfCards = [
+        new CardFixture({ color: 'baz color' }),
+        new CardFixture({ color: 'bob color' })
+      ];
+
       const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
+        title: '',
+        defaultColor: defaultColor
       };
+
       component.updateSettings(settings);
 
-      expect(component.lastColor).toBe('#00000000');
+      expect(
+        [...component.shelfCards, ...component.cards].every(
+          card => card.color === defaultColor
+        )
+      ).toBe(true);
     });
+
     it('should toggle settings visibility', () => {
-      const toggleSettingsSpy = jest.spyOn(component, 'toggleSettings');
-      const visibilityBefore = component.isSettingsActive;
+      component.isSettingsActive = true;
+
       const settings: SettingsInterface = {
-        title: 'afterTitle',
-        defaultColor: '#00000000'
+        title: updatedTitle,
+        defaultColor: updatedDefaultColor
       };
+
       component.updateSettings(settings);
-      const visibilityAfter = component.isSettingsActive;
-      expect(visibilityBefore).not.toBe(visibilityAfter);
-      expect(toggleSettingsSpy).toHaveBeenCalled();
+      expect(component.isSettingsActive).toBe(false);
+
+      component.updateSettings(settings);
+      expect(component.isSettingsActive).toBe(true);
+
+      expect(component.toggleSettings).toHaveBeenCalled();
     });
   });
 
@@ -135,13 +439,6 @@ describe('WhiteboardComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should hide card-colorlist when canMange is true', () => {
-        const colorlist = fixture.debugElement.query(
-          By.css('.whiteboard__color-list')
-        );
-        expect(colorlist).toBeFalsy();
-      });
-
       it('should show settingsbutton when canMange is true', () => {
         const settingsbutton = fixture.debugElement.query(
           By.css('.whiteboard__workspace__actions__settingsbutton')
@@ -154,13 +451,6 @@ describe('WhiteboardComponent', () => {
       beforeEach(() => {
         component.canManage = false;
         fixture.detectChanges();
-      });
-
-      it('should show card-colorlist when canMange is false', () => {
-        const colorlist = fixture.debugElement.query(
-          By.css('.whiteboard__color-list')
-        );
-        expect(colorlist).toBeTruthy();
       });
 
       it('should hide settingsbutton when canMange is false', () => {
@@ -346,19 +636,25 @@ describe('WhiteboardComponent', () => {
       });
     });
 
-    describe('updateImageForCard()', () => {
+    describe('onFilePickerImageSelected()', () => {
       const card = new CardFixture();
       const file = new File([''], 'dummy.jpg', {
-        type: ''
+        type: 'image/jpeg'
       });
       let emitSpy: jest.SpyInstance;
 
+      const imagePickedEvent: any = {
+        target: {
+          files: [file]
+        }
+      };
+
       beforeEach(() => {
         emitSpy = jest.spyOn(component.uploadImage, 'next');
-        component.uploadImageForCard(card, file);
+        component.onFilePickerImageSelected(imagePickedEvent, card);
       });
 
-      it('should set card mode to UploadMode when ', () => {
+      it('should set card mode to UploadMode', () => {
         expect(card.mode).toBe(ModeEnum.UPLOAD);
       });
 
@@ -367,17 +663,28 @@ describe('WhiteboardComponent', () => {
         expect(emitSpy).toHaveBeenCalledWith({ card, imageFile: file });
       });
 
-      it('should update shelfcard copy - canManage = true', () => {
-        component.canManage = true;
+      it('should not call uploadImageForCard() because filetype not allowed', () => {
+        const wrongFile = new File([''], 'dummy.jpg', {
+          type: 'nop'
+        });
 
-        component.lastColor = 'red';
-        component.cards = [];
-        component.shelfCards = [];
-        component.addEmptyCard();
+        const event = {
+          target: {
+            files: [wrongFile]
+          }
+        } as any;
 
-        component.uploadImageForCard(component.cards[0], file);
+        component.onFilePickerImageSelected(event, new CardFixture());
 
-        expect(component.cards[0].image).toEqual(component.shelfCards[0].image);
+        // the only call is from the beforeEach
+        expect(emitSpy).toHaveBeenCalledTimes(1);
+
+        expect(emitSpy).not.toHaveBeenCalledWith(
+          card,
+          jasmine.objectContaining({
+            imageFile: wrongFile
+          })
+        );
       });
     });
 
@@ -425,19 +732,30 @@ describe('WhiteboardComponent', () => {
     describe('bulkActions', () => {
       const selectedCards = [
         new CardFixture({
+          id: '1',
+          type: CardTypeEnum.PUBLISHER,
           mode: ModeEnum.MULTISELECTSELECTED
         }),
         new CardFixture({
+          id: '2',
+          type: CardTypeEnum.TEACHER,
+          mode: ModeEnum.MULTISELECTSELECTED
+        }),
+        new CardFixture({
+          id: '3',
+          type: CardTypeEnum.TEACHER,
           mode: ModeEnum.MULTISELECTSELECTED
         })
       ];
 
       const nonSelectedCards = [
         new CardFixture({
-          mode: ModeEnum.IDLE
+          id: '4',
+          mode: ModeEnum.MULTISELECT
         }),
         new CardFixture({
-          mode: ModeEnum.IDLE
+          id: '5',
+          mode: ModeEnum.MULTISELECT
         })
       ];
       beforeEach(() => {
@@ -446,21 +764,43 @@ describe('WhiteboardComponent', () => {
       });
 
       it('bulkDelete() should delete multiple cards', () => {
-        component.shelfCards = [];
+        jest.spyOn(component, 'onDeleteCard');
 
         component.bulkDeleteClicked();
-        selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
 
-        expect(component.selectedCards.length).toBe(0);
-        expect(component.cards).toEqual(nonSelectedCards);
-        component.shelfCards.forEach((shelfcard, index) => {
-          expect({ ...shelfcard, mode: null }).toEqual({
-            ...selectedCards[index],
-            mode: null,
-            top: null,
-            left: null
-          });
+        expect(nonSelectedCards.every(c => c.mode === ModeEnum.IDLE)).toBe(
+          true
+        );
+
+        expect(component.onDeleteCard).toHaveBeenCalledTimes(
+          selectedCards.length
+        );
+
+        selectedCards.forEach(card =>
+          expect(component.onDeleteCard).toHaveBeenCalledWith(card, true)
+        );
+
+        expect(component.selectedCards).toEqual([]);
+      });
+
+      it('bulkReturnCardsToShelfClicked() should only return publisher cards to shelf', () => {
+        jest.spyOn(component, 'updateWhiteboard' as any);
+
+        component.bulkReturnCardsToShelfClicked();
+
+        expect(nonSelectedCards.every(c => c.mode === ModeEnum.IDLE)).toBe(
+          true
+        );
+
+        expect(component['updateWhiteboard']).toHaveBeenCalledWith({
+          cards: [
+            ...nonSelectedCards,
+            { ...selectedCards[1], mode: ModeEnum.IDLE }, // teacher card
+            { ...selectedCards[2], mode: ModeEnum.IDLE } // teacher card
+          ]
         });
+
+        expect(component.selectedCards).toEqual([]);
       });
 
       it('changeSelectedCardsColor() should change the colors of the selected cards when a swatch is clicked', () => {
@@ -594,19 +934,36 @@ describe('WhiteboardComponent', () => {
         component.lastColor = 'red';
         component.cards = [];
         component.shelfCards = [];
-
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientWidth',
+          {
+            writable: true,
+            configurable: true,
+            value: 1400
+          }
+        );
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientHeight',
+          {
+            writable: true,
+            configurable: true,
+            value: 600
+          }
+        );
         component.addEmptyCard();
       });
-      it('should add an empty publisher card to the shelf and workspace', () => {
+      it('should add an empty publisher card to the shelf and workspace and center it', () => {
         const expectedCard = {
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
-          type: CardTypeEnum.PUBLISHERCARD,
+          type: CardTypeEnum.PUBLISHER,
           color: 'red',
           description: '',
           image: null,
-          top: 0,
-          left: 0,
+          top: 216.5,
+          left: 575,
           viewModeImage: false
         };
 
@@ -629,19 +986,36 @@ describe('WhiteboardComponent', () => {
         component.lastColor = 'red';
         component.cards = [];
         component.shelfCards = [];
-
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientWidth',
+          {
+            writable: true,
+            configurable: true,
+            value: 1800
+          }
+        );
+        Object.defineProperty(
+          component.workspaceElementRef.nativeElement,
+          'clientHeight',
+          {
+            writable: true,
+            configurable: true,
+            value: 1000
+          }
+        );
         component.addEmptyCard();
       });
-      it('should add an empty teacher card to the workspace', () => {
+      it('should add an empty teacher card to the workspace and center it', () => {
         expect(component.cards[0]).toEqual({
           id: component.cards[0].id,
           mode: ModeEnum.EDIT,
-          type: CardTypeEnum.TEACHERCARD,
+          type: CardTypeEnum.TEACHER,
           color: 'red',
           description: '',
           image: null,
-          top: 0,
-          left: 0,
+          top: 416.5,
+          left: 775,
           viewModeImage: false
         });
 
@@ -728,7 +1102,7 @@ describe('WhiteboardComponent', () => {
 
     it('should not remove the card from the shelf - permanent = true, canManage = false, card type = teacher', () => {
       component.canManage = false;
-      cardToBeDeleted.type = CardTypeEnum.PUBLISHERCARD;
+      cardToBeDeleted.type = CardTypeEnum.PUBLISHER;
 
       component.onDeleteCard(cardToBeDeleted, true);
 
@@ -777,21 +1151,21 @@ describe('WhiteboardComponent', () => {
       const addEmptySpy = jest
         .spyOn(component, 'addEmptyCard')
         .mockReturnValue(new CardFixture());
-      const uploadImageForCardSpy = jest
-        .spyOn(component, 'uploadImageForCard')
+      const emitSpy = jest
+        .spyOn(component.uploadImage, 'next')
         .mockImplementation(() => {});
 
-      const file = new File([''], 'dummy.jpg', {
+      const file1 = new File([''], 'dummy1.jpg', {
         type: component.allowedFileTypes[0]
       });
-      const file2 = new File([''], 'dummy.jpg', {
+      const file2 = new File([''], 'dummy2.jpg', {
         type: component.allowedFileTypes[0]
       });
 
       const fileDropEvent = {
         preventDefault: () => {},
         stopPropagation: () => {},
-        dataTransfer: { files: [file, file2] },
+        dataTransfer: { files: [file1, file2] },
         offsetX: 400,
         offsetY: 400
       };
@@ -799,16 +1173,118 @@ describe('WhiteboardComponent', () => {
       component.onFilesDropped(fileDropEvent);
 
       expect(addEmptySpy).toHaveBeenCalledTimes(2);
-      expect(uploadImageForCardSpy).toHaveBeenCalledTimes(2);
       expect(addEmptySpy.mock.calls).toEqual([
         [{ top: 400, left: 400 }],
         [{ top: 450, left: 450 }]
       ]);
-      expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(new CardFixture());
-      expect(uploadImageForCardSpy.mock.calls).toEqual([
-        [new CardFixture(), file],
-        [new CardFixture(), file2]
-      ]);
+
+      expect(emitSpy).toHaveBeenCalledTimes(2);
+      [file1, file2].forEach(file =>
+        expect(emitSpy).toHaveBeenCalledWith({
+          card: new CardFixture({ mode: ModeEnum.UPLOAD }),
+          imageFile: file
+        })
+      );
+    });
+  });
+
+  describe('whiteboard toolbar handlers', () => {
+    describe('zoom button', () => {
+      beforeEach(() => {
+        component.zoomFactor = 1;
+      });
+
+      it('increaseZoom() should zoom in', () => {
+        const expectedTicks = [1.2, 1.4, 1.6, 1.8, 2, 2];
+
+        for (let i = 0; i < expectedTicks.length; i++) {
+          component.increaseZoom();
+
+          expect(component.zoomFactor).toBe(expectedTicks[i]);
+        }
+      });
+
+      it('decreaseZoom() should zoom out', () => {
+        const expectedTicks = [0.8, 0.6, 0.4, 0.4];
+
+        for (let i = 0; i < expectedTicks.length; i++) {
+          component.decreaseZoom();
+
+          expect(component.zoomFactor).toBe(expectedTicks[i]);
+        }
+      });
+    });
+  });
+
+  describe('file upload response', () => {
+    // The first part of upload files, picking/dragging files has been tested in the event handlers
+    // Those tests assert that the correct event has been emitted
+    // These tests are about handling the response of the service via input
+
+    const fileUploadResponse = (card, progress?, imageUrl?) => {
+      const response = {
+        card,
+        image: { progress, imageUrl }
+      };
+
+      const uploadImageResponse = {
+        currentValue: response,
+        previousValue: null,
+        firstChange: false,
+        isFirstChange: () => false
+      } as SimpleChange;
+
+      component.ngOnChanges({ uploadImageResponse });
+    };
+
+    let mockCard: CardInterface;
+    beforeEach(() => {
+      mockCard = new CardFixture({ mode: ModeEnum.UPLOAD });
+      component.cards = [mockCard];
+    });
+
+    describe('progress', () => {
+      beforeEach(() => {
+        component.changes.emit = jest.fn();
+        fileUploadResponse(mockCard, 15);
+      });
+
+      it('should show the upload progress', () => {
+        expect(mockCard.image.progress).toBe(15);
+        expect(mockCard.mode).toBe(ModeEnum.UPLOAD);
+      });
+
+      it('should not emit a whiteboard change', () => {
+        expect(component.changes.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('upload finished', () => {
+      beforeEach(() => {
+        component.changes.emit = jest.fn();
+        fileUploadResponse(mockCard, undefined, 'some.image.url');
+      });
+
+      it('should show the image', () => {
+        expect(mockCard.image.imageUrl).toBe('some.image.url');
+        expect(mockCard.mode).toBe(ModeEnum.IDLE);
+        expect(mockCard.viewModeImage).toBe(true);
+      });
+
+      it('should emit a whiteboard change', () => {
+        const expected = jasmine.objectContaining({ cards: [mockCard] });
+
+        expect(component.changes.emit).toHaveBeenCalledWith(expected);
+      });
+
+      it('should reset the selection', () => {
+        component.selectedCards = [mockCard];
+
+        fileUploadResponse(mockCard, undefined, 'some.image.url');
+
+        expect(mockCard.mode).toBe(ModeEnum.MULTISELECT);
+        expect(mockCard.viewModeImage).toBe(true);
+      });
     });
   });
 });

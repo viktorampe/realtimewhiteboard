@@ -5,6 +5,8 @@ import {
 import {
   addSvg,
   arrowDownSvg,
+  arrowUpSvg,
+  colorLensSvg,
   deleteSvg,
   editSvg,
   flipCameraSvg,
@@ -39,7 +41,9 @@ export const iconMap: { [icon: string]: string } = {
   settings: settingsSvg,
   remove: removeSvg,
   'arrow-down': arrowDownSvg,
+  'arrow-up': arrowUpSvg,
   'empty-state-whiteboard-empty': whiteboardEmptyStateSvg,
   'empty-state-whiteboard-drop': whiteboardDropSvg,
-  'return-to-shelf': returnToShelfSvg
+  'return-to-shelf': returnToShelfSvg,
+  'color-lens': colorLensSvg
 };
