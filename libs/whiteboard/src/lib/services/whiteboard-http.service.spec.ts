@@ -4,6 +4,7 @@ import { cold } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { CardFixture } from '../models/card.fixture';
+import { ColorInterface } from '../models/color.interface';
 import { WhiteboardFixture } from '../models/whiteboard.fixture';
 import {
   WhiteboardHttpService,
@@ -163,6 +164,25 @@ describe('WhiteboardHttpService', () => {
             withCredentials: true
           }
         )
+      );
+    });
+  });
+
+  describe('getColorPalettes', () => {
+    const mockColorPalette: {
+      [paletteName: string]: ColorInterface[];
+    } = { dark: [{ label: 'chocolate', hexCode: '#chocolatey' }] };
+    beforeEach(() => {
+      httpClient.get = jest.fn().mockReturnValue(of(mockColorPalette));
+    });
+
+    it('should make the correct api call and return the response', () => {
+      expect(whiteboardHttpService.getColorPalettes()).toBeObservable(
+        cold('(a|)', { a: mockColorPalette })
+      );
+
+      expect(httpClient.get).toHaveBeenCalledWith(
+        APIBase + '/whiteboard/colors'
       );
     });
   });
