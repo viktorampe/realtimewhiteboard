@@ -181,6 +181,7 @@ export type DeletePlayerInput = {
 
 export type CreateCardInput = {
   id?: string | null;
+  whiteboardID: string;
   whiteboard?: WhiteboardInput | null;
   mode: number;
   type: number;
@@ -192,10 +193,10 @@ export type CreateCardInput = {
   viewModeImage: boolean;
   inShelf: boolean;
   _version?: number | null;
-  cardWhiteboardId?: string | null;
 };
 
 export type ModelCardConditionInput = {
+  whiteboardID?: ModelIDInput | null;
   mode?: ModelIntInput | null;
   type?: ModelIntInput | null;
   color?: ModelStringInput | null;
@@ -219,6 +220,7 @@ export type ModelBooleanInput = {
 
 export type UpdateCardInput = {
   id: string;
+  whiteboardID?: string | null;
   whiteboard?: WhiteboardInput | null;
   mode?: number | null;
   type?: number | null;
@@ -230,7 +232,6 @@ export type UpdateCardInput = {
   viewModeImage?: boolean | null;
   inShelf?: boolean | null;
   _version?: number | null;
-  cardWhiteboardId?: string | null;
 };
 
 export type DeleteCardInput = {
@@ -268,6 +269,7 @@ export type ModelPlayerFilterInput = {
 
 export type ModelCardFilterInput = {
   id?: ModelStringInput | null;
+  whiteboardID?: ModelIDInput | null;
   mode?: ModelIntInput | null;
   type?: ModelIntInput | null;
   color?: ModelStringInput | null;
@@ -414,6 +416,7 @@ export type CreateWhiteboardMutation = {
     items: Array<{
       __typename: "Card";
       id: string;
+      whiteboardID: string;
       mode: number;
       type: number;
       color: string;
@@ -445,6 +448,7 @@ export type UpdateWhiteboardMutation = {
     items: Array<{
       __typename: "Card";
       id: string;
+      whiteboardID: string;
       mode: number;
       type: number;
       color: string;
@@ -476,6 +480,7 @@ export type DeleteWhiteboardMutation = {
     items: Array<{
       __typename: "Card";
       id: string;
+      whiteboardID: string;
       mode: number;
       type: number;
       color: string;
@@ -602,6 +607,7 @@ export type DeletePlayerMutation = {
 export type CreateCardMutation = {
   __typename: "Card";
   id: string;
+  whiteboardID: string;
   whiteboard: {
     __typename: "Whiteboard";
     id: string;
@@ -633,6 +639,7 @@ export type CreateCardMutation = {
 export type UpdateCardMutation = {
   __typename: "Card";
   id: string;
+  whiteboardID: string;
   whiteboard: {
     __typename: "Whiteboard";
     id: string;
@@ -664,6 +671,7 @@ export type UpdateCardMutation = {
 export type DeleteCardMutation = {
   __typename: "Card";
   id: string;
+  whiteboardID: string;
   whiteboard: {
     __typename: "Whiteboard";
     id: string;
@@ -821,6 +829,7 @@ export type GetWhiteboardQuery = {
     items: Array<{
       __typename: "Card";
       id: string;
+      whiteboardID: string;
       mode: number;
       type: number;
       color: string;
@@ -951,6 +960,7 @@ export type SyncCardsQuery = {
   items: Array<{
     __typename: "Card";
     id: string;
+    whiteboardID: string;
     whiteboard: {
       __typename: "Whiteboard";
       id: string;
@@ -980,6 +990,7 @@ export type SyncCardsQuery = {
 export type GetCardQuery = {
   __typename: "Card";
   id: string;
+  whiteboardID: string;
   whiteboard: {
     __typename: "Whiteboard";
     id: string;
@@ -1013,6 +1024,7 @@ export type ListCardsQuery = {
   items: Array<{
     __typename: "Card";
     id: string;
+    whiteboardID: string;
     whiteboard: {
       __typename: "Whiteboard";
       id: string;
@@ -1056,6 +1068,38 @@ export type PlayerBySessionIdQuery = {
       _lastChangedAt: number;
     } | null;
     fullName: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
+  } | null> | null;
+  nextToken: string | null;
+  startedAt: number | null;
+};
+
+export type CardByWhiteboardIdQuery = {
+  __typename: "ModelCardConnection";
+  items: Array<{
+    __typename: "Card";
+    id: string;
+    whiteboardID: string;
+    whiteboard: {
+      __typename: "Whiteboard";
+      id: string;
+      title: string | null;
+      defaultColor: string | null;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+    } | null;
+    mode: number;
+    type: number;
+    color: string;
+    description: string | null;
+    image: string | null;
+    top: number;
+    left: number;
+    viewModeImage: boolean;
+    inShelf: boolean;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -1191,6 +1235,7 @@ export type OnCreateWhiteboardSubscription = {
     items: Array<{
       __typename: "Card";
       id: string;
+      whiteboardID: string;
       mode: number;
       type: number;
       color: string;
@@ -1222,6 +1267,7 @@ export type OnUpdateWhiteboardSubscription = {
     items: Array<{
       __typename: "Card";
       id: string;
+      whiteboardID: string;
       mode: number;
       type: number;
       color: string;
@@ -1253,6 +1299,7 @@ export type OnDeleteWhiteboardSubscription = {
     items: Array<{
       __typename: "Card";
       id: string;
+      whiteboardID: string;
       mode: number;
       type: number;
       color: string;
@@ -1379,6 +1426,7 @@ export type OnDeletePlayerSubscription = {
 export type OnCreateCardSubscription = {
   __typename: "Card";
   id: string;
+  whiteboardID: string;
   whiteboard: {
     __typename: "Whiteboard";
     id: string;
@@ -1410,6 +1458,7 @@ export type OnCreateCardSubscription = {
 export type OnUpdateCardSubscription = {
   __typename: "Card";
   id: string;
+  whiteboardID: string;
   whiteboard: {
     __typename: "Whiteboard";
     id: string;
@@ -1441,6 +1490,7 @@ export type OnUpdateCardSubscription = {
 export type OnDeleteCardSubscription = {
   __typename: "Card";
   id: string;
+  whiteboardID: string;
   whiteboard: {
     __typename: "Whiteboard";
     id: string;
@@ -1653,6 +1703,7 @@ export class APIService {
             items {
               __typename
               id
+              whiteboardID
               mode
               type
               color
@@ -1700,6 +1751,7 @@ export class APIService {
             items {
               __typename
               id
+              whiteboardID
               mode
               type
               color
@@ -1747,6 +1799,7 @@ export class APIService {
             items {
               __typename
               id
+              whiteboardID
               mode
               type
               color
@@ -1937,6 +1990,7 @@ export class APIService {
         createCard(input: $input, condition: $condition) {
           __typename
           id
+          whiteboardID
           whiteboard {
             __typename
             id
@@ -1984,6 +2038,7 @@ export class APIService {
         updateCard(input: $input, condition: $condition) {
           __typename
           id
+          whiteboardID
           whiteboard {
             __typename
             id
@@ -2031,6 +2086,7 @@ export class APIService {
         deleteCard(input: $input, condition: $condition) {
           __typename
           id
+          whiteboardID
           whiteboard {
             __typename
             id
@@ -2282,6 +2338,7 @@ export class APIService {
             items {
               __typename
               id
+              whiteboardID
               mode
               type
               color
@@ -2504,6 +2561,7 @@ export class APIService {
           items {
             __typename
             id
+            whiteboardID
             whiteboard {
               __typename
               id
@@ -2553,6 +2611,7 @@ export class APIService {
         getCard(id: $id) {
           __typename
           id
+          whiteboardID
           whiteboard {
             __typename
             id
@@ -2600,6 +2659,7 @@ export class APIService {
           items {
             __typename
             id
+            whiteboardID
             whiteboard {
               __typename
               id
@@ -2694,6 +2754,67 @@ export class APIService {
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
     return <PlayerBySessionIdQuery>response.data.playerBySessionID;
+  }
+  async CardByWhiteboardId(
+    whiteboardID?: string,
+    sortDirection?: ModelSortDirection,
+    filter?: ModelCardFilterInput,
+    limit?: number,
+    nextToken?: string
+  ): Promise<CardByWhiteboardIdQuery> {
+    const statement = `query CardByWhiteboardId($whiteboardID: ID, $sortDirection: ModelSortDirection, $filter: ModelCardFilterInput, $limit: Int, $nextToken: String) {
+        cardByWhiteboardID(whiteboardID: $whiteboardID, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {
+          __typename
+          items {
+            __typename
+            id
+            whiteboardID
+            whiteboard {
+              __typename
+              id
+              title
+              defaultColor
+              _version
+              _deleted
+              _lastChangedAt
+            }
+            mode
+            type
+            color
+            description
+            image
+            top
+            left
+            viewModeImage
+            inShelf
+            _version
+            _deleted
+            _lastChangedAt
+          }
+          nextToken
+          startedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {};
+    if (whiteboardID) {
+      gqlAPIServiceArguments.whiteboardID = whiteboardID;
+    }
+    if (sortDirection) {
+      gqlAPIServiceArguments.sortDirection = sortDirection;
+    }
+    if (filter) {
+      gqlAPIServiceArguments.filter = filter;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
+    }
+    if (nextToken) {
+      gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <CardByWhiteboardIdQuery>response.data.cardByWhiteboardID;
   }
   OnCreateSessionListener: Observable<
     OnCreateSessionSubscription
@@ -2851,6 +2972,7 @@ export class APIService {
             items {
               __typename
               id
+              whiteboardID
               mode
               type
               color
@@ -2890,6 +3012,7 @@ export class APIService {
             items {
               __typename
               id
+              whiteboardID
               mode
               type
               color
@@ -2929,6 +3052,7 @@ export class APIService {
             items {
               __typename
               id
+              whiteboardID
               mode
               type
               color
@@ -3079,6 +3203,7 @@ export class APIService {
         onCreateCard {
           __typename
           id
+          whiteboardID
           whiteboard {
             __typename
             id
@@ -3116,6 +3241,7 @@ export class APIService {
         onUpdateCard {
           __typename
           id
+          whiteboardID
           whiteboard {
             __typename
             id
@@ -3153,6 +3279,7 @@ export class APIService {
         onDeleteCard {
           __typename
           id
+          whiteboardID
           whiteboard {
             __typename
             id

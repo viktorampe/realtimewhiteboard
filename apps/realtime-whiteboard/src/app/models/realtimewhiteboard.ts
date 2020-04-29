@@ -1,12 +1,12 @@
-import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
+import { RealtimeCard } from './realtimecard';
 
 export class RealtimeWhiteboard implements WhiteboardInterface {
   id: string;
   title: string;
   defaultColor: string;
-  cards: CardInterface[];
-  shelfCards: CardInterface[];
+  cards: RealtimeCard[];
+  shelfCards: RealtimeCard[];
   version: number;
 
   constructor(whiteboardResponse?: any) {
@@ -24,12 +24,16 @@ export class RealtimeWhiteboard implements WhiteboardInterface {
     this.version = whiteboardResponse ? whiteboardResponse._version : null;
   }
 
-  setWorkspaceCards(cardResponse: any[]): CardInterface[] {
-    const cards: CardInterface[] = [];
-    return cards;
+  setWorkspaceCards(cardResponses: any[]): RealtimeCard[] {
+    if (cardResponses !== undefined)
+      return cardResponses
+        .map(cr => new RealtimeCard(cr))
+        .filter(rtc => !rtc.inShelf);
   }
-  setShelfCards(cardResponse: any[]): CardInterface[] {
-    const cards: CardInterface[] = [];
-    return cards;
+  setShelfCards(cardResponses: any[]): RealtimeCard[] {
+    if (cardResponses !== undefined)
+      return cardResponses
+        .map(cr => new RealtimeCard(cr))
+        .filter(rtc => rtc.inShelf);
   }
 }

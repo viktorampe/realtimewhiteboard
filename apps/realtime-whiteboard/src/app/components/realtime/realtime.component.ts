@@ -44,28 +44,44 @@ export class RealtimeComponent implements OnInit {
     if (
       this.session.whiteboard.title !== updatedWhiteboard.title ||
       this.session.whiteboard.defaultColor !== updatedWhiteboard.defaultColor
-    )
+    ) {
       this.sessionService
         .updateWhiteboardData(updatedWhiteboard)
         .subscribe(() => {});
+    }
+
     // card was added
-    if (this.session.whiteboard.cards.length < updatedWhiteboard.cards.length)
-      return; // create card
+    if (this.session.whiteboard.cards.length < updatedWhiteboard.cards.length) {
+      console.log('create card');
+      const cardsToCreate = updatedWhiteboard.cards.filter(
+        newCards =>
+          !this.session.whiteboard.cards
+            .map(currentCards => currentCards.id)
+            .includes(newCards.id)
+      );
+      this.sessionService.createCard(cardsToCreate[0], false);
+    }
+
     // card was deleted
-    if (this.session.whiteboard.cards.length > updatedWhiteboard.cards.length)
-      return; // delete card
+    if (this.session.whiteboard.cards.length > updatedWhiteboard.cards.length) {
+      console.log('delete card');
+    }
+
     // shelfCard was added
     if (
       this.session.whiteboard.shelfCards.length <
       updatedWhiteboard.shelfCards.length
-    )
-      return; // create card
+    ) {
+      console.log('create shelfcard');
+    }
+
     // shelfCard was deleted
     if (
       this.session.whiteboard.shelfCards.length >
       updatedWhiteboard.shelfCards.length
-    )
-      return; // delete card
+    ) {
+      console.log('delete shelfcard');
+    }
   }
 
   // triggers when a Card recieved an update

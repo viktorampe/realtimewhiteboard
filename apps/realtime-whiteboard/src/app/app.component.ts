@@ -30,6 +30,8 @@ export class AppComponent {
     this.sessionService.subscribeOnCreatePlayer();
     // subscribe on whiteboard updates
     this.sessionService.subscribeOnWhiteboardUpdates();
+    // subscribe on card craeteion
+    this.sessionService.subscribeOnCreateCard();
   }
 
   private setupIconRegistry() {

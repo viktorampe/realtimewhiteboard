@@ -124,6 +124,7 @@ mutation CreateWhiteboard(
     cards {
       items {
         id
+        whiteboardID
         mode
         type
         color
@@ -156,6 +157,7 @@ mutation UpdateWhiteboard(
     cards {
       items {
         id
+        whiteboardID
         mode
         type
         color
@@ -188,6 +190,7 @@ mutation DeleteWhiteboard(
     cards {
       items {
         id
+        whiteboardID
         mode
         type
         color
@@ -317,6 +320,7 @@ mutation CreateCard(
 ) {
   createCard(input: $input, condition: $condition) {
     id
+    whiteboardID
     whiteboard {
       id
       title
@@ -349,6 +353,7 @@ mutation UpdateCard(
 ) {
   updateCard(input: $input, condition: $condition) {
     id
+    whiteboardID
     whiteboard {
       id
       title
@@ -381,6 +386,7 @@ mutation DeleteCard(
 ) {
   deleteCard(input: $input, condition: $condition) {
     id
+    whiteboardID
     whiteboard {
       id
       title

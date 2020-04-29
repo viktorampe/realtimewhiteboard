@@ -13,6 +13,22 @@ export class RealtimeCard implements CardInterface {
   top: number;
   left: number;
   viewModeImage: boolean;
+  inShelf: boolean;
+  whiteboardId: string;
 
-  constructor(cardResponse: any) {}
+  constructor(cardResponse: any) {
+    this.id = cardResponse.id;
+    this.mode = cardResponse.mode;
+    this.type = cardResponse.type;
+    this.color = cardResponse.color;
+    this.description = cardResponse.description;
+    this.image = {
+      imageUrl: cardResponse.image
+    };
+    this.top = cardResponse.top;
+    this.left = cardResponse.left;
+    this.viewModeImage = cardResponse.viewModeImage;
+    this.inShelf = cardResponse.inShelf;
+    this.whiteboardId = cardResponse.whiteboardID;
+  }
 }

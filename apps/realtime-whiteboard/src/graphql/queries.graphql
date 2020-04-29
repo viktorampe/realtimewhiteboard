@@ -138,6 +138,7 @@ query GetWhiteboard($id: ID!) {
     cards {
       items {
         id
+        whiteboardID
         mode
         type
         color
@@ -286,6 +287,7 @@ query SyncCards(
   ) {
     items {
       id
+      whiteboardID
       whiteboard {
         id
         title
@@ -314,6 +316,7 @@ query SyncCards(
 query GetCard($id: ID!) {
   getCard(id: $id) {
     id
+    whiteboardID
     whiteboard {
       id
       title
@@ -348,6 +351,7 @@ query ListCards(
   listCards(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      whiteboardID
       whiteboard {
         id
         title
@@ -400,6 +404,48 @@ query PlayerBySessionId(
         _lastChangedAt
       }
       fullName
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query CardByWhiteboardId(
+  $whiteboardID: ID
+  $sortDirection: ModelSortDirection
+  $filter: ModelCardFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  cardByWhiteboardID(
+    whiteboardID: $whiteboardID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      whiteboardID
+      whiteboard {
+        id
+        title
+        defaultColor
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      mode
+      type
+      color
+      description
+      image
+      top
+      left
+      viewModeImage
+      inShelf
       _version
       _deleted
       _lastChangedAt

@@ -112,6 +112,7 @@ subscription OnCreateWhiteboard {
     cards {
       items {
         id
+        whiteboardID
         mode
         type
         color
@@ -141,6 +142,7 @@ subscription OnUpdateWhiteboard {
     cards {
       items {
         id
+        whiteboardID
         mode
         type
         color
@@ -170,6 +172,7 @@ subscription OnDeleteWhiteboard {
     cards {
       items {
         id
+        whiteboardID
         mode
         type
         color
@@ -287,6 +290,7 @@ subscription OnDeletePlayer {
 subscription OnCreateCard {
   onCreateCard {
     id
+    whiteboardID
     whiteboard {
       id
       title
@@ -316,6 +320,7 @@ subscription OnCreateCard {
 subscription OnUpdateCard {
   onUpdateCard {
     id
+    whiteboardID
     whiteboard {
       id
       title
@@ -345,6 +350,7 @@ subscription OnUpdateCard {
 subscription OnDeleteCard {
   onDeleteCard {
     id
+    whiteboardID
     whiteboard {
       id
       title

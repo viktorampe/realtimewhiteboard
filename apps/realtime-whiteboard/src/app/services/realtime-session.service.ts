@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../API.service';
+import { RealtimeCard } from '../models/realtimecard';
 import RealtimeSession from '../models/realtimesession';
 import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
 
@@ -52,10 +54,22 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   getSession(sessionId: string) {
+    // get session
     this.apiService
       .GetSession(sessionId)
-      .then(sessionResponse => {
-        this.setCurrentRealtimeSession(new RealtimeSession(sessionResponse));
+      .then((sessionResponse: any) => {
+        const realtimeSession = new RealtimeSession(sessionResponse);
+        // get whiteboard
+        this.apiService
+          .GetWhiteboard(realtimeSession.whiteboard.id)
+          .then((whiteboardResponse: any) => {
+            console.log(whiteboardResponse);
+            realtimeSession.whiteboard = new RealtimeWhiteboard(
+              whiteboardResponse
+            );
+            this.setCurrentRealtimeSession(realtimeSession);
+          })
+          .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
   }
@@ -160,6 +174,48 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         this.currentRealtimeSession.whiteboard = new RealtimeWhiteboard(
           evt.value.data.onUpdateWhiteboard
         );
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      }
+    });
+  }
+
+  //#endregion
+
+  //#region CARDS
+
+  createCard(card: CardInterface, inShelf: boolean) {
+    this.apiService
+      .CreateCard({
+        id: card.id,
+        whiteboardID: this.currentRealtimeSession.whiteboard.id,
+        mode: card.mode,
+        type: card.type,
+        color: card.color,
+        image: 'myUrl',
+        top: card.type,
+        left: card.left,
+        viewModeImage: card.viewModeImage,
+        inShelf: inShelf
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
+  subscribeOnCreateCard() {
+    this.apiService.OnCreateCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onCreateCard
+      );
+
+      if (
+        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+      ) {
+        if (cardResponse.inShelf) {
+          this.currentRealtimeSession.whiteboard.shelfCards.push(cardResponse);
+        }
+        if (!cardResponse.inShelf) {
+          this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
+        }
         this.setCurrentRealtimeSession(this.currentRealtimeSession);
       }
     });
