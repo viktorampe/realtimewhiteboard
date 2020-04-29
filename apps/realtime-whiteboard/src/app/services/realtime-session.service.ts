@@ -5,6 +5,7 @@ import { BehaviorSubject, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../API.service';
 import RealtimeSession from '../models/realtimesession';
+import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -132,7 +133,9 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#region WHITEBOARD
 
-  createWhiteboard(whiteboard: WhiteboardInterface): Observable<any> {
+  createWhiteboard(
+    whiteboard: WhiteboardInterface
+  ): Observable<RealtimeWhiteboard> {
     return from(
       this.apiService.CreateWhiteboard({
         title: whiteboard.title,
@@ -140,50 +143,29 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       })
     ).pipe(
       map(whiteboardResponse => {
-        this.currentRealtimeSession.whiteboard = {
-          title: whiteboardResponse.title,
-          defaultColor: whiteboardResponse.defaultColor,
-          cards: whiteboardResponse.cards.items
-            .filter(c => c.inShelf === false)
-            .map(c => {
-              return {
-                id: c.id,
-                mode: c.mode,
-                type: c.type,
-                color: c.color,
-                description: c.description,
-                image: {
-                  imageUrl: c.image
-                },
-                top: c.top,
-                left: c.left,
-                viewModeImage: c.viewModeImage
-              };
-            }),
-          shelfCards: whiteboardResponse.cards.items
-            .filter(c => c.inShelf === true)
-            .map(c => {
-              return {
-                id: c.id,
-                mode: c.mode,
-                type: c.type,
-                color: c.color,
-                description: c.description,
-                image: {
-                  imageUrl: c.image
-                },
-                top: c.top,
-                left: c.left,
-                viewModeImage: c.viewModeImage
-              };
-            })
-        };
-        return whiteboardResponse;
+        this.currentRealtimeSession.whiteboard = new RealtimeWhiteboard(
+          whiteboardResponse
+        );
+        return this.currentRealtimeSession.whiteboard;
       })
     );
   }
 
-  ////#endregion
+  subscribeOnWhiteboardUpdates() {
+    this.apiService.OnUpdateWhiteboardListener.subscribe((evt: any) => {
+      if (
+        evt.value.data.onUpdateWhiteboard.id ===
+        this.currentRealtimeSession.whiteboard.id
+      ) {
+        this.currentRealtimeSession.whiteboard = new RealtimeWhiteboard(
+          evt.value.data.onUpdateWhiteboard
+        );
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      }
+    });
+  }
+
+  //#endregion
 
   //#region INTERFACE IMPLEMENTATION
 
@@ -197,12 +179,15 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     );
   }
 
-  updateWhiteboardData(whiteboard: WhiteboardInterface): Observable<Boolean> {
+  updateWhiteboardData(
+    updatedWhiteboard: WhiteboardInterface
+  ): Observable<Boolean> {
     return from(
-      this.apiService.UpdateSession({
-        id: this.currentRealtimeSession.id,
-        title: this.currentRealtimeSession.title,
-        pincode: this.currentRealtimeSession.pincode
+      this.apiService.UpdateWhiteboard({
+        id: this.currentRealtimeSession.whiteboard.id,
+        title: updatedWhiteboard.title,
+        defaultColor: updatedWhiteboard.defaultColor,
+        _version: this.currentRealtimeSession.whiteboard.version
       })
     ).pipe(mapTo(true));
   }

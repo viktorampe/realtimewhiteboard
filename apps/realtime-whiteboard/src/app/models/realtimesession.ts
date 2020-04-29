@@ -1,12 +1,11 @@
-import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import { SessionHelper } from '../util/sessionhelper';
 import Player from './player';
+import { RealtimeWhiteboard } from './realtimewhiteboard';
 
 export default class RealtimeSession {
   id: string;
   title: string;
   pincode: number;
-  whiteboard: WhiteboardInterface;
+  whiteboard: RealtimeWhiteboard;
   players: Player[];
   lives: boolean;
 
@@ -18,7 +17,7 @@ export default class RealtimeSession {
       ? this.setPlayers(sessionResponse.players.items)
       : null;
     this.whiteboard = sessionResponse
-      ? SessionHelper.getWhiteboardFromResponse(sessionResponse.whiteboard)
+      ? new RealtimeWhiteboard(sessionResponse.whiteboard)
       : null;
     this.lives = true;
   }

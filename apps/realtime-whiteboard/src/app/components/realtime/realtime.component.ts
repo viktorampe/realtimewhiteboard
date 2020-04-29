@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
-import { UpdateHelper } from '../../util/updateHelper';
 
 @Component({
   selector: 'campus-realtime',
@@ -21,7 +21,8 @@ export class RealtimeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.canManage = false;
+    // is user a publisher or a teacher?
+    this.canManage = true;
     // get customer id from route
     this.route.paramMap.subscribe(params => {
       this.sessionId = params.get('id');
@@ -39,9 +40,36 @@ export class RealtimeComponent implements OnInit {
 
   // triggers when Whiteboard has changed
   updateWhiteboard(updatedWhiteboard: WhiteboardInterface) {
-    UpdateHelper.checkForUpdates(this.session.whiteboard, updatedWhiteboard);
-    // this.sessionService.updateWhiteboardData(updatedWhiteboard);
+    // title / defaultcolor changed
+    if (
+      this.session.whiteboard.title !== updatedWhiteboard.title ||
+      this.session.whiteboard.defaultColor !== updatedWhiteboard.defaultColor
+    )
+      this.sessionService
+        .updateWhiteboardData(updatedWhiteboard)
+        .subscribe(() => {});
+    // card was added
+    if (this.session.whiteboard.cards.length < updatedWhiteboard.cards.length)
+      return; // create card
+    // card was deleted
+    if (this.session.whiteboard.cards.length > updatedWhiteboard.cards.length)
+      return; // delete card
+    // shelfCard was added
+    if (
+      this.session.whiteboard.shelfCards.length <
+      updatedWhiteboard.shelfCards.length
+    )
+      return; // create card
+    // shelfCard was deleted
+    if (
+      this.session.whiteboard.shelfCards.length >
+      updatedWhiteboard.shelfCards.length
+    )
+      return; // delete card
   }
+
+  // triggers when a Card recieved an update
+  updateCard(updatedCard: CardInterface) {}
 
   private fetchSession() {
     this.sessionService.getSession(this.sessionId);

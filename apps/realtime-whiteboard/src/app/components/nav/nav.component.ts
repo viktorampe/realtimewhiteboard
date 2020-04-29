@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import RealtimeSession from '../../models/realtimesession';
+import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
 import { ActiveplayersdialogComponent } from '../../ui/activeplayersdialog/activeplayersdialog.component';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
@@ -23,7 +24,6 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
-        console.log(realtimesession);
         if (realtimesession !== null) {
           if (realtimesession.lives === false) {
             this.router.navigate(['']);
@@ -61,10 +61,10 @@ export class NavComponent implements OnInit {
         cards: [],
         shelfCards: []
       })
-      .subscribe((whiteboardResponse: any) => {
+      .subscribe((realtimeWhiteboard: RealtimeWhiteboard) => {
         // create session
         this.sessionService
-          .createNewSession(realtimeSession, whiteboardResponse.id)
+          .createNewSession(realtimeSession, realtimeWhiteboard.id)
           .subscribe((sessionResponse: any) => {
             this.router.navigate(['realtimesession', sessionResponse.id]);
           });
