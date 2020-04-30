@@ -8,6 +8,7 @@ import { APIService } from '../API.service';
 import { RealtimeCard } from '../models/realtimecard';
 import RealtimeSession from '../models/realtimesession';
 import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
+import { UpdateHelper } from '../util/updateHelper';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -63,7 +64,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         this.apiService
           .GetWhiteboard(realtimeSession.whiteboard.id)
           .then((whiteboardResponse: any) => {
-            console.log(whiteboardResponse);
             realtimeSession.whiteboard = new RealtimeWhiteboard(
               whiteboardResponse
             );
@@ -183,7 +183,63 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#region CARDS
 
+  subscribeOnUpdateCard() {
+    this.apiService.OnUpdateCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onUpdateCard
+      );
+      console.log('cardResponse', cardResponse);
+      // update is for this whiteboard
+      if (
+        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+      ) {
+        // find card to update
+        let cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
+          c => c.id === cardResponse.id
+        );
+
+        // ceck if card exists
+        if (cardToUpdate === undefined) {
+          this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
+          this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        } else {
+          // update necessary properties
+          cardToUpdate.color = cardResponse.color;
+          cardToUpdate.description = cardResponse.description;
+          cardToUpdate.image = cardResponse.image;
+          cardToUpdate.top = cardResponse.top;
+          cardToUpdate.left = cardResponse.left;
+          cardToUpdate.viewModeImage = cardResponse.viewModeImage;
+          cardToUpdate.version = cardResponse.version;
+          this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        }
+      }
+    });
+  }
+
+  subscribeOnDeleteCard() {
+    this.apiService.OnDeleteCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onDeleteCard
+      );
+      if (
+        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+      ) {
+        this.apiService
+          .SyncCards({ whiteboardID: { contains: cardResponse.whiteboardId } })
+          .then(res => console.log(res));
+        /*
+        this.currentRealtimeSession.whiteboard.cards.filter(
+          c => c.id !== cardResponse.id
+        );
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        */
+      }
+    });
+  }
+
   createCard(card: CardInterface) {
+    console.log(card);
     this.apiService
       .CreateCard({
         id: card.id,
@@ -195,98 +251,55 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         top: card.type,
         left: card.left,
         viewModeImage: card.viewModeImage,
-        inShelf: false
+        inShelf: false,
+        _version: 0
       })
       .then(() => {})
       .catch(err => console.log(err));
   }
 
-  subscribeOnCreateCard() {
-    this.apiService.OnCreateCardListener.subscribe((evt: any) => {
-      const cardResponse: RealtimeCard = new RealtimeCard(
-        evt.value.data.onCreateCard
-      );
-
-      if (
-        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
-      ) {
-        this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
-      }
-    });
-  }
-
-  subscribeOnUpdateCard() {
-    this.apiService.OnUpdateCardListener.subscribe((evt: any) => {
-      const cardResponse: RealtimeCard = new RealtimeCard(
-        evt.value.data.onUpdateCard
-      );
-      // update is for this whiteboard
-      if (
-        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
-      ) {
-        let cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
-          c => c.id === cardResponse.id
-        );
-
-        // update necessary properties
-        cardToUpdate.color = cardResponse.color;
-        cardToUpdate.description = cardResponse.description;
-        cardToUpdate.image = cardResponse.image;
-        cardToUpdate.top = cardResponse.top;
-        cardToUpdate.left = cardResponse.left;
-        cardToUpdate.viewModeImage = cardResponse.viewModeImage;
-        cardToUpdate.version = cardResponse.version;
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
-      }
-    });
-  }
-
-  subscribeOnDeleteCard() {
-    this.apiService.OnDeleteCardListener.subscribe((evt: any) => {
-      const cardResponse: RealtimeCard = new RealtimeCard(
-        evt.value.data.onUpdateCard
-      );
-      if (
-        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
-      ) {
-        this.currentRealtimeSession.whiteboard.cards.filter(
-          c => c.id != cardResponse.id
-        );
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
-      }
-    });
-  }
-
-  updateCard(card: CardInterface) {
+  updateCard(realtimeCard: RealtimeCard) {
+    console.log(realtimeCard);
     // can't save empty string
-    if (card.description === null || card.description.length < 1)
-      card.description = 'empty';
+    if (
+      realtimeCard.description === null ||
+      realtimeCard.description.length < 1
+    ) {
+      realtimeCard.description = 'empty';
+    }
+
+    // if version undefined set to 1 else get last version
+    if (realtimeCard.version === undefined) {
+      realtimeCard.version = 1;
+    } else {
+      realtimeCard.version = UpdateHelper.getLastVersionOfCard(
+        this.currentRealtimeSession,
+        realtimeCard.id
+      );
+    }
 
     // update necessary properties
     this.apiService
       .UpdateCard({
-        id: card.id,
-        color: card.color,
-        description: card.description,
+        id: realtimeCard.id,
+        color: realtimeCard.color,
+        description: realtimeCard.description,
         image: 'myUrl',
-        top: card.top,
-        left: card.left,
+        top: realtimeCard.top,
+        left: realtimeCard.left,
         mode: 1, // always save card as IDLE mode
-        viewModeImage: card.viewModeImage,
-        _version: this.currentRealtimeSession.whiteboard.cards.find(
-          c => c.id === card.id
-        ).version
+        viewModeImage: realtimeCard.viewModeImage,
+        _version: realtimeCard.version
       })
       .then(() => {})
       .catch(err => console.log(err));
   }
 
-  deleteCard(card: RealtimeCard) {
+  deleteCard(realtimeCard: RealtimeCard) {
     this.apiService
       .DeleteCard({
-        id: card.id,
-        _version: card.version
+        id: realtimeCard.id,
+        _version: realtimeCard.version
       })
       .then(() => {})
       .catch(err => console.log(err));

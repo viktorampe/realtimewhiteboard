@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
+import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
 
@@ -75,7 +75,7 @@ export class RealtimeComponent implements OnInit {
   }
 
   // triggers when a Card recieved an update
-  updateCard(updatedCard: CardInterface) {
+  updateCard(updatedCard: RealtimeCard) {
     console.log('update card');
     this.sessionService.updateCard(updatedCard);
   }

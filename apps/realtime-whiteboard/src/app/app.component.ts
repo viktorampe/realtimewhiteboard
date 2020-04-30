@@ -31,7 +31,6 @@ export class AppComponent {
     // subscribe on whiteboard updates
     this.sessionService.subscribeOnWhiteboardUpdates();
     // subscribe on card creation/deletes/updates
-    this.sessionService.subscribeOnCreateCard();
     this.sessionService.subscribeOnDeleteCard();
     this.sessionService.subscribeOnUpdateCard();
   }
