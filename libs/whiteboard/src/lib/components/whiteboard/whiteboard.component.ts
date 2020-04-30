@@ -539,7 +539,8 @@ export class WhiteboardComponent implements OnChanges {
   cardConfirmIconClicked(card: CardInterface) {
     this.updateCard(
       { mode: ModeEnum.IDLE, description: card.description },
-      card
+      card,
+      true
     );
     this.updateViewMode(card);
     this.saveWhiteboard();
@@ -547,7 +548,7 @@ export class WhiteboardComponent implements OnChanges {
 
   cardFlipIconClicked(card: CardInterface) {
     if ((card.description && card.image) || card.mode === ModeEnum.EDIT) {
-      this.updateCard({ viewModeImage: !card.viewModeImage }, card);
+      this.updateCard({ viewModeImage: !card.viewModeImage }, card, true);
 
       if (card.mode !== ModeEnum.EDIT) {
         this.updateCard({ mode: ModeEnum.IDLE }, card);

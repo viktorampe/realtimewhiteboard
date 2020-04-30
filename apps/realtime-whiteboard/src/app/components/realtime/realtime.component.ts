@@ -22,7 +22,7 @@ export class RealtimeComponent implements OnInit {
 
   ngOnInit() {
     // is user a publisher or a teacher?
-    this.canManage = true;
+    this.canManage = false;
     // get customer id from route
     this.route.paramMap.subscribe(params => {
       this.sessionId = params.get('id');
@@ -45,6 +45,7 @@ export class RealtimeComponent implements OnInit {
       this.session.whiteboard.title !== updatedWhiteboard.title ||
       this.session.whiteboard.defaultColor !== updatedWhiteboard.defaultColor
     ) {
+      console.log('updateWhiteboard');
       this.sessionService
         .updateWhiteboardData(updatedWhiteboard)
         .subscribe(() => {});
@@ -66,26 +67,13 @@ export class RealtimeComponent implements OnInit {
     if (this.session.whiteboard.cards.length > updatedWhiteboard.cards.length) {
       console.log('delete card');
     }
-
-    // shelfCard was added
-    if (
-      this.session.whiteboard.shelfCards.length <
-      updatedWhiteboard.shelfCards.length
-    ) {
-      console.log('create shelfcard');
-    }
-
-    // shelfCard was deleted
-    if (
-      this.session.whiteboard.shelfCards.length >
-      updatedWhiteboard.shelfCards.length
-    ) {
-      console.log('delete shelfcard');
-    }
   }
 
   // triggers when a Card recieved an update
-  updateCard(updatedCard: CardInterface) {}
+  updateCard(updatedCard: CardInterface) {
+    console.log('update card');
+    this.sessionService.updateCard(updatedCard);
+  }
 
   private fetchSession() {
     this.sessionService.getSession(this.sessionId);

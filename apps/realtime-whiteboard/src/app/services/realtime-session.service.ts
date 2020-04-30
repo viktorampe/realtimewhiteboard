@@ -221,6 +221,51 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
+  subscribeOnUpdateCard() {
+    this.apiService.OnUpdateCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onUpdateCard
+      );
+      if (
+        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+      ) {
+        let cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
+          c => c.id === cardResponse.id
+        );
+        // update necessary properties
+        cardToUpdate.color = cardResponse.color;
+        cardToUpdate.description = cardResponse.description;
+        cardToUpdate.image = cardResponse.image;
+        cardToUpdate.top = cardResponse.top;
+        cardToUpdate.left = cardResponse.left;
+        cardToUpdate.viewModeImage = cardResponse.viewModeImage;
+        cardToUpdate.version = cardResponse.version;
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      }
+    });
+  }
+
+  updateCard(card: CardInterface) {
+    // can't save empty string
+    if (card.description === null) card.description = ' ';
+    // update necessary properties
+    this.apiService
+      .UpdateCard({
+        id: card.id,
+        color: card.color,
+        description: card.description,
+        image: 'myUrl',
+        top: card.top,
+        left: card.left,
+        mode: 1, // always save card as IDLE mode
+        viewModeImage: card.viewModeImage,
+        _version: this.currentRealtimeSession.whiteboard.cards.find(
+          c => c.id === card.id
+        ).version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
   //#endregion
 
   //#region INTERFACE IMPLEMENTATION
