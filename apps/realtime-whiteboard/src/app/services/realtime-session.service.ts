@@ -268,7 +268,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       realtimeCard.description = 'empty';
     }
 
-    // if version undefined set to 1 else get last version
+    // if version undefined set to 1 else get last version (A newly created card does not have a version)
     if (realtimeCard.version === undefined) {
       realtimeCard.version = 1;
     } else {
