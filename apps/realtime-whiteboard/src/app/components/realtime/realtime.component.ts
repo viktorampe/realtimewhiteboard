@@ -60,12 +60,17 @@ export class RealtimeComponent implements OnInit {
             .map(currentCards => currentCards.id)
             .includes(newCards.id)
       );
-      this.sessionService.createCard(cardsToCreate[0], false);
+      this.sessionService.createCard(cardsToCreate[0]);
     }
 
     // card was deleted
     if (this.session.whiteboard.cards.length > updatedWhiteboard.cards.length) {
       console.log('delete card');
+      const cardToDelete = this.session.whiteboard.cards.filter(
+        currentCard =>
+          !updatedWhiteboard.cards.map(c => c.id).includes(currentCard.id)
+      );
+      this.sessionService.deleteCard(cardToDelete[0]);
     }
   }
 

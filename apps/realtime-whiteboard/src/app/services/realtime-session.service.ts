@@ -183,19 +183,19 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#region CARDS
 
-  createCard(card: CardInterface, inShelf: boolean) {
+  createCard(card: CardInterface) {
     this.apiService
       .CreateCard({
         id: card.id,
         whiteboardID: this.currentRealtimeSession.whiteboard.id,
-        mode: card.mode,
+        mode: 1, // Save in database as IDLE
         type: card.type,
         color: card.color,
         image: 'myUrl',
         top: card.type,
         left: card.left,
         viewModeImage: card.viewModeImage,
-        inShelf: inShelf
+        inShelf: false
       })
       .then(() => {})
       .catch(err => console.log(err));
@@ -210,12 +210,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       if (
         this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
       ) {
-        if (cardResponse.inShelf) {
-          this.currentRealtimeSession.whiteboard.shelfCards.push(cardResponse);
-        }
-        if (!cardResponse.inShelf) {
-          this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
-        }
+        this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
         this.setCurrentRealtimeSession(this.currentRealtimeSession);
       }
     });
@@ -226,12 +221,14 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       const cardResponse: RealtimeCard = new RealtimeCard(
         evt.value.data.onUpdateCard
       );
+      // update is for this whiteboard
       if (
         this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
       ) {
         let cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
           c => c.id === cardResponse.id
         );
+
         // update necessary properties
         cardToUpdate.color = cardResponse.color;
         cardToUpdate.description = cardResponse.description;
@@ -245,9 +242,27 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
+  subscribeOnDeleteCard() {
+    this.apiService.OnDeleteCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onUpdateCard
+      );
+      if (
+        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+      ) {
+        this.currentRealtimeSession.whiteboard.cards.filter(
+          c => c.id != cardResponse.id
+        );
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      }
+    });
+  }
+
   updateCard(card: CardInterface) {
     // can't save empty string
-    if (card.description === null) card.description = ' ';
+    if (card.description === null || card.description.length < 1)
+      card.description = 'empty';
+
     // update necessary properties
     this.apiService
       .UpdateCard({
@@ -266,6 +281,17 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       .then(() => {})
       .catch(err => console.log(err));
   }
+
+  deleteCard(card: RealtimeCard) {
+    this.apiService
+      .DeleteCard({
+        id: card.id,
+        _version: card.version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
   //#endregion
 
   //#region INTERFACE IMPLEMENTATION
