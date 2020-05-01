@@ -261,22 +261,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   updateCard(realtimeCard: RealtimeCard) {
     console.log(realtimeCard);
     // can't save empty string
-    if (
-      realtimeCard.description === null ||
-      realtimeCard.description.length < 1
-    ) {
-      realtimeCard.description = 'empty';
-    }
+    UpdateHelper.checkDescription(realtimeCard);
 
-    // if version undefined set to 1 else get last version (A newly created card does not have a version)
-    if (realtimeCard.version === undefined) {
-      realtimeCard.version = 1;
-    } else {
-      realtimeCard.version = UpdateHelper.getLastVersionOfCard(
-        this.currentRealtimeSession,
-        realtimeCard.id
-      );
-    }
+    // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
+    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
 
     // update necessary properties
     this.apiService
