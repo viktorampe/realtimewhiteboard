@@ -7,6 +7,7 @@ export default class RealtimeSession {
   pincode: number;
   whiteboard: RealtimeWhiteboard;
   players: Player[];
+  version: number;
   lives: boolean;
 
   constructor(sessionResponse?: any) {
@@ -19,12 +20,20 @@ export default class RealtimeSession {
     this.whiteboard = sessionResponse
       ? new RealtimeWhiteboard(sessionResponse.whiteboard)
       : null;
-    this.lives = true;
+    this.version = sessionResponse ? sessionResponse._version : null;
+    this.lives = sessionResponse ? this.setLives(sessionResponse) : true;
   }
 
   setPlayers(playerResponse: any[]): Player[] {
     const players: Player[] = [];
     playerResponse.forEach(pr => players.push(new Player(pr)));
     return players;
+  }
+
+  setLives(sessionResponse: any): boolean {
+    if (sessionResponse._deleted) {
+      return false;
+    }
+    return true;
   }
 }

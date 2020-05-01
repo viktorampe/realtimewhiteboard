@@ -59,13 +59,11 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.apiService
       .GetSession(sessionId)
       .then((sessionResponse: any) => {
-        console.log('sessionresponse', sessionResponse);
         const realtimeSession = new RealtimeSession(sessionResponse);
         // get whiteboard
         this.apiService
           .GetWhiteboard(realtimeSession.whiteboard.id)
           .then((whiteboardResponse: any) => {
-            console.log('whiteboardResponse', whiteboardResponse);
             realtimeSession.whiteboard = new RealtimeWhiteboard(
               whiteboardResponse
             );
@@ -88,8 +86,33 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   DeleteSession(sessionId: string) {
+    // delete cards from active whiteboard
+    this.currentRealtimeSession.whiteboard.cards.forEach(c => {
+      UpdateHelper.setVersionOfCard(this.currentRealtimeSession, c);
+      this.apiService
+        .DeleteCard({
+          id: c.id,
+          _version: c.version
+        })
+        .then(() => {})
+        .catch(err => console.log(err));
+    });
+
+    // delete active whiteboard
     this.apiService
-      .DeleteSession({ id: sessionId })
+      .DeleteWhiteboard({
+        id: this.currentRealtimeSession.whiteboard.id,
+        _version: this.currentRealtimeSession.whiteboard.version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+
+    // delete session
+    this.apiService
+      .DeleteSession({
+        id: sessionId,
+        _version: this.currentRealtimeSession.version
+      })
       .then(() => {})
       .catch(err => console.log(err));
   }
@@ -110,11 +133,12 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   subscribeOnSessionDeletes() {
     this.apiService.OnDeleteSessionListener.subscribe((evt: any) => {
-      if (
-        evt.value.data.onDeleteSession.id === this.currentRealtimeSession.id
-      ) {
-        this.currentRealtimeSession.lives = false;
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      const deletedSession = new RealtimeSession(
+        evt.value.data.onDeleteSession
+      );
+      if (deletedSession.id === this.currentRealtimeSession.id) {
+        // update behaviorSubject
+        this.setCurrentRealtimeSession(deletedSession);
       }
     });
   }
