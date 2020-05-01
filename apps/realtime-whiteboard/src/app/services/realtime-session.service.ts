@@ -59,11 +59,13 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.apiService
       .GetSession(sessionId)
       .then((sessionResponse: any) => {
+        console.log('sessionresponse', sessionResponse);
         const realtimeSession = new RealtimeSession(sessionResponse);
         // get whiteboard
         this.apiService
           .GetWhiteboard(realtimeSession.whiteboard.id)
           .then((whiteboardResponse: any) => {
+            console.log('whiteboardResponse', whiteboardResponse);
             realtimeSession.whiteboard = new RealtimeWhiteboard(
               whiteboardResponse
             );
@@ -225,15 +227,11 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       if (
         this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
       ) {
-        this.apiService
-          .SyncCards({ whiteboardID: { contains: cardResponse.whiteboardId } })
-          .then(res => console.log(res));
-        /*
-        this.currentRealtimeSession.whiteboard.cards.filter(
+        // remove card from array
+        this.currentRealtimeSession.whiteboard.cards = this.currentRealtimeSession.whiteboard.cards.filter(
           c => c.id !== cardResponse.id
         );
         this.setCurrentRealtimeSession(this.currentRealtimeSession);
-        */
       }
     });
   }
@@ -284,6 +282,8 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   deleteCard(realtimeCard: RealtimeCard) {
+    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
+
     this.apiService
       .DeleteCard({
         id: realtimeCard.id,

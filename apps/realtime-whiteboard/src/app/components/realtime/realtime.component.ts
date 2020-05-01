@@ -33,7 +33,6 @@ export class RealtimeComponent implements OnInit {
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimeSession: RealtimeSession) => {
         this.session = realtimeSession;
-        console.log(realtimeSession);
       }
     );
   }

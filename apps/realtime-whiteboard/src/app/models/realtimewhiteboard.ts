@@ -27,12 +27,14 @@ export class RealtimeWhiteboard implements WhiteboardInterface {
   setWorkspaceCards(cardResponses: any[]): RealtimeCard[] {
     if (cardResponses !== undefined)
       return cardResponses
+        .filter(cr => !cr._deleted === true)
         .map(cr => new RealtimeCard(cr))
         .filter(rtc => !rtc.inShelf);
   }
   setShelfCards(cardResponses: any[]): RealtimeCard[] {
     if (cardResponses !== undefined)
       return cardResponses
+        .filter(cr => !cr._deleted === true)
         .map(cr => new RealtimeCard(cr))
         .filter(rtc => rtc.inShelf);
   }
