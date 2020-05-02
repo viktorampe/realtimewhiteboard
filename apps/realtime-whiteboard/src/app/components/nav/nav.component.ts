@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import RealtimeSession from '../../models/realtimesession';
+import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
 import { ActiveplayersdialogComponent } from '../../ui/activeplayersdialog/activeplayersdialog.component';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
@@ -23,12 +24,11 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
-        console.log(realtimesession);
-        if (realtimesession !== null) {
-          if (realtimesession.lives === false) {
+        this.session = realtimesession;
+        console.log(this.session);
+        if (this.session !== null) {
+          if (this.session.lives === false) {
             this.router.navigate(['']);
-          } else {
-            this.session = realtimesession;
           }
         }
       }
@@ -47,22 +47,28 @@ export class NavComponent implements OnInit {
         realtimeSession.id = null;
         realtimeSession.title = result.sessionTitle;
         realtimeSession.pincode = result.sessionPincode;
-        realtimeSession.whiteboard = {
-          title: 'realtime whiteboard',
-          defaultColor: '#5D3284',
-          cards: [],
-          shelfCards: []
-        };
         this.startSession(realtimeSession);
       }
     });
   }
 
   private startSession(realtimeSession: RealtimeSession) {
-    // create session
-    this.sessionService.createNewSession(realtimeSession).subscribe(session => {
-      this.router.navigate(['realtimesession', session.id]);
-    });
+    // create whiteboard
+    this.sessionService
+      .createWhiteboard({
+        title: 'realtime whiteboard',
+        defaultColor: '#5D3284',
+        cards: [],
+        shelfCards: []
+      })
+      .subscribe((realtimeWhiteboard: RealtimeWhiteboard) => {
+        // create session
+        this.sessionService
+          .createNewSession(realtimeSession, realtimeWhiteboard.id)
+          .subscribe((sessionResponse: any) => {
+            this.router.navigate(['realtimesession', sessionResponse.id]);
+          });
+      });
   }
 
   stopSession() {
