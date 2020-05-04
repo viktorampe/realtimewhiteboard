@@ -267,10 +267,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         id: card.id,
         whiteboardID: this.currentRealtimeSession.whiteboard.id,
         mode: 1, // Save in database as IDLE
-        type: card.type,
+        type: 0, // unimportant
         color: card.color,
         image: 'myUrl',
-        top: card.type,
+        top: card.top,
         left: card.left,
         viewModeImage: card.viewModeImage,
         inShelf: false,
