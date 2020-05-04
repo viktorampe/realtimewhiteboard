@@ -138,6 +138,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       );
       if (deletedSession.id === this.currentRealtimeSession.id) {
         // update behaviorSubject
+        console.log(deletedSession);
         this.setCurrentRealtimeSession(deletedSession);
       }
     });
