@@ -1,13 +1,13 @@
+import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
+import { SessionHelper } from '../util/sessionhelper';
 import Player from './player';
-import { RealtimeWhiteboard } from './realtimewhiteboard';
 
 export default class RealtimeSession {
   id: string;
   title: string;
   pincode: number;
-  whiteboard: RealtimeWhiteboard;
+  whiteboard: WhiteboardInterface;
   players: Player[];
-  version: number;
   lives: boolean;
 
   constructor(sessionResponse?: any) {
@@ -18,22 +18,14 @@ export default class RealtimeSession {
       ? this.setPlayers(sessionResponse.players.items)
       : null;
     this.whiteboard = sessionResponse
-      ? new RealtimeWhiteboard(sessionResponse.whiteboard)
+      ? SessionHelper.parseWhiteboard(sessionResponse.whiteboard)
       : null;
-    this.version = sessionResponse ? sessionResponse._version : null;
-    this.lives = sessionResponse ? this.setLives(sessionResponse) : true;
+    this.lives = true;
   }
 
   setPlayers(playerResponse: any[]): Player[] {
     const players: Player[] = [];
     playerResponse.forEach(pr => players.push(new Player(pr)));
     return players;
-  }
-
-  setLives(sessionResponse: any): boolean {
-    if (sessionResponse._deleted) {
-      return false;
-    }
-    return true;
   }
 }

@@ -2,16 +2,8 @@ type Session @model {
   id: ID!
   title: String!
   pincode: Int!
+  whiteboard: String!
   players: [Player] @connection(keyName: "bySession", fields: ["id"])
-  whiteboardID: ID!
-  whiteboard: Whiteboard @connection(fields: ["whiteboardID"])
-}
-
-type Whiteboard @model {
-  id: ID!
-  title: String
-  defaultColor: String
-  cards: [Card] @connection(keyName: "byWhiteboard", fields: ["id"])
 }
 
 type Player
@@ -25,25 +17,4 @@ type Player
   sessionID: ID!
   session: Session @connection(fields: ["sessionID"])
   fullName: String!
-}
-
-type Card
-  @model
-  @key(
-    name: "byWhiteboard"
-    fields: ["whiteboardID"]
-    queryField: "cardByWhiteboardID"
-  ) {
-  id: String!
-  whiteboardID: ID!
-  whiteboard: Whiteboard @connection(fields: ["whiteboardID"])
-  mode: Int!
-  type: Int!
-  color: String!
-  description: String
-  image: String
-  top: Int!
-  left: Int!
-  viewModeImage: Boolean!
-  inShelf: Boolean!
 }

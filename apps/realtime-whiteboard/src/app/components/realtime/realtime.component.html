@@ -5,6 +5,5 @@
   [cards]="session.whiteboard.cards"
   [shelfCards]="session.whiteboard.shelfCards"
   [canManage]="this.canManage"
-  (whiteboardChange)="updateWhiteboard($event)"
-  (cardChange)="updateCard($event)"
+  (changes)="updateWhiteboard($event)"
 ></campus-whiteboard>
