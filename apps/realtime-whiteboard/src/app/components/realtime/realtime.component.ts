@@ -40,7 +40,6 @@ export class RealtimeComponent implements OnInit {
 
   // triggers when Whiteboard has changed
   updateWhiteboard(updatedWhiteboard: WhiteboardInterface) {
-    console.log(updatedWhiteboard);
     // get update type
     const update = UpdateHelper.handleWhiteboardUpdate(
       this.session.whiteboard,
@@ -66,11 +65,11 @@ export class RealtimeComponent implements OnInit {
 
     // card was deleted
     if (update.includes('DELETE_CARD')) {
-      const cardToDelete = this.session.whiteboard.cards.filter(
+      const cardsToDelete = this.session.whiteboard.cards.filter(
         currentCard =>
           !updatedWhiteboard.cards.map(c => c.id).includes(currentCard.id)
       );
-      this.sessionService.deleteCard(cardToDelete[0]);
+      cardsToDelete.forEach(c => this.sessionService.deleteCard(c));
     }
   }
 

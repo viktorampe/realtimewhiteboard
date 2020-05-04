@@ -260,7 +260,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   updateWhiteboardData(
     updatedWhiteboard: WhiteboardInterface
   ): Observable<Boolean> {
-    console.log(this.currentRealtimeSession.whiteboard);
     return from(
       this.apiService.UpdateWhiteboard({
         id: this.currentRealtimeSession.whiteboard.id,
