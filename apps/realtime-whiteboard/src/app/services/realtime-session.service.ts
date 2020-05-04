@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
+import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../API.service';
+import { RealtimeCard } from '../models/realtimecard';
 import RealtimeSession from '../models/realtimesession';
+import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
+import { UpdateHelper } from '../util/updateHelper';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -17,7 +21,7 @@ export interface WhiteboardDataServiceInterface {
 })
 export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession$ = new BehaviorSubject<RealtimeSession>(null);
-  currentRealtimeSession: RealtimeSession;
+  currentRealtimeSession: RealtimeSession = new RealtimeSession();
 
   constructor(private apiService: APIService) {}
 
@@ -29,13 +33,14 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   //#region SESSOINS
 
   createNewSession(
-    realtimeSession: RealtimeSession
+    realtimeSession: RealtimeSession,
+    whiteboardID: string
   ): Observable<RealtimeSession> {
     return from(
       this.apiService.CreateSession({
         title: realtimeSession.title,
         pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+        whiteboardID: whiteboardID
       })
     ).pipe(
       // get created session
@@ -50,10 +55,21 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   getSession(sessionId: string) {
+    // get session
     this.apiService
       .GetSession(sessionId)
-      .then(sessionResponse => {
-        this.setCurrentRealtimeSession(new RealtimeSession(sessionResponse));
+      .then((sessionResponse: any) => {
+        const realtimeSession = new RealtimeSession(sessionResponse);
+        // get whiteboard
+        this.apiService
+          .GetWhiteboard(realtimeSession.whiteboard.id)
+          .then((whiteboardResponse: any) => {
+            realtimeSession.whiteboard = new RealtimeWhiteboard(
+              whiteboardResponse
+            );
+            this.setCurrentRealtimeSession(realtimeSession);
+          })
+          .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
   }
@@ -63,16 +79,40 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       .UpdateSession({
         id: realtimeSession.id,
         title: realtimeSession.title,
-        pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
+        pincode: realtimeSession.pincode
       })
       .then(() => {})
       .catch(err => console.log(err));
   }
 
   DeleteSession(sessionId: string) {
+    // delete cards from active whiteboard
+    this.currentRealtimeSession.whiteboard.cards.forEach(c => {
+      UpdateHelper.setVersionOfCard(this.currentRealtimeSession, c);
+      this.apiService
+        .DeleteCard({
+          id: c.id,
+          _version: c.version
+        })
+        .then(() => {})
+        .catch(err => console.log(err));
+    });
+
+    // delete active whiteboard
     this.apiService
-      .DeleteSession({ id: sessionId })
+      .DeleteWhiteboard({
+        id: this.currentRealtimeSession.whiteboard.id,
+        _version: this.currentRealtimeSession.whiteboard.version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+
+    // delete session
+    this.apiService
+      .DeleteSession({
+        id: sessionId,
+        _version: this.currentRealtimeSession.version
+      })
       .then(() => {})
       .catch(err => console.log(err));
   }
@@ -93,11 +133,12 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   subscribeOnSessionDeletes() {
     this.apiService.OnDeleteSessionListener.subscribe((evt: any) => {
-      if (
-        evt.value.data.onDeleteSession.id === this.currentRealtimeSession.id
-      ) {
-        this.currentRealtimeSession.lives = false;
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      const deletedSession = new RealtimeSession(
+        evt.value.data.onDeleteSession
+      );
+      if (deletedSession.id === this.currentRealtimeSession.id) {
+        // update behaviorSubject
+        this.setCurrentRealtimeSession(deletedSession);
       }
     });
   }
@@ -130,6 +171,154 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#endregion
 
+  //#region WHITEBOARD
+
+  createWhiteboard(
+    whiteboard: WhiteboardInterface
+  ): Observable<RealtimeWhiteboard> {
+    return from(
+      this.apiService.CreateWhiteboard({
+        title: whiteboard.title,
+        defaultColor: whiteboard.defaultColor
+      })
+    ).pipe(
+      map(whiteboardResponse => {
+        this.currentRealtimeSession.whiteboard = new RealtimeWhiteboard(
+          whiteboardResponse
+        );
+        return this.currentRealtimeSession.whiteboard;
+      })
+    );
+  }
+
+  subscribeOnWhiteboardUpdates() {
+    this.apiService.OnUpdateWhiteboardListener.subscribe((evt: any) => {
+      if (
+        evt.value.data.onUpdateWhiteboard.id ===
+        this.currentRealtimeSession.whiteboard.id
+      ) {
+        this.currentRealtimeSession.whiteboard = new RealtimeWhiteboard(
+          evt.value.data.onUpdateWhiteboard
+        );
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      }
+    });
+  }
+
+  //#endregion
+
+  //#region CARDS
+
+  subscribeOnUpdateCard() {
+    this.apiService.OnUpdateCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onUpdateCard
+      );
+      console.log('cardResponse', cardResponse);
+      // update is for this whiteboard
+      if (
+        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+      ) {
+        // find card to update
+        let cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
+          c => c.id === cardResponse.id
+        );
+
+        // ceck if card exists
+        if (cardToUpdate === undefined) {
+          this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
+          this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        } else {
+          // update necessary properties
+          cardToUpdate.color = cardResponse.color;
+          cardToUpdate.description = cardResponse.description;
+          cardToUpdate.image = cardResponse.image;
+          cardToUpdate.top = cardResponse.top;
+          cardToUpdate.left = cardResponse.left;
+          cardToUpdate.viewModeImage = cardResponse.viewModeImage;
+          cardToUpdate.version = cardResponse.version;
+          this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        }
+      }
+    });
+  }
+
+  subscribeOnDeleteCard() {
+    this.apiService.OnDeleteCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onDeleteCard
+      );
+      if (
+        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+      ) {
+        // remove card from array
+        this.currentRealtimeSession.whiteboard.cards = this.currentRealtimeSession.whiteboard.cards.filter(
+          c => c.id !== cardResponse.id
+        );
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      }
+    });
+  }
+
+  createCard(card: CardInterface) {
+    console.log(card);
+    this.apiService
+      .CreateCard({
+        id: card.id,
+        whiteboardID: this.currentRealtimeSession.whiteboard.id,
+        mode: 1, // Save in database as IDLE
+        type: card.type,
+        color: card.color,
+        image: 'myUrl',
+        top: card.type,
+        left: card.left,
+        viewModeImage: card.viewModeImage,
+        inShelf: false,
+        _version: 0
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
+  updateCard(realtimeCard: RealtimeCard) {
+    console.log(realtimeCard);
+    // can't save empty string
+    UpdateHelper.checkDescription(realtimeCard);
+
+    // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
+    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
+
+    // update necessary properties
+    this.apiService
+      .UpdateCard({
+        id: realtimeCard.id,
+        color: realtimeCard.color,
+        description: realtimeCard.description,
+        image: 'myUrl',
+        top: realtimeCard.top,
+        left: realtimeCard.left,
+        mode: 1, // always save card as IDLE mode
+        viewModeImage: realtimeCard.viewModeImage,
+        _version: realtimeCard.version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
+  deleteCard(realtimeCard: RealtimeCard) {
+    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
+
+    this.apiService
+      .DeleteCard({
+        id: realtimeCard.id,
+        _version: realtimeCard.version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
+  //#endregion
+
   //#region INTERFACE IMPLEMENTATION
 
   getWhiteboardData(): Observable<WhiteboardInterface> {
@@ -142,13 +331,15 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     );
   }
 
-  updateWhiteboardData(whiteboard: WhiteboardInterface): Observable<Boolean> {
+  updateWhiteboardData(
+    updatedWhiteboard: WhiteboardInterface
+  ): Observable<Boolean> {
     return from(
-      this.apiService.UpdateSession({
-        id: this.currentRealtimeSession.id,
-        title: this.currentRealtimeSession.title,
-        pincode: this.currentRealtimeSession.pincode,
-        whiteboard: JSON.stringify(whiteboard)
+      this.apiService.UpdateWhiteboard({
+        id: this.currentRealtimeSession.whiteboard.id,
+        title: updatedWhiteboard.title,
+        defaultColor: updatedWhiteboard.defaultColor,
+        _version: this.currentRealtimeSession.whiteboard.version
       })
     ).pipe(mapTo(true));
   }
@@ -159,42 +350,3 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#endregion
 }
-
-/*
-
-
-  getSession(sessionId: string): Observable<RealtimeSession> {
-    return from(this.apiService.GetSession(sessionId)).pipe(
-      map(sessionResponse => {
-        return new RealtimeSession(sessionResponse);
-      })
-    );
-  }
-
-
-  updateSession(realtimeSession: RealtimeSession): Observable<boolean> {
-    return from(
-      this.apiService.UpdateSession({
-        id: realtimeSession.id,
-        title: realtimeSession.title,
-        pincode: realtimeSession.pincode,
-        whiteboard: JSON.stringify(realtimeSession.whiteboard)
-      })
-    ).pipe(mapTo(true));
-  }
-
-
-  getPlayersBySession(sessionId: string): Observable<Player[]> {
-    return from(this.apiService.PlayerBySessionId(sessionId)).pipe(
-      map(playersResponse => {
-        const players: Player[] = [];
-        playersResponse.items.forEach(pr => {
-          players.push(new Player(pr));
-        });
-        return players;
-      })
-    );
-  }
-
-
-*/

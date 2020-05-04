@@ -1,13 +1,6 @@
 <nav>
   <div class="content_container" id="nav_container">
-    <ng-container *ngIf="!session?.lives; else sessionLives">
-      <div class="nav_item">
-        <button class="btn btnPrimary" (click)="setupSession()"
-          >start session</button
-        >
-      </div>
-    </ng-container>
-    <ng-template #sessionLives>
+    <ng-container *ngIf="session?.lives; else noSession">
       <div class="nav_item">
         <button class="btn btnPrimary" (click)="stopSession()"
           >Stop session</button
@@ -22,6 +15,13 @@
         <button class="btn btnSecundary" (click)="openActivePlayersModal()">
           Players
         </button>
+      </div>
+    </ng-container>
+    <ng-template #noSession>
+      <div class="nav_item">
+        <button class="btn btnPrimary" (click)="setupSession()"
+          >start session</button
+        >
       </div>
     </ng-template>
   </div>

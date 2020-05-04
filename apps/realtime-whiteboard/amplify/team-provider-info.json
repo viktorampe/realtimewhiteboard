@@ -1,15 +1,15 @@
 {
-    "dev": {
-        "awscloudformation": {
-            "AuthRoleName": "amplify-realtime-whiteboard-dev-130516-authRole",
-            "UnauthRoleArn": "arn:aws:iam::924476590741:role/amplify-realtime-whiteboard-dev-130516-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::924476590741:role/amplify-realtime-whiteboard-dev-130516-authRole",
-            "Region": "eu-west-1",
-            "DeploymentBucketName": "amplify-realtime-whiteboard-dev-130516-deployment",
-            "UnauthRoleName": "amplify-realtime-whiteboard-dev-130516-unauthRole",
-            "StackName": "amplify-realtime-whiteboard-dev-130516",
-            "StackId": "arn:aws:cloudformation:eu-west-1:924476590741:stack/amplify-realtime-whiteboard-dev-130516/d1da45d0-82f6-11ea-9236-02bbe9b74d60",
-            "AmplifyAppId": "d12dmrq92t795l"
-        }
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-realtimewhiteboard-dev-171932-authRole",
+      "UnauthRoleArn": "arn:aws:iam::924476590741:role/amplify-realtimewhiteboard-dev-171932-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::924476590741:role/amplify-realtimewhiteboard-dev-171932-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-realtimewhiteboard-dev-171932-deployment",
+      "UnauthRoleName": "amplify-realtimewhiteboard-dev-171932-unauthRole",
+      "StackName": "amplify-realtimewhiteboard-dev-171932",
+      "StackId": "arn:aws:cloudformation:eu-west-1:924476590741:stack/amplify-realtimewhiteboard-dev-171932/7fcace00-889a-11ea-a21b-02dbc193ed28",
+      "AmplifyAppId": "d3vpu0j4spfgsu"
     }
+  }
 }

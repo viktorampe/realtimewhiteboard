@@ -1,20 +1,20 @@
 {
-	"api": {
-		"realtimewhiteboard": {
-			"service": "AppSync",
-			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "API_KEY",
-						"apiKeyConfig": {
-							"description": "realtimewhiteboard API key",
-							"apiKeyExpirationDays": 7
-						}
-					}
-				}
-			}
-		}
-	}
+  "api": {
+    "realtimewhiteboard": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "description": "realtime api",
+              "apiKeyExpirationDays": 7
+            }
+          }
+        }
+      }
+    }
+  }
 }
