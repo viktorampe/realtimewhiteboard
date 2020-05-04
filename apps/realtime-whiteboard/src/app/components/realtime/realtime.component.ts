@@ -4,6 +4,7 @@ import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.i
 import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
+import { UpdateHelper } from '../../util/updateHelper';
 
 @Component({
   selector: 'campus-realtime',
@@ -39,20 +40,21 @@ export class RealtimeComponent implements OnInit {
 
   // triggers when Whiteboard has changed
   updateWhiteboard(updatedWhiteboard: WhiteboardInterface) {
+    console.log(updatedWhiteboard);
+    // get update type
+    const update = UpdateHelper.handleWhiteboardUpdate(
+      this.session.whiteboard,
+      updatedWhiteboard
+    );
     // title / defaultcolor changed
-    if (
-      this.session.whiteboard.title !== updatedWhiteboard.title ||
-      this.session.whiteboard.defaultColor !== updatedWhiteboard.defaultColor
-    ) {
-      console.log('updateWhiteboard');
+    if (update.includes('UPDATE_WHITEBOARD')) {
       this.sessionService
         .updateWhiteboardData(updatedWhiteboard)
         .subscribe(() => {});
     }
 
     // card was added
-    if (this.session.whiteboard.cards.length < updatedWhiteboard.cards.length) {
-      console.log('create card');
+    if (update.includes('CREATE_CARD')) {
       const cardsToCreate = updatedWhiteboard.cards.filter(
         newCards =>
           !this.session.whiteboard.cards
@@ -63,8 +65,7 @@ export class RealtimeComponent implements OnInit {
     }
 
     // card was deleted
-    if (this.session.whiteboard.cards.length > updatedWhiteboard.cards.length) {
-      console.log('delete card');
+    if (update.includes('DELETE_CARD')) {
       const cardToDelete = this.session.whiteboard.cards.filter(
         currentCard =>
           !updatedWhiteboard.cards.map(c => c.id).includes(currentCard.id)

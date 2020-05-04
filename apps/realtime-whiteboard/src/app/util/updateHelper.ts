@@ -1,6 +1,8 @@
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
+import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import { RealtimeCard } from '../models/realtimecard';
 import RealtimeSession from '../models/realtimesession';
+import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
 
 export class UpdateHelper {
   public static checkIfSessionHasCard(
@@ -14,7 +16,8 @@ export class UpdateHelper {
     realtimeSession: RealtimeSession,
     cardId: string
   ): number {
-    return realtimeSession.whiteboard.cards.find(c => c.id === cardId).version;
+    const card = realtimeSession.whiteboard.cards.find(c => c.id === cardId);
+    return card.version;
   }
 
   // if version undefined set to 1 else get last version (A newly created card does not have a version)
@@ -39,5 +42,34 @@ export class UpdateHelper {
     ) {
       realtimeCard.description = 'empty';
     }
+  }
+
+  public static handleWhiteboardUpdate(
+    currentWhiteboard: RealtimeWhiteboard,
+    updatedWhiteboard: WhiteboardInterface
+  ): string[] {
+    const actions: string[] = [];
+    // title / defaultcolor changed
+    if (
+      currentWhiteboard.title !== updatedWhiteboard.title ||
+      currentWhiteboard.defaultColor !== updatedWhiteboard.defaultColor
+    ) {
+      console.log('updateWhiteboard');
+      actions.push('UPDATE_WHITEBOARD');
+    }
+
+    // card was added
+    if (currentWhiteboard.cards.length < updatedWhiteboard.cards.length) {
+      console.log('create card');
+      actions.push('CREATE_CARD');
+    }
+
+    // card was deleted
+    if (currentWhiteboard.cards.length > updatedWhiteboard.cards.length) {
+      console.log('delete card');
+      actions.push('DELETE_CARD');
+    }
+
+    return actions;
   }
 }
