@@ -15,6 +15,7 @@ export class RealtimeComponent implements OnInit {
   sessionId: string;
   session: RealtimeSession;
   canManage: boolean;
+  loggedIn: boolean;
 
   constructor(
     private sessionService: RealtimeSessionService,
@@ -24,6 +25,8 @@ export class RealtimeComponent implements OnInit {
   ngOnInit() {
     // is user a publisher or a teacher?
     this.canManage = false;
+    // is user logged in with correct pin?
+    this.loggedIn = false;
     // get customer id from route
     this.route.paramMap.subscribe(params => {
       this.sessionId = params.get('id');

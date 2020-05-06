@@ -1,0 +1,16 @@
+@import '../../../constants.scss';
+
+.joinSession_container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $gradient;
+
+  #section_joinSession {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+  }
+}

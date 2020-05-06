@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
 import { RealtimeComponent } from './components/realtime/realtime.component';
+import { JoinsessionComponent } from './ui/joinsession/joinsession.component';
 import { PlayertableComponent } from './ui/playertable/playertable.component';
 import { SessiondetailsdialogComponent } from './ui/sessiondetailsdialog/sessiondetailsdialog.component';
 import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetupdialog.component';
@@ -23,7 +24,8 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     NavComponent,
     HomeComponent,
     PlayertableComponent,
-    SessiondetailsdialogComponent
+    SessiondetailsdialogComponent,
+    JoinsessionComponent
   ],
   imports: [
     BrowserModule,
