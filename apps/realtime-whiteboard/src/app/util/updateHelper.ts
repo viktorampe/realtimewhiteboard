@@ -72,4 +72,9 @@ export class UpdateHelper {
 
     return actions;
   }
+
+  public static prepareCard(card: CardInterface) {
+    card.left = Math.round(card.left);
+    card.top = Math.round(card.top);
+  }
 }
