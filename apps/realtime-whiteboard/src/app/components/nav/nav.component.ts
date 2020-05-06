@@ -22,6 +22,7 @@ export class NavComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // subscribe on realtime session updates
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
         this.session = realtimesession;
@@ -33,6 +34,7 @@ export class NavComponent implements OnInit {
         }
       }
     );
+    // TODO: subscribe on active player (if active player === creator of session --> is teacher --> show nav)
   }
 
   setupSession() {

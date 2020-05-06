@@ -42,8 +42,13 @@ export class RealtimeComponent implements OnInit {
     );
   }
 
-  joinSession(player: Player) {
-    console.log('joinSession', player);
+  joinSession(playerAndPincode: { player: Player; pincode: number }) {
+    const { player, pincode } = playerAndPincode;
+    if (pincode === this.session.pincode) {
+      this.sessionService.createPlayer(player.fullName);
+      // TODO: set player as active player in playerService behavior subject
+      this.loggedIn = true;
+    }
   }
 
   // triggers when Whiteboard has changed
