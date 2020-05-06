@@ -12,5 +12,12 @@
     background: white;
     padding: 25px;
     border-radius: 10px;
+
+    .joinSession_actions {
+      width: 100%;
+      .btn {
+        width: 100%;
+      }
+    }
   }
 }

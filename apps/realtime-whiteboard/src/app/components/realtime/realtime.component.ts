@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
+import Player from '../../models/player';
 import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
@@ -39,6 +40,10 @@ export class RealtimeComponent implements OnInit {
         this.session = realtimeSession;
       }
     );
+  }
+
+  joinSession(player: Player) {
+    console.log('joinSession', player);
   }
 
   // triggers when Whiteboard has changed
