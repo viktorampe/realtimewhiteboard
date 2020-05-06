@@ -18,18 +18,22 @@ export class JoinsessionComponent implements OnInit {
     Validators.min(0),
     Validators.max(999999)
   ]);
+  nameFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2)
+  ]);
 
   constructor() {}
 
   ngOnInit() {}
 
   join() {
-    const player: Player = {
-      id: null,
-      sessionId: null,
-      fullName: 'viktor ampe'
-    };
-    if (this.pincodeFormControl.valid) {
+    if (this.pincodeFormControl.valid && this.nameFormControl.valid) {
+      const player: Player = {
+        id: null,
+        sessionId: null,
+        fullName: this.nameFormControl.value
+      };
       this.joinSession.emit({
         player: player,
         pincode: this.pincodeFormControl.value

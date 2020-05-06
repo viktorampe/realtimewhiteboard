@@ -6,6 +6,18 @@
     <form>
       <div class="form_group">
         <mat-form-field>
+          <mat-label><h4>Name</h4></mat-label>
+          <input matInput [formControl]="nameFormControl" />
+          <mat-error *ngIf="nameFormControl.hasError('minlength')">
+            Name should be at least 2 characters long
+          </mat-error>
+          <mat-error *ngIf="nameFormControl.hasError('required')">
+            Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form_group">
+        <mat-form-field>
           <mat-label><h4>Pincode</h4></mat-label>
           <input type="number" matInput [formControl]="pincodeFormControl" />
           <mat-error *ngIf="pincodeFormControl.hasError('min')">
