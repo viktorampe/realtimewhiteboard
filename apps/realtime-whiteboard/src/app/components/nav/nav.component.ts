@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { RealtimeSessionService } from '../../services/realtime-session.service';
-import { ActiveplayersdialogComponent } from '../../ui/activeplayersdialog/activeplayersdialog.component';
+import { SessiondetailsdialogComponent } from '../../ui/sessiondetailsdialog/sessiondetailsdialog.component';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
 
 @Component({
@@ -79,10 +79,14 @@ export class NavComponent implements OnInit {
     this.sessionService.createPlayer('new player');
   }
 
-  openActivePlayersModal() {
-    const dialogRef = this.dialog.open(ActiveplayersdialogComponent, {
+  openInfoModal() {
+    const dialogRef = this.dialog.open(SessiondetailsdialogComponent, {
       width: '75%',
-      data: { players: this.session.players }
+      data: {
+        title: this.session.title,
+        pincode: this.session.pincode,
+        players: this.session.players
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
