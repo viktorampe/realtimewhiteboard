@@ -1,5 +1,27 @@
 <div class="joinSession_container">
   <section id="section_joinSession">
-    <p>Join the session!</p>
+    <h2>Join the session!</h2>
+    <h4>Enter the pincode to join.</h4>
+    <hr />
+    <form>
+      <div class="form_group">
+        <mat-form-field>
+          <mat-label><h4>Pincode</h4></mat-label>
+          <input type="number" matInput [formControl]="pincodeFormControl" />
+          <mat-error *ngIf="pincodeFormControl.hasError('min')">
+            Pincode should be between 0 and 999999
+          </mat-error>
+          <mat-error *ngIf="pincodeFormControl.hasError('max')">
+            Pincode should be between 0 and 999999
+          </mat-error>
+          <mat-error *ngIf="pincodeFormControl.hasError('required')">
+            Pincode is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+    <div class="joinSession_actions">
+      <button class="btn btnPrimary" (click)="join()">Join</button>
+    </div>
   </section>
 </div>
