@@ -4,7 +4,8 @@ import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.i
 import Player from '../../models/player';
 import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
-import { RealtimeSessionService } from '../../services/realtime-session.service';
+import { ActiveplayerService } from '../../services/activeplayer/activeplayer.service';
+import { RealtimeSessionService } from '../../services/realtimesession/realtime-session.service';
 import { UpdateHelper } from '../../util/updateHelper';
 
 @Component({
@@ -20,6 +21,7 @@ export class RealtimeComponent implements OnInit {
 
   constructor(
     private sessionService: RealtimeSessionService,
+    private activePlayerService: ActiveplayerService,
     private route: ActivatedRoute
   ) {}
 
@@ -45,9 +47,14 @@ export class RealtimeComponent implements OnInit {
   joinSession(playerAndPincode: { player: Player; pincode: number }) {
     const { player, pincode } = playerAndPincode;
     if (pincode === this.session.pincode) {
-      this.sessionService.createPlayer(player.fullName);
-      // TODO: set player as active player in playerService behavior subject
-      this.loggedIn = true;
+      // post player
+      this.sessionService
+        .createPlayer(player)
+        .subscribe((newPlayer: Player) => {
+          // set new player as active player
+          this.activePlayerService.setActivePlayer(newPlayer);
+          this.loggedIn = true;
+        });
     }
   }
 

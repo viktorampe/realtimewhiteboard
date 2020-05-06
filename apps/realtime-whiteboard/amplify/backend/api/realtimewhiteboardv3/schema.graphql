@@ -25,6 +25,7 @@ type Player
   sessionID: ID!
   session: Session @connection(fields: ["sessionID"])
   fullName: String!
+  isTeacher: Boolean!
 }
 
 type Card

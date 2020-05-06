@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import Player from '../../models/player';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
-import { RealtimeSessionService } from '../../services/realtime-session.service';
+import { ActiveplayerService } from '../../services/activeplayer/activeplayer.service';
+import { RealtimeSessionService } from '../../services/realtimesession/realtime-session.service';
 import { SessiondetailsdialogComponent } from '../../ui/sessiondetailsdialog/sessiondetailsdialog.component';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
 
@@ -18,6 +20,7 @@ export class NavComponent implements OnInit {
   constructor(
     private router: Router,
     private sessionService: RealtimeSessionService,
+    private activePlayerService: ActiveplayerService,
     public dialog: MatDialog
   ) {}
 
@@ -34,7 +37,11 @@ export class NavComponent implements OnInit {
         }
       }
     );
-    // TODO: subscribe on active player (if active player === creator of session --> is teacher --> show nav)
+    // subscribe on active player
+    this.activePlayerService.activePlayer$.subscribe((activePlayer: Player) => {
+      // TODO if player === teacher ? show nav : fullscreenmode
+      console.log(activePlayer);
+    });
   }
 
   setupSession() {
@@ -78,7 +85,13 @@ export class NavComponent implements OnInit {
   }
 
   addPlayer() {
-    this.sessionService.createPlayer('new player');
+    const player: Player = {
+      id: null,
+      sessionId: this.session.id,
+      fullName: 'new player',
+      isTeacher: false
+    };
+    this.sessionService.createPlayer(player);
   }
 
   openInfoModal() {

@@ -9,6 +9,7 @@ subscription OnCreateSession {
         id
         sessionID
         fullName
+        isTeacher
         _version
         _deleted
         _lastChangedAt
@@ -44,6 +45,7 @@ subscription OnUpdateSession {
         id
         sessionID
         fullName
+        isTeacher
         _version
         _deleted
         _lastChangedAt
@@ -79,6 +81,7 @@ subscription OnDeleteSession {
         id
         sessionID
         fullName
+        isTeacher
         _version
         _deleted
         _lastChangedAt
@@ -220,6 +223,7 @@ subscription OnCreatePlayer {
       _lastChangedAt
     }
     fullName
+    isTeacher
     _version
     _deleted
     _lastChangedAt
@@ -251,6 +255,7 @@ subscription OnUpdatePlayer {
       _lastChangedAt
     }
     fullName
+    isTeacher
     _version
     _deleted
     _lastChangedAt
@@ -282,6 +287,7 @@ subscription OnDeletePlayer {
       _lastChangedAt
     }
     fullName
+    isTeacher
     _version
     _deleted
     _lastChangedAt

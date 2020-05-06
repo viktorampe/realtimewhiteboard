@@ -4,11 +4,12 @@ import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
-import { APIService } from '../API.service';
-import { RealtimeCard } from '../models/realtimecard';
-import RealtimeSession from '../models/realtimesession';
-import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
-import { UpdateHelper } from '../util/updateHelper';
+import { APIService } from '../../API.service';
+import Player from '../../models/player';
+import { RealtimeCard } from '../../models/realtimecard';
+import RealtimeSession from '../../models/realtimesession';
+import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
+import { UpdateHelper } from '../../util/updateHelper';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -162,14 +163,18 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     );
   }
 
-  createPlayer(fullName: string) {
-    this.apiService
-      .CreatePlayer({
+  createPlayer(player: Player): Observable<Player> {
+    return from(
+      this.apiService.CreatePlayer({
         sessionID: this.currentRealtimeSession.id,
-        fullName: fullName
+        fullName: player.fullName,
+        isTeacher: player.isTeacher
       })
-      .then(() => {})
-      .catch(err => console.log(err));
+    ).pipe(
+      map(playerResponse => {
+        return new Player(playerResponse);
+      })
+    );
   }
 
   createWhiteboard(

@@ -3,7 +3,7 @@ import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { iconMap } from 'libs/whiteboard/src/lib/icons/icon-mapping';
 import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from 'libs/whiteboard/src/lib/tokens/whiteboard-element-icon-mapping.token';
-import { RealtimeSessionService } from './services/realtime-session.service';
+import { RealtimeSessionService } from './services/realtimesession/realtime-session.service';
 
 @Component({
   selector: 'campus-root',
