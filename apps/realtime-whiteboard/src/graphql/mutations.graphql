@@ -12,6 +12,7 @@ mutation CreateSession(
         id
         sessionID
         fullName
+        isTeacher
         _version
         _deleted
         _lastChangedAt
@@ -50,6 +51,7 @@ mutation UpdateSession(
         id
         sessionID
         fullName
+        isTeacher
         _version
         _deleted
         _lastChangedAt
@@ -88,6 +90,7 @@ mutation DeleteSession(
         id
         sessionID
         fullName
+        isTeacher
         _version
         _deleted
         _lastChangedAt
@@ -241,6 +244,7 @@ mutation CreatePlayer(
       _lastChangedAt
     }
     fullName
+    isTeacher
     _version
     _deleted
     _lastChangedAt
@@ -275,6 +279,7 @@ mutation UpdatePlayer(
       _lastChangedAt
     }
     fullName
+    isTeacher
     _version
     _deleted
     _lastChangedAt
@@ -309,6 +314,7 @@ mutation DeletePlayer(
       _lastChangedAt
     }
     fullName
+    isTeacher
     _version
     _deleted
     _lastChangedAt

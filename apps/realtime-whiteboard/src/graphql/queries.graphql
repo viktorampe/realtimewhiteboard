@@ -46,6 +46,7 @@ query GetSession($id: ID!) {
         id
         sessionID
         fullName
+        isTeacher
         _version
         _deleted
         _lastChangedAt
@@ -207,6 +208,7 @@ query SyncPlayers(
         _lastChangedAt
       }
       fullName
+      isTeacher
       _version
       _deleted
       _lastChangedAt
@@ -241,6 +243,7 @@ query GetPlayer($id: ID!) {
       _lastChangedAt
     }
     fullName
+    isTeacher
     _version
     _deleted
     _lastChangedAt
@@ -265,6 +268,7 @@ query ListPlayers(
         _lastChangedAt
       }
       fullName
+      isTeacher
       _version
       _deleted
       _lastChangedAt
@@ -404,6 +408,7 @@ query PlayerBySessionId(
         _lastChangedAt
       }
       fullName
+      isTeacher
       _version
       _deleted
       _lastChangedAt

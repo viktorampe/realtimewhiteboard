@@ -1,15 +1,17 @@
 {
-  "projectName": "realtimewhiteboard",
-  "version": "3.0",
-  "frontend": "javascript",
-  "javascript": {
-    "framework": "angular",
-    "config": {
-      "SourceDir": "src",
-      "DistributionDir": "dist/realtime-whiteboard",
-      "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "ng serve"
-    }
-  },
-  "providers": ["awscloudformation"]
+    "projectName": "realtimewhiteboardv3",
+    "version": "3.0",
+    "frontend": "javascript",
+    "javascript": {
+        "framework": "angular",
+        "config": {
+            "SourceDir": "src",
+            "DistributionDir": "dist/realtime-whiteboard",
+            "BuildCommand": "npm.cmd run-script build",
+            "StartCommand": "ng serve"
+        }
+    },
+    "providers": [
+        "awscloudformation"
+    ]
 }
