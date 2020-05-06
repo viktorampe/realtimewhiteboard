@@ -1,10 +1,15 @@
-<campus-whiteboard
-  *ngIf="session?.whiteboard"
-  [title]="session.whiteboard.title"
-  [defaultColor]="session.whiteboard.defaultColor"
-  [cards]="session.whiteboard.cards"
-  [shelfCards]="session.whiteboard.shelfCards"
-  [canManage]="this.canManage"
-  (whiteboardChange)="updateWhiteboard($event)"
-  (cardChange)="updateCard($event)"
-></campus-whiteboard>
+<ng-container *ngIf="!loggedIn; else activePlayer">
+  <campus-joinsession></campus-joinsession>
+</ng-container>
+<ng-template #activePlayer>
+  <campus-whiteboard
+    *ngIf="session?.whiteboard"
+    [title]="session.whiteboard.title"
+    [defaultColor]="session.whiteboard.defaultColor"
+    [cards]="session.whiteboard.cards"
+    [shelfCards]="session.whiteboard.shelfCards"
+    [canManage]="this.canManage"
+    (whiteboardChange)="updateWhiteboard($event)"
+    (cardChange)="updateCard($event)"
+  ></campus-whiteboard>
+</ng-template>
