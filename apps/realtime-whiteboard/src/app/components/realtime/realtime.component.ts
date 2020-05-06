@@ -60,6 +60,7 @@ export class RealtimeComponent implements OnInit {
             .map(currentCards => currentCards.id)
             .includes(newCards.id)
       );
+      UpdateHelper.prepareCard(cardsToCreate[0]);
       this.sessionService.createCard(cardsToCreate[0]);
     }
 
@@ -76,6 +77,7 @@ export class RealtimeComponent implements OnInit {
   // triggers when a Card recieved an update
   updateCard(updatedCard: RealtimeCard) {
     console.log('update card');
+    UpdateHelper.prepareCard(updatedCard);
     this.sessionService.updateCard(updatedCard);
   }
 
