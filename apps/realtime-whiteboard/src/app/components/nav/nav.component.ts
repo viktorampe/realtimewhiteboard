@@ -91,16 +91,6 @@ export class NavComponent implements OnInit {
     this.sessionService.DeleteSession(this.session.id);
   }
 
-  addPlayer() {
-    const player: Player = {
-      id: null,
-      sessionId: this.session.id,
-      fullName: 'new player',
-      isTeacher: false
-    };
-    this.sessionService.createPlayer(player);
-  }
-
   openInfoModal() {
     const dialogRef = this.dialog.open(SessiondetailsdialogComponent, {
       width: '75%',
