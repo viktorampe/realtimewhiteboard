@@ -55,6 +55,7 @@ export class RealtimeComponent implements OnInit {
         .subscribe((newPlayer: Player) => {
           // set new player as active player
           this.activePlayerService.setActivePlayer(newPlayer);
+          this.activePlayer = this.activePlayerService.getActivePlayer();
           // update ui to view realtimewhiteboard
           this.loggedIn = true;
         });
@@ -101,9 +102,16 @@ export class RealtimeComponent implements OnInit {
 
   // triggers when a Card recieved an update
   updateCard(updatedCard: RealtimeCard) {
-    console.log('update card');
-    UpdateHelper.prepareCard(updatedCard);
-    this.sessionService.updateCard(updatedCard, this.activePlayer);
+    const update = UpdateHelper.handleCardUpdate(
+      updatedCard,
+      this.activePlayer
+    );
+    if (update.includes('UPDATE_CARD')) {
+      this.sessionService.updateCard(updatedCard, this.activePlayer);
+    }
+    if (update.includes('RESET_CARD')) {
+      this.sessionService.resetCard(updatedCard.id);
+    }
   }
 
   private fetchSession() {
@@ -113,10 +121,12 @@ export class RealtimeComponent implements OnInit {
   private handleUI() {
     if (this.activePlayer !== null) {
       this.loggedIn = true;
-    }
-    if (this.activePlayer === null || !this.activePlayer.isTeacher) {
-      this.fullscreenService.setFullscreen(true);
+      if (!this.activePlayer.isTeacher) {
+        this.fullscreenService.setFullscreen(true);
+      }
+    } else {
       this.loggedIn = false;
+      this.fullscreenService.setFullscreen(true);
     }
   }
 }

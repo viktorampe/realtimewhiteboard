@@ -1,5 +1,6 @@
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
+import Player from '../models/player';
 import { RealtimeCard } from '../models/realtimecard';
 import RealtimeSession from '../models/realtimesession';
 import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
@@ -73,8 +74,37 @@ export class UpdateHelper {
     return actions;
   }
 
+  public static handleCardUpdate(
+    card: RealtimeCard,
+    activePlayer: Player
+  ): string[] {
+    const actions: string[] = [];
+    if (card.createdBy === activePlayer.id) {
+      console.log('update card');
+      this.prepareCard(card);
+      actions.push('UPDATE_CARD');
+    } else {
+      console.log('card update denied');
+      actions.push('RESET_CARD');
+    }
+    return actions;
+  }
+
   public static prepareCard(card: CardInterface) {
     card.left = Math.round(card.left);
     card.top = Math.round(card.top);
+  }
+
+  public static updateCardProperties(
+    cardToUpdate: RealtimeCard,
+    cardResponse: RealtimeCard
+  ) {
+    cardToUpdate.color = cardResponse.color;
+    cardToUpdate.description = cardResponse.description;
+    cardToUpdate.image = cardResponse.image;
+    cardToUpdate.top = cardResponse.top;
+    cardToUpdate.left = cardResponse.left;
+    cardToUpdate.viewModeImage = cardResponse.viewModeImage;
+    cardToUpdate.version = cardResponse.version;
   }
 }
