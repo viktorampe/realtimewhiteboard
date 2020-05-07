@@ -5,6 +5,7 @@ import Player from '../../models/player';
 import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
 import { ActiveplayerService } from '../../services/activeplayer/activeplayer.service';
+import { FullscreenService } from '../../services/fullscreen/fullscreen.service';
 import { RealtimeSessionService } from '../../services/realtimesession/realtime-session.service';
 import { UpdateHelper } from '../../util/updateHelper';
 
@@ -16,21 +17,18 @@ import { UpdateHelper } from '../../util/updateHelper';
 export class RealtimeComponent implements OnInit {
   sessionId: string;
   session: RealtimeSession;
-  canManage: boolean;
   loggedIn: boolean;
+  message: string;
 
   constructor(
     private sessionService: RealtimeSessionService,
     private activePlayerService: ActiveplayerService,
+    private fullscreenService: FullscreenService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    // is user a publisher or a teacher?
-    this.canManage = false;
-    // is user logged in with correct pin?
-    this.loggedIn = false;
-    // get customer id from route
+    // get session id from route
     this.route.paramMap.subscribe(params => {
       this.sessionId = params.get('id');
       this.fetchSession();
@@ -42,6 +40,8 @@ export class RealtimeComponent implements OnInit {
         this.session = realtimeSession;
       }
     );
+    // Update ui depending on active player
+    this.handleUI(this.activePlayerService.getActivePlayer());
   }
 
   joinSession(playerAndPincode: { player: Player; pincode: number }) {
@@ -53,8 +53,11 @@ export class RealtimeComponent implements OnInit {
         .subscribe((newPlayer: Player) => {
           // set new player as active player
           this.activePlayerService.setActivePlayer(newPlayer);
+          // update ui to view realtimewhiteboard
           this.loggedIn = true;
         });
+    } else {
+      this.message = 'Incorrect pincode';
     }
   }
 
@@ -103,5 +106,15 @@ export class RealtimeComponent implements OnInit {
 
   private fetchSession() {
     this.sessionService.getSession(this.sessionId);
+  }
+
+  private handleUI(activePlayer: Player) {
+    if (activePlayer !== null) {
+      this.loggedIn = true;
+    }
+    if (activePlayer === null || !activePlayer.isTeacher) {
+      this.fullscreenService.setFullscreen(true);
+      this.loggedIn = false;
+    }
   }
 }

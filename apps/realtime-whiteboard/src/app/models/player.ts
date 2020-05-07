@@ -4,10 +4,10 @@ export default class Player {
   fullName: string;
   isTeacher: boolean;
 
-  constructor(playerResponse: any) {
-    this.id = playerResponse.id;
-    this.sessionId = playerResponse.sessionId;
-    this.fullName = playerResponse.fullName;
-    this.isTeacher = playerResponse.isTeacher;
+  constructor(playerResponse?: any) {
+    this.id = playerResponse ? playerResponse.id : null;
+    this.sessionId = playerResponse ? playerResponse.sessionId : null;
+    this.fullName = playerResponse ? playerResponse.fullName : null;
+    this.isTeacher = playerResponse ? playerResponse.isTeacher : null;
   }
 }

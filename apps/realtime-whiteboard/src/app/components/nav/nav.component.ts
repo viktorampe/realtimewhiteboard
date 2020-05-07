@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import Player from '../../models/player';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
@@ -16,11 +17,11 @@ import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/session
 })
 export class NavComponent implements OnInit {
   session: RealtimeSession;
-
   constructor(
     private router: Router,
     private sessionService: RealtimeSessionService,
     private activePlayerService: ActiveplayerService,
+    private cookieService: CookieService,
     public dialog: MatDialog
   ) {}
 
@@ -37,11 +38,6 @@ export class NavComponent implements OnInit {
         }
       }
     );
-    // subscribe on active player
-    this.activePlayerService.activePlayer$.subscribe((activePlayer: Player) => {
-      // TODO if player === teacher ? show nav : fullscreenmode
-      console.log(activePlayer);
-    });
   }
 
   setupSession() {
@@ -56,12 +52,15 @@ export class NavComponent implements OnInit {
         realtimeSession.id = null;
         realtimeSession.title = result.sessionTitle;
         realtimeSession.pincode = result.sessionPincode;
-        this.startSession(realtimeSession);
+        const teacher = new Player();
+        teacher.fullName = result.teacherName;
+        teacher.isTeacher = true;
+        this.startSession(realtimeSession, teacher);
       }
     });
   }
 
-  private startSession(realtimeSession: RealtimeSession) {
+  private startSession(realtimeSession: RealtimeSession, teacher: Player) {
     // create whiteboard
     this.sessionService
       .createWhiteboard({
@@ -75,7 +74,15 @@ export class NavComponent implements OnInit {
         this.sessionService
           .createNewSession(realtimeSession, realtimeWhiteboard.id)
           .subscribe((sessionResponse: any) => {
-            this.router.navigate(['realtimesession', sessionResponse.id]);
+            // create player
+            this.sessionService
+              .createPlayer(teacher)
+              .subscribe((player: Player) => {
+                // set active player
+                this.activePlayerService.setActivePlayer(player);
+                // nav to realtime session
+                this.router.navigate(['realtimesession', sessionResponse.id]);
+              });
           });
       });
   }

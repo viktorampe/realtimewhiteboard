@@ -1,8 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { iconMap } from 'libs/whiteboard/src/lib/icons/icon-mapping';
 import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from 'libs/whiteboard/src/lib/tokens/whiteboard-element-icon-mapping.token';
+import { FullscreenService } from './services/fullscreen/fullscreen.service';
 import { RealtimeSessionService } from './services/realtimesession/realtime-session.service';
 
 @Component({
@@ -15,12 +16,15 @@ import { RealtimeSessionService } from './services/realtimesession/realtime-sess
 })
 export class AppComponent {
   title = 'realtime-whiteboard';
+  fullScreen: boolean;
 
   constructor(
     @Inject(WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN) private iconMapping,
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
-    private sessionService: RealtimeSessionService
+    private sessionService: RealtimeSessionService,
+    private fullscreenService: FullscreenService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.setupIconRegistry();
     // subscribe on session updates/deletes
@@ -33,6 +37,14 @@ export class AppComponent {
     // subscribe on card creation/deletes/updates
     this.sessionService.subscribeOnDeleteCard();
     this.sessionService.subscribeOnUpdateCard();
+  }
+
+  ngOnInit() {
+    // subscribe on fullscreen
+    this.fullscreenService.isFullscreen$.subscribe((isFS: boolean) => {
+      this.fullScreen = isFS;
+      this.cdRef.detectChanges(); // removes error
+    });
   }
 
   private setupIconRegistry() {

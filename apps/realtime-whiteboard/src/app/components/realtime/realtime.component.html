@@ -2,6 +2,7 @@
   <ng-container *ngIf="!loggedIn; else activePlayer">
     <campus-joinsession
       (joinSession)="joinSession($event)"
+      [message]="message"
     ></campus-joinsession>
   </ng-container>
   <ng-template #activePlayer>
@@ -11,7 +12,7 @@
       [defaultColor]="session.whiteboard.defaultColor"
       [cards]="session.whiteboard.cards"
       [shelfCards]="session.whiteboard.shelfCards"
-      [canManage]="this.canManage"
+      [canManage]="false"
       (whiteboardChange)="updateWhiteboard($event)"
       (cardChange)="updateCard($event)"
     ></campus-whiteboard>

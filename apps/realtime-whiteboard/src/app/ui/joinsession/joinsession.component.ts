@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import Player from '../../models/player';
 
@@ -12,6 +12,7 @@ export class JoinsessionComponent implements OnInit {
     player: Player;
     pincode: number;
   }>();
+  @Input() message: string;
 
   pincodeFormControl = new FormControl('', [
     Validators.required,

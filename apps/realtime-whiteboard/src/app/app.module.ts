@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { WhiteboardModule } from '@campus/whiteboard';
+import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
@@ -45,7 +46,7 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     MatTableModule
   ],
   entryComponents: [SessionsetupdialogComponent, SessiondetailsdialogComponent],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

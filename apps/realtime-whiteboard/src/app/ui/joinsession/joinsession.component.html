@@ -32,6 +32,9 @@
         </mat-form-field>
       </div>
     </form>
+    <div class="message" *ngIf="message !== undefined">
+      <p>{{ message }}</p>
+    </div>
     <div class="joinSession_actions">
       <button class="btn btnPrimary" (click)="join()">Join</button>
     </div>
