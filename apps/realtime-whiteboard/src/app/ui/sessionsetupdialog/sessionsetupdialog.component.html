@@ -5,11 +5,7 @@
   <div class="form_group">
     <mat-form-field>
       <mat-label><h4>Title</h4></mat-label>
-      <input
-        matInput
-        [(ngModel)]="sessionTitle"
-        [formControl]="titleFormControl"
-      />
+      <input matInput [formControl]="titleFormControl" />
       <mat-error *ngIf="titleFormControl.hasError('minlength')">
         Title should be at least 3 characters long
       </mat-error>
@@ -20,13 +16,20 @@
   </div>
   <div class="form_group">
     <mat-form-field>
+      <mat-label><h4>Teacher name</h4></mat-label>
+      <input matInput [formControl]="nameFormControl" />
+      <mat-error *ngIf="nameFormControl.hasError('minlength')">
+        Name should be at least 3 characters long
+      </mat-error>
+      <mat-error *ngIf="nameFormControl.hasError('required')">
+        Name is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form_group">
+    <mat-form-field>
       <mat-label><h4>Pincode</h4></mat-label>
-      <input
-        type="number"
-        matInput
-        [(ngModel)]="sessionPincode"
-        [formControl]="pincodeFormControl"
-      />
+      <input type="number" matInput [formControl]="pincodeFormControl" />
       <mat-error *ngIf="pincodeFormControl.hasError('min')">
         Pincode should be between 0 and 999999
       </mat-error>
@@ -39,17 +42,10 @@
     </mat-form-field>
   </div>
 </form>
+<div *ngIf="message !== undefined">
+  <p class="message">{{ message }}</p>
+</div>
 <div class="sessionsettup_dialog_actions">
-  <button
-    class="btn btnPrimary"
-    (click)="createSession()"
-    *ngIf="
-      titleFormControl.touched &&
-      titleFormControl.valid &&
-      pincodeFormControl.touched &&
-      pincodeFormControl.valid
-    "
-    >Create</button
-  >
+  <button class="btn btnPrimary" (click)="createSession()">Create</button>
   <button class="btn btnSecundary" (click)="cancel()">cancel</button>
 </div>

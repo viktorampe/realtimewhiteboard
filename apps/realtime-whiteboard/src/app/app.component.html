@@ -1,4 +1,4 @@
-<campus-nav></campus-nav>
-<div class="content">
+<campus-nav *ngIf="!fullScreen"></campus-nav>
+<div [ngClass]="{ fullscreen: fullScreen }" class="content">
   <router-outlet></router-outlet>
 </div>

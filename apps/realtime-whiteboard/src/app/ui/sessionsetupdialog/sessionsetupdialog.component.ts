@@ -8,12 +8,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./sessionsetupdialog.component.scss']
 })
 export class SessionsetupdialogComponent implements OnInit {
-  sessionTitle: String = '';
-  sessionPincode: number;
+  message: string;
 
   titleFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3)
+  ]);
+
+  nameFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2)
   ]);
 
   pincodeFormControl = new FormControl('', [
@@ -30,10 +34,19 @@ export class SessionsetupdialogComponent implements OnInit {
   ngOnInit() {}
 
   createSession() {
-    this.dialogRef.close({
-      sessionTitle: this.sessionTitle,
-      sessionPincode: this.sessionPincode
-    });
+    if (
+      this.titleFormControl.valid &&
+      this.nameFormControl.valid &&
+      this.pincodeFormControl.valid
+    ) {
+      this.dialogRef.close({
+        sessionTitle: this.titleFormControl.value,
+        teacherName: this.nameFormControl.value,
+        sessionPincode: this.pincodeFormControl.value
+      });
+    } else {
+      this.message = 'Some fields are wrong';
+    }
   }
 
   cancel() {
