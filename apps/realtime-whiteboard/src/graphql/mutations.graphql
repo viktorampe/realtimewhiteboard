@@ -137,6 +137,8 @@ mutation CreateWhiteboard(
         left
         viewModeImage
         inShelf
+        createdBy
+        lastUpdatedBy
         _version
         _deleted
         _lastChangedAt
@@ -170,6 +172,8 @@ mutation UpdateWhiteboard(
         left
         viewModeImage
         inShelf
+        createdBy
+        lastUpdatedBy
         _version
         _deleted
         _lastChangedAt
@@ -203,6 +207,8 @@ mutation DeleteWhiteboard(
         left
         viewModeImage
         inShelf
+        createdBy
+        lastUpdatedBy
         _version
         _deleted
         _lastChangedAt
@@ -348,6 +354,8 @@ mutation CreateCard(
     left
     viewModeImage
     inShelf
+    createdBy
+    lastUpdatedBy
     _version
     _deleted
     _lastChangedAt
@@ -381,6 +389,8 @@ mutation UpdateCard(
     left
     viewModeImage
     inShelf
+    createdBy
+    lastUpdatedBy
     _version
     _deleted
     _lastChangedAt
@@ -414,6 +424,8 @@ mutation DeleteCard(
     left
     viewModeImage
     inShelf
+    createdBy
+    lastUpdatedBy
     _version
     _deleted
     _lastChangedAt

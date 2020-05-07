@@ -125,6 +125,8 @@ subscription OnCreateWhiteboard {
         left
         viewModeImage
         inShelf
+        createdBy
+        lastUpdatedBy
         _version
         _deleted
         _lastChangedAt
@@ -155,6 +157,8 @@ subscription OnUpdateWhiteboard {
         left
         viewModeImage
         inShelf
+        createdBy
+        lastUpdatedBy
         _version
         _deleted
         _lastChangedAt
@@ -185,6 +189,8 @@ subscription OnDeleteWhiteboard {
         left
         viewModeImage
         inShelf
+        createdBy
+        lastUpdatedBy
         _version
         _deleted
         _lastChangedAt
@@ -318,6 +324,8 @@ subscription OnCreateCard {
     left
     viewModeImage
     inShelf
+    createdBy
+    lastUpdatedBy
     _version
     _deleted
     _lastChangedAt
@@ -348,6 +356,8 @@ subscription OnUpdateCard {
     left
     viewModeImage
     inShelf
+    createdBy
+    lastUpdatedBy
     _version
     _deleted
     _lastChangedAt
@@ -378,6 +388,8 @@ subscription OnDeleteCard {
     left
     viewModeImage
     inShelf
+    createdBy
+    lastUpdatedBy
     _version
     _deleted
     _lastChangedAt

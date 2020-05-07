@@ -18,6 +18,7 @@ export class RealtimeComponent implements OnInit {
   sessionId: string;
   session: RealtimeSession;
   loggedIn: boolean;
+  activePlayer: Player;
   message: string;
 
   constructor(
@@ -41,7 +42,8 @@ export class RealtimeComponent implements OnInit {
       }
     );
     // Update ui depending on active player
-    this.handleUI(this.activePlayerService.getActivePlayer());
+    this.activePlayer = this.activePlayerService.getActivePlayer();
+    this.handleUI();
   }
 
   joinSession(playerAndPincode: { player: Player; pincode: number }) {
@@ -84,7 +86,7 @@ export class RealtimeComponent implements OnInit {
             .includes(newCards.id)
       );
       UpdateHelper.prepareCard(cardsToCreate[0]);
-      this.sessionService.createCard(cardsToCreate[0]);
+      this.sessionService.createCard(cardsToCreate[0], this.activePlayer);
     }
 
     // card was deleted
@@ -101,18 +103,18 @@ export class RealtimeComponent implements OnInit {
   updateCard(updatedCard: RealtimeCard) {
     console.log('update card');
     UpdateHelper.prepareCard(updatedCard);
-    this.sessionService.updateCard(updatedCard);
+    this.sessionService.updateCard(updatedCard, this.activePlayer);
   }
 
   private fetchSession() {
     this.sessionService.getSession(this.sessionId);
   }
 
-  private handleUI(activePlayer: Player) {
-    if (activePlayer !== null) {
+  private handleUI() {
+    if (this.activePlayer !== null) {
       this.loggedIn = true;
     }
-    if (activePlayer === null || !activePlayer.isTeacher) {
+    if (this.activePlayer === null || !this.activePlayer.isTeacher) {
       this.fullscreenService.setFullscreen(true);
       this.loggedIn = false;
     }

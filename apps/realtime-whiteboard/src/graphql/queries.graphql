@@ -149,6 +149,8 @@ query GetWhiteboard($id: ID!) {
         left
         viewModeImage
         inShelf
+        createdBy
+        lastUpdatedBy
         _version
         _deleted
         _lastChangedAt
@@ -309,6 +311,8 @@ query SyncCards(
       left
       viewModeImage
       inShelf
+      createdBy
+      lastUpdatedBy
       _version
       _deleted
       _lastChangedAt
@@ -342,6 +346,8 @@ query GetCard($id: ID!) {
     left
     viewModeImage
     inShelf
+    createdBy
+    lastUpdatedBy
     _version
     _deleted
     _lastChangedAt
@@ -373,6 +379,8 @@ query ListCards(
       left
       viewModeImage
       inShelf
+      createdBy
+      lastUpdatedBy
       _version
       _deleted
       _lastChangedAt
@@ -451,6 +459,8 @@ query CardByWhiteboardId(
       left
       viewModeImage
       inShelf
+      createdBy
+      lastUpdatedBy
       _version
       _deleted
       _lastChangedAt

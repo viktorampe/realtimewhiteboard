@@ -195,7 +195,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     );
   }
 
-  createCard(card: CardInterface) {
+  createCard(card: CardInterface, player: Player) {
     this.apiService
       .CreateCard({
         id: card.id,
@@ -208,6 +208,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         left: card.left,
         viewModeImage: card.viewModeImage,
         inShelf: false,
+        createdBy: player.id,
         _version: 0
       })
       .then(() => {})
@@ -275,7 +276,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     ).pipe(mapTo(true));
   }
 
-  updateCard(realtimeCard: RealtimeCard) {
+  updateCard(realtimeCard: RealtimeCard, player: Player) {
     // can't save empty string
     UpdateHelper.checkDescription(realtimeCard);
 
@@ -293,6 +294,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         left: realtimeCard.left,
         mode: 1, // always save card as IDLE mode
         viewModeImage: realtimeCard.viewModeImage,
+        lastUpdatedBy: player.id,
         _version: realtimeCard.version
       })
       .then(() => {})

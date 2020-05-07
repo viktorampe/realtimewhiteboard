@@ -202,6 +202,8 @@ export type CreateCardInput = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy?: string | null;
   _version?: number | null;
 };
 
@@ -216,6 +218,8 @@ export type ModelCardConditionInput = {
   left?: ModelIntInput | null;
   viewModeImage?: ModelBooleanInput | null;
   inShelf?: ModelBooleanInput | null;
+  createdBy?: ModelIDInput | null;
+  lastUpdatedBy?: ModelIDInput | null;
   and?: Array<ModelCardConditionInput | null> | null;
   or?: Array<ModelCardConditionInput | null> | null;
   not?: ModelCardConditionInput | null;
@@ -234,6 +238,8 @@ export type UpdateCardInput = {
   left?: number | null;
   viewModeImage?: boolean | null;
   inShelf?: boolean | null;
+  createdBy?: string | null;
+  lastUpdatedBy?: string | null;
   _version?: number | null;
 };
 
@@ -283,6 +289,8 @@ export type ModelCardFilterInput = {
   left?: ModelIntInput | null;
   viewModeImage?: ModelBooleanInput | null;
   inShelf?: ModelBooleanInput | null;
+  createdBy?: ModelIDInput | null;
+  lastUpdatedBy?: ModelIDInput | null;
   and?: Array<ModelCardFilterInput | null> | null;
   or?: Array<ModelCardFilterInput | null> | null;
   not?: ModelCardFilterInput | null;
@@ -433,6 +441,8 @@ export type CreateWhiteboardMutation = {
       left: number;
       viewModeImage: boolean;
       inShelf: boolean;
+      createdBy: string;
+      lastUpdatedBy: string | null;
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
@@ -465,6 +475,8 @@ export type UpdateWhiteboardMutation = {
       left: number;
       viewModeImage: boolean;
       inShelf: boolean;
+      createdBy: string;
+      lastUpdatedBy: string | null;
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
@@ -497,6 +509,8 @@ export type DeleteWhiteboardMutation = {
       left: number;
       viewModeImage: boolean;
       inShelf: boolean;
+      createdBy: string;
+      lastUpdatedBy: string | null;
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
@@ -641,6 +655,8 @@ export type CreateCardMutation = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -673,6 +689,8 @@ export type UpdateCardMutation = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -705,6 +723,8 @@ export type DeleteCardMutation = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -850,6 +870,8 @@ export type GetWhiteboardQuery = {
       left: number;
       viewModeImage: boolean;
       inShelf: boolean;
+      createdBy: string;
+      lastUpdatedBy: string | null;
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
@@ -993,6 +1015,8 @@ export type SyncCardsQuery = {
     left: number;
     viewModeImage: boolean;
     inShelf: boolean;
+    createdBy: string;
+    lastUpdatedBy: string | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -1028,6 +1052,8 @@ export type GetCardQuery = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -1057,6 +1083,8 @@ export type ListCardsQuery = {
     left: number;
     viewModeImage: boolean;
     inShelf: boolean;
+    createdBy: string;
+    lastUpdatedBy: string | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -1115,6 +1143,8 @@ export type CardByWhiteboardIdQuery = {
     left: number;
     viewModeImage: boolean;
     inShelf: boolean;
+    createdBy: string;
+    lastUpdatedBy: string | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -1263,6 +1293,8 @@ export type OnCreateWhiteboardSubscription = {
       left: number;
       viewModeImage: boolean;
       inShelf: boolean;
+      createdBy: string;
+      lastUpdatedBy: string | null;
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
@@ -1295,6 +1327,8 @@ export type OnUpdateWhiteboardSubscription = {
       left: number;
       viewModeImage: boolean;
       inShelf: boolean;
+      createdBy: string;
+      lastUpdatedBy: string | null;
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
@@ -1327,6 +1361,8 @@ export type OnDeleteWhiteboardSubscription = {
       left: number;
       viewModeImage: boolean;
       inShelf: boolean;
+      createdBy: string;
+      lastUpdatedBy: string | null;
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
@@ -1471,6 +1507,8 @@ export type OnCreateCardSubscription = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -1503,6 +1541,8 @@ export type OnUpdateCardSubscription = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -1535,6 +1575,8 @@ export type OnDeleteCardSubscription = {
   left: number;
   viewModeImage: boolean;
   inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -1737,6 +1779,8 @@ export class APIService {
               left
               viewModeImage
               inShelf
+              createdBy
+              lastUpdatedBy
               _version
               _deleted
               _lastChangedAt
@@ -1785,6 +1829,8 @@ export class APIService {
               left
               viewModeImage
               inShelf
+              createdBy
+              lastUpdatedBy
               _version
               _deleted
               _lastChangedAt
@@ -1833,6 +1879,8 @@ export class APIService {
               left
               viewModeImage
               inShelf
+              createdBy
+              lastUpdatedBy
               _version
               _deleted
               _lastChangedAt
@@ -2041,6 +2089,8 @@ export class APIService {
           left
           viewModeImage
           inShelf
+          createdBy
+          lastUpdatedBy
           _version
           _deleted
           _lastChangedAt
@@ -2089,6 +2139,8 @@ export class APIService {
           left
           viewModeImage
           inShelf
+          createdBy
+          lastUpdatedBy
           _version
           _deleted
           _lastChangedAt
@@ -2137,6 +2189,8 @@ export class APIService {
           left
           viewModeImage
           inShelf
+          createdBy
+          lastUpdatedBy
           _version
           _deleted
           _lastChangedAt
@@ -2376,6 +2430,8 @@ export class APIService {
               left
               viewModeImage
               inShelf
+              createdBy
+              lastUpdatedBy
               _version
               _deleted
               _lastChangedAt
@@ -2611,6 +2667,8 @@ export class APIService {
             left
             viewModeImage
             inShelf
+            createdBy
+            lastUpdatedBy
             _version
             _deleted
             _lastChangedAt
@@ -2666,6 +2724,8 @@ export class APIService {
           left
           viewModeImage
           inShelf
+          createdBy
+          lastUpdatedBy
           _version
           _deleted
           _lastChangedAt
@@ -2709,6 +2769,8 @@ export class APIService {
             left
             viewModeImage
             inShelf
+            createdBy
+            lastUpdatedBy
             _version
             _deleted
             _lastChangedAt
@@ -2819,6 +2881,8 @@ export class APIService {
             left
             viewModeImage
             inShelf
+            createdBy
+            lastUpdatedBy
             _version
             _deleted
             _lastChangedAt
@@ -3017,6 +3081,8 @@ export class APIService {
               left
               viewModeImage
               inShelf
+              createdBy
+              lastUpdatedBy
               _version
               _deleted
               _lastChangedAt
@@ -3057,6 +3123,8 @@ export class APIService {
               left
               viewModeImage
               inShelf
+              createdBy
+              lastUpdatedBy
               _version
               _deleted
               _lastChangedAt
@@ -3097,6 +3165,8 @@ export class APIService {
               left
               viewModeImage
               inShelf
+              createdBy
+              lastUpdatedBy
               _version
               _deleted
               _lastChangedAt
@@ -3265,6 +3335,8 @@ export class APIService {
           left
           viewModeImage
           inShelf
+          createdBy
+          lastUpdatedBy
           _version
           _deleted
           _lastChangedAt
@@ -3303,6 +3375,8 @@ export class APIService {
           left
           viewModeImage
           inShelf
+          createdBy
+          lastUpdatedBy
           _version
           _deleted
           _lastChangedAt
@@ -3341,6 +3415,8 @@ export class APIService {
           left
           viewModeImage
           inShelf
+          createdBy
+          lastUpdatedBy
           _version
           _deleted
           _lastChangedAt
