@@ -105,13 +105,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
           this.setCurrentRealtimeSession(this.currentRealtimeSession);
         } else {
           // update necessary properties
-          cardToUpdate.color = cardResponse.color;
-          cardToUpdate.description = cardResponse.description;
-          cardToUpdate.image = cardResponse.image;
-          cardToUpdate.top = cardResponse.top;
-          cardToUpdate.left = cardResponse.left;
-          cardToUpdate.viewModeImage = cardResponse.viewModeImage;
-          cardToUpdate.version = cardResponse.version;
+          UpdateHelper.updateCardProperties(cardToUpdate, cardResponse);
           this.setCurrentRealtimeSession(this.currentRealtimeSession);
         }
       }
@@ -248,6 +242,14 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     );
   }
 
+  getCard(cardId: string): Observable<RealtimeCard> {
+    return from(this.apiService.GetCard(cardId)).pipe(
+      map(cardResponse => {
+        return new RealtimeCard(cardResponse);
+      })
+    );
+  }
+
   //#endregion
 
   //#region UPDATE
@@ -358,4 +360,14 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   //#endregion
+
+  resetCard(cardId: string) {
+    this.getCard(cardId).subscribe((cardResponse: RealtimeCard) => {
+      const cardToReset = this.currentRealtimeSession.whiteboard.cards.find(
+        c => c.id === cardResponse.id
+      );
+      UpdateHelper.updateCardProperties(cardToReset, cardResponse);
+      this.setCurrentRealtimeSession(this.currentRealtimeSession);
+    });
+  }
 }

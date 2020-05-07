@@ -19,22 +19,24 @@ export class RealtimeCard implements CardInterface {
   lastUpdatedBy: string;
   version: number;
 
-  constructor(cardResponse: any) {
-    this.id = cardResponse.id;
-    this.mode = cardResponse.mode;
-    this.type = cardResponse.type;
-    this.color = cardResponse.color;
-    this.description = cardResponse.description;
-    this.image = {
-      imageUrl: cardResponse.image
-    };
-    this.top = cardResponse.top;
-    this.left = cardResponse.left;
-    this.viewModeImage = cardResponse.viewModeImage;
-    this.inShelf = cardResponse.inShelf;
-    this.whiteboardId = cardResponse.whiteboardID;
-    this.createdBy = cardResponse.createdBy;
-    this.lastUpdatedBy = cardResponse.lastUpdatedBy;
-    this.version = cardResponse._version;
+  constructor(cardResponse?: any) {
+    this.id = cardResponse ? cardResponse.id : null;
+    this.mode = cardResponse ? cardResponse.mode : null;
+    this.type = cardResponse ? cardResponse.type : null;
+    this.color = cardResponse ? cardResponse.color : null;
+    this.description = cardResponse ? cardResponse.description : null;
+    this.image = cardResponse
+      ? {
+          imageUrl: cardResponse.image
+        }
+      : null;
+    this.top = cardResponse ? cardResponse.top : null;
+    this.left = cardResponse ? cardResponse.left : null;
+    this.viewModeImage = cardResponse ? cardResponse.viewModeImage : null;
+    this.inShelf = cardResponse ? cardResponse.inShelf : null;
+    this.whiteboardId = cardResponse ? cardResponse.whiteboardID : null;
+    this.createdBy = cardResponse ? cardResponse.createdBy : null;
+    this.lastUpdatedBy = cardResponse ? cardResponse.lastUpdatedBy : null;
+    this.version = cardResponse ? cardResponse._version : null;
   }
 }

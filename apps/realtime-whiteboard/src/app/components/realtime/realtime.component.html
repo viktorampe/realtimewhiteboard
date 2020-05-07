@@ -1,11 +1,5 @@
 <div class="realtime_container" *ngIf="session !== undefined">
-  <ng-container *ngIf="!loggedIn; else activePlayer">
-    <campus-joinsession
-      (joinSession)="joinSession($event)"
-      [message]="message"
-    ></campus-joinsession>
-  </ng-container>
-  <ng-template #activePlayer>
+  <ng-container *ngIf="loggedIn; else logIn">
     <campus-whiteboard
       *ngIf="session?.whiteboard"
       [title]="session.whiteboard.title"
@@ -16,5 +10,11 @@
       (whiteboardChange)="updateWhiteboard($event)"
       (cardChange)="updateCard($event)"
     ></campus-whiteboard>
+  </ng-container>
+  <ng-template #logIn>
+    <campus-joinsession
+      (joinSession)="joinSession($event)"
+      [message]="message"
+    ></campus-joinsession>
   </ng-template>
 </div>
