@@ -3,11 +3,13 @@ export default class Player {
   sessionId: string;
   fullName: string;
   isTeacher: boolean;
+  version: number;
 
   constructor(playerResponse?: any) {
     this.id = playerResponse ? playerResponse.id : null;
     this.sessionId = playerResponse ? playerResponse.sessionID : null;
     this.fullName = playerResponse ? playerResponse.fullName : null;
     this.isTeacher = playerResponse ? playerResponse.isTeacher : null;
+    this.version = playerResponse ? playerResponse._version : null;
   }
 }

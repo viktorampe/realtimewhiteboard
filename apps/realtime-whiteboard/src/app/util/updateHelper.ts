@@ -21,6 +21,14 @@ export class UpdateHelper {
     return card.version;
   }
 
+  private static getLastVersionOfPlayer(
+    realtimeSession: RealtimeSession,
+    playerId: string
+  ) {
+    const player = realtimeSession.players.find(p => p.id === playerId);
+    return player.version;
+  }
+
   // if version undefined set to 1 else get last version (A newly created card does not have a version)
   public static setVersionOfCard(
     currentRealtimeSession: RealtimeSession,
@@ -32,6 +40,20 @@ export class UpdateHelper {
       realtimeCard.version = UpdateHelper.getLastVersionOfCard(
         currentRealtimeSession,
         realtimeCard.id
+      );
+    }
+  }
+
+  public static setVersionOfPlayer(
+    currentRealtimeSession: RealtimeSession,
+    player: Player
+  ) {
+    if (player.version === undefined) {
+      player.version = 1;
+    } else {
+      player.version = UpdateHelper.getLastVersionOfPlayer(
+        currentRealtimeSession,
+        player.id
       );
     }
   }

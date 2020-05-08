@@ -1,0 +1,7 @@
+@import '../../../constants.scss';
+
+mat-icon {
+  float: right;
+  color: $errorColor;
+  cursor: pointer;
+}
