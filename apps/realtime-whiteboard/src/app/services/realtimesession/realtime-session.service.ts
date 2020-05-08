@@ -23,12 +23,17 @@ export interface WhiteboardDataServiceInterface {
 export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession$ = new BehaviorSubject<RealtimeSession>(null);
   currentRealtimeSession: RealtimeSession = new RealtimeSession();
+  notificationSetter$ = new BehaviorSubject<string>(null);
 
   constructor(private apiService: APIService) {}
 
   public setCurrentRealtimeSession(realtimeSession: RealtimeSession) {
     this.currentRealtimeSession$.next(realtimeSession);
     this.currentRealtimeSession = realtimeSession;
+  }
+
+  private setNotification(message: string) {
+    this.notificationSetter$.next(message);
   }
 
   //#region SUBSCRIBTIONS
@@ -75,12 +80,12 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   subscribeOnCreatePlayer() {
     this.apiService.OnCreatePlayerListener.subscribe((evt: any) => {
-      if (
-        evt.value.data.onCreatePlayer.sessionID ===
-        this.currentRealtimeSession.id
-      ) {
+      const playerResponse: Player = new Player(evt.value.data.onCreatePlayer);
+      if (playerResponse.sessionId === this.currentRealtimeSession.id) {
         // refetch session -> will contain player and update behavior subject
         this.getSession(this.currentRealtimeSession.id);
+        // set notification for component
+        this.setNotification(`${playerResponse.fullName} joined the session.`);
       }
     });
   }

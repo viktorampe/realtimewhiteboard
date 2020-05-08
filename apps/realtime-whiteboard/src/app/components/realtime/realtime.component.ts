@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import Player from '../../models/player';
@@ -25,6 +26,7 @@ export class RealtimeComponent implements OnInit {
     private sessionService: RealtimeSessionService,
     private activePlayerService: ActiveplayerService,
     private fullscreenService: FullscreenService,
+    private _snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) {}
 
@@ -44,6 +46,12 @@ export class RealtimeComponent implements OnInit {
     // Update ui depending on active player
     this.activePlayer = this.activePlayerService.getActivePlayer();
     this.handleUI();
+    // subscribe on notifications from sessionService
+    this.sessionService.notificationSetter$.subscribe((message: string) => {
+      if (message) {
+        this.openSnackBar(message);
+      }
+    });
   }
 
   joinSession(playerAndPincode: { player: Player; pincode: number }) {
@@ -128,5 +136,12 @@ export class RealtimeComponent implements OnInit {
       this.loggedIn = false;
       this.fullscreenService.setFullscreen(true);
     }
+  }
+
+  private openSnackBar(message: string) {
+    console.log(message);
+    this._snackBar.open(message, null, {
+      duration: 2000
+    });
   }
 }
