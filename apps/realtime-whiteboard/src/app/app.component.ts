@@ -30,7 +30,8 @@ export class AppComponent {
     // subscribe on session updates/deletes
     this.sessionService.subscribeOnSessionUpdates();
     this.sessionService.subscribeOnSessionDeletes();
-    // subscribe on player creation
+    // subscribe on player creation/delets
+    this.sessionService.subsribeOnDeletePlayer();
     this.sessionService.subscribeOnCreatePlayer();
     // subscribe on whiteboard updates
     this.sessionService.subscribeOnWhiteboardUpdates();

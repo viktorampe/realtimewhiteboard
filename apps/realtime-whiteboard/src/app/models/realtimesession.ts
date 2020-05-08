@@ -26,7 +26,9 @@ export default class RealtimeSession {
 
   setPlayers(playerResponse: any[]): Player[] {
     const players: Player[] = [];
-    playerResponse.forEach(pr => players.push(new Player(pr)));
+    playerResponse
+      .filter(pr => !pr._deleted === true)
+      .forEach(pr => players.push(new Player(pr)));
     return players;
   }
 

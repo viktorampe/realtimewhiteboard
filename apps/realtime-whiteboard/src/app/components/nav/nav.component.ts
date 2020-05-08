@@ -108,4 +108,8 @@ export class NavComponent implements OnInit {
       }
     });
   }
+
+  removePlayer() {
+    this.sessionService.deletePlayer(this.session.players[0]);
+  }
 }

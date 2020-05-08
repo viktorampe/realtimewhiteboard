@@ -83,9 +83,25 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       const playerResponse: Player = new Player(evt.value.data.onCreatePlayer);
       if (playerResponse.sessionId === this.currentRealtimeSession.id) {
         // refetch session -> will contain player and update behavior subject
-        this.getSession(this.currentRealtimeSession.id);
+        this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
+          p => p.id !== playerResponse.id
+        );
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
         // set notification for component
         this.setNotification(`${playerResponse.fullName} joined the session.`);
+      }
+    });
+  }
+
+  subsribeOnDeletePlayer() {
+    this.apiService.OnDeletePlayerListener.subscribe((evt: any) => {
+      console.log(evt);
+      const playerResponse: Player = new Player(evt.value.data.onDeletePlayer);
+      if (playerResponse.sessionId === this.currentRealtimeSession.id) {
+        // refetch session -> will contain player and update behavior subject
+        this.getSession(this.currentRealtimeSession.id);
+        // set notification for component
+        this.setNotification(`${playerResponse.fullName} left the session.`);
       }
     });
   }
@@ -351,6 +367,18 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       .DeleteCard({
         id: realtimeCard.id,
         _version: realtimeCard.version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
+  }
+
+  deletePlayer(player: Player) {
+    UpdateHelper.setVersionOfPlayer(this.currentRealtimeSession, player);
+    console.log(player);
+    this.apiService
+      .DeletePlayer({
+        id: player.id,
+        _version: player.version
       })
       .then(() => {})
       .catch(err => console.log(err));
