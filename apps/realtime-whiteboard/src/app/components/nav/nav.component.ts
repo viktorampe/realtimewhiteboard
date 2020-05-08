@@ -97,7 +97,8 @@ export class NavComponent implements OnInit {
       data: {
         title: this.session.title,
         pincode: this.session.pincode,
-        players: this.session.players
+        players: this.session.players,
+        sharelink: location.href
       }
     });
 
