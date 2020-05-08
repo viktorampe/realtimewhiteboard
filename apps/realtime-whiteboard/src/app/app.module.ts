@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -43,7 +45,9 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule,
+    MatRippleModule,
+    MatSnackBarModule
   ],
   entryComponents: [SessionsetupdialogComponent, SessiondetailsdialogComponent],
   providers: [CookieService],

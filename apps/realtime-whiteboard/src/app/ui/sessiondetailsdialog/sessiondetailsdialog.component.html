@@ -5,6 +5,12 @@
   <p>{{ data.title }}</p>
 </div>
 <div class="info_group">
+  <h3>Share this link</h3>
+  <div class="sharelink" (click)="copyMessage(data.sharelink)" matRipple>
+    <p>{{ data.sharelink }}</p>
+  </div>
+</div>
+<div class="info_group">
   <h3>Pincode</h3>
   <p>{{ data.pincode }}</p>
 </div>
