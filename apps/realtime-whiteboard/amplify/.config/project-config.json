@@ -1,4 +1,7 @@
 {
+    "providers": [
+        "awscloudformation"
+    ],
     "projectName": "realtimewhiteboardv3",
     "version": "3.0",
     "frontend": "javascript",
@@ -6,12 +9,9 @@
         "framework": "angular",
         "config": {
             "SourceDir": "src",
-            "DistributionDir": "dist/realtime-whiteboard",
+            "DistributionDir": "dist",
             "BuildCommand": "npm.cmd run-script build",
             "StartCommand": "ng serve"
         }
-    },
-    "providers": [
-        "awscloudformation"
-    ]
+    }
 }
