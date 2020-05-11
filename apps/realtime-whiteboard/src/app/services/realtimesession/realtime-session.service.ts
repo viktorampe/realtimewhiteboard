@@ -82,10 +82,8 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.apiService.OnCreatePlayerListener.subscribe((evt: any) => {
       const playerResponse: Player = new Player(evt.value.data.onCreatePlayer);
       if (playerResponse.sessionId === this.currentRealtimeSession.id) {
-        // refetch session -> will contain player and update behavior subject
-        this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
-          p => p.id !== playerResponse.id
-        );
+        // push player in array
+        this.currentRealtimeSession.players.push(playerResponse);
         this.setCurrentRealtimeSession(this.currentRealtimeSession);
         // set notification for component
         this.setNotification(`${playerResponse.fullName} joined the session.`);
@@ -95,11 +93,12 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   subsribeOnDeletePlayer() {
     this.apiService.OnDeletePlayerListener.subscribe((evt: any) => {
-      console.log(evt);
       const playerResponse: Player = new Player(evt.value.data.onDeletePlayer);
       if (playerResponse.sessionId === this.currentRealtimeSession.id) {
-        // refetch session -> will contain player and update behavior subject
-        this.getSession(this.currentRealtimeSession.id);
+        // remove player from array
+        this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
+          p => p.id !== playerResponse.id
+        );
         // set notification for component
         this.setNotification(`${playerResponse.fullName} left the session.`);
       }
