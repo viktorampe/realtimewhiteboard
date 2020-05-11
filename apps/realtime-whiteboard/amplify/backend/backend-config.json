@@ -1,6 +1,6 @@
 {
 	"api": {
-		"realtimewhiteboardv3": {
+		"realtimewhiteboardv4": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {
@@ -9,7 +9,7 @@
 					"defaultAuthentication": {
 						"authenticationType": "API_KEY",
 						"apiKeyConfig": {
-							"description": "v3 api key",
+							"description": "api key",
 							"apiKeyExpirationDays": 7
 						}
 					}

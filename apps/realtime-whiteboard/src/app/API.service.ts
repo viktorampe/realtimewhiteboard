@@ -1,10 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
-import { Injectable } from "@angular/core";
-import API, { graphqlOperation } from "@aws-amplify/api";
-import { GraphQLResult } from "@aws-amplify/api/lib/types";
-import * as Observable from "zen-observable";
+import { Injectable } from '@angular/core';
+import API, { graphqlOperation } from '@aws-amplify/api';
+import * as Observable from 'zen-observable';
 
 export type CreateSessionInput = {
   id?: string | null;
@@ -40,16 +39,16 @@ export type ModelStringInput = {
 };
 
 export enum ModelAttributeTypes {
-  binary = "binary",
-  binarySet = "binarySet",
-  bool = "bool",
-  list = "list",
-  map = "map",
-  number = "number",
-  numberSet = "numberSet",
-  string = "string",
-  stringSet = "stringSet",
-  _null = "_null"
+  binary = 'binary',
+  binarySet = 'binarySet',
+  bool = 'bool',
+  list = 'list',
+  map = 'map',
+  number = 'number',
+  numberSet = 'numberSet',
+  string = 'string',
+  stringSet = 'stringSet',
+  _null = '_null',
 }
 
 export type ModelSizeInput = {
@@ -297,19 +296,19 @@ export type ModelCardFilterInput = {
 };
 
 export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC"
+  ASC = 'ASC',
+  DESC = 'DESC',
 }
 
 export type CreateSessionMutation = {
-  __typename: "Session";
+  __typename: 'Session';
   id: string;
   title: string;
   pincode: number;
   players: {
-    __typename: "ModelPlayerConnection";
+    __typename: 'ModelPlayerConnection';
     items: Array<{
-      __typename: "Player";
+      __typename: 'Player';
       id: string;
       sessionID: string;
       fullName: string;
@@ -323,12 +322,12 @@ export type CreateSessionMutation = {
   } | null;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -342,14 +341,14 @@ export type CreateSessionMutation = {
 };
 
 export type UpdateSessionMutation = {
-  __typename: "Session";
+  __typename: 'Session';
   id: string;
   title: string;
   pincode: number;
   players: {
-    __typename: "ModelPlayerConnection";
+    __typename: 'ModelPlayerConnection';
     items: Array<{
-      __typename: "Player";
+      __typename: 'Player';
       id: string;
       sessionID: string;
       fullName: string;
@@ -363,12 +362,12 @@ export type UpdateSessionMutation = {
   } | null;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -382,14 +381,14 @@ export type UpdateSessionMutation = {
 };
 
 export type DeleteSessionMutation = {
-  __typename: "Session";
+  __typename: 'Session';
   id: string;
   title: string;
   pincode: number;
   players: {
-    __typename: "ModelPlayerConnection";
+    __typename: 'ModelPlayerConnection';
     items: Array<{
-      __typename: "Player";
+      __typename: 'Player';
       id: string;
       sessionID: string;
       fullName: string;
@@ -403,12 +402,12 @@ export type DeleteSessionMutation = {
   } | null;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -422,14 +421,14 @@ export type DeleteSessionMutation = {
 };
 
 export type CreateWhiteboardMutation = {
-  __typename: "Whiteboard";
+  __typename: 'Whiteboard';
   id: string;
   title: string | null;
   defaultColor: string | null;
   cards: {
-    __typename: "ModelCardConnection";
+    __typename: 'ModelCardConnection';
     items: Array<{
-      __typename: "Card";
+      __typename: 'Card';
       id: string;
       whiteboardID: string;
       mode: number;
@@ -456,14 +455,14 @@ export type CreateWhiteboardMutation = {
 };
 
 export type UpdateWhiteboardMutation = {
-  __typename: "Whiteboard";
+  __typename: 'Whiteboard';
   id: string;
   title: string | null;
   defaultColor: string | null;
   cards: {
-    __typename: "ModelCardConnection";
+    __typename: 'ModelCardConnection';
     items: Array<{
-      __typename: "Card";
+      __typename: 'Card';
       id: string;
       whiteboardID: string;
       mode: number;
@@ -490,14 +489,14 @@ export type UpdateWhiteboardMutation = {
 };
 
 export type DeleteWhiteboardMutation = {
-  __typename: "Whiteboard";
+  __typename: 'Whiteboard';
   id: string;
   title: string | null;
   defaultColor: string | null;
   cards: {
-    __typename: "ModelCardConnection";
+    __typename: 'ModelCardConnection';
     items: Array<{
-      __typename: "Card";
+      __typename: 'Card';
       id: string;
       whiteboardID: string;
       mode: number;
@@ -524,22 +523,22 @@ export type DeleteWhiteboardMutation = {
 };
 
 export type CreatePlayerMutation = {
-  __typename: "Player";
+  __typename: 'Player';
   id: string;
   sessionID: string;
   session: {
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -559,22 +558,22 @@ export type CreatePlayerMutation = {
 };
 
 export type UpdatePlayerMutation = {
-  __typename: "Player";
+  __typename: 'Player';
   id: string;
   sessionID: string;
   session: {
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -594,22 +593,22 @@ export type UpdatePlayerMutation = {
 };
 
 export type DeletePlayerMutation = {
-  __typename: "Player";
+  __typename: 'Player';
   id: string;
   sessionID: string;
   session: {
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -629,16 +628,16 @@ export type DeletePlayerMutation = {
 };
 
 export type CreateCardMutation = {
-  __typename: "Card";
+  __typename: 'Card';
   id: string;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -663,16 +662,16 @@ export type CreateCardMutation = {
 };
 
 export type UpdateCardMutation = {
-  __typename: "Card";
+  __typename: 'Card';
   id: string;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -697,16 +696,16 @@ export type UpdateCardMutation = {
 };
 
 export type DeleteCardMutation = {
-  __typename: "Card";
+  __typename: 'Card';
   id: string;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -731,20 +730,20 @@ export type DeleteCardMutation = {
 };
 
 export type SyncSessionsQuery = {
-  __typename: "ModelSessionConnection";
+  __typename: 'ModelSessionConnection';
   items: Array<{
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -761,14 +760,14 @@ export type SyncSessionsQuery = {
 };
 
 export type GetSessionQuery = {
-  __typename: "Session";
+  __typename: 'Session';
   id: string;
   title: string;
   pincode: number;
   players: {
-    __typename: "ModelPlayerConnection";
+    __typename: 'ModelPlayerConnection';
     items: Array<{
-      __typename: "Player";
+      __typename: 'Player';
       id: string;
       sessionID: string;
       fullName: string;
@@ -782,12 +781,12 @@ export type GetSessionQuery = {
   } | null;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -801,20 +800,20 @@ export type GetSessionQuery = {
 };
 
 export type ListSessionsQuery = {
-  __typename: "ModelSessionConnection";
+  __typename: 'ModelSessionConnection';
   items: Array<{
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -831,14 +830,14 @@ export type ListSessionsQuery = {
 };
 
 export type SyncWhiteboardsQuery = {
-  __typename: "ModelWhiteboardConnection";
+  __typename: 'ModelWhiteboardConnection';
   items: Array<{
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -851,14 +850,14 @@ export type SyncWhiteboardsQuery = {
 };
 
 export type GetWhiteboardQuery = {
-  __typename: "Whiteboard";
+  __typename: 'Whiteboard';
   id: string;
   title: string | null;
   defaultColor: string | null;
   cards: {
-    __typename: "ModelCardConnection";
+    __typename: 'ModelCardConnection';
     items: Array<{
-      __typename: "Card";
+      __typename: 'Card';
       id: string;
       whiteboardID: string;
       mode: number;
@@ -885,14 +884,14 @@ export type GetWhiteboardQuery = {
 };
 
 export type ListWhiteboardsQuery = {
-  __typename: "ModelWhiteboardConnection";
+  __typename: 'ModelWhiteboardConnection';
   items: Array<{
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -905,13 +904,13 @@ export type ListWhiteboardsQuery = {
 };
 
 export type SyncPlayersQuery = {
-  __typename: "ModelPlayerConnection";
+  __typename: 'ModelPlayerConnection';
   items: Array<{
-    __typename: "Player";
+    __typename: 'Player';
     id: string;
     sessionID: string;
     session: {
-      __typename: "Session";
+      __typename: 'Session';
       id: string;
       title: string;
       pincode: number;
@@ -931,22 +930,22 @@ export type SyncPlayersQuery = {
 };
 
 export type GetPlayerQuery = {
-  __typename: "Player";
+  __typename: 'Player';
   id: string;
   sessionID: string;
   session: {
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -966,13 +965,13 @@ export type GetPlayerQuery = {
 };
 
 export type ListPlayersQuery = {
-  __typename: "ModelPlayerConnection";
+  __typename: 'ModelPlayerConnection';
   items: Array<{
-    __typename: "Player";
+    __typename: 'Player';
     id: string;
     sessionID: string;
     session: {
-      __typename: "Session";
+      __typename: 'Session';
       id: string;
       title: string;
       pincode: number;
@@ -992,13 +991,13 @@ export type ListPlayersQuery = {
 };
 
 export type SyncCardsQuery = {
-  __typename: "ModelCardConnection";
+  __typename: 'ModelCardConnection';
   items: Array<{
-    __typename: "Card";
+    __typename: 'Card';
     id: string;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -1026,16 +1025,16 @@ export type SyncCardsQuery = {
 };
 
 export type GetCardQuery = {
-  __typename: "Card";
+  __typename: 'Card';
   id: string;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -1060,13 +1059,13 @@ export type GetCardQuery = {
 };
 
 export type ListCardsQuery = {
-  __typename: "ModelCardConnection";
+  __typename: 'ModelCardConnection';
   items: Array<{
-    __typename: "Card";
+    __typename: 'Card';
     id: string;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -1094,13 +1093,13 @@ export type ListCardsQuery = {
 };
 
 export type PlayerBySessionIdQuery = {
-  __typename: "ModelPlayerConnection";
+  __typename: 'ModelPlayerConnection';
   items: Array<{
-    __typename: "Player";
+    __typename: 'Player';
     id: string;
     sessionID: string;
     session: {
-      __typename: "Session";
+      __typename: 'Session';
       id: string;
       title: string;
       pincode: number;
@@ -1120,13 +1119,13 @@ export type PlayerBySessionIdQuery = {
 };
 
 export type CardByWhiteboardIdQuery = {
-  __typename: "ModelCardConnection";
+  __typename: 'ModelCardConnection';
   items: Array<{
-    __typename: "Card";
+    __typename: 'Card';
     id: string;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -1154,14 +1153,14 @@ export type CardByWhiteboardIdQuery = {
 };
 
 export type OnCreateSessionSubscription = {
-  __typename: "Session";
+  __typename: 'Session';
   id: string;
   title: string;
   pincode: number;
   players: {
-    __typename: "ModelPlayerConnection";
+    __typename: 'ModelPlayerConnection';
     items: Array<{
-      __typename: "Player";
+      __typename: 'Player';
       id: string;
       sessionID: string;
       fullName: string;
@@ -1175,12 +1174,12 @@ export type OnCreateSessionSubscription = {
   } | null;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -1194,14 +1193,14 @@ export type OnCreateSessionSubscription = {
 };
 
 export type OnUpdateSessionSubscription = {
-  __typename: "Session";
+  __typename: 'Session';
   id: string;
   title: string;
   pincode: number;
   players: {
-    __typename: "ModelPlayerConnection";
+    __typename: 'ModelPlayerConnection';
     items: Array<{
-      __typename: "Player";
+      __typename: 'Player';
       id: string;
       sessionID: string;
       fullName: string;
@@ -1215,12 +1214,12 @@ export type OnUpdateSessionSubscription = {
   } | null;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -1234,14 +1233,14 @@ export type OnUpdateSessionSubscription = {
 };
 
 export type OnDeleteSessionSubscription = {
-  __typename: "Session";
+  __typename: 'Session';
   id: string;
   title: string;
   pincode: number;
   players: {
-    __typename: "ModelPlayerConnection";
+    __typename: 'ModelPlayerConnection';
     items: Array<{
-      __typename: "Player";
+      __typename: 'Player';
       id: string;
       sessionID: string;
       fullName: string;
@@ -1255,12 +1254,12 @@ export type OnDeleteSessionSubscription = {
   } | null;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -1274,14 +1273,14 @@ export type OnDeleteSessionSubscription = {
 };
 
 export type OnCreateWhiteboardSubscription = {
-  __typename: "Whiteboard";
+  __typename: 'Whiteboard';
   id: string;
   title: string | null;
   defaultColor: string | null;
   cards: {
-    __typename: "ModelCardConnection";
+    __typename: 'ModelCardConnection';
     items: Array<{
-      __typename: "Card";
+      __typename: 'Card';
       id: string;
       whiteboardID: string;
       mode: number;
@@ -1308,14 +1307,14 @@ export type OnCreateWhiteboardSubscription = {
 };
 
 export type OnUpdateWhiteboardSubscription = {
-  __typename: "Whiteboard";
+  __typename: 'Whiteboard';
   id: string;
   title: string | null;
   defaultColor: string | null;
   cards: {
-    __typename: "ModelCardConnection";
+    __typename: 'ModelCardConnection';
     items: Array<{
-      __typename: "Card";
+      __typename: 'Card';
       id: string;
       whiteboardID: string;
       mode: number;
@@ -1342,14 +1341,14 @@ export type OnUpdateWhiteboardSubscription = {
 };
 
 export type OnDeleteWhiteboardSubscription = {
-  __typename: "Whiteboard";
+  __typename: 'Whiteboard';
   id: string;
   title: string | null;
   defaultColor: string | null;
   cards: {
-    __typename: "ModelCardConnection";
+    __typename: 'ModelCardConnection';
     items: Array<{
-      __typename: "Card";
+      __typename: 'Card';
       id: string;
       whiteboardID: string;
       mode: number;
@@ -1376,22 +1375,22 @@ export type OnDeleteWhiteboardSubscription = {
 };
 
 export type OnCreatePlayerSubscription = {
-  __typename: "Player";
+  __typename: 'Player';
   id: string;
   sessionID: string;
   session: {
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -1411,22 +1410,22 @@ export type OnCreatePlayerSubscription = {
 };
 
 export type OnUpdatePlayerSubscription = {
-  __typename: "Player";
+  __typename: 'Player';
   id: string;
   sessionID: string;
   session: {
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -1446,22 +1445,22 @@ export type OnUpdatePlayerSubscription = {
 };
 
 export type OnDeletePlayerSubscription = {
-  __typename: "Player";
+  __typename: 'Player';
   id: string;
   sessionID: string;
   session: {
-    __typename: "Session";
+    __typename: 'Session';
     id: string;
     title: string;
     pincode: number;
     players: {
-      __typename: "ModelPlayerConnection";
+      __typename: 'ModelPlayerConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
     whiteboardID: string;
     whiteboard: {
-      __typename: "Whiteboard";
+      __typename: 'Whiteboard';
       id: string;
       title: string | null;
       defaultColor: string | null;
@@ -1481,16 +1480,16 @@ export type OnDeletePlayerSubscription = {
 };
 
 export type OnCreateCardSubscription = {
-  __typename: "Card";
+  __typename: 'Card';
   id: string;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -1515,16 +1514,16 @@ export type OnCreateCardSubscription = {
 };
 
 export type OnUpdateCardSubscription = {
-  __typename: "Card";
+  __typename: 'Card';
   id: string;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -1549,16 +1548,16 @@ export type OnUpdateCardSubscription = {
 };
 
 export type OnDeleteCardSubscription = {
-  __typename: "Card";
+  __typename: 'Card';
   id: string;
   whiteboardID: string;
   whiteboard: {
-    __typename: "Whiteboard";
+    __typename: 'Whiteboard';
     id: string;
     title: string | null;
     defaultColor: string | null;
     cards: {
-      __typename: "ModelCardConnection";
+      __typename: 'ModelCardConnection';
       nextToken: string | null;
       startedAt: number | null;
     } | null;
@@ -1583,7 +1582,7 @@ export type OnDeleteCardSubscription = {
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
 export class APIService {
   async CreateSession(
@@ -1632,7 +1631,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1688,7 +1687,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1744,7 +1743,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1794,7 +1793,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1844,7 +1843,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1894,7 +1893,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1945,7 +1944,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1996,7 +1995,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2047,7 +2046,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2097,7 +2096,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2147,7 +2146,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2197,7 +2196,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2305,7 +2304,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id
+      id,
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -2445,7 +2444,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id
+      id,
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -2582,7 +2581,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id
+      id,
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -2732,7 +2731,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id
+      id,
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
