@@ -34,7 +34,8 @@ export class JoinsessionComponent implements OnInit {
         id: null,
         sessionId: null,
         fullName: this.nameFormControl.value,
-        isTeacher: false
+        isTeacher: false,
+        version: null
       };
       this.joinSession.emit({
         player: player,
