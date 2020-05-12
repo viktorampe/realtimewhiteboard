@@ -38,6 +38,7 @@ export class AppComponent {
     // subscribe on card creation/deletes/updates
     this.sessionService.subscribeOnDeleteCard();
     this.sessionService.subscribeOnUpdateCard();
+    this.sessionService.subscribeOnCreateCard();
   }
 
   ngOnInit() {

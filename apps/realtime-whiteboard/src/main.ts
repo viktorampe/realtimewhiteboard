@@ -1,7 +1,8 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import API from '@aws-amplify/api';
-import PubSub from '@aws-amplify/pubsub';
+import Amplify from 'aws-amplify';
+// import API from '@aws-amplify/api';
+// import PubSub from '@aws-amplify/pubsub';
 import { AppModule } from './app/app.module';
 import awsconfig from './aws-exports';
 import { environment } from './environments/environment';
@@ -14,5 +15,7 @@ platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .catch(err => console.error(err));
 
-API.configure(awsconfig);
-PubSub.configure(awsconfig);
+// API.configure(awsconfig);
+// PubSub.configure(awsconfig);
+
+Amplify.configure(awsconfig);

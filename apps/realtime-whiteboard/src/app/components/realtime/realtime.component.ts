@@ -1,7 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import {
+  FileReaderService,
+  FileReaderServiceInterface,
+  FILEREADER_SERVICE_TOKEN
+} from '@campus/browser';
+import {
+  CardImageUploadInterface,
+  CardImageUploadResponseInterface
+} from 'libs/whiteboard/src/lib/components/whiteboard/whiteboard.component';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
+import { BehaviorSubject } from 'rxjs';
 import Player from '../../models/player';
 import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
@@ -13,7 +23,10 @@ import { UpdateHelper } from '../../util/updateHelper';
 @Component({
   selector: 'campus-realtime',
   templateUrl: './realtime.component.html',
-  styleUrls: ['./realtime.component.scss']
+  styleUrls: ['./realtime.component.scss'],
+  providers: [
+    { provide: FILEREADER_SERVICE_TOKEN, useClass: FileReaderService }
+  ]
 })
 export class RealtimeComponent implements OnInit {
   sessionId: string;
@@ -22,10 +35,16 @@ export class RealtimeComponent implements OnInit {
   activePlayer: Player;
   message: string;
 
+  imageUploadResponse$ = new BehaviorSubject<CardImageUploadResponseInterface>(
+    null
+  );
+
   constructor(
     private sessionService: RealtimeSessionService,
     private activePlayerService: ActiveplayerService,
     private fullscreenService: FullscreenService,
+    @Inject(FILEREADER_SERVICE_TOKEN)
+    private fileReaderService: FileReaderServiceInterface,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) {}
@@ -94,7 +113,6 @@ export class RealtimeComponent implements OnInit {
             .map(currentCards => currentCards.id)
             .includes(newCards.id)
       );
-      UpdateHelper.prepareCard(cardsToCreate[0]);
       this.sessionService.createCard(cardsToCreate[0], this.activePlayer);
     }
 
@@ -120,6 +138,29 @@ export class RealtimeComponent implements OnInit {
     if (update.includes('RESET_CARD')) {
       this.sessionService.resetCard(updatedCard.id);
     }
+    if (update.includes('REPLACE_BY_REALTIMECARD')) {
+      const cardToUpdate = this.session.whiteboard.cards.find(
+        c => c.id === updatedCard.id
+      );
+      UpdateHelper.updateCardProperties(cardToUpdate, updatedCard);
+
+      this.sessionService.updateCard(updatedCard, this.activePlayer);
+    }
+  }
+
+  updateCardImage(cardImageUpload: CardImageUploadInterface) {
+    const { card, imageFile } = cardImageUpload;
+    // save image in S3 bucket
+    this.sessionService.uploadFileTEST(imageFile).subscribe(response => {
+      // get image from S3 bucket
+      this.sessionService.downloadFile(response.key).subscribe(() => {
+        const imageUrl = `https://realtimewhiteboardstragebucket125040-dev.s3-eu-west-1.amazonaws.com/public/${response.key}`;
+        this.sessionService.updateCardImage(
+          this.session.whiteboard.cards.find(c => (c.id = card.id)),
+          imageUrl
+        );
+      });
+    });
   }
 
   private fetchSession() {
@@ -139,7 +180,6 @@ export class RealtimeComponent implements OnInit {
   }
 
   private openSnackBar(message: string) {
-    console.log(message);
     this._snackBar.open(message, null, {
       duration: 2000
     });

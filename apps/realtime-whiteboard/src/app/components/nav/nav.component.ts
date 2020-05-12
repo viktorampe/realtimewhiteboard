@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import Player from '../../models/player';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
@@ -21,7 +20,6 @@ export class NavComponent implements OnInit {
     private router: Router,
     private sessionService: RealtimeSessionService,
     private activePlayerService: ActiveplayerService,
-    private cookieService: CookieService,
     public dialog: MatDialog
   ) {}
 
