@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { Storage } from 'aws-amplify';
 import Player from '../../models/player';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
@@ -25,7 +24,6 @@ export class NavComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.testStorage();
     // subscribe on realtime session updates
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
@@ -111,11 +109,5 @@ export class NavComponent implements OnInit {
 
   removePlayer() {
     this.sessionService.deletePlayer(this.session.players[0]);
-  }
-
-  testStorage() {
-    Storage.put('test.txt', 'Hello')
-      .then(result => console.log(result)) // {key: "test.txt"}
-      .catch(err => console.log(err));
   }
 }

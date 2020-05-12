@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from 'aws-amplify';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
@@ -78,6 +79,21 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
+  subscribeOnCreateCard() {
+    this.apiService.OnCreateCardListener.subscribe((evt: any) => {
+      const cardResponse: RealtimeCard = new RealtimeCard(
+        evt.value.data.onCreateCard
+      );
+      if (
+        cardResponse.whiteboardId === this.currentRealtimeSession.whiteboard.id
+      ) {
+        // push cardResponse
+        this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+      }
+    });
+  }
+
   subscribeOnCreatePlayer() {
     this.apiService.OnCreatePlayerListener.subscribe((evt: any) => {
       const playerResponse: Player = new Player(evt.value.data.onCreatePlayer);
@@ -119,15 +135,9 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
           c => c.id === cardResponse.id
         );
 
-        // ceck if card exists
-        if (cardToUpdate === undefined) {
-          this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
-          this.setCurrentRealtimeSession(this.currentRealtimeSession);
-        } else {
-          // update necessary properties
-          UpdateHelper.updateCardProperties(cardToUpdate, cardResponse);
-          this.setCurrentRealtimeSession(this.currentRealtimeSession);
-        }
+        // update necessary properties
+        UpdateHelper.updateCardProperties(cardToUpdate, cardResponse);
+        this.setCurrentRealtimeSession(this.currentRealtimeSession);
       }
     });
   }
@@ -210,6 +220,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   createCard(card: CardInterface, player: Player) {
+    UpdateHelper.prepareCard(card);
     this.apiService
       .CreateCard({
         id: card.id,
@@ -217,7 +228,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         mode: 1, // Save in database as IDLE
         type: 0, // unimportant
         color: card.color,
-        image: 'myUrl',
         top: card.top,
         left: card.left,
         viewModeImage: card.viewModeImage,
@@ -299,9 +309,8 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   updateCard(realtimeCard: RealtimeCard, player: Player) {
-    // can't save empty string
-    UpdateHelper.checkDescription(realtimeCard);
-
+    // prepare card
+    UpdateHelper.prepareCard(realtimeCard);
     // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
     UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
 
@@ -311,7 +320,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         id: realtimeCard.id,
         color: realtimeCard.color,
         description: realtimeCard.description,
-        image: 'myUrl',
         top: realtimeCard.top,
         left: realtimeCard.left,
         mode: 1, // always save card as IDLE mode
@@ -389,6 +397,46 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   uploadFile(file: File): Observable<ImageInterface> {
     throw new Error('Method not implemented.');
+  }
+
+  uploadFileTEST(file: File): Observable<any> {
+    // TODO: minitor progress: https://docs.amplify.aws/lib/storage/upload/q/platform/js#protected-level
+    return from(
+      Storage.put(file.name, file, {
+        level: 'public',
+        contentType: 'image/png'
+      })
+    ).pipe(
+      map((uploadResponse: any) => {
+        return uploadResponse;
+      })
+    );
+  }
+
+  downloadFile(key: string): Observable<any> {
+    return from(Storage.get(key)).pipe(
+      map((downloadResponse: any) => {
+        return downloadResponse.key;
+      })
+    );
+  }
+
+  updateCardImage(realtimeCard: RealtimeCard, url: string) {
+    // prepare card
+    UpdateHelper.prepareCard(realtimeCard);
+    // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
+    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
+
+    console.log(realtimeCard.version);
+
+    this.apiService
+      .UpdateCard({
+        id: realtimeCard.id,
+        image: url,
+        _version: realtimeCard.version
+      })
+      .then(() => {})
+      .catch(err => console.log(err));
   }
 
   //#endregion

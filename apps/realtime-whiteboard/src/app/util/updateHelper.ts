@@ -18,7 +18,11 @@ export class UpdateHelper {
     cardId: string
   ): number {
     const card = realtimeSession.whiteboard.cards.find(c => c.id === cardId);
-    return card.version;
+    if (card.version === undefined) {
+      return 1;
+    } else {
+      return card.version;
+    }
   }
 
   private static getLastVersionOfPlayer(
@@ -34,14 +38,10 @@ export class UpdateHelper {
     currentRealtimeSession: RealtimeSession,
     realtimeCard: RealtimeCard
   ) {
-    if (realtimeCard.version === undefined) {
-      realtimeCard.version = 1;
-    } else {
-      realtimeCard.version = UpdateHelper.getLastVersionOfCard(
-        currentRealtimeSession,
-        realtimeCard.id
-      );
-    }
+    realtimeCard.version = UpdateHelper.getLastVersionOfCard(
+      currentRealtimeSession,
+      realtimeCard.id
+    );
   }
 
   public static setVersionOfPlayer(
@@ -58,7 +58,7 @@ export class UpdateHelper {
     }
   }
 
-  public static checkDescription(realtimeCard: RealtimeCard) {
+  public static checkDescription(realtimeCard: CardInterface) {
     if (
       realtimeCard.description === null ||
       realtimeCard.description.length < 1
@@ -101,11 +101,16 @@ export class UpdateHelper {
     activePlayer: Player
   ): string[] {
     const actions: string[] = [];
+    if (card.createdBy === undefined) {
+      console.log('newly created cards are not Realtimecards, update props');
+      actions.push('REPLACE_BY_REALTIMECARD');
+      return actions;
+    }
     if (card.createdBy === activePlayer.id) {
       console.log('update card');
-      this.prepareCard(card);
       actions.push('UPDATE_CARD');
-    } else {
+    }
+    if (card.createdBy !== activePlayer.id) {
       console.log('card update denied');
       actions.push('RESET_CARD');
     }
@@ -113,6 +118,7 @@ export class UpdateHelper {
   }
 
   public static prepareCard(card: CardInterface) {
+    this.checkDescription(card);
     card.left = Math.round(card.left);
     card.top = Math.round(card.top);
   }

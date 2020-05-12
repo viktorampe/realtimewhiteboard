@@ -7,8 +7,10 @@
       [cards]="session.whiteboard.cards"
       [shelfCards]="session.whiteboard.shelfCards"
       [canManage]="false"
+      [uploadImageResponse]="imageUploadResponse$ | async"
       (whiteboardChange)="updateWhiteboard($event)"
       (cardChange)="updateCard($event)"
+      (uploadImage)="updateCardImage($event)"
     ></campus-whiteboard>
   </ng-container>
   <ng-template #logIn>
