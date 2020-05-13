@@ -131,12 +131,31 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
       ) {
         // find card to update
-        let cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
+        const cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
           c => c.id === cardResponse.id
         );
 
-        // update necessary properties
-        UpdateHelper.updateCardProperties(cardToUpdate, cardResponse);
+        /* METHOD 1 - update necessary properties (doesnt do the job? --> Delete and add card instead)
+        UpdateHelper.updateCardPropertiesFromCardResponse(
+          cardToUpdate,
+          cardResponse
+        );
+        */
+
+        /* METHOD 2 - Delete and add cardResponse to array ()
+        UpdateHelper.replaceCardinArray(
+          this.currentRealtimeSession,
+          cardResponse
+        );
+          */
+
+        // METHOD 3 - set new array object
+        const newCardArray = this.currentRealtimeSession.whiteboard.cards.filter(
+          c => c.id !== cardResponse.id
+        );
+        newCardArray.push(cardResponse);
+        this.currentRealtimeSession.whiteboard.cards = newCardArray;
+
         this.setCurrentRealtimeSession(this.currentRealtimeSession);
       }
     });
@@ -220,6 +239,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   createCard(card: CardInterface, player: Player) {
+    console.log('create card');
     UpdateHelper.prepareCard(card);
     this.apiService
       .CreateCard({
@@ -263,6 +283,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   getWhiteboardData(): Observable<WhiteboardInterface> {
+    console.log('get whiteboard');
     return from(
       this.apiService.GetSession(this.currentRealtimeSession.id)
     ).pipe(
@@ -273,6 +294,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   getCard(cardId: string): Observable<RealtimeCard> {
+    console.log('get card');
     return from(this.apiService.GetCard(cardId)).pipe(
       map(cardResponse => {
         return new RealtimeCard(cardResponse);
@@ -298,6 +320,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   updateWhiteboardData(
     updatedWhiteboard: WhiteboardInterface
   ): Observable<Boolean> {
+    console.log('update whiteboard');
     return from(
       this.apiService.UpdateWhiteboard({
         id: this.currentRealtimeSession.whiteboard.id,
@@ -308,8 +331,14 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     ).pipe(mapTo(true));
   }
 
-  updateCard(realtimeCard: RealtimeCard, player: Player) {
-    // prepare card
+  updateCard(card: CardInterface, player: Player) {
+    console.log('update card');
+    // find card to update
+    const realtimeCard: RealtimeCard = this.currentRealtimeSession.whiteboard.cards.find(
+      c => c.id === card.id
+    );
+
+    // prepare card (check description, top, left, ...)
     UpdateHelper.prepareCard(realtimeCard);
     // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
     UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
@@ -368,6 +397,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   deleteCard(realtimeCard: RealtimeCard) {
+    console.log('delete card');
     UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
 
     this.apiService
@@ -440,14 +470,4 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   //#endregion
-
-  resetCard(cardId: string) {
-    this.getCard(cardId).subscribe((cardResponse: RealtimeCard) => {
-      const cardToReset = this.currentRealtimeSession.whiteboard.cards.find(
-        c => c.id === cardResponse.id
-      );
-      UpdateHelper.updateCardProperties(cardToReset, cardResponse);
-      this.setCurrentRealtimeSession(this.currentRealtimeSession);
-    });
-  }
 }
