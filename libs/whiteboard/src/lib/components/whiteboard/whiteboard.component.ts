@@ -737,4 +737,8 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   //#endregion
+
+  trackByFn(index, item) {
+    return item.id; // or item.id
+  }
 }

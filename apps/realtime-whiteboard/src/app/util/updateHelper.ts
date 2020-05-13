@@ -120,9 +120,11 @@ export class UpdateHelper {
     currentRealtimeSession: RealtimeSession,
     realtimeCard: RealtimeCard
   ) {
-    currentRealtimeSession.whiteboard.cards = currentRealtimeSession.whiteboard.cards.filter(
-      c => c.id !== realtimeCard.id
-    );
-    currentRealtimeSession.whiteboard.cards.push(realtimeCard);
+    currentRealtimeSession.whiteboard.cards = [
+      ...currentRealtimeSession.whiteboard.cards.filter(
+        c => c.id !== realtimeCard.id
+      ),
+      realtimeCard
+    ];
   }
 }
