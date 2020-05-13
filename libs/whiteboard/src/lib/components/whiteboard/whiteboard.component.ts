@@ -637,7 +637,8 @@ export class WhiteboardComponent implements OnChanges {
   cardConfirmIconClicked(card: CardInterface) {
     this.updateCard(
       { mode: ModeEnum.IDLE, description: card.description },
-      card
+      card,
+      true
     );
     this.updateViewMode(card);
     this.saveWhiteboard();

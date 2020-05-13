@@ -135,26 +135,11 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
           c => c.id === cardResponse.id
         );
 
-        /* METHOD 1 - update necessary properties (doesnt do the job? --> Delete and add card instead)
-        UpdateHelper.updateCardPropertiesFromCardResponse(
-          cardToUpdate,
-          cardResponse
-        );
-        */
-
-        /* METHOD 2 - Delete and add cardResponse to array ()
+        // Delete and add cardResponse to array ()
         UpdateHelper.replaceCardinArray(
           this.currentRealtimeSession,
           cardResponse
         );
-          */
-
-        // METHOD 3 - set new array object
-        const newCardArray = this.currentRealtimeSession.whiteboard.cards.filter(
-          c => c.id !== cardResponse.id
-        );
-        newCardArray.push(cardResponse);
-        this.currentRealtimeSession.whiteboard.cards = newCardArray;
 
         this.setCurrentRealtimeSession(this.currentRealtimeSession);
       }

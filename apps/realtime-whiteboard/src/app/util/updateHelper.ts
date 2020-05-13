@@ -124,13 +124,5 @@ export class UpdateHelper {
       c => c.id !== realtimeCard.id
     );
     currentRealtimeSession.whiteboard.cards.push(realtimeCard);
-    /*
-    for (let i = 0; i < currentRealtimeSession.whiteboard.cards.length; i++) {
-      if (currentRealtimeSession.whiteboard.cards[i].id === realtimeCard.id) {
-        currentRealtimeSession.whiteboard.cards.splice(i, 1);
-      }
-    }
-    currentRealtimeSession.whiteboard.cards.push(realtimeCard);
-    */
   }
 }
