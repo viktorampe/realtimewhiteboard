@@ -10,10 +10,10 @@ import {
   CardImageUploadInterface,
   CardImageUploadResponseInterface
 } from 'libs/whiteboard/src/lib/components/whiteboard/whiteboard.component';
+import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
 import { BehaviorSubject } from 'rxjs';
 import Player from '../../models/player';
-import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
 import { ActiveplayerService } from '../../services/activeplayer/activeplayer.service';
 import { FullscreenService } from '../../services/fullscreen/fullscreen.service';
@@ -127,25 +127,8 @@ export class RealtimeComponent implements OnInit {
   }
 
   // triggers when a Card recieved an update
-  updateCard(updatedCard: RealtimeCard) {
-    const update = UpdateHelper.handleCardUpdate(
-      updatedCard,
-      this.activePlayer
-    );
-    if (update.includes('UPDATE_CARD')) {
-      this.sessionService.updateCard(updatedCard, this.activePlayer);
-    }
-    if (update.includes('RESET_CARD')) {
-      this.sessionService.resetCard(updatedCard.id);
-    }
-    if (update.includes('REPLACE_BY_REALTIMECARD')) {
-      const cardToUpdate = this.session.whiteboard.cards.find(
-        c => c.id === updatedCard.id
-      );
-      UpdateHelper.updateCardProperties(cardToUpdate, updatedCard);
-
-      this.sessionService.updateCard(updatedCard, this.activePlayer);
-    }
+  updateCard(updatedCard: CardInterface) {
+    this.sessionService.updateCard(updatedCard, this.activePlayer);
   }
 
   updateCardImage(cardImageUpload: CardImageUploadInterface) {

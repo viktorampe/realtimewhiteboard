@@ -13,18 +13,6 @@ export class UpdateHelper {
     return realtimeSession.whiteboard.cards.map(c => c.id).includes(card.id);
   }
 
-  private static getLastVersionOfCard(
-    realtimeSession: RealtimeSession,
-    cardId: string
-  ): number {
-    const card = realtimeSession.whiteboard.cards.find(c => c.id === cardId);
-    if (card.version === undefined) {
-      return 1;
-    } else {
-      return card.version;
-    }
-  }
-
   private static getLastVersionOfPlayer(
     realtimeSession: RealtimeSession,
     playerId: string
@@ -38,10 +26,14 @@ export class UpdateHelper {
     currentRealtimeSession: RealtimeSession,
     realtimeCard: RealtimeCard
   ) {
-    realtimeCard.version = UpdateHelper.getLastVersionOfCard(
-      currentRealtimeSession,
-      realtimeCard.id
-    );
+    const cardVersion = currentRealtimeSession.whiteboard.cards.find(
+      c => c.id === realtimeCard.id
+    ).version;
+    if (cardVersion === undefined) {
+      return 1;
+    } else {
+      return cardVersion;
+    }
   }
 
   public static setVersionOfPlayer(
@@ -77,43 +69,19 @@ export class UpdateHelper {
       currentWhiteboard.title !== updatedWhiteboard.title ||
       currentWhiteboard.defaultColor !== updatedWhiteboard.defaultColor
     ) {
-      console.log('updateWhiteboard');
       actions.push('UPDATE_WHITEBOARD');
     }
 
     // card was added
     if (currentWhiteboard.cards.length < updatedWhiteboard.cards.length) {
-      console.log('create card');
       actions.push('CREATE_CARD');
     }
 
     // card was deleted
     if (currentWhiteboard.cards.length > updatedWhiteboard.cards.length) {
-      console.log('delete card');
       actions.push('DELETE_CARD');
     }
 
-    return actions;
-  }
-
-  public static handleCardUpdate(
-    card: RealtimeCard,
-    activePlayer: Player
-  ): string[] {
-    const actions: string[] = [];
-    if (card.createdBy === undefined) {
-      console.log('newly created cards are not Realtimecards, update props');
-      actions.push('REPLACE_BY_REALTIMECARD');
-      return actions;
-    }
-    if (card.createdBy === activePlayer.id) {
-      console.log('update card');
-      actions.push('UPDATE_CARD');
-    }
-    if (card.createdBy !== activePlayer.id) {
-      console.log('card update denied');
-      actions.push('RESET_CARD');
-    }
     return actions;
   }
 
@@ -123,7 +91,7 @@ export class UpdateHelper {
     card.top = Math.round(card.top);
   }
 
-  public static updateCardProperties(
+  public static updateCardPropertiesFromCardResponse(
     cardToUpdate: RealtimeCard,
     cardResponse: RealtimeCard
   ) {
@@ -134,5 +102,27 @@ export class UpdateHelper {
     cardToUpdate.left = cardResponse.left;
     cardToUpdate.viewModeImage = cardResponse.viewModeImage;
     cardToUpdate.version = cardResponse.version;
+  }
+
+  public static updateRealtimeCardPropertiesFromCardInterface(
+    realtimeCard: RealtimeCard,
+    CardInterface: CardInterface
+  ) {
+    realtimeCard.color = CardInterface.color;
+    realtimeCard.description = CardInterface.description;
+    realtimeCard.image = CardInterface.image;
+    realtimeCard.top = CardInterface.top;
+    realtimeCard.left = CardInterface.left;
+    realtimeCard.viewModeImage = CardInterface.viewModeImage;
+  }
+
+  public static replaceCardinArray(
+    currentRealtimeSession: RealtimeSession,
+    realtimeCard: RealtimeCard
+  ) {
+    currentRealtimeSession.whiteboard.cards = currentRealtimeSession.whiteboard.cards.filter(
+      c => c.id !== realtimeCard.id
+    );
+    currentRealtimeSession.whiteboard.cards.push(realtimeCard);
   }
 }
