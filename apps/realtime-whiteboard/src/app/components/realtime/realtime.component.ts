@@ -1,11 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import {
-  FileReaderService,
-  FileReaderServiceInterface,
-  FILEREADER_SERVICE_TOKEN
-} from '@campus/browser';
 import {
   CardImageUploadInterface,
   CardImageUploadResponseInterface
@@ -24,9 +19,7 @@ import { UpdateHelper } from '../../util/updateHelper';
   selector: 'campus-realtime',
   templateUrl: './realtime.component.html',
   styleUrls: ['./realtime.component.scss'],
-  providers: [
-    { provide: FILEREADER_SERVICE_TOKEN, useClass: FileReaderService }
-  ]
+  providers: []
 })
 export class RealtimeComponent implements OnInit {
   sessionId: string;
@@ -43,8 +36,6 @@ export class RealtimeComponent implements OnInit {
     private sessionService: RealtimeSessionService,
     private activePlayerService: ActiveplayerService,
     private fullscreenService: FullscreenService,
-    @Inject(FILEREADER_SERVICE_TOKEN)
-    private fileReaderService: FileReaderServiceInterface,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) {}
@@ -56,15 +47,18 @@ export class RealtimeComponent implements OnInit {
       this.fetchSession();
     });
 
-    // subscribe on behaviorSubject
+    // subscribe on session behaviorsubject  updates
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimeSession: RealtimeSession) => {
         this.session = realtimeSession;
       }
     );
-    // Update ui depending on active player
-    this.activePlayer = this.activePlayerService.getActivePlayer();
-    this.handleUI();
+    // Subscribe on active Playyer and update ui depending on active player
+    this.activePlayerService.activePlayer$.subscribe((player: Player) => {
+      console.log('active player: ', player);
+      this.activePlayer = player;
+      this.handleUI();
+    });
     // subscribe on notifications from sessionService
     this.sessionService.notificationSetter$.subscribe((message: string) => {
       if (message) {
@@ -82,9 +76,6 @@ export class RealtimeComponent implements OnInit {
         .subscribe((newPlayer: Player) => {
           // set new player as active player
           this.activePlayerService.setActivePlayer(newPlayer);
-          this.activePlayer = this.activePlayerService.getActivePlayer();
-          // update ui to view realtimewhiteboard
-          this.loggedIn = true;
         });
     } else {
       this.message = 'Incorrect pincode';

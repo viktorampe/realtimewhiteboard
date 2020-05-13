@@ -11,6 +11,7 @@ import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { UpdateHelper } from '../../util/updateHelper';
+import { ActiveplayerService } from '../activeplayer/activeplayer.service';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -26,7 +27,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession: RealtimeSession = new RealtimeSession();
   notificationSetter$ = new BehaviorSubject<string>(null);
 
-  constructor(private apiService: APIService) {}
+  constructor(
+    private apiService: APIService,
+    private activePlayerService: ActiveplayerService
+  ) {}
 
   public setCurrentRealtimeSession(realtimeSession: RealtimeSession) {
     this.currentRealtimeSession$.next(realtimeSession);
@@ -111,12 +115,16 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.apiService.OnDeletePlayerListener.subscribe((evt: any) => {
       const playerResponse: Player = new Player(evt.value.data.onDeletePlayer);
       if (playerResponse.sessionId === this.currentRealtimeSession.id) {
+        // remove cookie
+        this.activePlayerService.deleteActivePlayer(playerResponse.id);
         // remove player from array
-        this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
-          p => p.id !== playerResponse.id
-        );
-        // set notification for component
-        this.setNotification(`${playerResponse.fullName} left the session.`);
+        if (this.currentRealtimeSession.players) {
+          this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
+            p => p.id !== playerResponse.id
+          );
+          // set notification for component
+          this.setNotification(`${playerResponse.fullName} left the session.`);
+        }
       }
     });
   }
@@ -362,6 +370,17 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         .catch(err => console.log(err));
     });
 
+    // delete players
+    this.currentRealtimeSession.players.forEach(p => {
+      UpdateHelper.setVersionOfPlayer(this.currentRealtimeSession, p);
+      this.apiService
+        .DeletePlayer({
+          id: p.id,
+          _version: p.version
+        })
+        .then(() => {})
+        .catch(err => console.log(err));
+    });
     // delete active whiteboard
     this.apiService
       .DeleteWhiteboard({
