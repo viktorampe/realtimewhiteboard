@@ -3,7 +3,7 @@ import { Storage } from 'aws-amplify';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import { BehaviorSubject, from, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../../API.service';
 import Player from '../../models/player';
@@ -357,74 +357,56 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#region DELETE
 
-  DeleteSession(sessionId: string) {
-    // delete cards from active whiteboard
-    this.currentRealtimeSession.whiteboard.cards.forEach(c => {
-      UpdateHelper.setVersionOfCard(this.currentRealtimeSession, c);
-      this.apiService
-        .DeleteCard({
-          id: c.id,
-          _version: c.version
-        })
-        .then(() => {})
-        .catch(err => console.log(err));
-    });
+  deleteSession(sessionId: string) {
+    const deletePlayers$ = this.currentRealtimeSession.players.map(p =>
+      this.deletePlayer(p)
+    );
+    const deleteCards$ = this.currentRealtimeSession.whiteboard.cards.map(c =>
+      this.deleteCard(c)
+    );
+    const deleteWhiteboard$ = this.deleteWhiteboard(
+      this.currentRealtimeSession.whiteboard
+    );
 
-    // delete players
-    this.currentRealtimeSession.players.forEach(p => {
-      UpdateHelper.setVersionOfPlayer(this.currentRealtimeSession, p);
-      this.apiService
-        .DeletePlayer({
-          id: p.id,
-          _version: p.version
-        })
-        .then(() => {})
-        .catch(err => console.log(err));
-    });
-    // delete active whiteboard
-    this.apiService
-      .DeleteWhiteboard({
-        id: this.currentRealtimeSession.whiteboard.id,
-        _version: this.currentRealtimeSession.whiteboard.version
-      })
-      .then(() => {})
-      .catch(err => console.log(err));
-
-    // delete session
-    this.apiService
-      .DeleteSession({
-        id: sessionId,
-        _version: this.currentRealtimeSession.version
-      })
-      .then(() => {})
-      .catch(err => console.log(err));
+    // User ForkJoin
+    combineLatest(
+      deleteCards$,
+      deletePlayers$,
+      deleteWhiteboard$
+    ).subscribe(() => console.log('delete session'));
   }
 
-  deleteCard(realtimeCard: RealtimeCard) {
+  deleteCard(realtimeCard: RealtimeCard): Observable<boolean> {
     console.log('delete card');
     UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
-
-    this.apiService
-      .DeleteCard({
+    return from(
+      this.apiService.DeleteCard({
         id: realtimeCard.id,
         _version: realtimeCard.version
       })
-      .then(() => {})
-      .catch(err => console.log(err));
+    ).pipe(mapTo(true));
   }
 
-  deletePlayer(player: Player) {
+  deletePlayer(player: Player): Observable<boolean> {
+    console.log('delete player');
     UpdateHelper.setVersionOfPlayer(this.currentRealtimeSession, player);
-    console.log(player);
-    this.apiService
-      .DeletePlayer({
+    return from(
+      this.apiService.DeletePlayer({
         id: player.id,
         _version: player.version
       })
-      .then(() => {})
-      .catch(err => console.log(err));
+    ).pipe(mapTo(true));
   }
 
+  deleteWhiteboard(whiteboard: RealtimeWhiteboard): Observable<boolean> {
+    console.log('delete whiteboard');
+    return from(
+      this.apiService.DeleteWhiteboard({
+        id: whiteboard.id,
+        _version: whiteboard.version
+      })
+    ).pipe(mapTo(true));
+  }
   //#endregion
 
   //#region IMAGES

@@ -19,10 +19,12 @@ export class ActiveplayerService {
 
   deleteActivePlayer(playerId: string) {
     const activePlayer = this.getActivePlayer();
-    if (activePlayer.id === playerId) {
-      this.cookieService.delete(this.key);
+    if (activePlayer) {
+      if (activePlayer.id === playerId) {
+        this.cookieService.delete(this.key);
+        this.activePlayer$.next(null);
+      }
     }
-    this.activePlayer$.next(null);
   }
 
   private getActivePlayer(): Player {
