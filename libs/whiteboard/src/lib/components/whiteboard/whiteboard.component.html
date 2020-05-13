@@ -51,7 +51,7 @@
       <div
         @showHideCard
         class="whiteboard__workspace__card"
-        *ngFor="let card of cards"
+        *ngFor="let card of cards; trackBy: trackByFn"
         cdkDrag
         [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
         [cdkDragDisabled]="card.mode === Mode.ZOOM"
