@@ -3,7 +3,7 @@ import { Storage } from 'aws-amplify';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import { BehaviorSubject, from, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../../API.service';
 import Player from '../../models/player';
@@ -11,6 +11,7 @@ import { RealtimeCard } from '../../models/realtimecard';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { UpdateHelper } from '../../util/updateHelper';
+import { ActiveplayerService } from '../activeplayer/activeplayer.service';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -26,7 +27,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession: RealtimeSession = new RealtimeSession();
   notificationSetter$ = new BehaviorSubject<string>(null);
 
-  constructor(private apiService: APIService) {}
+  constructor(
+    private apiService: APIService,
+    private activePlayerService: ActiveplayerService
+  ) {}
 
   public setCurrentRealtimeSession(realtimeSession: RealtimeSession) {
     this.currentRealtimeSession$.next(realtimeSession);
@@ -111,12 +115,16 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.apiService.OnDeletePlayerListener.subscribe((evt: any) => {
       const playerResponse: Player = new Player(evt.value.data.onDeletePlayer);
       if (playerResponse.sessionId === this.currentRealtimeSession.id) {
+        // remove cookie
+        this.activePlayerService.deleteActivePlayer(playerResponse.id);
         // remove player from array
-        this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
-          p => p.id !== playerResponse.id
-        );
-        // set notification for component
-        this.setNotification(`${playerResponse.fullName} left the session.`);
+        if (this.currentRealtimeSession.players) {
+          this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
+            p => p.id !== playerResponse.id
+          );
+          // set notification for component
+          this.setNotification(`${playerResponse.fullName} left the session.`);
+        }
       }
     });
   }
@@ -349,63 +357,60 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#region DELETE
 
-  DeleteSession(sessionId: string) {
-    // delete cards from active whiteboard
-    this.currentRealtimeSession.whiteboard.cards.forEach(c => {
-      UpdateHelper.setVersionOfCard(this.currentRealtimeSession, c);
-      this.apiService
-        .DeleteCard({
-          id: c.id,
-          _version: c.version
-        })
-        .then(() => {})
-        .catch(err => console.log(err));
-    });
+  deleteSession(sessionId: string): Observable<boolean> {
+    const deletePlayers$ = this.currentRealtimeSession.players.map(p =>
+      this.deletePlayer(p)
+    );
+    const deleteCards$ = this.currentRealtimeSession.whiteboard.cards.map(c =>
+      this.deleteCard(c)
+    );
+    const deleteWhiteboard$ = this.deleteWhiteboard(
+      this.currentRealtimeSession.whiteboard
+    );
 
-    // delete active whiteboard
-    this.apiService
-      .DeleteWhiteboard({
-        id: this.currentRealtimeSession.whiteboard.id,
-        _version: this.currentRealtimeSession.whiteboard.version
-      })
-      .then(() => {})
-      .catch(err => console.log(err));
-
-    // delete session
-    this.apiService
-      .DeleteSession({
-        id: sessionId,
-        _version: this.currentRealtimeSession.version
-      })
-      .then(() => {})
-      .catch(err => console.log(err));
+    // completes delete players, cards, whiteboard before deleting the session
+    return forkJoin(deleteCards$, deletePlayers$, deleteWhiteboard$).pipe(
+      map(() => {
+        this.apiService.DeleteSession({
+          id: sessionId,
+          _version: this.currentRealtimeSession.version
+        });
+      }),
+      mapTo(true)
+    );
   }
 
-  deleteCard(realtimeCard: RealtimeCard) {
+  deleteCard(realtimeCard: RealtimeCard): Observable<boolean> {
     console.log('delete card');
     UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
-
-    this.apiService
-      .DeleteCard({
+    return from(
+      this.apiService.DeleteCard({
         id: realtimeCard.id,
         _version: realtimeCard.version
       })
-      .then(() => {})
-      .catch(err => console.log(err));
+    ).pipe(mapTo(true));
   }
 
-  deletePlayer(player: Player) {
+  deletePlayer(player: Player): Observable<boolean> {
+    console.log('delete player');
     UpdateHelper.setVersionOfPlayer(this.currentRealtimeSession, player);
-    console.log(player);
-    this.apiService
-      .DeletePlayer({
+    return from(
+      this.apiService.DeletePlayer({
         id: player.id,
         _version: player.version
       })
-      .then(() => {})
-      .catch(err => console.log(err));
+    ).pipe(mapTo(true));
   }
 
+  deleteWhiteboard(whiteboard: RealtimeWhiteboard): Observable<boolean> {
+    console.log('delete whiteboard');
+    return from(
+      this.apiService.DeleteWhiteboard({
+        id: whiteboard.id,
+        _version: whiteboard.version
+      })
+    ).pipe(mapTo(true));
+  }
   //#endregion
 
   //#region IMAGES
