@@ -3,7 +3,7 @@ import { Storage } from 'aws-amplify';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../../API.service';
 import Player from '../../models/player';
@@ -357,7 +357,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   //#region DELETE
 
-  deleteSession(sessionId: string) {
+  deleteSession(sessionId: string): Observable<boolean> {
     const deletePlayers$ = this.currentRealtimeSession.players.map(p =>
       this.deletePlayer(p)
     );
@@ -368,12 +368,16 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       this.currentRealtimeSession.whiteboard
     );
 
-    // User ForkJoin
-    combineLatest(
-      deleteCards$,
-      deletePlayers$,
-      deleteWhiteboard$
-    ).subscribe(() => console.log('delete session'));
+    // completes delete players, cards, whiteboard before deleting the session
+    return forkJoin(deleteCards$, deletePlayers$, deleteWhiteboard$).pipe(
+      map(() => {
+        this.apiService.DeleteSession({
+          id: sessionId,
+          _version: this.currentRealtimeSession.version
+        });
+      }),
+      mapTo(true)
+    );
   }
 
   deleteCard(realtimeCard: RealtimeCard): Observable<boolean> {

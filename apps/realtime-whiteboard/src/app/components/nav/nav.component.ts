@@ -86,7 +86,7 @@ export class NavComponent implements OnInit {
   }
 
   stopSession() {
-    this.sessionService.deleteSession(this.session.id);
+    this.sessionService.deleteSession(this.session.id).subscribe(() => {});
   }
 
   openInfoModal() {
