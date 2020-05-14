@@ -24,18 +24,12 @@ export interface WhiteboardDataServiceInterface {
 })
 export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession$ = new BehaviorSubject<RealtimeSession>(null);
-  currentRealtimeSession: RealtimeSession = new RealtimeSession();
   notificationSetter$ = new BehaviorSubject<string>(null);
 
   constructor(
     private apiService: APIService,
     private activePlayerService: ActiveplayerService
   ) {}
-
-  public setCurrentRealtimeSession(realtimeSession: RealtimeSession) {
-    this.currentRealtimeSession$.next(realtimeSession);
-    this.currentRealtimeSession = realtimeSession;
-  }
 
   private setNotification(message: string) {
     this.notificationSetter$.next(message);
@@ -48,9 +42,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.apiService.OnUpdateSessionListener.subscribe((evt: any) => {
       // check if update is for currect session
       if (
-        evt.value.data.onUpdateSession.id === this.currentRealtimeSession.id
+        evt.value.data.onUpdateSession.id ===
+        this.currentRealtimeSession$.getValue().id
       ) {
-        this.setCurrentRealtimeSession(
+        this.currentRealtimeSession$.next(
           new RealtimeSession(evt.value.data.onUpdateSession)
         );
       }
@@ -62,23 +57,25 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       const deletedSession = new RealtimeSession(
         evt.value.data.onDeleteSession
       );
-      if (deletedSession.id === this.currentRealtimeSession.id) {
+      if (deletedSession.id === this.currentRealtimeSession$.getValue().id) {
         // update behaviorSubject
-        this.setCurrentRealtimeSession(deletedSession);
+        this.currentRealtimeSession$.next(deletedSession);
       }
     });
   }
 
   subscribeOnWhiteboardUpdates() {
     this.apiService.OnUpdateWhiteboardListener.subscribe((evt: any) => {
+      const updatedWhiteboard = new RealtimeWhiteboard(
+        evt.value.data.onUpdateWhiteboard
+      );
       if (
-        evt.value.data.onUpdateWhiteboard.id ===
-        this.currentRealtimeSession.whiteboard.id
+        updatedWhiteboard.id ===
+        this.currentRealtimeSession$.getValue().whiteboard.id
       ) {
-        this.currentRealtimeSession.whiteboard = new RealtimeWhiteboard(
-          evt.value.data.onUpdateWhiteboard
-        );
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+        realtimeSessionUpdate.whiteboard = updatedWhiteboard;
+        this.currentRealtimeSession$.next(realtimeSessionUpdate);
       }
     });
   }
@@ -89,11 +86,13 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         evt.value.data.onCreateCard
       );
       if (
-        cardResponse.whiteboardId === this.currentRealtimeSession.whiteboard.id
+        cardResponse.whiteboardId ===
+        this.currentRealtimeSession$.getValue().whiteboard.id
       ) {
         // push cardResponse
-        this.currentRealtimeSession.whiteboard.cards.push(cardResponse);
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        const realtimeSessioUpdate = this.currentRealtimeSession$.getValue();
+        realtimeSessioUpdate.whiteboard.cards.push(cardResponse);
+        this.currentRealtimeSession$.next(realtimeSessioUpdate);
       }
     });
   }
@@ -101,10 +100,13 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   subscribeOnCreatePlayer() {
     this.apiService.OnCreatePlayerListener.subscribe((evt: any) => {
       const playerResponse: Player = new Player(evt.value.data.onCreatePlayer);
-      if (playerResponse.sessionId === this.currentRealtimeSession.id) {
+      if (
+        playerResponse.sessionId === this.currentRealtimeSession$.getValue().id
+      ) {
         // push player in array
-        this.currentRealtimeSession.players.push(playerResponse);
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        const realtimeSessioUpdate = this.currentRealtimeSession$.getValue();
+        realtimeSessioUpdate.players.push(playerResponse);
+        this.currentRealtimeSession$.next(realtimeSessioUpdate);
         // set notification for component
         this.setNotification(`${playerResponse.fullName} joined the session.`);
       }
@@ -114,14 +116,20 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   subsribeOnDeletePlayer() {
     this.apiService.OnDeletePlayerListener.subscribe((evt: any) => {
       const playerResponse: Player = new Player(evt.value.data.onDeletePlayer);
-      if (playerResponse.sessionId === this.currentRealtimeSession.id) {
+      if (
+        playerResponse.sessionId === this.currentRealtimeSession$.getValue().id
+      ) {
         // remove cookie
         this.activePlayerService.deleteActivePlayer(playerResponse.id);
         // remove player from array
-        if (this.currentRealtimeSession.players) {
-          this.currentRealtimeSession.players = this.currentRealtimeSession.players.filter(
-            p => p.id !== playerResponse.id
-          );
+        if (this.currentRealtimeSession$.getValue().players) {
+          const realtimeSessioUpdate = this.currentRealtimeSession$.getValue();
+          realtimeSessioUpdate.players = [
+            ...realtimeSessioUpdate.players.filter(
+              p => p.id !== playerResponse.id
+            )
+          ];
+          this.currentRealtimeSession$.next(realtimeSessioUpdate);
           // set notification for component
           this.setNotification(`${playerResponse.fullName} left the session.`);
         }
@@ -136,20 +144,21 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       );
       // update is for this whiteboard
       if (
-        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+        this.currentRealtimeSession$.getValue().whiteboard.id ===
+        cardResponse.whiteboardId
       ) {
+        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
         // find card to update
-        const cardToUpdate = this.currentRealtimeSession.whiteboard.cards.find(
-          c => c.id === cardResponse.id
-        );
+        realtimeSessionUpdate.whiteboard.cards.forEach(c => {
+          if (c.id === cardResponse.id) {
+            UpdateHelper.updateCardPropertiesFromCardResponse(c, cardResponse);
+          }
+        });
 
         // Delete and add cardResponse to array ()
-        UpdateHelper.replaceCardinArray(
-          this.currentRealtimeSession,
-          cardResponse
-        );
+        // UpdateHelper.replaceCardinArray(realtimeSessionUpdate, cardResponse);
 
-        this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        this.currentRealtimeSession$.next(realtimeSessionUpdate);
       }
     });
   }
@@ -160,14 +169,18 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         evt.value.data.onDeleteCard
       );
       if (
-        this.currentRealtimeSession.whiteboard.id === cardResponse.whiteboardId
+        this.currentRealtimeSession$.getValue().whiteboard.id ===
+        cardResponse.whiteboardId
       ) {
         // remove card from array
-        if (this.currentRealtimeSession.whiteboard.cards) {
-          this.currentRealtimeSession.whiteboard.cards = this.currentRealtimeSession.whiteboard.cards.filter(
-            c => c.id !== cardResponse.id
-          );
-          this.setCurrentRealtimeSession(this.currentRealtimeSession);
+        if (this.currentRealtimeSession$.getValue().whiteboard.cards) {
+          const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+          realtimeSessionUpdate.whiteboard.cards = [
+            ...realtimeSessionUpdate.whiteboard.cards.filter(
+              c => c.id !== cardResponse.id
+            )
+          ];
+          this.currentRealtimeSession$.next(realtimeSessionUpdate);
         }
       }
     });
@@ -192,7 +205,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       map(sessionResponse => {
         // update behaviorSubject
         const currentSession = new RealtimeSession(sessionResponse);
-        this.setCurrentRealtimeSession(currentSession);
+        this.currentRealtimeSession$.next(currentSession);
         // return session (id is required for navigation)
         return currentSession;
       })
@@ -202,7 +215,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   createPlayer(player: Player): Observable<Player> {
     return from(
       this.apiService.CreatePlayer({
-        sessionID: this.currentRealtimeSession.id,
+        sessionID: this.currentRealtimeSession$.getValue().id,
         fullName: player.fullName,
         isTeacher: player.isTeacher
       })
@@ -216,6 +229,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   createWhiteboard(
     whiteboard: WhiteboardInterface
   ): Observable<RealtimeWhiteboard> {
+    console.log('create whiteboard');
     return from(
       this.apiService.CreateWhiteboard({
         title: whiteboard.title,
@@ -223,10 +237,8 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       })
     ).pipe(
       map(whiteboardResponse => {
-        this.currentRealtimeSession.whiteboard = new RealtimeWhiteboard(
-          whiteboardResponse
-        );
-        return this.currentRealtimeSession.whiteboard;
+        const realtimeWhiteboard = new RealtimeWhiteboard(whiteboardResponse);
+        return realtimeWhiteboard;
       })
     );
   }
@@ -237,7 +249,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.apiService
       .CreateCard({
         id: card.id,
-        whiteboardID: this.currentRealtimeSession.whiteboard.id,
+        whiteboardID: this.currentRealtimeSession$.getValue().whiteboard.id,
         mode: 1, // Save in database as IDLE
         type: 0, // unimportant
         color: card.color,
@@ -256,6 +268,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   //#region GET
 
   getSession(sessionId: string) {
+    console.log('get session');
     // get session
     this.apiService
       .GetSession(sessionId)
@@ -268,7 +281,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
             realtimeSession.whiteboard = new RealtimeWhiteboard(
               whiteboardResponse
             );
-            this.setCurrentRealtimeSession(realtimeSession);
+            this.currentRealtimeSession$.next(realtimeSession);
           })
           .catch(err => console.log(err));
       })
@@ -278,7 +291,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface> {
     console.log('get whiteboard');
     return from(
-      this.apiService.GetSession(this.currentRealtimeSession.id)
+      this.apiService.GetSession(this.currentRealtimeSession$.getValue().id)
     ).pipe(
       map(sessionResponse => {
         return new RealtimeSession(sessionResponse).whiteboard;
@@ -316,10 +329,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     console.log('update whiteboard');
     return from(
       this.apiService.UpdateWhiteboard({
-        id: this.currentRealtimeSession.whiteboard.id,
+        id: this.currentRealtimeSession$.getValue().whiteboard.id,
         title: updatedWhiteboard.title,
         defaultColor: updatedWhiteboard.defaultColor,
-        _version: this.currentRealtimeSession.whiteboard.version
+        _version: this.currentRealtimeSession$.getValue().whiteboard.version
       })
     ).pipe(mapTo(true));
   }
@@ -327,14 +340,21 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   updateCard(card: CardInterface, player: Player) {
     console.log('update card');
     // find card to update
-    const realtimeCard: RealtimeCard = this.currentRealtimeSession.whiteboard.cards.find(
-      c => c.id === card.id
-    );
-
-    // prepare card (check description, top, left, ...)
+    const realtimeCard: RealtimeCard = this.currentRealtimeSession$
+      .getValue()
+      .whiteboard.cards.find(c => c.id === card.id);
+    // prepare card
     UpdateHelper.prepareCard(realtimeCard);
+    // update realtiemCard properties
+    UpdateHelper.updateRealtimeCardPropertiesFromCardInterface(
+      realtimeCard,
+      card
+    );
     // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
-    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
+    UpdateHelper.setVersionOfCard(
+      this.currentRealtimeSession$.getValue(),
+      realtimeCard
+    );
 
     // update necessary properties
     this.apiService
@@ -358,14 +378,15 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   //#region DELETE
 
   deleteSession(sessionId: string): Observable<boolean> {
-    const deletePlayers$ = this.currentRealtimeSession.players.map(p =>
-      this.deletePlayer(p)
-    );
-    const deleteCards$ = this.currentRealtimeSession.whiteboard.cards.map(c =>
-      this.deleteCard(c)
-    );
+    console.log('delete session');
+    const deletePlayers$ = this.currentRealtimeSession$
+      .getValue()
+      .players.map(p => this.deletePlayer(p));
+    const deleteCards$ = this.currentRealtimeSession$
+      .getValue()
+      .whiteboard.cards.map(c => this.deleteCard(c));
     const deleteWhiteboard$ = this.deleteWhiteboard(
-      this.currentRealtimeSession.whiteboard
+      this.currentRealtimeSession$.getValue().whiteboard
     );
 
     // completes delete players, cards, whiteboard before deleting the session
@@ -373,7 +394,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       map(() => {
         this.apiService.DeleteSession({
           id: sessionId,
-          _version: this.currentRealtimeSession.version
+          _version: this.currentRealtimeSession$.getValue().version
         });
       }),
       mapTo(true)
@@ -382,7 +403,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   deleteCard(realtimeCard: RealtimeCard): Observable<boolean> {
     console.log('delete card');
-    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
+    UpdateHelper.setVersionOfCard(
+      this.currentRealtimeSession$.getValue(),
+      realtimeCard
+    );
     return from(
       this.apiService.DeleteCard({
         id: realtimeCard.id,
@@ -393,7 +417,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   deletePlayer(player: Player): Observable<boolean> {
     console.log('delete player');
-    UpdateHelper.setVersionOfPlayer(this.currentRealtimeSession, player);
+    UpdateHelper.setVersionOfPlayer(
+      this.currentRealtimeSession$.getValue(),
+      player
+    );
     return from(
       this.apiService.DeletePlayer({
         id: player.id,
@@ -416,11 +443,18 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   //#region IMAGES
 
   uploadFile(file: File): Observable<ImageInterface> {
-    throw new Error('Method not implemented.');
+    console.log('upload file');
+    return from(this.saveImg(file)).pipe(
+      map((uploadResponse: any) => {
+        return {
+          imageUrl: `https://realtimewhiteboardstragebucket125040-dev.s3-eu-west-1.amazonaws.com/public/${uploadResponse.key}`,
+          progress: 0
+        };
+      })
+    );
   }
 
-  uploadFileTEST(file: File): Observable<any> {
-    // TODO: minitor progress: https://docs.amplify.aws/lib/storage/upload/q/platform/js#protected-level
+  private saveImg(file: File): Observable<any> {
     return from(
       Storage.put(file.name, file, {
         level: 'public',
@@ -433,21 +467,15 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     );
   }
 
-  downloadFile(key: string): Observable<any> {
-    return from(Storage.get(key)).pipe(
-      map((downloadResponse: any) => {
-        return downloadResponse.key;
-      })
-    );
-  }
-
   updateCardImage(realtimeCard: RealtimeCard, url: string) {
+    console.log('update card image');
     // prepare card
     UpdateHelper.prepareCard(realtimeCard);
     // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
-    UpdateHelper.setVersionOfCard(this.currentRealtimeSession, realtimeCard);
-
-    console.log(realtimeCard.version);
+    UpdateHelper.setVersionOfCard(
+      this.currentRealtimeSession$.getValue(),
+      realtimeCard
+    );
 
     this.apiService
       .UpdateCard({

@@ -36,6 +36,15 @@ export class UpdateHelper {
     }
   }
 
+  public static checkDescription(realtimeCard: CardInterface) {
+    if (
+      realtimeCard.description === null ||
+      realtimeCard.description.length < 1
+    ) {
+      realtimeCard.description = 'empty';
+    }
+  }
+
   public static setVersionOfPlayer(
     currentRealtimeSession: RealtimeSession,
     player: Player
@@ -47,15 +56,6 @@ export class UpdateHelper {
         currentRealtimeSession,
         player.id
       );
-    }
-  }
-
-  public static checkDescription(realtimeCard: CardInterface) {
-    if (
-      realtimeCard.description === null ||
-      realtimeCard.description.length < 1
-    ) {
-      realtimeCard.description = 'empty';
     }
   }
 

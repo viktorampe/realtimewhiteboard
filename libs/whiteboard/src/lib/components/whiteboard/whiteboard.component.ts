@@ -197,6 +197,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
     if (
       changes.uploadImageResponse &&
       !changes.uploadImageResponse.firstChange
@@ -235,10 +236,10 @@ export class WhiteboardComponent implements OnChanges {
 
   private updateViewMode(card: CardInterface) {
     if (!card.image) {
-      this.updateCard({ viewModeImage: false }, card, true);
+      this.updateCard({ viewModeImage: false }, card);
     }
     if (!card.description) {
-      this.updateCard({ viewModeImage: true }, card, true);
+      this.updateCard({ viewModeImage: true }, card);
     }
 
     this.saveWhiteboard();
@@ -737,8 +738,4 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   //#endregion
-
-  trackByFn(index, item) {
-    return item.id; // or item.id
-  }
 }

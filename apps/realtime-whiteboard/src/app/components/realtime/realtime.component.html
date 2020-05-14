@@ -1,11 +1,11 @@
-<div class="realtime_container" *ngIf="session !== undefined">
+<div class="realtime_container">
   <ng-container *ngIf="loggedIn; else logIn">
     <campus-whiteboard
-      *ngIf="session?.whiteboard"
-      [title]="session.whiteboard.title"
-      [defaultColor]="session.whiteboard.defaultColor"
-      [cards]="session.whiteboard.cards"
-      [shelfCards]="session.whiteboard.shelfCards"
+      *ngIf="whiteboard$ | async as whiteboard"
+      [title]="whiteboard.title"
+      [defaultColor]="whiteboard.defaultColor"
+      [cards]="whiteboard.cards"
+      [shelfCards]="whiteboard.shelfCards"
       [canManage]="false"
       [uploadImageResponse]="imageUploadResponse$ | async"
       (whiteboardChange)="updateWhiteboard($event)"

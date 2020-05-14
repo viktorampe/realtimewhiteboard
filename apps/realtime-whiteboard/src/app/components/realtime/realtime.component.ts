@@ -10,6 +10,7 @@ import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.i
 import { BehaviorSubject } from 'rxjs';
 import Player from '../../models/player';
 import RealtimeSession from '../../models/realtimesession';
+import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { ActiveplayerService } from '../../services/activeplayer/activeplayer.service';
 import { FullscreenService } from '../../services/fullscreen/fullscreen.service';
 import { RealtimeSessionService } from '../../services/realtimesession/realtime-session.service';
@@ -23,7 +24,10 @@ import { UpdateHelper } from '../../util/updateHelper';
 })
 export class RealtimeComponent implements OnInit {
   sessionId: string;
-  session: RealtimeSession;
+
+  session$ = new BehaviorSubject<RealtimeSession>(null);
+  whiteboard$ = new BehaviorSubject<RealtimeWhiteboard>(null);
+
   loggedIn: boolean;
   activePlayer: Player;
   message: string;
@@ -47,15 +51,16 @@ export class RealtimeComponent implements OnInit {
       this.fetchSession();
     });
 
-    // subscribe on session behaviorsubject  updates
+    // subscribe on session behaviorsubject updates
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimeSession: RealtimeSession) => {
-        this.session = realtimeSession;
+        if (realtimeSession) {
+          this.setBehaviorSubjects(realtimeSession);
+        }
       }
     );
     // Subscribe on active Playyer and update ui depending on active player
     this.activePlayerService.activePlayer$.subscribe((player: Player) => {
-      console.log('active player: ', player);
       this.activePlayer = player;
       this.handleUI();
     });
@@ -69,7 +74,7 @@ export class RealtimeComponent implements OnInit {
 
   joinSession(playerAndPincode: { player: Player; pincode: number }) {
     const { player, pincode } = playerAndPincode;
-    if (pincode === this.session.pincode) {
+    if (pincode === this.session$.getValue().pincode) {
       // post player
       this.sessionService
         .createPlayer(player)
@@ -86,7 +91,7 @@ export class RealtimeComponent implements OnInit {
   updateWhiteboard(updatedWhiteboard: WhiteboardInterface) {
     // get update type
     const update = UpdateHelper.handleWhiteboardUpdate(
-      this.session.whiteboard,
+      this.whiteboard$.getValue(),
       updatedWhiteboard
     );
     // title / defaultcolor changed
@@ -100,8 +105,9 @@ export class RealtimeComponent implements OnInit {
     if (update.includes('CREATE_CARD')) {
       const cardsToCreate = updatedWhiteboard.cards.filter(
         newCards =>
-          !this.session.whiteboard.cards
-            .map(currentCards => currentCards.id)
+          !this.whiteboard$
+            .getValue()
+            .cards.map(currentCards => currentCards.id)
             .includes(newCards.id)
       );
       this.sessionService.createCard(cardsToCreate[0], this.activePlayer);
@@ -109,10 +115,12 @@ export class RealtimeComponent implements OnInit {
 
     // card was deleted
     if (update.includes('DELETE_CARD')) {
-      const cardsToDelete = this.session.whiteboard.cards.filter(
-        currentCard =>
-          !updatedWhiteboard.cards.map(c => c.id).includes(currentCard.id)
-      );
+      const cardsToDelete = this.whiteboard$
+        .getValue()
+        .cards.filter(
+          currentCard =>
+            !updatedWhiteboard.cards.map(c => c.id).includes(currentCard.id)
+        );
       cardsToDelete.forEach(c => this.sessionService.deleteCard(c));
     }
   }
@@ -124,16 +132,11 @@ export class RealtimeComponent implements OnInit {
 
   updateCardImage(cardImageUpload: CardImageUploadInterface) {
     const { card, imageFile } = cardImageUpload;
-    // save image in S3 bucket
-    this.sessionService.uploadFileTEST(imageFile).subscribe(response => {
-      // get image from S3 bucket
-      this.sessionService.downloadFile(response.key).subscribe(() => {
-        const imageUrl = `https://realtimewhiteboardstragebucket125040-dev.s3-eu-west-1.amazonaws.com/public/${response.key}`;
-        this.sessionService.updateCardImage(
-          this.session.whiteboard.cards.find(c => (c.id = card.id)),
-          imageUrl
-        );
-      });
+    this.sessionService.uploadFile(imageFile).subscribe((image: any) => {
+      this.sessionService.updateCardImage(
+        this.whiteboard$.getValue().cards.find(c => (c.id = card.id)),
+        image.imageUrl
+      );
     });
   }
 
@@ -157,5 +160,10 @@ export class RealtimeComponent implements OnInit {
     this._snackBar.open(message, null, {
       duration: 2000
     });
+  }
+
+  private setBehaviorSubjects(realtimeSession: RealtimeSession) {
+    this.session$.next(realtimeSession);
+    this.whiteboard$.next(realtimeSession.whiteboard);
   }
 }
