@@ -41,7 +41,7 @@ export class UpdateHelper {
       realtimeCard.description === null ||
       realtimeCard.description.length < 1
     ) {
-      realtimeCard.description = 'empty';
+      realtimeCard.description = null;
     }
   }
 
