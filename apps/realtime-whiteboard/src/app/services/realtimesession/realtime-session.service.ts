@@ -90,9 +90,12 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         cardResponse.whiteboardId ===
         this.currentRealtimeSession$.getValue().whiteboard.id
       ) {
-        // push cardResponse
+        // add card to array and update reference
         const realtimeSessioUpdate = this.currentRealtimeSession$.getValue();
-        realtimeSessioUpdate.whiteboard.cards.push(cardResponse);
+        realtimeSessioUpdate.whiteboard.cards = [
+          ...realtimeSessioUpdate.whiteboard.cards,
+          cardResponse
+        ];
         this.currentRealtimeSession$.next(realtimeSessioUpdate);
       }
     });
@@ -149,12 +152,19 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         cardResponse.whiteboardId
       ) {
         const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-        // find card to update
-        realtimeSessionUpdate.whiteboard.cards.forEach(c => {
-          if (c.id === cardResponse.id) {
-            UpdateHelper.updateCardPropertiesFromCardResponse(c, cardResponse);
+        // find card to update and set to new reference
+        realtimeSessionUpdate.whiteboard.cards = realtimeSessionUpdate.whiteboard.cards.map(
+          c => {
+            const updatedCard = { ...c };
+            if (updatedCard.id === cardResponse.id) {
+              UpdateHelper.updateCardPropertiesFromCardResponse(
+                updatedCard,
+                cardResponse
+              );
+            }
+            return updatedCard;
           }
-        });
+        );
 
         // Delete and add cardResponse to array ()
         // UpdateHelper.replaceCardinArray(realtimeSessionUpdate, cardResponse);
@@ -173,7 +183,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         this.currentRealtimeSession$.getValue().whiteboard.id ===
         cardResponse.whiteboardId
       ) {
-        // remove card from array
+        // remove card from array with new reference
         if (this.currentRealtimeSession$.getValue().whiteboard.cards) {
           const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
           realtimeSessionUpdate.whiteboard.cards = [

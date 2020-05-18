@@ -164,6 +164,6 @@ export class RealtimeComponent implements OnInit {
 
   private setBehaviorSubjects(realtimeSession: RealtimeSession) {
     this.session$.next(realtimeSession);
-    this.whiteboard$.next(realtimeSession.whiteboard);
+    this.whiteboard$.next(Object.assign({}, realtimeSession.whiteboard));
   }
 }

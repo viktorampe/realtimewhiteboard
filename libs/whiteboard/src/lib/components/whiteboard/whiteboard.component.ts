@@ -737,5 +737,8 @@ export class WhiteboardComponent implements OnChanges {
     return this.cards.filter(c => !this.selectedCards.includes(c));
   }
 
+  trackByFn(index, item) {
+    return item.id; // or item.id
+  }
   //#endregion
 }
