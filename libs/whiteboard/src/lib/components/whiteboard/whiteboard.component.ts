@@ -197,7 +197,6 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     if (
       changes.uploadImageResponse &&
       !changes.uploadImageResponse.firstChange

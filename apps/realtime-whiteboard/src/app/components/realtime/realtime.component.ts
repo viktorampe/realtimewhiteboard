@@ -134,7 +134,7 @@ export class RealtimeComponent implements OnInit {
     const { card, imageFile } = cardImageUpload;
     this.sessionService.uploadFile(imageFile).subscribe((image: any) => {
       this.sessionService.updateCardImage(
-        this.whiteboard$.getValue().cards.find(c => (c.id = card.id)),
+        this.whiteboard$.getValue().cards.find(c => c.id === card.id),
         image.imageUrl
       );
     });

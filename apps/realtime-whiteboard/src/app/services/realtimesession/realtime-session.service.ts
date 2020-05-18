@@ -91,12 +91,25 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         this.currentRealtimeSession$.getValue().whiteboard.id
       ) {
         // add card to array and update reference
-        const realtimeSessioUpdate = this.currentRealtimeSession$.getValue();
-        realtimeSessioUpdate.whiteboard.cards = [
-          ...realtimeSessioUpdate.whiteboard.cards,
-          cardResponse
+        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+        // find card to update and set to new reference
+        const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
+          c => c.id === cardResponse.id
+        );
+        // find card to update and set to new reference
+        realtimeSessionUpdate.whiteboard.cards = [
+          ...realtimeSessionUpdate.whiteboard.cards.filter(
+            c => c.id !== cardResponse.id
+          ),
+          {
+            ...cardResponse,
+            mode:
+              ownCardVersion && ownCardVersion.mode !== cardResponse.mode
+                ? ownCardVersion.mode
+                : cardResponse.mode
+          }
         ];
-        this.currentRealtimeSession$.next(realtimeSessioUpdate);
+        this.currentRealtimeSession$.next(realtimeSessionUpdate);
       }
     });
   }
@@ -153,18 +166,22 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       ) {
         const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
         // find card to update and set to new reference
-        realtimeSessionUpdate.whiteboard.cards = realtimeSessionUpdate.whiteboard.cards.map(
-          c => {
-            const updatedCard = { ...c };
-            if (updatedCard.id === cardResponse.id) {
-              UpdateHelper.updateCardPropertiesFromCardResponse(
-                updatedCard,
-                cardResponse
-              );
-            }
-            return updatedCard;
-          }
+        const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
+          c => c.id === cardResponse.id
         );
+        // find card to update and set to new reference
+        realtimeSessionUpdate.whiteboard.cards = [
+          ...realtimeSessionUpdate.whiteboard.cards.filter(
+            c => c.id !== cardResponse.id
+          ),
+          {
+            ...cardResponse,
+            mode:
+              ownCardVersion && ownCardVersion.mode !== cardResponse.mode
+                ? ownCardVersion.mode
+                : cardResponse.mode
+          }
+        ];
 
         // Delete and add cardResponse to array ()
         // UpdateHelper.replaceCardinArray(realtimeSessionUpdate, cardResponse);
@@ -362,10 +379,11 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       card
     );
     // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
+    /*
     UpdateHelper.setVersionOfCard(
       this.currentRealtimeSession$.getValue(),
       realtimeCard
-    );
+    );*/
 
     // update necessary properties
     this.apiService
@@ -483,10 +501,12 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     // prepare card
     UpdateHelper.prepareCard(realtimeCard);
     // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
+    /*
     UpdateHelper.setVersionOfCard(
       this.currentRealtimeSession$.getValue(),
       realtimeCard
     );
+    */
 
     this.apiService
       .UpdateCard({
