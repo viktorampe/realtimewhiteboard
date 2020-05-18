@@ -75,6 +75,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       ) {
         const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
         realtimeSessionUpdate.whiteboard = updatedWhiteboard;
+
         this.currentRealtimeSession$.next(realtimeSessionUpdate);
       }
     });

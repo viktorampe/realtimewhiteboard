@@ -26,13 +26,11 @@ export class UpdateHelper {
     currentRealtimeSession: RealtimeSession,
     realtimeCard: RealtimeCard
   ) {
-    const cardVersion = currentRealtimeSession.whiteboard.cards.find(
+    realtimeCard.version = currentRealtimeSession.whiteboard.cards.find(
       c => c.id === realtimeCard.id
     ).version;
-    if (cardVersion === undefined) {
-      return 1;
-    } else {
-      return cardVersion;
+    if (realtimeCard.version === undefined) {
+      realtimeCard.version = 1;
     }
   }
 
