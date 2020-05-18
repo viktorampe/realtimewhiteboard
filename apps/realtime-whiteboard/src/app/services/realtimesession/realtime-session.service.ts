@@ -102,10 +102,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         // add card to array and update reference
         const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
         // find card to update and set to new reference
-        const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
-          c => c.id === cardResponse.id
-        );
-        // find card to update and set to new reference
         realtimeSessionUpdate.whiteboard.cards = [
           ...realtimeSessionUpdate.whiteboard.cards.filter(
             c => c.id !== cardResponse.id
