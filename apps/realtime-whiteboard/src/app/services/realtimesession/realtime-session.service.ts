@@ -3,13 +3,7 @@ import { Storage } from 'aws-amplify';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import {
-  BehaviorSubject,
-  combineLatest,
-  forkJoin,
-  from,
-  Observable
-} from 'rxjs';
+import { BehaviorSubject, forkJoin, from, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../../API.service';
 import Player from '../../models/player';
@@ -88,10 +82,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   subscribeOnCreateCard() {
-    combineLatest([
-      this.activePlayerService.activePlayer$,
-      this.apiService.OnCreateCardListener
-    ]).subscribe(([activePlayer, evt]: [Player, any]) => {
+    this.apiService.OnCreateCardListener.subscribe((evt: any) => {
       const cardResponse: RealtimeCard = new RealtimeCard(
         evt.value.data.onCreateCard
       );
@@ -109,7 +100,10 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
           {
             ...cardResponse,
             mode:
-              activePlayer.id === cardResponse.createdBy ? 0 : cardResponse.mode
+              this.activePlayerService.activePlayer$.getValue().id ===
+              cardResponse.createdBy
+                ? 0
+                : cardResponse.mode
           }
         ];
         this.currentRealtimeSession$.next(realtimeSessionUpdate);
