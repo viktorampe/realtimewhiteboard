@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatRippleModule } from '@angular/material/core';
@@ -8,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { WhiteboardModule } from '@campus/whiteboard';
 import { CookieService } from 'ngx-cookie-service';
@@ -49,7 +51,9 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     MatTableModule,
     MatRippleModule,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   entryComponents: [SessionsetupdialogComponent, SessiondetailsdialogComponent],
   providers: [CookieService],

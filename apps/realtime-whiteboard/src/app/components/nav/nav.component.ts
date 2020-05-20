@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -12,10 +13,23 @@ import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/session
 @Component({
   selector: 'campus-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+  styleUrls: ['./nav.component.scss'],
+  animations: [
+    trigger('inOutAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translate(100px)' }),
+        animate(
+          '0.3s ease-in',
+          style({ opacity: 1, transform: 'translate(0%)' })
+        )
+      ])
+    ])
+  ]
 })
 export class NavComponent implements OnInit {
+  navMinimized = true;
   session: RealtimeSession;
+
   constructor(
     private router: Router,
     private sessionService: RealtimeSessionService,
@@ -109,5 +123,9 @@ export class NavComponent implements OnInit {
 
   removePlayer() {
     this.sessionService.deletePlayer(this.session.players[0]);
+  }
+
+  toggleNav() {
+    this.navMinimized = !this.navMinimized;
   }
 }

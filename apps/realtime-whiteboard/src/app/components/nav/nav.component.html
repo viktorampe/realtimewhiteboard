@@ -1,28 +1,48 @@
-<nav>
-  <div class="content_container" id="nav_container">
-    <ng-container *ngIf="session?.lives; else noSession">
-      <div class="nav_item">
-        <button class="btn btnPrimary" (click)="stopSession()"
-          >Stop session</button
-        >
-      </div>
-      <div class="nav_item">
-        <button class="btn btnSecundary" (click)="openInfoModal()">
-          info
-        </button>
-      </div>
-      <div class="nav_item">
-        <button class="btn btnSecundary" (click)="removePlayer()">
-          delete first player
-        </button>
-      </div>
-    </ng-container>
-    <ng-template #noSession>
-      <div class="nav_item">
-        <button class="btn btnPrimary" (click)="setupSession()"
-          >start session</button
-        >
-      </div>
-    </ng-template>
+<nav [ngClass]="{ minimized: navMinimized }">
+  <div class="nav_item nav_controller" (click)="toggleNav()">
+    <mat-icon
+      class="nav_item_icon"
+      [svgIcon]="navMinimized ? 'menu' : 'close'"
+    ></mat-icon>
   </div>
+  <ng-container *ngIf="session?.lives; else noSession">
+    <div class="nav_item" (click)="stopSession()">
+      <mat-icon class="nav_item_icon" [svgIcon]="'stop'"></mat-icon>
+      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+        >Stop session</p
+      >
+    </div>
+    <div class="nav_item" (click)="openInfoModal()">
+      <mat-icon class="nav_item_icon" [svgIcon]="'settings'"></mat-icon>
+      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+        >Setting</p
+      >
+    </div>
+    <div class="nav_item" (click)="openInfoModal()">
+      <mat-icon class="nav_item_icon" [svgIcon]="'share'"></mat-icon>
+      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+        >Share link</p
+      >
+    </div>
+    <div class="nav_item" (click)="openInfoModal()">
+      <mat-icon class="nav_item_icon" [svgIcon]="'players'"></mat-icon>
+      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+        >Players</p
+      >
+    </div>
+    <div class="nav_item" (click)="openInfoModal()">
+      <mat-icon class="nav_item_icon" [svgIcon]="'cards'"></mat-icon>
+      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+        >Cards</p
+      >
+    </div>
+  </ng-container>
+  <ng-template #noSession>
+    <div class="nav_item" (click)="setupSession()">
+      <mat-icon class="nav_item_icon" [svgIcon]="'play'"></mat-icon>
+      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+        >Start session</p
+      >
+    </div>
+  </ng-template>
 </nav>
