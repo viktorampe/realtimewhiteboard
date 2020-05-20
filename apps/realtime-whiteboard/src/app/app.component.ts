@@ -26,7 +26,10 @@ export class AppComponent {
     private fullscreenService: FullscreenService,
     private cdRef: ChangeDetectorRef
   ) {
+    // whiteboard icons
     this.setupIconRegistry();
+    // custom icons
+    this.customIcons();
     // subscribe on session updates/deletes
     this.sessionService.subscribeOnSessionUpdates();
     this.sessionService.subscribeOnSessionDeletes();
@@ -47,6 +50,45 @@ export class AppComponent {
       this.fullScreen = isFS;
       this.cdRef.detectChanges(); // removes error
     });
+  }
+
+  private customIcons() {
+    this.iconRegistry.addSvgIcon(
+      'cards',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/cards.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'close',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/close.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'minimize',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/minimize.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'play',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/play.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'players',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/players.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'settings',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/settings.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'share',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/share.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'stop',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/stop.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'menu',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/menu.svg')
+    );
   }
 
   private setupIconRegistry() {
