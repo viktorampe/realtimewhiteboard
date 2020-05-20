@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from 'aws-amplify';
+import { ModeEnum } from 'libs/whiteboard/src/lib/enums/mode.enum';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
@@ -156,13 +157,13 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       const cardResponse: RealtimeCard = new RealtimeCard(
         evt.value.data.onUpdateCard
       );
+      console.log(cardResponse);
       // update is for this whiteboard
       if (
         this.currentRealtimeSession$.getValue().whiteboard.id ===
         cardResponse.whiteboardId
       ) {
         const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-        // find card to update and set to new reference
         const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
           c => c.id === cardResponse.id
         );
@@ -174,14 +175,13 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
           {
             ...cardResponse,
             mode:
-              ownCardVersion && ownCardVersion.mode !== cardResponse.mode
+              ownCardVersion &&
+              ownCardVersion.mode !== cardResponse.mode &&
+              ownCardVersion.mode !== ModeEnum.UPLOAD
                 ? ownCardVersion.mode
                 : cardResponse.mode
           }
         ];
-
-        // Delete and add cardResponse to array ()
-        // UpdateHelper.replaceCardinArray(realtimeSessionUpdate, cardResponse);
 
         this.currentRealtimeSession$.next(realtimeSessionUpdate);
       }
