@@ -10,6 +10,14 @@
             "StackName": "amplify-realtimewhiteboardv3-dev-125040",
             "StackId": "arn:aws:cloudformation:eu-west-1:924476590741:stack/amplify-realtimewhiteboardv3-dev-125040/41f54070-9375-11ea-9991-0a51e14e7998",
             "AmplifyAppId": "dk9wnetq427kl"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "dk9wnetq427kl",
+                    "type": "manual"
+                }
+            }
         }
     }
 }

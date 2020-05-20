@@ -1,34 +1,41 @@
 {
-	"auth": {
-		"realtimewhiteboardv3fd0097af": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": [],
-			"customAuth": false
-		}
-	},
-	"storage": {
-		"realtimewhitebaordstorage": {
-			"service": "S3",
-			"providerPlugin": "awscloudformation"
-		}
-	},
-	"api": {
-		"realtimewhitebaordv4": {
-			"service": "AppSync",
-			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "API_KEY",
-						"apiKeyConfig": {
-							"description": "key",
-							"apiKeyExpirationDays": 7
-						}
-					}
-				}
-			}
-		}
-	}
+    "auth": {
+        "realtimewhiteboardv3fd0097af": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [],
+            "customAuth": false
+        }
+    },
+    "storage": {
+        "realtimewhitebaordstorage": {
+            "service": "S3",
+            "providerPlugin": "awscloudformation"
+        }
+    },
+    "api": {
+        "realtimewhitebaordv4": {
+            "service": "AppSync",
+            "providerPlugin": "awscloudformation",
+            "output": {
+                "authConfig": {
+                    "additionalAuthenticationProviders": [],
+                    "defaultAuthentication": {
+                        "authenticationType": "API_KEY",
+                        "apiKeyConfig": {
+                            "description": "key",
+                            "apiKeyExpirationDays": 7
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "hosting": {
+        "amplifyhosting": {
+            "service": "amplifyhosting",
+            "providerPlugin": "awscloudformation",
+            "type": "manual"
+        }
+    }
 }
