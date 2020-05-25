@@ -170,12 +170,14 @@ export class NavComponent implements OnInit {
 
   private sortCards(realtimeSession: RealtimeSession) {
     if (realtimeSession.whiteboard) {
-      realtimeSession.whiteboard.cards = realtimeSession.whiteboard.cards.sort(
-        (a, b) => {
-          if (a.id > b.id) return -1;
-          if (a.id < b.id) return 1;
-        }
-      );
+      if (realtimeSession.whiteboard.cards) {
+        realtimeSession.whiteboard.cards = realtimeSession.whiteboard.cards.sort(
+          (a, b) => {
+            if (a.id > b.id) return -1;
+            if (a.id < b.id) return 1;
+          }
+        );
+      }
     }
   }
 }
