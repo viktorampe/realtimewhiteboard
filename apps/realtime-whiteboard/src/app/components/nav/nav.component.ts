@@ -159,7 +159,7 @@ export class NavComponent implements OnInit {
     console.log(realtimeSession);
 
     if (realtimeSession !== null) {
-      if (realtimeSession.lives === false) {
+      if (realtimeSession.deleted === true) {
         this.router.navigate(['']);
         return;
       }
