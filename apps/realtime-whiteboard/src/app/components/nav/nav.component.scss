@@ -56,3 +56,19 @@ nav {
     }
   }
 }
+
+.nav_card_details {
+  min-width: 300px;
+  width: fit-content;
+  overflow-y: scroll;
+
+  &_cardlist {
+    padding-left: 30px;
+    padding-right: 55px;
+    width: 100%;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

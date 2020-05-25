@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { ClipboardHelper } from '../../util/clipboardHelper';
 
 @Component({
   selector: 'campus-sessiondetailsdialog',
@@ -15,18 +16,8 @@ export class SessiondetailsdialogComponent implements OnInit {
 
   ngOnInit() {}
 
-  copyMessage(val: string) {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
+  copyMessage() {
+    ClipboardHelper.copyMessage(location.href);
     this.openSnackBar('Copied');
   }
 

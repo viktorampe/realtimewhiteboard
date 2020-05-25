@@ -1,0 +1,12 @@
+.realtimecard_detail {
+  height: 80px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+
+  &_info {
+    margin-left: 20px;
+  }
+}

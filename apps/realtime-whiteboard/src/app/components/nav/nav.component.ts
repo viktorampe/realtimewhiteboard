@@ -2,13 +2,16 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import Player from '../../models/player';
 import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { ActiveplayerService } from '../../services/activeplayer/activeplayer.service';
 import { RealtimeSessionService } from '../../services/realtimesession/realtime-session.service';
+import { ActiveplayersdialogComponent } from '../../ui/activeplayersdialog/activeplayersdialog.component';
 import { SessiondetailsdialogComponent } from '../../ui/sessiondetailsdialog/sessiondetailsdialog.component';
 import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/sessionsetupdialog.component';
+import { ClipboardHelper } from '../../util/clipboardHelper';
 
 @Component({
   selector: 'campus-nav',
@@ -28,7 +31,9 @@ import { SessionsetupdialogComponent } from '../../ui/sessionsetupdialog/session
 })
 export class NavComponent implements OnInit {
   navMinimized = true;
-  session: RealtimeSession;
+  navCardDetails = false;
+
+  session$ = new BehaviorSubject<RealtimeSession>(null);
 
   constructor(
     private router: Router,
@@ -41,13 +46,7 @@ export class NavComponent implements OnInit {
     // subscribe on realtime session updates
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
-        this.session = realtimesession;
-        console.log(this.session);
-        if (this.session !== null) {
-          if (this.session.lives === false) {
-            this.router.navigate(['']);
-          }
-        }
+        this.setBehaviorSubjects(realtimesession);
       }
     );
   }
@@ -100,16 +99,18 @@ export class NavComponent implements OnInit {
   }
 
   stopSession() {
-    this.sessionService.deleteSession(this.session.id).subscribe(() => {});
+    this.sessionService
+      .deleteSession(this.session$.getValue().id)
+      .subscribe(() => {});
   }
 
   openInfoModal() {
     const dialogRef = this.dialog.open(SessiondetailsdialogComponent, {
-      width: '75%',
+      width: '50%',
       data: {
-        title: this.session.title,
-        pincode: this.session.pincode,
-        players: this.session.players,
+        title: this.session$.getValue().title,
+        pincode: this.session$.getValue().pincode,
+        players: this.session$.getValue().players,
         sharelink: location.href
       }
     });
@@ -121,11 +122,60 @@ export class NavComponent implements OnInit {
     });
   }
 
-  removePlayer() {
-    this.sessionService.deletePlayer(this.session.players[0]);
+  copyLinkToClipboard() {
+    ClipboardHelper.copyMessage(location.href);
+    this.sessionService.notificationSetter$.next('Copied');
+  }
+
+  openActivePlayersModal() {
+    const dialogRef = this.dialog.open(ActiveplayersdialogComponent, {
+      width: '30%',
+      data: {
+        title: this.session$.getValue().title,
+        players: this.session$.getValue().players
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        // do something with result
+      }
+    });
+  }
+
+  showCardDetails() {
+    this.navCardDetails = true;
   }
 
   toggleNav() {
     this.navMinimized = !this.navMinimized;
+  }
+
+  closeCardDetails() {
+    this.navCardDetails = false;
+  }
+
+  private setBehaviorSubjects(realtimeSession: RealtimeSession) {
+    console.log(realtimeSession);
+
+    if (realtimeSession !== null) {
+      if (realtimeSession.lives === false) {
+        this.router.navigate(['']);
+        return;
+      }
+      this.sortCards(realtimeSession);
+    }
+    this.session$.next(realtimeSession);
+  }
+
+  private sortCards(realtimeSession: RealtimeSession) {
+    if (realtimeSession.whiteboard) {
+      realtimeSession.whiteboard.cards = realtimeSession.whiteboard.cards.sort(
+        (a, b) => {
+          if (a.id > b.id) return -1;
+          if (a.id < b.id) return 1;
+        }
+      );
+    }
   }
 }

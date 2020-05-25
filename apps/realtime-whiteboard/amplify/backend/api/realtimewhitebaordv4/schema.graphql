@@ -47,6 +47,6 @@ type Card
   left: Int!
   viewModeImage: Boolean!
   inShelf: Boolean!
-  createdBy: ID!
-  lastUpdatedBy: ID
+  createdBy: String!
+  lastUpdatedBy: String
 }
