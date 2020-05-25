@@ -17,10 +17,12 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
 import { RealtimeComponent } from './components/realtime/realtime.component';
+import { ActiveplayersdialogComponent } from './ui/activeplayersdialog/activeplayersdialog.component';
 import { JoinsessionComponent } from './ui/joinsession/joinsession.component';
 import { PlayertableComponent } from './ui/playertable/playertable.component';
 import { SessiondetailsdialogComponent } from './ui/sessiondetailsdialog/sessiondetailsdialog.component';
 import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetupdialog.component';
+import { CarddetailitemComponent } from './ui/carddetailitem/carddetailitem.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     HomeComponent,
     PlayertableComponent,
     SessiondetailsdialogComponent,
-    JoinsessionComponent
+    JoinsessionComponent,
+    ActiveplayersdialogComponent,
+    CarddetailitemComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,11 @@ import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetu
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  entryComponents: [SessionsetupdialogComponent, SessiondetailsdialogComponent],
+  entryComponents: [
+    SessionsetupdialogComponent,
+    SessiondetailsdialogComponent,
+    ActiveplayersdialogComponent
+  ],
   providers: [CookieService],
   bootstrap: [AppComponent]
 })

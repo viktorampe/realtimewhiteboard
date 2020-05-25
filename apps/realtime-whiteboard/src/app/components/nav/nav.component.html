@@ -1,48 +1,64 @@
-<nav [ngClass]="{ minimized: navMinimized }">
-  <div class="nav_item nav_controller" (click)="toggleNav()">
-    <mat-icon
-      class="nav_item_icon"
-      [svgIcon]="navMinimized ? 'menu' : 'close'"
-    ></mat-icon>
-  </div>
-  <ng-container *ngIf="session?.lives; else noSession">
-    <div class="nav_item" (click)="stopSession()">
-      <mat-icon class="nav_item_icon" [svgIcon]="'stop'"></mat-icon>
-      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
-        >Stop session</p
-      >
+<ng-container *ngIf="!navCardDetails; else cardDetails">
+  <nav [ngClass]="{ minimized: navMinimized }">
+    <div class="nav_item nav_controller" (click)="toggleNav()">
+      <mat-icon
+        class="nav_item_icon"
+        [svgIcon]="navMinimized ? 'menu' : 'close'"
+      ></mat-icon>
     </div>
-    <div class="nav_item" (click)="openInfoModal()">
-      <mat-icon class="nav_item_icon" [svgIcon]="'settings'"></mat-icon>
-      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
-        >Setting</p
-      >
+    <ng-container *ngIf="session$ | async; else noSession">
+      <div class="nav_item" (click)="stopSession()">
+        <mat-icon class="nav_item_icon" [svgIcon]="'stop'"></mat-icon>
+        <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+          >Stop session</p
+        >
+      </div>
+      <div class="nav_item" (click)="openInfoModal()">
+        <mat-icon class="nav_item_icon" [svgIcon]="'settings'"></mat-icon>
+        <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+          >Setting</p
+        >
+      </div>
+      <div class="nav_item" (click)="copyLinkToClipboard()">
+        <mat-icon class="nav_item_icon" [svgIcon]="'share'"></mat-icon>
+        <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+          >Share link</p
+        >
+      </div>
+      <div class="nav_item" (click)="openActivePlayersModal()">
+        <mat-icon class="nav_item_icon" [svgIcon]="'players'"></mat-icon>
+        <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+          >Players</p
+        >
+      </div>
+      <div class="nav_item" (click)="showCardDetails()">
+        <mat-icon class="nav_item_icon" [svgIcon]="'cards'"></mat-icon>
+        <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+          >Cards</p
+        >
+      </div>
+    </ng-container>
+    <ng-template #noSession>
+      <div class="nav_item" (click)="setupSession()">
+        <mat-icon class="nav_item_icon" [svgIcon]="'play'"></mat-icon>
+        <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
+          >Start session</p
+        >
+      </div>
+    </ng-template>
+  </nav>
+</ng-container>
+
+<ng-template #cardDetails>
+  <nav class="nav_card_details">
+    <div class="nav_item nav_controller" (click)="closeCardDetails()">
+      <mat-icon class="nav_item_icon" [svgIcon]="'minimize'"></mat-icon>
     </div>
-    <div class="nav_item" (click)="openInfoModal()">
-      <mat-icon class="nav_item_icon" [svgIcon]="'share'"></mat-icon>
-      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
-        >Share link</p
-      >
+    <div class="nav_card_details_cardlist">
+      <campus-carddetailitem
+        *ngFor="let card of session$.value.whiteboard.cards"
+        [card]="card"
+      ></campus-carddetailitem>
     </div>
-    <div class="nav_item" (click)="openInfoModal()">
-      <mat-icon class="nav_item_icon" [svgIcon]="'players'"></mat-icon>
-      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
-        >Players</p
-      >
-    </div>
-    <div class="nav_item" (click)="openInfoModal()">
-      <mat-icon class="nav_item_icon" [svgIcon]="'cards'"></mat-icon>
-      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
-        >Cards</p
-      >
-    </div>
-  </ng-container>
-  <ng-template #noSession>
-    <div class="nav_item" (click)="setupSession()">
-      <mat-icon class="nav_item_icon" [svgIcon]="'play'"></mat-icon>
-      <p @inOutAnimation *ngIf="!navMinimized" class="nav_item_content"
-        >Start session</p
-      >
-    </div>
-  </ng-template>
-</nav>
+  </nav>
+</ng-template>

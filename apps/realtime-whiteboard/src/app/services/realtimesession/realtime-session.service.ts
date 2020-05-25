@@ -282,7 +282,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         left: card.left,
         viewModeImage: card.viewModeImage,
         inShelf: false,
-        createdBy: player.id,
+        createdBy: player.fullName,
         _version: 0
       })
       .then(() => {})
@@ -375,12 +375,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       realtimeCard,
       card
     );
-    // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
-    /*
-    UpdateHelper.setVersionOfCard(
-      this.currentRealtimeSession$.getValue(),
-      realtimeCard
-    );*/
 
     // update necessary properties
     this.apiService
@@ -392,7 +386,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         left: realtimeCard.left,
         mode: 1, // always save card as IDLE mode
         viewModeImage: realtimeCard.viewModeImage,
-        lastUpdatedBy: player.id,
+        lastUpdatedBy: player.fullName,
         _version: realtimeCard.version
       })
       .then(() => {})

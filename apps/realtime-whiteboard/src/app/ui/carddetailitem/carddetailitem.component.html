@@ -1,0 +1,15 @@
+<div class="realtimecard_detail">
+  <campus-card
+    class="realtimecard_card"
+    [mode]="card.mode"
+    [color]="card.color"
+    [description]="card.description"
+    [image]="card.image"
+    [viewModeImage]="card.viewModeImage"
+  >
+  </campus-card>
+  <div class="realtimecard_detail_info">
+    <p>Created: {{ card.createdBy }}</p>
+    <p>Updated: {{ card.lastUpdatedBy }}</p>
+  </div>
+</div>
