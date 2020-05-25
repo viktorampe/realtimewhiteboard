@@ -55,6 +55,8 @@
       <mat-icon class="nav_item_icon" [svgIcon]="'minimize'"></mat-icon>
     </div>
     <div class="nav_card_details_cardlist">
+      <h3>Card details</h3>
+      <hr />
       <campus-carddetailitem
         *ngFor="let card of session$.value.whiteboard.cards"
         [card]="card"
