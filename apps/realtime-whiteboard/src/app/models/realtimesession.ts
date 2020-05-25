@@ -8,7 +8,7 @@ export default class RealtimeSession {
   whiteboard: RealtimeWhiteboard;
   players: Player[];
   version: number;
-  lives: boolean;
+  deleted: boolean;
 
   constructor(sessionResponse?: any) {
     this.id = sessionResponse ? sessionResponse.id : null;
@@ -21,7 +21,7 @@ export default class RealtimeSession {
       ? new RealtimeWhiteboard(sessionResponse.whiteboard)
       : null;
     this.version = sessionResponse ? sessionResponse._version : null;
-    this.lives = sessionResponse ? this.setLives(sessionResponse) : true;
+    this.deleted = sessionResponse ? this.setDeleted(sessionResponse) : false;
   }
 
   setPlayers(playerResponse: any[]): Player[] {
@@ -37,5 +37,12 @@ export default class RealtimeSession {
       return false;
     }
     return true;
+  }
+
+  setDeleted(sessionResponse: any): boolean {
+    if (sessionResponse._deleted) {
+      return true;
+    }
+    return false;
   }
 }

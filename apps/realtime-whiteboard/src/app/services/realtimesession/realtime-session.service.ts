@@ -4,7 +4,7 @@ import { ModeEnum } from 'libs/whiteboard/src/lib/enums/mode.enum';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
 import ImageInterface from 'libs/whiteboard/src/lib/models/image.interface';
 import { WhiteboardInterface } from 'libs/whiteboard/src/lib/models/whiteboard.interface';
-import { BehaviorSubject, forkJoin, from, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, from, Observable, of } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { APIService } from '../../API.service';
 import Player from '../../models/player';
@@ -399,25 +399,46 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   deleteSession(sessionId: string): Observable<boolean> {
     console.log('delete session');
-    const deletePlayers$ = this.currentRealtimeSession$
-      .getValue()
-      .players.map(p => this.deletePlayer(p));
-    const deleteCards$ = this.currentRealtimeSession$
-      .getValue()
-      .whiteboard.cards.map(c => this.deleteCard(c));
-    const deleteWhiteboard$ = this.deleteWhiteboard(
-      this.currentRealtimeSession$.getValue().whiteboard
-    );
+    const deletePlayers$ = this.getDeletePlayersStream();
+    const deleteCards$ = this.getDeleteCardsStream();
+    const deleteWhiteboard$ = this.getDeleteWhiteboardStream();
 
     // completes delete players, cards, whiteboard before deleting the session
     return forkJoin(deleteCards$, deletePlayers$, deleteWhiteboard$).pipe(
-      map(() => {
+      map(res => {
+        console.log(res);
         this.apiService.DeleteSession({
           id: sessionId,
           _version: this.currentRealtimeSession$.getValue().version
         });
       }),
       mapTo(true)
+    );
+  }
+
+  private getDeletePlayersStream(): Observable<boolean>[] {
+    return this.currentRealtimeSession$
+      .getValue()
+      .players.map(p => this.deletePlayer(p));
+  }
+
+  private getDeleteCardsStream(): Observable<boolean>[] {
+    if (this.currentRealtimeSession$.getValue().whiteboard) {
+      if (this.currentRealtimeSession$.getValue().whiteboard.cards.length) {
+        return this.currentRealtimeSession$
+          .getValue()
+          .whiteboard.cards.map(c => this.deleteCard(c));
+      }
+    }
+    // no cards to delete -> return mock stream
+    const stream: Observable<boolean>[] = [];
+    stream.push(of(true));
+    return stream;
+  }
+
+  private getDeleteWhiteboardStream(): Observable<boolean> {
+    return this.deleteWhiteboard(
+      this.currentRealtimeSession$.getValue().whiteboard
     );
   }
 
