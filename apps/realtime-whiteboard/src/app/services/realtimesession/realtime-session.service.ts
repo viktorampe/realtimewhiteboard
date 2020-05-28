@@ -13,6 +13,7 @@ import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { UpdateHelper } from '../../util/updateHelper';
 import { ActiveplayerService } from '../activeplayer/activeplayer.service';
+import { CustomsubsService } from '../customsubs/customsubs.service';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -29,7 +30,8 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
 
   constructor(
     private apiService: APIService,
-    private activePlayerService: ActiveplayerService
+    private activePlayerService: ActiveplayerService,
+    private customSubsService: CustomsubsService
   ) {}
 
   private setNotification(message: string) {
@@ -83,7 +85,8 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   subscribeOnCreateCard() {
-    this.apiService.OnCreateCardListener.subscribe((evt: any) => {
+    this.apiService.OnCardAddedInWhiteboardListener.subscribe((evt: any) => {
+      console.log(evt);
       const cardResponse: RealtimeCard = new RealtimeCard(
         evt.value.data.onCreateCard
       );
@@ -153,43 +156,49 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   }
 
   subscribeOnUpdateCard() {
-    this.apiService.OnUpdateCardListener.subscribe((evt: any) => {
-      const cardResponse: RealtimeCard = new RealtimeCard(
-        evt.value.data.onUpdateCard
-      );
-      console.log(cardResponse);
-      // update is for this whiteboard
-      if (
-        this.currentRealtimeSession$.getValue().whiteboard.id ===
-        cardResponse.whiteboardId
-      ) {
-        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-        const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
-          c => c.id === cardResponse.id
+    this.customSubsService
+      .OnCardChangedInWhiteboardListener('b5162656-6492-4dea-8ee9-68de36a1764b')
+      .map((response: any) => {
+        let card = response.value.data.onUpdateCard;
+        return card;
+      })
+      .subscribe((evt: any) => {
+        console.log(evt);
+        const cardResponse: RealtimeCard = new RealtimeCard(
+          evt.value.data.onUpdateCard
         );
-        // find card to update and set to new reference
-        realtimeSessionUpdate.whiteboard.cards = [
-          ...realtimeSessionUpdate.whiteboard.cards.filter(
-            c => c.id !== cardResponse.id
-          ),
-          {
-            ...cardResponse,
-            mode:
-              ownCardVersion &&
-              ownCardVersion.mode !== cardResponse.mode &&
-              ownCardVersion.mode !== ModeEnum.UPLOAD
-                ? ownCardVersion.mode
-                : cardResponse.mode
-          }
-        ];
+        // update is for this whiteboard
+        if (
+          this.currentRealtimeSession$.getValue().whiteboard.id ===
+          cardResponse.whiteboardId
+        ) {
+          const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+          const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
+            c => c.id === cardResponse.id
+          );
+          // find card to update and set to new reference
+          realtimeSessionUpdate.whiteboard.cards = [
+            ...realtimeSessionUpdate.whiteboard.cards.filter(
+              c => c.id !== cardResponse.id
+            ),
+            {
+              ...cardResponse,
+              mode:
+                ownCardVersion &&
+                ownCardVersion.mode !== cardResponse.mode &&
+                ownCardVersion.mode !== ModeEnum.UPLOAD
+                  ? ownCardVersion.mode
+                  : cardResponse.mode
+            }
+          ];
 
-        this.currentRealtimeSession$.next(realtimeSessionUpdate);
-      }
-    });
+          this.currentRealtimeSession$.next(realtimeSessionUpdate);
+        }
+      });
   }
 
   subscribeOnDeleteCard() {
-    this.apiService.OnDeleteCardListener.subscribe((evt: any) => {
+    this.apiService.OnCardRemovedInWhiteboardListener.subscribe((evt: any) => {
       const cardResponse: RealtimeCard = new RealtimeCard(
         evt.value.data.onDeleteCard
       );

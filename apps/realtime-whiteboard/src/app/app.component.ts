@@ -3,7 +3,6 @@ import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { iconMap } from 'libs/whiteboard/src/lib/icons/icon-mapping';
 import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from 'libs/whiteboard/src/lib/tokens/whiteboard-element-icon-mapping.token';
-import { CustomsubsciptionsService } from './services/customsubscriptions/customsubsciptions.service';
 import { FullscreenService } from './services/fullscreen/fullscreen.service';
 import { RealtimeSessionService } from './services/realtimesession/realtime-session.service';
 
@@ -25,8 +24,7 @@ export class AppComponent {
     private sanitizer: DomSanitizer,
     private sessionService: RealtimeSessionService,
     private fullscreenService: FullscreenService,
-    private cdRef: ChangeDetectorRef,
-    private customSubscriptionsService: CustomsubsciptionsService
+    private cdRef: ChangeDetectorRef
   ) {
     // whiteboard icons
     this.setupIconRegistry();
@@ -44,11 +42,6 @@ export class AppComponent {
     this.sessionService.subscribeOnDeleteCard();
     this.sessionService.subscribeOnUpdateCard();
     this.sessionService.subscribeOnCreateCard();
-
-    // test custom subscription
-    this.customSubscriptionsService
-      .OnCreateCardByWhiteboardListener('6c3d7e15-8d3f-452d-b8d5-9736f979bb45')
-      .subscribe(res => console.log('custom sub: ', res));
   }
 
   ngOnInit() {

@@ -29,7 +29,7 @@ type Player
 }
 
 type Card
-  @model
+  @model(subscriptions: null)
   @key(
     name: "byWhiteboard"
     fields: ["whiteboardID"]
@@ -49,4 +49,13 @@ type Card
   inShelf: Boolean!
   createdBy: String!
   lastUpdatedBy: String
+}
+
+type Subscription {
+  onCardAddedInWhiteboard(whiteboardId: ID!): Card
+    @aws_subscribe(mutations: ["createCard"])
+  onCardChangedInWhiteboard(whiteboardId: ID!): Card
+    @aws_subscribe(mutations: ["updateCard"])
+  onCardRemovedInWhiteboard(whiteboardId: ID!): Card
+    @aws_subscribe(mutations: ["deleteCard"])
 }

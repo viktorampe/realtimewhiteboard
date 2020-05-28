@@ -16,6 +16,8 @@ mutation CreateSession(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -32,10 +34,14 @@ mutation CreateSession(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation UpdateSession(
@@ -55,6 +61,8 @@ mutation UpdateSession(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -71,10 +79,14 @@ mutation UpdateSession(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation DeleteSession(
@@ -94,6 +106,8 @@ mutation DeleteSession(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -110,10 +124,14 @@ mutation DeleteSession(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation CreateWhiteboard(
@@ -142,6 +160,8 @@ mutation CreateWhiteboard(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -149,6 +169,8 @@ mutation CreateWhiteboard(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation UpdateWhiteboard(
@@ -177,6 +199,8 @@ mutation UpdateWhiteboard(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -184,6 +208,8 @@ mutation UpdateWhiteboard(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation DeleteWhiteboard(
@@ -212,6 +238,8 @@ mutation DeleteWhiteboard(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -219,6 +247,8 @@ mutation DeleteWhiteboard(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation CreatePlayer(
@@ -244,16 +274,22 @@ mutation CreatePlayer(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     fullName
     isTeacher
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation UpdatePlayer(
@@ -279,16 +315,22 @@ mutation UpdatePlayer(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     fullName
     isTeacher
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation DeletePlayer(
@@ -314,16 +356,22 @@ mutation DeletePlayer(
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     fullName
     isTeacher
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation CreateCard(
@@ -344,6 +392,8 @@ mutation CreateCard(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     mode
     type
@@ -359,6 +409,8 @@ mutation CreateCard(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation UpdateCard(
@@ -379,6 +431,8 @@ mutation UpdateCard(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     mode
     type
@@ -394,6 +448,8 @@ mutation UpdateCard(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 mutation DeleteCard(
@@ -414,6 +470,8 @@ mutation DeleteCard(
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     mode
     type
@@ -429,5 +487,7 @@ mutation DeleteCard(
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
