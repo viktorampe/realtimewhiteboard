@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Storage } from 'aws-amplify';
 import { ModeEnum } from 'libs/whiteboard/src/lib/enums/mode.enum';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
@@ -25,15 +26,17 @@ export interface WhiteboardDataServiceInterface {
 })
 export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession$ = new BehaviorSubject<RealtimeSession>(null);
-  notificationSetter$ = new BehaviorSubject<string>(null);
 
   constructor(
     private apiService: APIService,
-    private activePlayerService: ActiveplayerService
+    private activePlayerService: ActiveplayerService,
+    private _snackBar: MatSnackBar
   ) {}
 
   private setNotification(message: string) {
-    this.notificationSetter$.next(message);
+    this._snackBar.open(message, null, {
+      duration: 2000
+    });
   }
 
   //#region SUBSCRIBTIONS
