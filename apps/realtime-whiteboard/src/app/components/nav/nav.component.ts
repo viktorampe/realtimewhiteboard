@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import Player from '../../models/player';
@@ -39,7 +39,8 @@ export class NavComponent implements OnInit {
     private router: Router,
     private sessionService: RealtimeSessionService,
     private activePlayerService: ActiveplayerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -124,7 +125,7 @@ export class NavComponent implements OnInit {
 
   copyLinkToClipboard() {
     ClipboardHelper.copyMessage(location.href);
-    this.sessionService.notificationSetter$.next('Copied');
+    this._snackBar.open('Copied', null, { duration: 2000 });
   }
 
   openActivePlayersModal() {
