@@ -1,0 +1,17 @@
+@import '../../../constants.scss';
+
+.bye_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+
+  #bye_section {
+    h1 {
+      margin: 0px;
+      color: $primary;
+      text-align: center;
+    }
+  }
+}
