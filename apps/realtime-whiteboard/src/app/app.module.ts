@@ -17,12 +17,13 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
 import { RealtimeComponent } from './components/realtime/realtime.component';
+import { ThankyouforplayingComponent } from './components/thankyouforplaying/thankyouforplaying.component';
 import { ActiveplayersdialogComponent } from './ui/activeplayersdialog/activeplayersdialog.component';
+import { CarddetailitemComponent } from './ui/carddetailitem/carddetailitem.component';
 import { JoinsessionComponent } from './ui/joinsession/joinsession.component';
 import { PlayertableComponent } from './ui/playertable/playertable.component';
 import { SessiondetailsdialogComponent } from './ui/sessiondetailsdialog/sessiondetailsdialog.component';
 import { SessionsetupdialogComponent } from './ui/sessionsetupdialog/sessionsetupdialog.component';
-import { CarddetailitemComponent } from './ui/carddetailitem/carddetailitem.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { CarddetailitemComponent } from './ui/carddetailitem/carddetailitem.comp
     SessiondetailsdialogComponent,
     JoinsessionComponent,
     ActiveplayersdialogComponent,
-    CarddetailitemComponent
+    CarddetailitemComponent,
+    ThankyouforplayingComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +45,8 @@ import { CarddetailitemComponent } from './ui/carddetailitem/carddetailitem.comp
     RouterModule.forRoot(
       [
         { path: '', component: HomeComponent },
-        { path: 'realtimesession/:id', component: RealtimeComponent }
+        { path: 'realtimesession/:id', component: RealtimeComponent },
+        { path: 'bye', component: ThankyouforplayingComponent }
       ],
       { initialNavigation: 'enabled' }
     ),

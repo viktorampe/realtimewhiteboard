@@ -102,7 +102,9 @@ export class NavComponent implements OnInit {
   stopSession() {
     this.sessionService
       .deleteSession(this.session$.getValue().id)
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.router.navigate(['bye']);
+      });
   }
 
   openInfoModal() {
@@ -157,11 +159,9 @@ export class NavComponent implements OnInit {
   }
 
   private setBehaviorSubjects(realtimeSession: RealtimeSession) {
-    console.log(realtimeSession);
-
     if (realtimeSession !== null) {
       if (realtimeSession.deleted === true) {
-        this.router.navigate(['']);
+        this.router.navigate(['bye']);
         return;
       }
       this.sortCards(realtimeSession);
