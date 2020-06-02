@@ -102,6 +102,8 @@ export class RealtimeComponent implements OnInit {
             .cards.map(currentCards => currentCards.id)
             .includes(newCards.id)
       );
+      // set mode to Idle
+      cardsToCreate.forEach(c => (c.mode = 1));
       this.sessionService.createCard(cardsToCreate[0], this.activePlayer);
     }
 
