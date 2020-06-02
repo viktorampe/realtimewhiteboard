@@ -1,4 +1,112 @@
 # this is an auto generated file. This will be overwritten
+subscription OnCardAddedInWhiteboard($whiteboardID: ID!) {
+  onCardAddedInWhiteboard(whiteboardID: $whiteboardID) {
+    id
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    createdBy
+    lastUpdatedBy
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCardChangedInWhiteboard($whiteboardID: ID!) {
+  onCardChangedInWhiteboard(whiteboardID: $whiteboardID) {
+    id
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    createdBy
+    lastUpdatedBy
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCardRemovedInWhiteboard($whiteboardID: ID!) {
+  onCardRemovedInWhiteboard(whiteboardID: $whiteboardID) {
+    id
+    whiteboardID
+    whiteboard {
+      id
+      title
+      defaultColor
+      cards {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    mode
+    type
+    color
+    description
+    image
+    top
+    left
+    viewModeImage
+    inShelf
+    createdBy
+    lastUpdatedBy
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
 subscription OnCreateSession {
   onCreateSession {
     id
@@ -13,6 +121,8 @@ subscription OnCreateSession {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -29,10 +139,14 @@ subscription OnCreateSession {
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnUpdateSession {
@@ -49,6 +163,8 @@ subscription OnUpdateSession {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -65,10 +181,14 @@ subscription OnUpdateSession {
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnDeleteSession {
@@ -85,6 +205,8 @@ subscription OnDeleteSession {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -101,10 +223,14 @@ subscription OnDeleteSession {
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnCreateWhiteboard {
@@ -130,6 +256,8 @@ subscription OnCreateWhiteboard {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -137,6 +265,8 @@ subscription OnCreateWhiteboard {
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnUpdateWhiteboard {
@@ -162,6 +292,8 @@ subscription OnUpdateWhiteboard {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -169,6 +301,8 @@ subscription OnUpdateWhiteboard {
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnDeleteWhiteboard {
@@ -194,6 +328,8 @@ subscription OnDeleteWhiteboard {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -201,6 +337,8 @@ subscription OnDeleteWhiteboard {
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnCreatePlayer {
@@ -223,16 +361,22 @@ subscription OnCreatePlayer {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     fullName
     isTeacher
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnUpdatePlayer {
@@ -255,16 +399,22 @@ subscription OnUpdatePlayer {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     fullName
     isTeacher
     _version
     _deleted
     _lastChangedAt
+    createdAt
+    updatedAt
   }
 }
 subscription OnDeletePlayer {
@@ -287,111 +437,21 @@ subscription OnDeletePlayer {
         _version
         _deleted
         _lastChangedAt
+        createdAt
+        updatedAt
       }
       _version
       _deleted
       _lastChangedAt
+      createdAt
+      updatedAt
     }
     fullName
     isTeacher
     _version
     _deleted
     _lastChangedAt
-  }
-}
-subscription OnCreateCard {
-  onCreateCard {
-    id
-    whiteboardID
-    whiteboard {
-      id
-      title
-      defaultColor
-      cards {
-        nextToken
-        startedAt
-      }
-      _version
-      _deleted
-      _lastChangedAt
-    }
-    mode
-    type
-    color
-    description
-    image
-    top
-    left
-    viewModeImage
-    inShelf
-    createdBy
-    lastUpdatedBy
-    _version
-    _deleted
-    _lastChangedAt
-  }
-}
-subscription OnUpdateCard {
-  onUpdateCard {
-    id
-    whiteboardID
-    whiteboard {
-      id
-      title
-      defaultColor
-      cards {
-        nextToken
-        startedAt
-      }
-      _version
-      _deleted
-      _lastChangedAt
-    }
-    mode
-    type
-    color
-    description
-    image
-    top
-    left
-    viewModeImage
-    inShelf
-    createdBy
-    lastUpdatedBy
-    _version
-    _deleted
-    _lastChangedAt
-  }
-}
-subscription OnDeleteCard {
-  onDeleteCard {
-    id
-    whiteboardID
-    whiteboard {
-      id
-      title
-      defaultColor
-      cards {
-        nextToken
-        startedAt
-      }
-      _version
-      _deleted
-      _lastChangedAt
-    }
-    mode
-    type
-    color
-    description
-    image
-    top
-    left
-    viewModeImage
-    inShelf
-    createdBy
-    lastUpdatedBy
-    _version
-    _deleted
-    _lastChangedAt
+    createdAt
+    updatedAt
   }
 }

@@ -14,6 +14,7 @@ import RealtimeSession from '../../models/realtimesession';
 import { RealtimeWhiteboard } from '../../models/realtimewhiteboard';
 import { UpdateHelper } from '../../util/updateHelper';
 import { ActiveplayerService } from '../activeplayer/activeplayer.service';
+import { CustomsubsService } from '../customsubs/customsubs.service';
 
 export interface WhiteboardDataServiceInterface {
   getWhiteboardData(): Observable<WhiteboardInterface>;
@@ -30,6 +31,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   constructor(
     private apiService: APIService,
     private activePlayerService: ActiveplayerService,
+    private customSubsService: CustomsubsService,
     private _snackBar: MatSnackBar
   ) {}
 
@@ -78,40 +80,41 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
       ) {
         const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
         realtimeSessionUpdate.whiteboard = updatedWhiteboard;
-
         this.currentRealtimeSession$.next(realtimeSessionUpdate);
       }
     });
   }
 
-  subscribeOnCreateCard() {
-    this.apiService.OnCreateCardListener.subscribe((evt: any) => {
-      const cardResponse: RealtimeCard = new RealtimeCard(
-        evt.value.data.onCreateCard
-      );
-      if (
-        cardResponse.whiteboardId ===
-        this.currentRealtimeSession$.getValue().whiteboard.id
-      ) {
-        // add card to array and update reference
-        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-        // find card to update and set to new reference
-        realtimeSessionUpdate.whiteboard.cards = [
-          ...realtimeSessionUpdate.whiteboard.cards.filter(
-            c => c.id !== cardResponse.id
-          ),
-          {
-            ...cardResponse,
-            mode:
-              this.activePlayerService.activePlayer$.getValue().id ===
-              cardResponse.createdBy
-                ? 0
-                : cardResponse.mode
-          }
-        ];
-        this.currentRealtimeSession$.next(realtimeSessionUpdate);
-      }
-    });
+  subscribeOnCreateCard(whiteboardID: string) {
+    this.customSubsService
+      .OnCardCreatedInWhiteboardListener(whiteboardID)
+      .subscribe((evt: any) => {
+        const cardResponse: RealtimeCard = new RealtimeCard(
+          evt.value.data.onCardAddedInWhiteboard
+        );
+        if (
+          cardResponse.whiteboardId ===
+          this.currentRealtimeSession$.getValue().whiteboard.id
+        ) {
+          // add card to array and update reference
+          const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+          // find card to update and set to new reference
+          realtimeSessionUpdate.whiteboard.cards = [
+            ...realtimeSessionUpdate.whiteboard.cards.filter(
+              c => c.id !== cardResponse.id
+            ),
+            {
+              ...cardResponse,
+              mode:
+                this.activePlayerService.activePlayer$.getValue().id ===
+                cardResponse.createdBy
+                  ? 0
+                  : cardResponse.mode
+            }
+          ];
+          this.currentRealtimeSession$.next(realtimeSessionUpdate);
+        }
+      });
   }
 
   subscribeOnCreatePlayer() {
@@ -154,61 +157,66 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
-  subscribeOnUpdateCard() {
-    this.apiService.OnUpdateCardListener.subscribe((evt: any) => {
-      const cardResponse: RealtimeCard = new RealtimeCard(
-        evt.value.data.onUpdateCard
-      );
-      // update is for this whiteboard
-      if (
-        this.currentRealtimeSession$.getValue().whiteboard.id ===
-        cardResponse.whiteboardId
-      ) {
-        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-        const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
-          c => c.id === cardResponse.id
+  subscribeOnUpdateCard(whiteboardID: string) {
+    this.customSubsService
+      .OnCardChangedInWhiteboardListener(whiteboardID)
+      .subscribe((evt: any) => {
+        const cardResponse: RealtimeCard = new RealtimeCard(
+          evt.value.data.onCardChangedInWhiteboard
         );
-        // find card to update and set to new reference
-        realtimeSessionUpdate.whiteboard.cards = [
-          ...realtimeSessionUpdate.whiteboard.cards.filter(
-            c => c.id !== cardResponse.id
-          ),
-          {
-            ...cardResponse,
-            mode:
-              ownCardVersion &&
-              ownCardVersion.mode !== cardResponse.mode &&
-              ownCardVersion.mode !== ModeEnum.UPLOAD
-                ? ownCardVersion.mode
-                : cardResponse.mode
-          }
-        ];
-        this.currentRealtimeSession$.next(realtimeSessionUpdate);
-      }
-    });
-  }
-
-  subscribeOnDeleteCard() {
-    this.apiService.OnDeleteCardListener.subscribe((evt: any) => {
-      const cardResponse: RealtimeCard = new RealtimeCard(
-        evt.value.data.onDeleteCard
-      );
-      if (
-        this.currentRealtimeSession$.getValue().whiteboard.id ===
-        cardResponse.whiteboardId
-      ) {
-        // remove card from array with new reference
-        if (this.currentRealtimeSession$.getValue().whiteboard.cards) {
+        // update is for this whiteboard
+        if (
+          this.currentRealtimeSession$.getValue().whiteboard.id ===
+          cardResponse.whiteboardId
+        ) {
           const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+          const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
+            c => c.id === cardResponse.id
+          );
+          // find card to update and set to new reference
           realtimeSessionUpdate.whiteboard.cards = [
             ...realtimeSessionUpdate.whiteboard.cards.filter(
               c => c.id !== cardResponse.id
-            )
+            ),
+            {
+              ...cardResponse,
+              mode:
+                ownCardVersion &&
+                ownCardVersion.mode !== cardResponse.mode &&
+                ownCardVersion.mode !== ModeEnum.UPLOAD
+                  ? ownCardVersion.mode
+                  : cardResponse.mode
+            }
           ];
+
           this.currentRealtimeSession$.next(realtimeSessionUpdate);
         }
-      }
-    });
+      });
+  }
+
+  subscribeOnDeleteCard(whiteboardID: string) {
+    this.customSubsService
+      .OnCardDeleteInWhiteboardListener(whiteboardID)
+      .subscribe((evt: any) => {
+        const cardResponse: RealtimeCard = new RealtimeCard(
+          evt.value.data.onDeleteCard
+        );
+        if (
+          this.currentRealtimeSession$.getValue().whiteboard.id ===
+          cardResponse.whiteboardId
+        ) {
+          // remove card from array with new reference
+          if (this.currentRealtimeSession$.getValue().whiteboard.cards) {
+            const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+            realtimeSessionUpdate.whiteboard.cards = [
+              ...realtimeSessionUpdate.whiteboard.cards.filter(
+                c => c.id !== cardResponse.id
+              )
+            ];
+            this.currentRealtimeSession$.next(realtimeSessionUpdate);
+          }
+        }
+      });
   }
 
   //#endregion

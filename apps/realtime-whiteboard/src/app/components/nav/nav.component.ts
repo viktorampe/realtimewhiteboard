@@ -47,6 +47,7 @@ export class NavComponent implements OnInit {
     // subscribe on realtime session updates
     this.sessionService.currentRealtimeSession$.subscribe(
       (realtimesession: RealtimeSession) => {
+        console.log(realtimesession);
         this.setBehaviorSubjects(realtimesession);
       }
     );

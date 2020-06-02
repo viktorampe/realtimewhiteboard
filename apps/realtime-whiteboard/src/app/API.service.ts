@@ -48,7 +48,7 @@ export enum ModelAttributeTypes {
   numberSet = 'numberSet',
   string = 'string',
   stringSet = 'stringSet',
-  _null = '_null',
+  _null = '_null'
 }
 
 export type ModelSizeInput = {
@@ -132,30 +132,9 @@ export type DeleteWhiteboardInput = {
 export type CreatePlayerInput = {
   id?: string | null;
   sessionID: string;
-  session?: SessionInput | null;
   fullName: string;
   isTeacher: boolean;
   _version?: number | null;
-};
-
-export type SessionInput = {
-  id: string;
-  title: string;
-  pincode: number;
-  whiteboardID: string;
-  whiteboard?: WhiteboardInput | null;
-  _version: number;
-  _deleted?: boolean | null;
-  _lastChangedAt: number;
-};
-
-export type WhiteboardInput = {
-  id: string;
-  title?: string | null;
-  defaultColor?: string | null;
-  _version: number;
-  _deleted?: boolean | null;
-  _lastChangedAt: number;
 };
 
 export type ModelPlayerConditionInput = {
@@ -177,7 +156,6 @@ export type ModelBooleanInput = {
 export type UpdatePlayerInput = {
   id: string;
   sessionID?: string | null;
-  session?: SessionInput | null;
   fullName?: string | null;
   isTeacher?: boolean | null;
   _version?: number | null;
@@ -189,9 +167,8 @@ export type DeletePlayerInput = {
 };
 
 export type CreateCardInput = {
-  id?: string | null;
+  id: string;
   whiteboardID: string;
-  whiteboard?: WhiteboardInput | null;
   mode: number;
   type: number;
   color: string;
@@ -217,8 +194,8 @@ export type ModelCardConditionInput = {
   left?: ModelIntInput | null;
   viewModeImage?: ModelBooleanInput | null;
   inShelf?: ModelBooleanInput | null;
-  createdBy?: ModelIDInput | null;
-  lastUpdatedBy?: ModelIDInput | null;
+  createdBy?: ModelStringInput | null;
+  lastUpdatedBy?: ModelStringInput | null;
   and?: Array<ModelCardConditionInput | null> | null;
   or?: Array<ModelCardConditionInput | null> | null;
   not?: ModelCardConditionInput | null;
@@ -227,7 +204,6 @@ export type ModelCardConditionInput = {
 export type UpdateCardInput = {
   id: string;
   whiteboardID?: string | null;
-  whiteboard?: WhiteboardInput | null;
   mode?: number | null;
   type?: number | null;
   color?: string | null;
@@ -288,8 +264,8 @@ export type ModelCardFilterInput = {
   left?: ModelIntInput | null;
   viewModeImage?: ModelBooleanInput | null;
   inShelf?: ModelBooleanInput | null;
-  createdBy?: ModelIDInput | null;
-  lastUpdatedBy?: ModelIDInput | null;
+  createdBy?: ModelStringInput | null;
+  lastUpdatedBy?: ModelStringInput | null;
   and?: Array<ModelCardFilterInput | null> | null;
   or?: Array<ModelCardFilterInput | null> | null;
   not?: ModelCardFilterInput | null;
@@ -297,7 +273,7 @@ export type ModelCardFilterInput = {
 
 export enum ModelSortDirection {
   ASC = 'ASC',
-  DESC = 'DESC',
+  DESC = 'DESC'
 }
 
 export type CreateSessionMutation = {
@@ -316,6 +292,8 @@ export type CreateSessionMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -334,10 +312,14 @@ export type CreateSessionMutation = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateSessionMutation = {
@@ -356,6 +338,8 @@ export type UpdateSessionMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -374,10 +358,14 @@ export type UpdateSessionMutation = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type DeleteSessionMutation = {
@@ -396,6 +384,8 @@ export type DeleteSessionMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -414,10 +404,14 @@ export type DeleteSessionMutation = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CreateWhiteboardMutation = {
@@ -445,6 +439,8 @@ export type CreateWhiteboardMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -452,6 +448,8 @@ export type CreateWhiteboardMutation = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateWhiteboardMutation = {
@@ -479,6 +477,8 @@ export type UpdateWhiteboardMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -486,6 +486,8 @@ export type UpdateWhiteboardMutation = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type DeleteWhiteboardMutation = {
@@ -513,6 +515,8 @@ export type DeleteWhiteboardMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -520,6 +524,8 @@ export type DeleteWhiteboardMutation = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CreatePlayerMutation = {
@@ -545,16 +551,22 @@ export type CreatePlayerMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   fullName: string;
   isTeacher: boolean;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdatePlayerMutation = {
@@ -580,16 +592,22 @@ export type UpdatePlayerMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   fullName: string;
   isTeacher: boolean;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type DeletePlayerMutation = {
@@ -615,16 +633,22 @@ export type DeletePlayerMutation = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   fullName: string;
   isTeacher: boolean;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CreateCardMutation = {
@@ -644,6 +668,8 @@ export type CreateCardMutation = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   mode: number;
   type: number;
@@ -659,6 +685,8 @@ export type CreateCardMutation = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateCardMutation = {
@@ -678,6 +706,8 @@ export type UpdateCardMutation = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   mode: number;
   type: number;
@@ -693,6 +723,8 @@ export type UpdateCardMutation = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type DeleteCardMutation = {
@@ -712,6 +744,8 @@ export type DeleteCardMutation = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   mode: number;
   type: number;
@@ -727,6 +761,8 @@ export type DeleteCardMutation = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type SyncSessionsQuery = {
@@ -750,10 +786,14 @@ export type SyncSessionsQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -775,6 +815,8 @@ export type GetSessionQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -793,10 +835,14 @@ export type GetSessionQuery = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ListSessionsQuery = {
@@ -820,10 +866,14 @@ export type ListSessionsQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -844,6 +894,8 @@ export type SyncWhiteboardsQuery = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -874,6 +926,8 @@ export type GetWhiteboardQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -881,6 +935,8 @@ export type GetWhiteboardQuery = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ListWhiteboardsQuery = {
@@ -898,6 +954,8 @@ export type ListWhiteboardsQuery = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -918,12 +976,16 @@ export type SyncPlayersQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     fullName: string;
     isTeacher: boolean;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -952,16 +1014,22 @@ export type GetPlayerQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   fullName: string;
   isTeacher: boolean;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ListPlayersQuery = {
@@ -979,12 +1047,16 @@ export type ListPlayersQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     fullName: string;
     isTeacher: boolean;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -1004,6 +1076,8 @@ export type SyncCardsQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     mode: number;
     type: number;
@@ -1019,6 +1093,8 @@ export type SyncCardsQuery = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -1041,6 +1117,8 @@ export type GetCardQuery = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   mode: number;
   type: number;
@@ -1056,6 +1134,8 @@ export type GetCardQuery = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ListCardsQuery = {
@@ -1072,6 +1152,8 @@ export type ListCardsQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     mode: number;
     type: number;
@@ -1087,6 +1169,8 @@ export type ListCardsQuery = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -1107,12 +1191,16 @@ export type PlayerBySessionIdQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     fullName: string;
     isTeacher: boolean;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
@@ -1132,6 +1220,8 @@ export type CardByWhiteboardIdQuery = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     mode: number;
     type: number;
@@ -1147,9 +1237,125 @@ export type CardByWhiteboardIdQuery = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null> | null;
   nextToken: string | null;
   startedAt: number | null;
+};
+
+export type OnCardAddedInWhiteboardSubscription = {
+  __typename: 'Card';
+  id: string;
+  whiteboardID: string;
+  whiteboard: {
+    __typename: 'Whiteboard';
+    id: string;
+    title: string | null;
+    defaultColor: string | null;
+    cards: {
+      __typename: 'ModelCardConnection';
+      nextToken: string | null;
+      startedAt: number | null;
+    } | null;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  mode: number;
+  type: number;
+  color: string;
+  description: string | null;
+  image: string | null;
+  top: number;
+  left: number;
+  viewModeImage: boolean;
+  inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnCardChangedInWhiteboardSubscription = {
+  __typename: 'Card';
+  id: string;
+  whiteboardID: string;
+  whiteboard: {
+    __typename: 'Whiteboard';
+    id: string;
+    title: string | null;
+    defaultColor: string | null;
+    cards: {
+      __typename: 'ModelCardConnection';
+      nextToken: string | null;
+      startedAt: number | null;
+    } | null;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  mode: number;
+  type: number;
+  color: string;
+  description: string | null;
+  image: string | null;
+  top: number;
+  left: number;
+  viewModeImage: boolean;
+  inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnCardRemovedInWhiteboardSubscription = {
+  __typename: 'Card';
+  id: string;
+  whiteboardID: string;
+  whiteboard: {
+    __typename: 'Whiteboard';
+    id: string;
+    title: string | null;
+    defaultColor: string | null;
+    cards: {
+      __typename: 'ModelCardConnection';
+      nextToken: string | null;
+      startedAt: number | null;
+    } | null;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  mode: number;
+  type: number;
+  color: string;
+  description: string | null;
+  image: string | null;
+  top: number;
+  left: number;
+  viewModeImage: boolean;
+  inShelf: boolean;
+  createdBy: string;
+  lastUpdatedBy: string | null;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnCreateSessionSubscription = {
@@ -1168,6 +1374,8 @@ export type OnCreateSessionSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -1186,10 +1394,14 @@ export type OnCreateSessionSubscription = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnUpdateSessionSubscription = {
@@ -1208,6 +1420,8 @@ export type OnUpdateSessionSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -1226,10 +1440,14 @@ export type OnUpdateSessionSubscription = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnDeleteSessionSubscription = {
@@ -1248,6 +1466,8 @@ export type OnDeleteSessionSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -1266,10 +1486,14 @@ export type OnDeleteSessionSubscription = {
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnCreateWhiteboardSubscription = {
@@ -1297,6 +1521,8 @@ export type OnCreateWhiteboardSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -1304,6 +1530,8 @@ export type OnCreateWhiteboardSubscription = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnUpdateWhiteboardSubscription = {
@@ -1331,6 +1559,8 @@ export type OnUpdateWhiteboardSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -1338,6 +1568,8 @@ export type OnUpdateWhiteboardSubscription = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnDeleteWhiteboardSubscription = {
@@ -1365,6 +1597,8 @@ export type OnDeleteWhiteboardSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null> | null;
     nextToken: string | null;
     startedAt: number | null;
@@ -1372,6 +1606,8 @@ export type OnDeleteWhiteboardSubscription = {
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnCreatePlayerSubscription = {
@@ -1397,16 +1633,22 @@ export type OnCreatePlayerSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   fullName: string;
   isTeacher: boolean;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnUpdatePlayerSubscription = {
@@ -1432,16 +1674,22 @@ export type OnUpdatePlayerSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   fullName: string;
   isTeacher: boolean;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type OnDeletePlayerSubscription = {
@@ -1467,122 +1715,26 @@ export type OnDeletePlayerSubscription = {
       _version: number;
       _deleted: boolean | null;
       _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
     } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
   } | null;
   fullName: string;
   isTeacher: boolean;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
-};
-
-export type OnCreateCardSubscription = {
-  __typename: 'Card';
-  id: string;
-  whiteboardID: string;
-  whiteboard: {
-    __typename: 'Whiteboard';
-    id: string;
-    title: string | null;
-    defaultColor: string | null;
-    cards: {
-      __typename: 'ModelCardConnection';
-      nextToken: string | null;
-      startedAt: number | null;
-    } | null;
-    _version: number;
-    _deleted: boolean | null;
-    _lastChangedAt: number;
-  } | null;
-  mode: number;
-  type: number;
-  color: string;
-  description: string | null;
-  image: string | null;
-  top: number;
-  left: number;
-  viewModeImage: boolean;
-  inShelf: boolean;
-  createdBy: string;
-  lastUpdatedBy: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-};
-
-export type OnUpdateCardSubscription = {
-  __typename: 'Card';
-  id: string;
-  whiteboardID: string;
-  whiteboard: {
-    __typename: 'Whiteboard';
-    id: string;
-    title: string | null;
-    defaultColor: string | null;
-    cards: {
-      __typename: 'ModelCardConnection';
-      nextToken: string | null;
-      startedAt: number | null;
-    } | null;
-    _version: number;
-    _deleted: boolean | null;
-    _lastChangedAt: number;
-  } | null;
-  mode: number;
-  type: number;
-  color: string;
-  description: string | null;
-  image: string | null;
-  top: number;
-  left: number;
-  viewModeImage: boolean;
-  inShelf: boolean;
-  createdBy: string;
-  lastUpdatedBy: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-};
-
-export type OnDeleteCardSubscription = {
-  __typename: 'Card';
-  id: string;
-  whiteboardID: string;
-  whiteboard: {
-    __typename: 'Whiteboard';
-    id: string;
-    title: string | null;
-    defaultColor: string | null;
-    cards: {
-      __typename: 'ModelCardConnection';
-      nextToken: string | null;
-      startedAt: number | null;
-    } | null;
-    _version: number;
-    _deleted: boolean | null;
-    _lastChangedAt: number;
-  } | null;
-  mode: number;
-  type: number;
-  color: string;
-  description: string | null;
-  image: string | null;
-  top: number;
-  left: number;
-  viewModeImage: boolean;
-  inShelf: boolean;
-  createdBy: string;
-  lastUpdatedBy: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class APIService {
   async CreateSession(
@@ -1606,6 +1758,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -1624,14 +1778,18 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1662,6 +1820,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -1680,14 +1840,18 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1718,6 +1882,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -1736,14 +1902,18 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1783,6 +1953,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -1790,10 +1962,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1833,6 +2007,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -1840,10 +2016,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1883,6 +2061,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -1890,10 +2070,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1931,20 +2113,26 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           fullName
           isTeacher
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -1982,20 +2170,26 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           fullName
           isTeacher
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2033,20 +2227,26 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           fullName
           isTeacher
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2078,6 +2278,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           mode
           type
@@ -2093,10 +2295,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2128,6 +2332,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           mode
           type
@@ -2143,10 +2349,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2178,6 +2386,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           mode
           type
@@ -2193,10 +2403,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input,
+      input
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -2234,10 +2446,14 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2279,6 +2495,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -2297,14 +2515,18 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id,
+      id
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -2338,10 +2560,14 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2384,6 +2610,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2434,6 +2662,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -2441,10 +2671,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id,
+      id
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -2472,6 +2704,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2514,12 +2748,16 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             fullName
             isTeacher
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2568,20 +2806,26 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           fullName
           isTeacher
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id,
+      id
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -2609,12 +2853,16 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             fullName
             isTeacher
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2656,6 +2904,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             mode
             type
@@ -2671,6 +2921,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2713,6 +2965,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           mode
           type
@@ -2728,10 +2982,12 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id,
+      id
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -2758,6 +3014,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             mode
             type
@@ -2773,6 +3031,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2816,12 +3076,16 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             fullName
             isTeacher
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2870,6 +3134,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             mode
             type
@@ -2885,6 +3151,8 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           nextToken
           startedAt
@@ -2911,6 +3179,144 @@ export class APIService {
     )) as any;
     return <CardByWhiteboardIdQuery>response.data.cardByWhiteboardID;
   }
+  OnCardAddedInWhiteboardListener: Observable<
+    OnCardAddedInWhiteboardSubscription
+  > = API.graphql(
+    graphqlOperation(
+      `subscription OnCardAddedInWhiteboard($whiteboardId: ID!) {
+        onCardAddedInWhiteboard(whiteboardId: $whiteboardId) {
+          __typename
+          id
+          whiteboardID
+          whiteboard {
+            __typename
+            id
+            title
+            defaultColor
+            cards {
+              __typename
+              nextToken
+              startedAt
+            }
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+          }
+          mode
+          type
+          color
+          description
+          image
+          top
+          left
+          viewModeImage
+          inShelf
+          createdBy
+          lastUpdatedBy
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnCardAddedInWhiteboardSubscription>;
+
+  OnCardChangedInWhiteboardListener: Observable<
+    OnCardChangedInWhiteboardSubscription
+  > = API.graphql(
+    graphqlOperation(
+      `subscription OnCardChangedInWhiteboard($whiteboardId: ID!) {
+        onCardChangedInWhiteboard(whiteboardId: $whiteboardId) {
+          __typename
+          id
+          whiteboardID
+          whiteboard {
+            __typename
+            id
+            title
+            defaultColor
+            cards {
+              __typename
+              nextToken
+              startedAt
+            }
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+          }
+          mode
+          type
+          color
+          description
+          image
+          top
+          left
+          viewModeImage
+          inShelf
+          createdBy
+          lastUpdatedBy
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnCardChangedInWhiteboardSubscription>;
+
+  OnCardRemovedInWhiteboardListener: Observable<
+    OnCardRemovedInWhiteboardSubscription
+  > = API.graphql(
+    graphqlOperation(
+      `subscription OnCardRemovedInWhiteboard($whiteboardId: ID!) {
+        onCardRemovedInWhiteboard(whiteboardId: $whiteboardId) {
+          __typename
+          id
+          whiteboardID
+          whiteboard {
+            __typename
+            id
+            title
+            defaultColor
+            cards {
+              __typename
+              nextToken
+              startedAt
+            }
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+          }
+          mode
+          type
+          color
+          description
+          image
+          top
+          left
+          viewModeImage
+          inShelf
+          createdBy
+          lastUpdatedBy
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnCardRemovedInWhiteboardSubscription>;
+
   OnCreateSessionListener: Observable<
     OnCreateSessionSubscription
   > = API.graphql(
@@ -2932,6 +3338,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -2950,10 +3358,14 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -2980,6 +3392,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -2998,10 +3412,14 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -3028,6 +3446,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -3046,10 +3466,14 @@ export class APIService {
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -3085,6 +3509,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -3092,6 +3518,8 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -3127,6 +3555,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -3134,6 +3564,8 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -3169,6 +3601,8 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             nextToken
             startedAt
@@ -3176,6 +3610,8 @@ export class APIService {
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -3207,16 +3643,22 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           fullName
           isTeacher
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -3248,16 +3690,22 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           fullName
           isTeacher
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
@@ -3289,138 +3737,24 @@ export class APIService {
               _version
               _deleted
               _lastChangedAt
+              createdAt
+              updatedAt
             }
             _version
             _deleted
             _lastChangedAt
+            createdAt
+            updatedAt
           }
           fullName
           isTeacher
           _version
           _deleted
           _lastChangedAt
+          createdAt
+          updatedAt
         }
       }`
     )
   ) as Observable<OnDeletePlayerSubscription>;
-
-  OnCreateCardListener: Observable<OnCreateCardSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnCreateCard {
-        onCreateCard {
-          __typename
-          id
-          whiteboardID
-          whiteboard {
-            __typename
-            id
-            title
-            defaultColor
-            cards {
-              __typename
-              nextToken
-              startedAt
-            }
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          mode
-          type
-          color
-          description
-          image
-          top
-          left
-          viewModeImage
-          inShelf
-          createdBy
-          lastUpdatedBy
-          _version
-          _deleted
-          _lastChangedAt
-        }
-      }`
-    )
-  ) as Observable<OnCreateCardSubscription>;
-
-  OnUpdateCardListener: Observable<OnUpdateCardSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnUpdateCard {
-        onUpdateCard {
-          __typename
-          id
-          whiteboardID
-          whiteboard {
-            __typename
-            id
-            title
-            defaultColor
-            cards {
-              __typename
-              nextToken
-              startedAt
-            }
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          mode
-          type
-          color
-          description
-          image
-          top
-          left
-          viewModeImage
-          inShelf
-          createdBy
-          lastUpdatedBy
-          _version
-          _deleted
-          _lastChangedAt
-        }
-      }`
-    )
-  ) as Observable<OnUpdateCardSubscription>;
-
-  OnDeleteCardListener: Observable<OnDeleteCardSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnDeleteCard {
-        onDeleteCard {
-          __typename
-          id
-          whiteboardID
-          whiteboard {
-            __typename
-            id
-            title
-            defaultColor
-            cards {
-              __typename
-              nextToken
-              startedAt
-            }
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          mode
-          type
-          color
-          description
-          image
-          top
-          left
-          viewModeImage
-          inShelf
-          createdBy
-          lastUpdatedBy
-          _version
-          _deleted
-          _lastChangedAt
-        }
-      }`
-    )
-  ) as Observable<OnDeleteCardSubscription>;
 }
