@@ -198,8 +198,9 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.customSubsService
       .OnCardDeleteInWhiteboardListener(whiteboardID)
       .subscribe((evt: any) => {
+        console.log(evt);
         const cardResponse: RealtimeCard = new RealtimeCard(
-          evt.value.data.onDeleteCard
+          evt.value.data.onCardRemovedInWhiteboard
         );
         if (
           this.currentRealtimeSession$.getValue().whiteboard.id ===
