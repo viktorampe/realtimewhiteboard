@@ -3,6 +3,7 @@ import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { iconMap } from 'libs/whiteboard/src/lib/icons/icon-mapping';
 import { WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN } from 'libs/whiteboard/src/lib/tokens/whiteboard-element-icon-mapping.token';
+import RealtimeSession from './models/realtimesession';
 import { FullscreenService } from './services/fullscreen/fullscreen.service';
 import { RealtimeSessionService } from './services/realtimesession/realtime-session.service';
 
@@ -17,6 +18,7 @@ import { RealtimeSessionService } from './services/realtimesession/realtime-sess
 export class AppComponent {
   title = 'realtime-whiteboard';
   fullScreen: boolean;
+  subscribedOnCards = false;
 
   constructor(
     @Inject(WHITEBOARD_ELEMENT_ICON_MAPPING_TOKEN) private iconMapping,
@@ -39,9 +41,24 @@ export class AppComponent {
     // subscribe on whiteboard updates
     this.sessionService.subscribeOnWhiteboardUpdates();
     // subscribe on card creation/deletes/updates
-    this.sessionService.subscribeOnDeleteCard();
-    this.sessionService.subscribeOnUpdateCard();
-    this.sessionService.subscribeOnCreateCard();
+    this.sessionService.currentRealtimeSession$.subscribe(
+      (realtimeSession: RealtimeSession) => {
+        if (realtimeSession === null) return;
+        if (this.subscribedOnCards) return;
+        if (realtimeSession.whiteboard.id) {
+          this.sessionService.subscribeOnDeleteCard(
+            realtimeSession.whiteboard.id
+          );
+          this.sessionService.subscribeOnUpdateCard(
+            realtimeSession.whiteboard.id
+          );
+          this.sessionService.subscribeOnCreateCard(
+            realtimeSession.whiteboard.id
+          );
+          this.subscribedOnCards = true;
+        }
+      }
+    );
   }
 
   ngOnInit() {

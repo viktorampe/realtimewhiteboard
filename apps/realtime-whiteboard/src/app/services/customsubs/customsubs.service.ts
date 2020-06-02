@@ -10,30 +10,13 @@ export class CustomsubsService {
   constructor() {}
 
   public OnCardChangedInWhiteboardListener(
-    whiteboardId: string
+    whiteboardID: string
   ): Observable<OnCardChangedInWhiteboardSubscription> {
-    console.log(whiteboardId);
-    const statement = `subscription OnCardChangedInWhiteboard($whiteboardId: ID!) {
-      onCardChangedInWhiteboard(whiteboardId: $whiteboardId) {
+    const statement = `subscription OnCardChangedInWhiteboard($whiteboardID: ID!) {
+      onCardChangedInWhiteboard(whiteboardID: $whiteboardID) {
         __typename
         id
         whiteboardID
-        whiteboard {
-          __typename
-          id
-          title
-          defaultColor
-          cards {
-            __typename
-            nextToken
-            startedAt
-          }
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
         mode
         type
         color
@@ -53,7 +36,77 @@ export class CustomsubsService {
       }
     }`;
     const gqlAPIServiceArguments: any = {
-      whiteboardId
+      whiteboardID
+    };
+
+    return API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    ) as Observable<OnCardChangedInWhiteboardSubscription>;
+  }
+
+  public OnCardCreatedInWhiteboardListener(
+    whiteboardID: string
+  ): Observable<OnCardChangedInWhiteboardSubscription> {
+    const statement = `subscription OnCardAddedInWhiteboard($whiteboardID: ID!) {
+      onCardAddedInWhiteboard(whiteboardID: $whiteboardID) {
+        __typename
+        id
+        whiteboardID
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        createdBy
+        lastUpdatedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }`;
+    const gqlAPIServiceArguments: any = {
+      whiteboardID
+    };
+
+    return API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    ) as Observable<OnCardChangedInWhiteboardSubscription>;
+  }
+
+  public OnCardDeleteInWhiteboardListener(
+    whiteboardID: string
+  ): Observable<OnCardChangedInWhiteboardSubscription> {
+    const statement = `subscription OnCardRemovedInWhiteboard($whiteboardID: ID!) {
+      onCardRemovedInWhiteboard(whiteboardID: $whiteboardID) {
+        __typename
+        id
+        whiteboardID
+        mode
+        type
+        color
+        description
+        image
+        top
+        left
+        viewModeImage
+        inShelf
+        createdBy
+        lastUpdatedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }`;
+    const gqlAPIServiceArguments: any = {
+      whiteboardID
     };
 
     return API.graphql(

@@ -52,10 +52,10 @@ type Card
 }
 
 type Subscription {
-  onCardAddedInWhiteboard(whiteboardId: ID!): Card
+  onCardAddedInWhiteboard(whiteboardID: ID!): Card
     @aws_subscribe(mutations: ["createCard"])
-  onCardChangedInWhiteboard(whiteboardId: ID!): Card
+  onCardChangedInWhiteboard(whiteboardID: ID!): Card
     @aws_subscribe(mutations: ["updateCard"])
-  onCardRemovedInWhiteboard(whiteboardId: ID!): Card
+  onCardRemovedInWhiteboard(whiteboardID: ID!): Card
     @aws_subscribe(mutations: ["deleteCard"])
 }

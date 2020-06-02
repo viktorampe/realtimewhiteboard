@@ -1,6 +1,6 @@
 # this is an auto generated file. This will be overwritten
-subscription OnCardAddedInWhiteboard($whiteboardId: ID!) {
-  onCardAddedInWhiteboard(whiteboardId: $whiteboardId) {
+subscription OnCardAddedInWhiteboard($whiteboardID: ID!) {
+  onCardAddedInWhiteboard(whiteboardID: $whiteboardID) {
     id
     whiteboardID
     whiteboard {
@@ -35,8 +35,8 @@ subscription OnCardAddedInWhiteboard($whiteboardId: ID!) {
     updatedAt
   }
 }
-subscription OnCardChangedInWhiteboard($whiteboardId: ID!) {
-  onCardChangedInWhiteboard(whiteboardId: $whiteboardId) {
+subscription OnCardChangedInWhiteboard($whiteboardID: ID!) {
+  onCardChangedInWhiteboard(whiteboardID: $whiteboardID) {
     id
     whiteboardID
     whiteboard {
@@ -71,8 +71,8 @@ subscription OnCardChangedInWhiteboard($whiteboardId: ID!) {
     updatedAt
   }
 }
-subscription OnCardRemovedInWhiteboard($whiteboardId: ID!) {
-  onCardRemovedInWhiteboard(whiteboardId: $whiteboardId) {
+subscription OnCardRemovedInWhiteboard($whiteboardID: ID!) {
+  onCardRemovedInWhiteboard(whiteboardID: $whiteboardID) {
     id
     whiteboardID
     whiteboard {
