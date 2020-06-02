@@ -57,7 +57,7 @@ export class RealtimeComponent implements OnInit {
         }
       }
     );
-    // Subscribe on active Playyer and update ui depending on active player
+    // Subscribe on active Player and update ui depending on active player
     this.activePlayerService.activePlayer$.subscribe((player: Player) => {
       this.activePlayer = player;
       this.handleUI();
