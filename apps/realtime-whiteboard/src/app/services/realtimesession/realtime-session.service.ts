@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Storage } from 'aws-amplify';
 import { ModeEnum } from 'libs/whiteboard/src/lib/enums/mode.enum';
 import { CardInterface } from 'libs/whiteboard/src/lib/models/card.interface';
@@ -26,16 +27,18 @@ export interface WhiteboardDataServiceInterface {
 })
 export class RealtimeSessionService implements WhiteboardDataServiceInterface {
   currentRealtimeSession$ = new BehaviorSubject<RealtimeSession>(null);
-  notificationSetter$ = new BehaviorSubject<string>(null);
 
   constructor(
     private apiService: APIService,
     private activePlayerService: ActiveplayerService,
-    private customSubsService: CustomsubsService
+    private customSubsService: CustomsubsService,
+    private _snackBar: MatSnackBar
   ) {}
 
   private setNotification(message: string) {
-    this.notificationSetter$.next(message);
+    this._snackBar.open(message, null, {
+      duration: 2000
+    });
   }
 
   //#region SUBSCRIBTIONS
@@ -61,7 +64,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         evt.value.data.onDeleteSession
       );
       if (deletedSession.id === this.currentRealtimeSession$.getValue().id) {
-        // update behaviorSubject
         this.currentRealtimeSession$.next(deletedSession);
       }
     });
@@ -439,7 +441,7 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
           .whiteboard.cards.map(c => this.deleteCard(c));
       }
     }
-    // no cards to delete -> return mock stream
+    // no cards to delete -> return empty stream
     const stream: Observable<boolean>[] = [];
     stream.push(of(true));
     return stream;
@@ -521,13 +523,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     console.log('update card image');
     // prepare card
     UpdateHelper.prepareCard(realtimeCard);
-    // if version undefined -> set to 1, else get last version (A newly created card does not have a version)
-    /*
-    UpdateHelper.setVersionOfCard(
-      this.currentRealtimeSession$.getValue(),
-      realtimeCard
-    );
-    */
 
     this.apiService
       .UpdateCard({

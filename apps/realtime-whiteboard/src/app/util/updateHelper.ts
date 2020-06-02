@@ -6,17 +6,10 @@ import RealtimeSession from '../models/realtimesession';
 import { RealtimeWhiteboard } from '../models/realtimewhiteboard';
 
 export class UpdateHelper {
-  public static checkIfSessionHasCard(
-    realtimeSession: RealtimeSession,
-    card: CardInterface
-  ): boolean {
-    return realtimeSession.whiteboard.cards.map(c => c.id).includes(card.id);
-  }
-
   private static getLastVersionOfPlayer(
     realtimeSession: RealtimeSession,
     playerId: string
-  ) {
+  ): number {
     const player = realtimeSession.players.find(p => p.id === playerId);
     return player.version;
   }
@@ -31,15 +24,6 @@ export class UpdateHelper {
     ).version;
     if (realtimeCard.version === undefined) {
       realtimeCard.version = 1;
-    }
-  }
-
-  public static checkDescription(realtimeCard: CardInterface) {
-    if (
-      realtimeCard.description === null ||
-      realtimeCard.description.length < 1
-    ) {
-      realtimeCard.description = null;
     }
   }
 
@@ -84,22 +68,8 @@ export class UpdateHelper {
   }
 
   public static prepareCard(card: CardInterface) {
-    this.checkDescription(card);
     card.left = Math.round(card.left);
     card.top = Math.round(card.top);
-  }
-
-  public static updateCardPropertiesFromCardResponse(
-    cardToUpdate: RealtimeCard,
-    cardResponse: RealtimeCard
-  ) {
-    cardToUpdate.color = cardResponse.color;
-    cardToUpdate.description = cardResponse.description;
-    cardToUpdate.image = cardResponse.image;
-    cardToUpdate.top = cardResponse.top;
-    cardToUpdate.left = cardResponse.left;
-    cardToUpdate.viewModeImage = cardResponse.viewModeImage;
-    cardToUpdate.version = cardResponse.version;
   }
 
   public static updateRealtimeCardPropertiesFromCardInterface(
@@ -112,17 +82,5 @@ export class UpdateHelper {
     realtimeCard.top = CardInterface.top;
     realtimeCard.left = CardInterface.left;
     realtimeCard.viewModeImage = CardInterface.viewModeImage;
-  }
-
-  public static replaceCardinArray(
-    currentRealtimeSession: RealtimeSession,
-    realtimeCard: RealtimeCard
-  ) {
-    currentRealtimeSession.whiteboard.cards = [
-      ...currentRealtimeSession.whiteboard.cards.filter(
-        c => c.id !== realtimeCard.id
-      ),
-      realtimeCard
-    ];
   }
 }
