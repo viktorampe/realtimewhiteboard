@@ -85,38 +85,6 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
-  subscribeOnCreateCard(whiteboardID: string) {
-    this.customSubsService
-      .OnCardCreatedInWhiteboardListener(whiteboardID)
-      .subscribe((evt: any) => {
-        const cardResponse: RealtimeCard = new RealtimeCard(
-          evt.value.data.onCardAddedInWhiteboard
-        );
-        if (
-          cardResponse.whiteboardId ===
-          this.currentRealtimeSession$.getValue().whiteboard.id
-        ) {
-          // add card to array and update reference
-          const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-          // find card to update and set to new reference
-          realtimeSessionUpdate.whiteboard.cards = [
-            ...realtimeSessionUpdate.whiteboard.cards.filter(
-              c => c.id !== cardResponse.id
-            ),
-            {
-              ...cardResponse,
-              mode:
-                this.activePlayerService.activePlayer$.getValue().id ===
-                cardResponse.createdBy
-                  ? 0
-                  : cardResponse.mode
-            }
-          ];
-          this.currentRealtimeSession$.next(realtimeSessionUpdate);
-        }
-      });
-  }
-
   subscribeOnCreatePlayer() {
     this.apiService.OnCreatePlayerListener.subscribe((evt: any) => {
       const playerResponse: Player = new Player(evt.value.data.onCreatePlayer);
@@ -157,6 +125,33 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     });
   }
 
+  subscribeOnCreateCard(whiteboardID: string) {
+    this.customSubsService
+      .OnCardCreatedInWhiteboardListener(whiteboardID)
+      .subscribe((evt: any) => {
+        const cardResponse: RealtimeCard = new RealtimeCard(
+          evt.value.data.onCardAddedInWhiteboard
+        );
+        // add card to array and update reference
+        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+        // find card to update and set to new reference
+        realtimeSessionUpdate.whiteboard.cards = [
+          ...realtimeSessionUpdate.whiteboard.cards.filter(
+            c => c.id !== cardResponse.id
+          ),
+          {
+            ...cardResponse,
+            mode:
+              this.activePlayerService.activePlayer$.getValue().id ===
+              cardResponse.createdBy
+                ? 0
+                : cardResponse.mode
+          }
+        ];
+        this.currentRealtimeSession$.next(realtimeSessionUpdate);
+      });
+  }
+
   subscribeOnUpdateCard(whiteboardID: string) {
     this.customSubsService
       .OnCardChangedInWhiteboardListener(whiteboardID)
@@ -164,33 +159,26 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
         const cardResponse: RealtimeCard = new RealtimeCard(
           evt.value.data.onCardChangedInWhiteboard
         );
-        // update is for this whiteboard
-        if (
-          this.currentRealtimeSession$.getValue().whiteboard.id ===
-          cardResponse.whiteboardId
-        ) {
-          const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-          const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
-            c => c.id === cardResponse.id
-          );
-          // find card to update and set to new reference
-          realtimeSessionUpdate.whiteboard.cards = [
-            ...realtimeSessionUpdate.whiteboard.cards.filter(
-              c => c.id !== cardResponse.id
-            ),
-            {
-              ...cardResponse,
-              mode:
-                ownCardVersion &&
-                ownCardVersion.mode !== cardResponse.mode &&
-                ownCardVersion.mode !== ModeEnum.UPLOAD
-                  ? ownCardVersion.mode
-                  : cardResponse.mode
-            }
-          ];
-
-          this.currentRealtimeSession$.next(realtimeSessionUpdate);
-        }
+        const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+        const ownCardVersion = realtimeSessionUpdate.whiteboard.cards.find(
+          c => c.id === cardResponse.id
+        );
+        // find card to update and set to new reference
+        realtimeSessionUpdate.whiteboard.cards = [
+          ...realtimeSessionUpdate.whiteboard.cards.filter(
+            c => c.id !== cardResponse.id
+          ),
+          {
+            ...cardResponse,
+            mode:
+              ownCardVersion &&
+              ownCardVersion.mode !== cardResponse.mode &&
+              ownCardVersion.mode !== ModeEnum.UPLOAD
+                ? ownCardVersion.mode
+                : cardResponse.mode
+          }
+        ];
+        this.currentRealtimeSession$.next(realtimeSessionUpdate);
       });
   }
 
@@ -198,24 +186,18 @@ export class RealtimeSessionService implements WhiteboardDataServiceInterface {
     this.customSubsService
       .OnCardDeleteInWhiteboardListener(whiteboardID)
       .subscribe((evt: any) => {
-        console.log(evt);
         const cardResponse: RealtimeCard = new RealtimeCard(
           evt.value.data.onCardRemovedInWhiteboard
         );
-        if (
-          this.currentRealtimeSession$.getValue().whiteboard.id ===
-          cardResponse.whiteboardId
-        ) {
-          // remove card from array with new reference
-          if (this.currentRealtimeSession$.getValue().whiteboard.cards) {
-            const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
-            realtimeSessionUpdate.whiteboard.cards = [
-              ...realtimeSessionUpdate.whiteboard.cards.filter(
-                c => c.id !== cardResponse.id
-              )
-            ];
-            this.currentRealtimeSession$.next(realtimeSessionUpdate);
-          }
+        // remove card from array with new reference
+        if (this.currentRealtimeSession$.getValue().whiteboard.cards) {
+          const realtimeSessionUpdate = this.currentRealtimeSession$.getValue();
+          realtimeSessionUpdate.whiteboard.cards = [
+            ...realtimeSessionUpdate.whiteboard.cards.filter(
+              c => c.id !== cardResponse.id
+            )
+          ];
+          this.currentRealtimeSession$.next(realtimeSessionUpdate);
         }
       });
   }
