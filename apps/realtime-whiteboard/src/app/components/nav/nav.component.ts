@@ -74,6 +74,7 @@ export class NavComponent implements OnInit {
   }
 
   private startSession(realtimeSession: RealtimeSession, teacher: Player) {
+    this._snackBar.open('Loading...');
     // create whiteboard
     this.sessionService
       .createWhiteboard({
@@ -94,6 +95,7 @@ export class NavComponent implements OnInit {
                 // set active player
                 this.activePlayerService.setActivePlayer(player);
                 // nav to realtime session
+                this._snackBar.dismiss();
                 this.router.navigate(['realtimesession', sessionResponse.id]);
               });
           });
