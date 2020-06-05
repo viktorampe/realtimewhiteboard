@@ -1,0 +1,37 @@
+<div class="home_container">
+  <div class="home_container_image"></div>
+  <div class="home_container_tutorial">
+    <mat-vertical-stepper #stepper>
+      <mat-step [stepControl]="setupFormGroup">
+        <ng-template matStepLabel
+          ><p class="stepper_title">Setup session</p></ng-template
+        >
+        <p class="stepper_text">
+          Start a realtime whiteboard session by clicking the 'Start session'
+          button in the navigation panel.campus-carddetailitem. Choose a name
+          and a pincode for your session.
+        </p>
+      </mat-step>
+      <mat-step [stepControl]="startFormGroup">
+        <ng-template matStepLabel
+          ><p class="stepper_title">Start session</p></ng-template
+        >
+        <p class="stepper_text">
+          Click 'Create' after you filled in the form to start the session. The
+          whiteboard will lauch shortly after you completed the setup. You are
+          almost ready to start playing!
+        </p>
+      </mat-step>
+      <mat-step [stepControl]="playFormGroup">
+        <ng-template matStepLabel
+          ><p class="stepper_title">Play!</p></ng-template
+        >
+        <p class="stepper_text">
+          You can start playing now! Let other people join your session by
+          sharing the link. You can track who manipulated wich card by clicking
+          the 'Card Info' button.
+        </p>
+      </mat-step>
+    </mat-vertical-stepper>
+  </div>
+</div>
