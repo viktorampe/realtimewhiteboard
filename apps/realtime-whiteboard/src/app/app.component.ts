@@ -106,6 +106,10 @@ export class AppComponent {
       'menu',
       this.sanitizer.bypassSecurityTrustResourceUrl('../assets/menu.svg')
     );
+    this.iconRegistry.addSvgIcon(
+      'remove',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/remove.svg')
+    );
   }
 
   private setupIconRegistry() {

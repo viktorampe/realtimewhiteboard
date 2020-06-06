@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import Player from '../../models/player';
+import { RealtimeSessionService } from '../../services/realtimesession/realtime-session.service';
 import { ClipboardHelper } from '../../util/clipboardHelper';
 
 @Component({
@@ -10,6 +12,7 @@ import { ClipboardHelper } from '../../util/clipboardHelper';
 export class SessiondetailsdialogComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
+    private sessionService: RealtimeSessionService,
     public dialogRef: MatDialogRef<SessiondetailsdialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -26,5 +29,9 @@ export class SessiondetailsdialogComponent implements OnInit {
       duration: 2000,
       verticalPosition: 'top'
     });
+  }
+
+  removePlayer(player: Player) {
+    this.sessionService.deletePlayer(player).subscribe(() => {});
   }
 }
