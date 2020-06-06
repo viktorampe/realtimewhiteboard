@@ -6,7 +6,10 @@
 </div>
 <div class="info_group">
   <h3>Active players</h3>
-  <div *ngIf="data.players">
-    <campus-playertable [players]="data.players"></campus-playertable>
+  <div *ngIf="players$ | async as players">
+    <campus-playertable
+      [players]="players"
+      (onRemovePlayer)="removePlayer($event)"
+    ></campus-playertable>
   </div>
 </div>
