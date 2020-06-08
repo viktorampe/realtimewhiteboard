@@ -4,4 +4,12 @@ mat-icon {
   float: right;
   color: $errorColor;
   cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.playertable_row:hover {
+  mat-icon {
+    opacity: 1;
+  }
 }
