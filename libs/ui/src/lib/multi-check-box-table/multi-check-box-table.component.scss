@@ -1,0 +1,44 @@
+.ui-multi-check-box-table {
+  &__header {
+    &--row-header {
+      text-align: left;
+      vertical-align: bottom;
+    }
+
+    &--item {
+      text-align: center;
+    }
+  }
+
+  &__body {
+    &__row {
+      &--subLevel {
+        text-align: center;
+
+        &--header {
+          text-align: left;
+        }
+
+        &--item {
+          .mat-icon {
+            cursor: pointer;
+          }
+        }
+      }
+
+      &__cell {
+        &--checkbox {
+          text-align: center;
+          vertical-align: middle;
+          padding-top: 0;
+          padding-bottom: 0;
+
+          .mat-checkbox-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}

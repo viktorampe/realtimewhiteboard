@@ -1,0 +1,50 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ui-list-item {
+  width: 100%;
+  &__container {
+    display: flex;
+    &:not(:last-child) {
+      margin-right: 16px;
+    }
+
+    &--center {
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-width: 250px;
+    }
+
+    &--right {
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+  }
+}
+@media #{$ui-breakpoint-xsmall} {
+  :host {
+    flex-direction: column;
+  }
+  .ui-list-item {
+    &__container {
+      &:not(:last-child) {
+        margin: 0;
+      }
+      &--center,
+      &--right {
+        width: 100%;
+        margin: 0;
+        > * {
+          width: 100%;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

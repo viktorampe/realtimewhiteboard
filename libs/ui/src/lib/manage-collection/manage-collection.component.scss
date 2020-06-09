@@ -1,0 +1,100 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  .mat-dialog-content {
+    min-height: 33vh;
+    width: 50vw;
+    max-width: 800px;
+  }
+}
+
+.ui-modal-side-sheet {
+  &__header {
+    display: flex;
+    flex-direction: column;
+
+    &__row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      div.ui-title,
+      div.ui-body-2 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      mat-icon {
+        cursor: pointer;
+      }
+
+      &--top {
+        .ui-title {
+          flex: 1 1 100%;
+        }
+      }
+    }
+  }
+  &__divider {
+    border: none;
+    border-top-width: 1px;
+    border-top-style: solid;
+  }
+}
+
+.ui-manage-collection {
+  &__info-panel {
+    max-height: 100%;
+  }
+
+  &__no-results {
+    *:not(:last-child) {
+      margin-right: 5px;
+    }
+
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  &__dialog__actions {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+  }
+
+  &__list-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    .ui-body-1 {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  :host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .mat-dialog-content {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .ui-manage-collection {
+    &__dialog__actions {
+      &__button {
+        width: 100%;
+      }
+    }
+  }
+}

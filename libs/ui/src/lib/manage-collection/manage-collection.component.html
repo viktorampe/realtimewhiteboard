@@ -1,0 +1,151 @@
+<ng-container *ngIf="asModalSideSheet; else centeredModal">
+  <div class="ui-modal-side-sheet__header">
+    <div
+      class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--top"
+    >
+      <ng-container *ngTemplateOutlet="close"></ng-container>
+      <div class="ui-title">{{ data.title }}</div>
+      <ng-container *ngTemplateOutlet="actions"></ng-container>
+    </div>
+    <div
+      class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--bottom"
+    >
+      <div class="ui-body-2">{{ data.subtitle }}</div>
+    </div>
+  </div>
+  <hr class="ui-modal-side-sheet__divider" />
+  <div class="ui-modal-side-sheet__body">
+    <ng-container *ngTemplateOutlet="filter"></ng-container>
+    <ng-container *ngTemplateOutlet="collection"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #centeredModal>
+  <campus-info-panel
+    [titleText]="data.title"
+    [titleIcon]="data.item.icon"
+    class="ui-manage-collection__info-panel"
+  >
+    <ng-container title__right *ngTemplateOutlet="filter"></ng-container>
+
+    <mat-dialog-content>
+      <ng-container *ngTemplateOutlet="collection"></ng-container>
+    </mat-dialog-content>
+  </campus-info-panel>
+  <mat-dialog-actions class="ui-manage-collection__dialog__actions">
+    <ng-container *ngTemplateOutlet="close"></ng-container>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- UI blocks -->
+<ng-template #noFilterResultsTemplate>
+  <div class="ui-manage-collection__no-results">
+    <span>Het filteren leverde geen resultaten op.</span>
+    <a (click)="filterTextInput && filterTextInput.clear()"
+      >Filter verwijderen</a
+    >
+  </div>
+</ng-template>
+
+<ng-template #emptyCollectionTemplate>
+  <div class="ui-manage-collection__no-results">
+    <!-- This should be an empty state template depending on the collection type -->
+    <span data-cy="empty-collection-message"
+      >Je hebt nog geen {{ data.collectionType }}.</span
+    >
+  </div>
+</ng-template>
+
+<ng-template #filter>
+  <campus-filter-text-input
+    *ngIf="useFilter && linkableItems.length > 0"
+    theme="dark"
+    [source]="linkableItems"
+    class="ui-manage-collection__filter"
+    autocomplete="off"
+  ></campus-filter-text-input>
+</ng-template>
+
+<ng-template #actions>
+  <!-- add extra actions if needed -->
+</ng-template>
+
+<ng-template #close>
+  <mat-icon
+    *ngIf="asModalSideSheet; else buttonClose"
+    (click)="onCloseButtonClick()"
+    svgIcon="close"
+  ></mat-icon>
+</ng-template>
+
+<ng-template #buttonClose>
+  <campus-button
+    *ngIf="!asModalSideSheet"
+    primary
+    class="ui-manage-collection__dialog__actions__button"
+    (click)="onCloseButtonClick()"
+    >Sluiten</campus-button
+  >
+</ng-template>
+
+<ng-template #collection>
+  <ng-container *ngIf="linkableItems.length > 0; else emptyCollectionTemplate">
+    <mat-selection-list (selectionChange)="onSelectionChanged($event)">
+      <div
+        class="ui-manage-collection__recent-items"
+        *ngIf="
+          (!filterTextInput && recentLinkableItems.length > 0) ||
+          (filterTextInput &&
+            !filterTextInput.input.value &&
+            recentLinkableItems.length > 0)
+        "
+      >
+        <h3 mat-subheader>Recent gebruikt</h3>
+        <mat-list-option
+          [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
+          *ngFor="let item of recentLinkableItems"
+          [value]="item.id"
+          class="ui-manage-collection__recent-item"
+        >
+          <ng-container
+            *ngTemplateOutlet="listItem; context: { listItem: item }"
+          ></ng-container>
+        </mat-list-option>
+        <mat-divider *ngIf="!asModalSideSheet"></mat-divider>
+      </div>
+      <ng-container *ngIf="listItems$ | async as filteredItems">
+        <div
+          class="ui-manage-collection__all-items"
+          *ngIf="filteredItems.length; else noFilterResultsTemplate"
+        >
+          <h3 mat-subheader>Alle</h3>
+          <mat-list-option
+            *ngFor="let item of filteredItems"
+            [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
+            [value]="item.id"
+          >
+            <ng-container
+              *ngTemplateOutlet="listItem; context: { listItem: item }"
+            ></ng-container>
+          </mat-list-option>
+        </div>
+      </ng-container>
+    </mat-selection-list>
+  </ng-container>
+</ng-template>
+
+<ng-template #listItem let-item="listItem">
+  <div class="ui-manage-collection__list-item">
+    <mat-icon
+      *ngIf="!asModalSideSheet"
+      mat-list-icon
+      [svgIcon]="item.icon"
+    ></mat-icon>
+    <div class="ui-body-1">{{ item.label }}</div>
+    <mat-icon
+      *ngIf="asModalSideSheet"
+      svgIcon="open-in-new"
+      (click)="navigateTo($event, item.linkToItem)"
+    ></mat-icon>
+  </div>
+</ng-template>

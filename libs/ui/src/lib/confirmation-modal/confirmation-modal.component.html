@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+  <p data-cy="cm-content" [innerHTML]="message"></p>
+</div>
+<div mat-dialog-actions class="confirmation-dialog__actions">
+  <campus-button data-cy="cm-cancel" bordered flat (click)="cancel()"
+    >Nee</campus-button
+  >
+  <campus-button
+    data-cy="cm-confirm"
+    primary
+    campusClickStopPropagation
+    primary
+    [disabled]="disableConfirm"
+    (click)="confirm()"
+    >Ja</campus-button
+  >
+</div>

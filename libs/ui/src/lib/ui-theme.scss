@@ -1,0 +1,451 @@
+@import './mixins';
+
+/* #region New Style Variables */
+/**
+  @TODO
+  We should shrink down all variables to a mix of these root variables
+**/
+$ui-color-primary: #44b0aa !default;
+$ui-color-secondary: #fff !default;
+$ui-color-accent: #fff !default;
+$ui-color-warning: #f80 !default;
+$ui-color-danger: #f00 !default;
+
+$ui-color-base: #000 !default;
+
+$ui-opacity-high-emphasis: 0.87 !default;
+$ui-opacity-medium-emphasis: 0.54 !default;
+$ui-opacity-low-emphasis: 0.38 !default;
+$ui-opacity-stroke-emphasis: 0.12 !default;
+$ui-opacity-hover-emphasis: 0.04 !default;
+$ui-opacity-odd-emphasis: 0.02 !default;
+
+$ui-stroke-color: rgba($ui-color-base, $ui-opacity-stroke-emphasis) !default;
+$ui-icon-color: rgba($ui-color-base, $ui-opacity-medium-emphasis) !default;
+$ui-icon-color--active: rgba(
+  $ui-color-base,
+  $ui-opacity-high-emphasis
+) !default;
+$ui-icon-color--disabled: rgba(
+  $ui-color-base,
+  $ui-opacity-low-emphasis
+) !default;
+
+// typography
+$ui-text-primary-color: rgba(
+  $ui-color-base,
+  $ui-opacity-high-emphasis
+) !default;
+$ui-text-secondary-color: rgba(
+  $ui-color-base,
+  $ui-opacity-medium-emphasis
+) !default;
+$ui-text-disabled-color: rgba(
+  $ui-color-base,
+  $ui-opacity-low-emphasis
+) !default;
+
+$ui-font-weight-light: 300 !default;
+$ui-font-weight-regular: 400 !default;
+$ui-font-weight-semibold: 600 !default;
+$ui-font-weight-bold: 700 !default;
+
+$ui-icon-text-gap: 12px !default;
+
+$ui-font-sizes: () !default;
+$ui-font-size-map: map-merge(
+  (
+    'headline': 24,
+    'title': 21,
+    'subheader': 16,
+    'body': 14,
+    'menu': 14,
+    'caption': 12,
+    'button': 15,
+    'action': 12,
+    'tooltip': 10
+  ),
+  $ui-font-sizes
+);
+
+$ui-inner-padding: 24px !default;
+
+// Borders
+$ui-border-radius-small: 4px !default;
+$ui-border-radius-medium: 10px !default;
+$ui-border-radius-large: 24px !default;
+
+// transitions
+$ui-transition-easing: cubic-bezier(0.43, 0, 0.31, 1) !default;
+
+$ui-transition-at-ease: 1000ms !default;
+$ui-transition-slow: 500ms !default;
+$ui-transition-normal: 250ms !default;
+$ui-transition-fast: 100ms !default;
+
+$ui-background-color-transition: background-color $ui-transition-normal
+  $ui-transition-easing !default;
+$ui-text-color-transition: color $ui-transition-normal $ui-transition-easing !default;
+$ui-elevation-transition: box-shadow $ui-transition-fast $ui-transition-easing !default;
+
+// Icons
+$ui-icon-size: 24px !default;
+$ui-icon-dense-size: 20px !default;
+/* #endregion */
+
+// Lists
+$ui-list-item-3-line-height: 88px !default;
+$ui-list-item-2-line-height: 56px !default;
+$ui-list-item-default-height: 48px !default;
+
+$ui-list-item-background-color--even: transparent !default;
+$ui-list-item-background-color--odd: rgba($ui-color-base, 0.04);
+$ui-list-item-background-color--hover: rgba($ui-color-secondary, 0.04);
+$ui-list-item-background-color--selected: rgba($ui-color-secondary, 0.08);
+
+/* #region Typograpy Classes */
+@mixin setFont(
+  $size,
+  $weight: $ui-font-weight-regular,
+  $color: $ui-text-primary-color,
+  $family: $ui-primary-font-family
+) {
+  font-family: $family;
+  font-size: #{$size}px;
+  font-weight: $weight;
+  color: $color;
+}
+.ui-headline {
+  @include setFont(map-get($ui-font-size-map, 'headline'));
+}
+.ui-title {
+  @include setFont(
+    map-get($ui-font-size-map, 'title'),
+    $ui-font-weight-semibold
+  );
+}
+.ui-subheader {
+  @include setFont(map-get($ui-font-size-map, 'subheader'));
+}
+.ui-body-2,
+.ui-menu {
+  &,
+  & .mat-list-item-content {
+    @include setFont(
+      map-get($ui-font-size-map, 'menu'),
+      $ui-font-weight-semibold
+    );
+  }
+}
+.ui-body-1 {
+  &,
+  & .mat-list-item-content {
+    @include setFont(map-get($ui-font-size-map, 'body'));
+  }
+}
+.ui-caption {
+  @include setFont(
+    $size: map-get($ui-font-size-map, 'caption'),
+    $color: $ui-text-secondary-color
+  );
+}
+.ui-button-text {
+  @include setFont(
+    map-get($ui-font-size-map, 'button'),
+    $ui-font-weight-semibold
+  );
+  text-transform: uppercase;
+}
+.ui-action-text {
+  @include setFont(map-get($ui-font-size-map, 'action'));
+  text-transform: uppercase;
+}
+.ui-tooltip-text {
+  @include setFont(map-get($ui-font-size-map, 'tooltip'));
+}
+/* #endregion*/
+
+// main body
+$ui-primary-bg-color: #fff !default;
+$ui-primary-font-color: #000 !default;
+$ui-primary-font-size: 16px !default;
+$ui-primary-color-accent: #fff !default; // link, button (borders)
+$ui-primary-font-color-2: #aaa !default; // subtitle
+$ui-primary-font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif !default;
+$ui-primary-font-family-2: 'Lato', sans-serif !default; // title
+$ui-primary-font-family-3: 'Oswald', 'Arial Narrow', Sans-Serif !default; // list item label
+$ui-danger-bg-color: $ui-color-danger !default;
+$ui-danger-font-color: #fff !default;
+$ui-warning-bg-color: $ui-color-warning !default;
+$ui-warning-font-color: #fff !default;
+$ui-form-button-default-bg-color: #e1e5e7 !default;
+$ui-form-button-primary-bg-color: $ui-color-primary !default;
+
+// nav + site header (shell)
+$ui-secondary-bg-color: #fff !default;
+$ui-secondary-font-color: #000 !default;
+$ui-secondary-bg-color-accent: $ui-color-danger !default; // active button, badge
+$ui-secondary-font-color-accent: #fff !default; // link, button (borders)
+
+// panel
+$ui-tertiary-bg-color: $ui-primary-bg-color !default;
+$ui-tertiary-font-color: $ui-primary-font-color !default;
+$ui-tertiary-bg-color-2: #999 !default; // header
+$ui-tertiary-font-color-2: #fff !default; // header
+$ui-tertiary-font-size-2: 14px !default;
+$ui-tertiary-font-weight-2: 300 !default;
+$ui-tertiary-color-accent: $ui-primary-color-accent !default;
+$ui-tertiary-border-color: #999 !default;
+$ui-tertiary-icon-color: #999 !default;
+
+// list
+$ui-list-row-bg-title-odd: #3b3c46 !default;
+$ui-list-row-bg-title-even: #536070 !default;
+$ui-list-row-bg-odd: $ui-primary-bg-color !default;
+$ui-list-row-bg-even: #f3f3f3 !default;
+
+// forms
+$ui-form-item-bg-color: $ui-primary-bg-color !default;
+$ui-form-item-font-color: $ui-primary-font-color !default;
+$ui-form-item-border-color: $ui-primary-font-color !default;
+$ui-button-bg-color: $ui-form-button-default-bg-color !default;
+$ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
+$ui-button-bg-color-2: $ui-tertiary-bg-color !default;
+$ui-button-font-color: #fff !default;
+$ui-button-font-weight: inherit !default;
+$ui-button-font-size: $ui-primary-font-size !default;
+$ui-form-input-font-weight: normal !default;
+$ui-form-input-font-color: inherit !default;
+$ui-form-input--focused-font-color: $ui-primary-font-color !default;
+$ui-form-item-padding-bottom: $ui-primary-font-size !default;
+$ui-form-item-margin-bottom: 0px !default;
+$ui-form-item-border-radius: 0px !default;
+$ui-form-item-label-color: inherit !default;
+$ui-form-item-bg-color: #fff !default;
+$ui-form-actions-padding: 20px 0 0 0 !default;
+$ui-form-spacing: 5px !default;
+
+// sizes
+$ui-person-badge-size-large: 200px !default;
+$ui-person-badge-size-large-font-size: $ui-person-badge-size-large / 2 !default;
+$ui-person-badge-size-large_name-font-size: 20px !default;
+$ui-person-badge-size-large_sub-text-font-size: 16px !default;
+$ui-person-badge-size-medium: 48px !default;
+$ui-person-badge-size-medium-font-size: $ui-person-badge-size-medium / 2 !default;
+$ui-person-badge-size-medium_name-font-size: 14px !default;
+$ui-person-badge-size-medium_sub-text-font-size: 14px !default;
+$ui-person-badge-size-small: 36px !default;
+$ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
+$ui-person-badge-size-small_name-font-size: 14px !default;
+$ui-person-badge-size-small_sub-text-font-size: 14px !default;
+$ui-icon-size-large: 96px !default;
+$ui-icon-size-medium: 48px !default;
+$ui-icon-size-small: 36px !default;
+$ui-icon-size-tiny: 12px !default;
+
+// buttons
+$ui-button-padding-left: $ui-primary-font-size !default;
+$ui-button-padding-right: $ui-primary-font-size !default;
+$ui-button-padding-top: $ui-primary-font-size/2 !default;
+$ui-button-padding-bottom: $ui-primary-font-size/2 !default;
+
+// tiles and droparea
+$ui-tile-width: 280px !default;
+$ui-tile-width--breakpoint-xsmall: 250px !default;
+$ui-tile-height: 105px !default;
+
+// helper classes
+.ui-no-link {
+  cursor: inherit;
+}
+
+// import all required sass files from our libs
+@import './folder/folder.component.theme.scss';
+@import './tree-nav/tree-nav.component.theme';
+@import './file-extension/file-extension.component.scss';
+@import './editable-inline-tag-list/editable-inline-tag-list.component.theme.scss';
+@import './confirmable-select/confirmable-select.component.theme.scss';
+@import './content-preview/content-preview.component.theme.scss';
+@import './input-label/input-label.component.theme.scss';
+@import './info-panel/info-panel.component.theme.scss';
+@import './label-and-icon-button/label-and-icon-button.component.theme.scss';
+@import './period-label/period-label.component.theme.scss';
+@import './person-badge/person-badge.component.theme.scss';
+@import './person-summary-component/person-summary-component.theme.scss';
+@import './page-header/page-header.component.theme.scss';
+@import './app-bar/app-bar.component.theme.scss';
+@import './side-sheet/side-sheet.component.theme';
+@import './shell/shell.component.theme';
+@import './list-view/list-view.component.theme.scss';
+@import './content-thumbnail/content-thumbnail.component.theme.scss';
+@import './filter-text-input/filter-text-input.component.themes.scss';
+@import './button/button.component.theme.scss';
+@import './notification/notification.component.theme';
+@import './dropdown-menu/dropdown-menu.component.theme.scss';
+@import './dropdown-menu-item/dropdown-menu-item.component.theme.scss';
+@import './banner/banner.component.theme.scss';
+@import './breadcrumbs/breadcrumbs.component.theme.scss';
+@import './collapsible-sheet/collapsible-sheet.component.theme.scss';
+@import './drop-area/drop-area.component.theme.scss';
+@import './tile/tile.component.theme.scss';
+@import './manage-collection/manage-collection.component.theme.scss';
+@import './multi-check-box-table/multi-check-box-table.component.theme.scss';
+@import './file-icon/file-icon.component.theme.scss';
+@import './date-range-picker/date-range-picker.component.theme.scss';
+@import './section/section.component.theme.scss';
+@import './list-item-content/list-item-content.component.theme.scss';
+@import './empty-state/empty-state.theme.scss';
+@import './backdrop/backdrop.component.theme.scss';
+@import './progress/progress.component.theme.scss';
+@import './collapsible-container/collapsible-container.component.theme.scss';
+@import './rating/rating.component.theme.scss';
+
+@mixin ui-forms() {
+  form {
+    .mat-form-field {
+      display: block;
+
+      .mat-form-field-wrapper {
+        padding-bottom: $ui-form-item-padding-bottom;
+      }
+
+      .mat-form-field-outline {
+        background-color: $ui-form-item-bg-color;
+        .mat-form-field-outline-start {
+          border-radius: $ui-form-item-border-radius;
+        }
+
+        .mat-form-field-outline-end {
+          border-radius: $ui-form-item-border-radius;
+        }
+      }
+
+      .mat-form-field-label {
+        color: $ui-form-item-label-color;
+      }
+
+      input {
+        font-weight: $ui-form-input-font-weight;
+        color: $ui-form-input-font-color;
+      }
+
+      &.mat-focused {
+        input,
+        select {
+          color: $ui-form-input--focused-font-color;
+        }
+      }
+    }
+
+    .form-inline {
+      .mat-form-field {
+        display: inline-block;
+        margin-right: $ui-form-spacing;
+      }
+    }
+
+    .form-actions {
+      padding: $ui-form-actions-padding;
+    }
+
+    .ui-button {
+      padding: $ui-button-font-size/2 $ui-button-font-size;
+    }
+  }
+
+  .ui-button.ui-button--large {
+    margin-bottom: $ui-form-item-padding-bottom;
+  }
+}
+
+@mixin ui-content-thumbnail-button() {
+  $ui-content-thumbnail-button-color: $ui-primary-font-color-2 !default;
+  $ui-content-thumbnail-button-background-color: transparent !default;
+  $ui-content-thumbnail-button-size: 30px !default;
+  $ui-content-thumbnail-button-padding: 5px !default;
+  $ui-content-thumbnail-button-margin: 0 !default;
+
+  campus-content-thumbnail {
+    .ui-button {
+      color: $ui-content-thumbnail-button-color;
+      background-color: $ui-content-thumbnail-button-background-color;
+      padding: $ui-content-thumbnail-button-padding;
+      margin: $ui-content-thumbnail-button-margin;
+
+      .mat-icon {
+        width: $ui-content-thumbnail-button-size;
+        height: $ui-content-thumbnail-button-size;
+      }
+    }
+
+    .ui-button--disabled {
+      &,
+      &:hover {
+        background-color: $ui-content-thumbnail-button-background-color;
+      }
+    }
+  }
+}
+
+$ui-form-field-height: 40px !default;
+
+campus-date-range-picker {
+  .mat-form-field,
+  .mat-form-field-outline {
+    height: $ui-form-field-height;
+  }
+}
+
+@mixin ui-icons {
+  svg {
+    pointer-events: none; //remove native tooltip
+  }
+}
+
+// create theme-mixin with each mixin from our library components
+@mixin ui-theme() {
+  @include ui-forms();
+  @include ui-icons();
+  @include ui-tree-nav();
+  @include ui-folder-theme();
+  //place desired width as optional parameter, default 84;
+  @include ui-file-extension();
+  @include ui_editable-inline-tag-list_theme();
+  @include ui_confirmable-select_theme();
+  @include ui_content-preview_theme();
+  @include ui_input-label_theme();
+  @include ui_info-panel_theme();
+  @include ui_label-and-icon-button_theme();
+  @include ui_period-label_theme();
+  @include ui_person-badge_theme();
+  @include ui-person-summary();
+  @include ui-page-header_theme();
+  @include ui-app-bar();
+  @include ui-app-shell();
+  @include ui-side-sheet();
+  @include ui-list-view();
+  @include ui-list-view-deep();
+  @include ui-content-thumbnail();
+  @include ui-filter-text-input();
+  @include ui-button();
+  @include ui-notification();
+  @include ui-dropdown-menu();
+  @include ui-dropdown-menu-item();
+  @include ui_banner_theme();
+  @include ui-breadcrumbs_theme();
+  @include ui-content-thumbnail-button();
+  @include ui-collapsible-sheet();
+  @include ui-drop-area-theme();
+  @include ui-tile();
+  @include ui-manage-collection();
+  @include ui-multi-check-box-table_theme();
+  @include ui-file-icon();
+  @include ui-date-range-picker();
+  @include ui-section();
+  @include ui-list-item-content();
+  @include ui-empty-state();
+  @include ui-backdrop();
+  @include ui-progress();
+  @include ui-collapsible-container();
+  @include ui-rating();
+}

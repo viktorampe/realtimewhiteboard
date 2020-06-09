@@ -1,0 +1,139 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+$ui-list-item-content-spacing--horizontal: 16px !default;
+$ui-list-item-content-spacing--vertical: 4px !default;
+
+$ui-list-item-content-stroke-color: $ui-stroke-color !default;
+
+$ui-list-item-content_icon-color: $ui-primary-color-accent !default;
+$ui-list-item-content_icon-width: 50px !default;
+$ui-list-item-content_icon-height: 50px !default;
+
+$ui-list-item-content-3-line-height: $ui-list-item-3-line-height !default;
+$ui-list-item-content-2-line-height: $ui-list-item-2-line-height !default;
+$ui-list-item-content-default-height: $ui-list-item-default-height !default;
+
+$ui-list-item-content-separator-height: 24px !default;
+$ui-list-item-content-separator-height--2-line: 32px !default;
+$ui-list-item-content-separator-height--3-line: 48px !default;
+
+@mixin ui-list-item-content() {
+  .ui-list-item {
+    &__icon {
+      align-self: center;
+      margin-right: $ui-list-item-content-spacing--horizontal;
+      color: $ui-list-item-content_icon-color;
+      width: $ui-list-item-content_icon-width !important;
+      max-height: $ui-list-item-content_icon-height;
+      flex: 0 0 auto;
+
+      & > .ui-file-icon {
+        height: $ui-list-item-content_icon-height;
+        width: $ui-list-item-content_icon-width;
+      }
+
+      & > mat-icon {
+        width: inherit !important;
+      }
+    }
+
+    &__title {
+      display: inline-block;
+      font-weight: bold;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    &__actions {
+      margin-top: $ui-list-item-content-spacing--vertical;
+      color: $ui-list-item-content-stroke-color;
+      font-size: 0.8rem;
+      white-space: normal;
+
+      > .ui-button {
+        $even-spacing: $ui-list-item-content-spacing--horizontal / 2;
+        $divider-margin-left: $even-spacing -$ui-form-spacing;
+        $divider-margin-right: $even-spacing;
+        &:not(:first-child) {
+          &:before {
+            content: '';
+            display: block;
+            pointer-events: none;
+            border-left: 1px solid $ui-list-item-content-stroke-color;
+            height: $ui-list-item-content-spacing--horizontal;
+            margin-left: $divider-margin-left; //ui-button has a margin-right form spacing
+            margin-right: $divider-margin-right;
+          }
+        }
+        &--inline:not(:first-child):after {
+          $width-offset: $divider-margin-left * 4;
+          margin-left: $divider-margin-left * 2;
+          width: calc(100% - #{$width-offset});
+        }
+      }
+    }
+
+    &__content-right {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      justify-content: flex-end;
+
+      &--separated > *:not(:last-child):after {
+        content: '';
+        pointer-events: none;
+        border-left: 1px solid $ui-list-item-content-stroke-color;
+        margin-left: $ui-list-item-content-spacing--horizontal;
+        margin-right: $ui-list-item-content-spacing--horizontal;
+        height: $ui-list-item-content-separator-height;
+      }
+      .ui-list-item-3-line &--separated > *:after {
+        height: $ui-list-item-content-separator-height--3-line;
+      }
+      .ui-list-item-2-line &--seperated > *:after {
+        height: $ui-list-item-content-separator-height--2-line;
+      }
+    }
+  }
+
+  .mat-list-base .mat-list-item,
+  .mat-list-base .mat-list-option {
+    &.ui-list-item {
+      height: $ui-list-item-content-default-height;
+      &-3-line {
+        height: $ui-list-item-content-3-line-height;
+      }
+      &-2-line {
+        height: $ui-list-item-content-2-line-height;
+      }
+    }
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    .mat-list-base .mat-list-item,
+    .mat-list-base .mat-list-option {
+      &.ui-list-item,
+      &.ui-list-item-3-line,
+      &.ui-list-item-2-line {
+        @include elevation(2);
+        padding: 12px;
+        height: auto;
+        margin-bottom: 24px;
+
+        & .mat-list-item-content {
+          align-items: flex-start;
+          padding: 0;
+
+          & .mat-pseudo-checkbox {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+@mixin ui-rating {
+  $ui-rating-icon-color: $ui-icon-color !default;
+  $ui-rating-icon-fill: $ui-color-primary !default;
+
+  .ui-rating {
+    .mat-icon {
+      fill: $ui-rating-icon-color;
+    }
+    &--filled {
+      &.mat-icon {
+        fill: $ui-rating-icon-fill;
+        .fill {
+          fill: $ui-rating-icon-fill;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
