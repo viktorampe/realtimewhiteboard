@@ -175,7 +175,7 @@ export class WhiteboardComponent implements OnChanges {
   selectedCards: CardInterface[] = [];
 
   lastColor = DEFAULT_COLOR; // used to give a new card the last picked color
-  isShelfMinimized = false;
+  isShelfMinimized = true;
   zoomFactor = START_ZOOM_LEVEL;
   isSettingsActive = false;
 
