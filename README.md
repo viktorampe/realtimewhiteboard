@@ -61,9 +61,10 @@ Indien de bestaande API niet meer operationeel is, moet je zelf een Amplify proj
 ##### Installeer Amplify Core
 
 Open een terminal in de root van het project. Ga daarna naar de juiste applicatie
-cd apps/realtime-whiteboard
 
-##### Installeer Amplify Core
+`cd apps/realtime-whiteboard`
+
+Installeer Amplify Core
 
 `npm i aws-amplify --save`
 
