@@ -7,7 +7,7 @@ Omdat deze applicatie slechts een PoC is, wordt deze niet geïntegreerd in een b
 
 - VS Code: Download Visual Studio Code op https://code.visualstudio.com/
 - Node.js: Download en installeer Node.js op https://nodejs.org/en/download/
-- Angular CLI: Installeer de Angular CLI via de node package manager. 
+- Angular CLI: Installeer de Angular CLI via de node package manager. <br>
 Gebruik daarvoor dit cmd: `npm install -g @angular/cli`
 
 5.2 – Hoe ga je aan de slag?
