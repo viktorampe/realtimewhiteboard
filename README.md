@@ -1,65 +1,274 @@
-# Campus
+# 1 – Integratie
 
-[![Build Status](https://dev.azure.com/diekeure-webdev/LK2020/_apis/build/status/diekeure.campus?branchName=develop)](https://dev.azure.com/diekeure-webdev/LK2020/_build/latest?definitionId=2&branchName=develop)
+De Realtime-Whiteboard applicatie is een PoC. Het project dient aan te tonen welke mogelijkheden het Amplify Framework kan bieden om realtime-data weer te geven. Om dat aan te tonen werd het Whiteboard project uitgebreid met een real-time module.
+Omdat deze applicatie slechts een PoC is, wordt deze niet geïntegreerd in een bedrijf. De App wordt slechts voorgesteld aan het team van die Keure. 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) using [Nrwl Nx](https://nrwl.io/nx).
+## 1.1 – Wat heb je nodig?
 
-## Nrwl Extensions for Angular (Nx)
+- VS Code: Download Visual Studio Code op https://code.visualstudio.com/
+- Node.js: Download en installeer Node.js op https://nodejs.org/en/download/
+- Angular CLI: Installeer de Angular CLI via de node package manager. Gebruik daarvoor dit cmd: 
+`npm install -g @angular/cli`
 
-<a href="https://nrwl.io/nx"><img src="https://preview.ibb.co/mW6sdw/nx_logo.png"></a>
+5.2 – Hoe ga je aan de slag?
 
-Nx is an open source toolkit for enterprise Angular applications.
+Stap 1 – Clone de Git repository en open deze in VS Code
 
-Nx is designed to help you create and build enterprise grade Angular applications. It provides an opinionated approach to application project structure and patterns.
+Open een terminal en clone het project naar het systeem.
 
-## Quick Start & Documentation
+Stap 2 – Installeer de node modules
 
-[Watch a 5-minute video on how to get started with Nx.](http://nrwl.io/nx)
+npm i
 
-## Generate your first application
+Stap 3 – API configureren 
 
-Run `ng generate app myapp` to generate an application. When using Nx, you can create multiple applications and libraries in the same CLI workspace. Read more [here](http://nrwl.io/nx).
+Vanaf dit punt zijn er twee mogelijkheden om het project te runnen. 
+Optie 1 – Bestaande API gebruiken
+De eerste en snelste mogelijkheid is om te connecteren met de API gemaakt voor dit project. Deze API is geldig tot 31 juli 2020. Daarna zal de API-key vervallen.  Als je ervoor kiest om te connecteren met de bestaande API, dan hoef je het Amplify framework niet te configurern. Dit is de snelste manier om het project te starten. Maak een file aan genaamd aws-exports.js. Plaats de file in apps > realtime-whiteboard > src. 
+Plaats onderstaande code in de file.
 
-## Development server
+const awsmobile = {
+  aws_project_region: 'eu-west-1',
+  aws_cognito_identity_pool_id:
+    'eu-west-1:6ffb3926-f9d8-4287-bca6-253c6700375d',
+  aws_cognito_region: 'eu-west-1',
+  aws_user_pools_id: 'eu-west-1_CovhrsJwA',
+  aws_user_pools_web_client_id: '13877nrrl5tih61mcb942oggbb',
+  oauth: {},
+  aws_user_files_s3_bucket: 'realtimewhiteboardstragebucket125040-dev',
+  aws_user_files_s3_bucket_region: 'eu-west-1',
+  aws_appsync_graphqlEndpoint:
+    'https://amowajm2cfha5n5yahrjelwblu.appsync-api.eu-west-1.amazonaws.com/graphql',
+  aws_appsync_region: 'eu-west-1',
+  aws_appsync_authenticationType: 'API_KEY',
+  aws_appsync_apiKey: 'da2-grdmnz6fwbdt7mhvhyfoqz52ea '
+};
 
-Run `ng serve --project=myapp` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+export default awsmobile;
 
-## Code scaffolding
 
-Run `ng generate component component-name --project=myapp` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Optie 2 – Configureer een eigen Amplify project
+Indien de bestaande API niet meer operationeel is, moet je zelf een Amplify project maken. Dit wil zeggen dat je een eigen Amplify app zult initialiseren en daar services zoals storage, authenticatie en AppSync zult aan toevoegen. Om dit te doen heb je een AWS account nodig. Om het account aan te maken heb je een creditcard nodig.
 
-## Build
+Installeer Amplify Core
 
-Run `ng build --project=myapp` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Open een terminal in de root van het project. Ga daarna naar de juiste applicatie
+cd apps/realtime-whiteboard
 
-## Running unit tests
+Installeer Amplify Core
+npm i aws-amplify --save
 
-Run `ng test` to execute the unit tests via [Jest](https://jestjs.io/).
+Installeer Amplify CLI
+npm install -g @aws-amplify/cli  
+Configuratie van Amplify en AWS account
+amplify configure
+Dit cmd zal een browservenster openen. Volg de stappen in de browser om een AWS account aan te maken. Hiervoor heb je een creditcard nodig. Het is aangeraden om tijdens het maken van het account het Access Key ID en de Secret Access Key te bewaren. 
+Doorloop volgende stappen om Amplify te configureren en de user te initialiseren:
 
-## Running end-to-end tests
+$ amplify configure
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/). Before running the tests make sure you are serving the app via `ng serve`.
+Specify the AWS Region
+? region:  eu-west-1
+Specify the username of the new IAM user:
+? user name:  amplify-viktor-mac
+Enter the access key of the newly created user:
+? accessKeyId:  ********************
+? secretAccessKey:  ****************************************
+This would update/create the AWS Profile in your local machine
+? Profile Name:  amplify-viktor-mac
 
-## Further help
+Successfully set up the new user.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-### generate new route lib using @diekeure/angular-schematics
+Verwijder de huidige Amplify folder
+Voor de volgende stap moeten we de huidige Amplify folder verwijderen. Het is namelijk zo dat we deze files opnieuw zullen laten genereren met de configuratie van een nieuwe API. De folder bevind zich onder apps > realtime-whiteboard > Amplify.
 
-    ng g @diekeure/angular-schematics:page --name=some-name-in-snake-case
+Initialiseer Amplify
+Initialiseer Amplify met 
+amplify init
 
-optional parameter --project ==> project in which the new route should be added, if not entered, the default project from angular.json will be used --directory ==> name of the route if it should not be 'pages'
+Doorloop volgende stappen:
 
-the route will be added to the libs folder
+? Enter a name for the project rtwhiteboardmac
+? Enter a name for the environment dev
+? Choose your default editor: Visual Studio Code
+? Choose the type of app that you're building javascript
+? What javascript framework are you using angular
+? Source Directory Path:  src
+? Distribution Directory Path: dist/realtime-whiteboard
+? Build Command:  npm run-script build
+? Start Command: ng serve
+? Do you want to use an AWS profile? Yes
+? Please choose the profile you want to use amplify-viktor-mac
 
-### add component to UI library
 
-    ng g component {component name} --styleext=scss --project=ui --export
+API toevoegen
+Voeg de API toe met 
+amplify add api
 
-### generate state in dal lib (non root state 'bundles' example)
+Doorloop volgende stappen:
 
-    ng generate ngrx bundles --directory=+state/bundles --module=libs/dal/src/lib/dal.module.ts
+? Please select from one of the below mentioned services: GraphQL
+? Provide API name: rtwhiteboardmac
+? Choose the default authorization type for the API API key
+? Enter a description for the API key: my key
+? After how many days from now the API key should expire (1-365): 7
+? Do you want to configure advanced settings for the GraphQL API Yes, I want to make some additional changes.
+? Configure additional auth types? No
+? Configure conflict detection? Yes
+? Select the default resolution strategy Auto Merge
+? Do you have an annotated GraphQL schema? No
+? Do you want a guided schema creation? Yes
+? What best describes your project: Single object with fields (e.g., “Todo” with ID, name, description)
+? Do you want to edit the schema now? Yes
 
-### generate state in app (root state 'app' example)
 
-    ng generate ngrx app --module=apps/polpo-classroom-web/src/app/app.module.ts --root
+Pas het standaard schema aan naar deze models:
+
+type Session @model {
+ id: ID!
+ title: String!
+ pincode: Int!
+ players: [Player] @connection(keyName: "bySession", fields: ["id"])
+ whiteboardID: ID!
+ whiteboard: Whiteboard @connection(fields: ["whiteboardID"])
+}
+
+type Whiteboard @model {
+ id: ID!
+ title: String
+ defaultColor: String
+ cards: [Card] @connection(keyName: "byWhiteboard", fields: ["id"])
+}
+
+type Player
+ @model
+ @key(
+   name: "bySession"
+   fields: ["sessionID"]
+   queryField: "playerBySessionID"
+ ) {
+ id: ID!
+ sessionID: ID!
+ session: Session @connection(fields: ["sessionID"])
+ fullName: String!
+ isTeacher: Boolean!
+}
+
+type Card
+ @model(subscriptions: null)
+ @key(
+   name: "byWhiteboard"
+   fields: ["whiteboardID"]
+   queryField: "cardByWhiteboardID"
+ ) {
+ id: String!
+ whiteboardID: ID!
+ whiteboard: Whiteboard @connection(fields: ["whiteboardID"])
+ mode: Int!
+ type: Int!
+ color: String!
+ description: String
+ image: String
+ top: Int!
+ left: Int!
+ viewModeImage: Boolean!
+ inShelf: Boolean!
+ createdBy: String!
+ lastUpdatedBy: String
+}
+
+type Subscription {
+ onCardAddedInWhiteboard(whiteboardID: ID!): Card
+   @aws_subscribe(mutations: ["createCard"])
+ onCardChangedInWhiteboard(whiteboardID: ID!): Card
+   @aws_subscribe(mutations: ["updateCard"])
+ onCardRemovedInWhiteboard(whiteboardID: ID!): Card
+   @aws_subscribe(mutations: ["deleteCard"])
+}
+
+
+Authentication toevoegen
+Voeg authenticatie toe met 
+$ amplify add auth
+
+Doorloop deze stappen
+
+ Do you want to use the default authentication and security configuration? Default configuration
+ How do you want users to be able to sign in? Username
+ Do you want to configure advanced settings? No, I am done.
+
+
+Storage toevoegen
+Voeg storage toe met
+amplify add storage
+
+Doorloop deze stappen
+
+? Please select from one of the below mentioned services: Content (Images, audio, video, etc.)
+? Please provide a friendly name for your resource that will be used to label this category in the project: rtwhiteboardmacstorage
+? Please provide bucket name: rtwiteboardmacbucket
+? Who should have access: Auth and guest users
+? What kind of access do you want for Authenticated users? create/update, read, delete
+? What kind of access do you want for Guest users? create/update, read, delete
+? Do you want to add a Lambda Trigger for your S3 Bucket? No
+
+
+Push de resources naar de cloud configuratie
+Controleer de huidige status van de resources met 
+
+amplify status
+
+Push de resources
+
+$ amplify push
+
+✔ Successfully pulled backend environment dev from the cloud.
+
+Current Environment: dev
+
+| Category | Resource name           | Operation | Provider plugin   |
+| -------- | ----------------------- | --------- | ----------------- |
+| Api      | rtwhiteboardmac         | Create    | awscloudformation |
+| Auth     | rtwhiteboardmac0a3ba133 | Create    | awscloudformation |
+| Storage  | rtwhiteboardmacstorage  | Create    | awscloudformation |
+
+? Are you sure you want to continue? Yes
+? Do you want to generate code for your newly created GraphQL API Yes
+? Choose the code generation language target angular
+? Enter the file name pattern of graphql queries, mutations and subscriptions src/graphql/**/*.graphql
+? Do you want to generate/update all possible GraphQL operations - queries, mutations and subscriptions Yes
+? Enter maximum statement depth [increase from default if your schema is deeply nested] 2
+? Enter the file name for the generated code src/app/API.service.ts
+
+Maak de storage bucket public
+Een standaard S3 bucket is niet toegankelijk voor alle users. De bucket policy moet aangepast worden zodat afbeeldingen kunnen gedownload worden.
+Ga naar de amplify console met het cmd 
+amplify console
+
+Selecteer de applicatie die we in de vorige stap hebben geïnitialiseerd.
+Ga naar ‘Backend environments’ → ‘File Storage’ → ‘View in S3’ → ‘Permissions’ → ‘Bucket Policy’.
+
+Plaats daar deze code:
+
+{
+    "Version": "2012-10-17",
+    "Id": "Policy1589285065543",
+    "Statement": [
+        {
+            "Sid": "Stmt1589285058091",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::rtwiteboardmacbucket142722-dev/*"
+        }
+    ]
+}
+
+
+Pas het ‘Resource’ veld aan naar de naam van je eigen resource. Deze kun je vinden in de tekst boven de ‘policy-editor’.
+
+Stap 4 – Run het project
+
+Run het project met
+ng serve realtime-whiteboard
