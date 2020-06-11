@@ -10,23 +10,28 @@ Omdat deze applicatie slechts een PoC is, wordt deze niet geïntegreerd in een b
 - Angular CLI: Installeer de Angular CLI via de node package manager. <br>
 Gebruik daarvoor dit cmd: `npm install -g @angular/cli`
 
-5.2 – Hoe ga je aan de slag?
+## 1.2 – Hoe ga je aan de slag?
 
-Stap 1 – Clone de Git repository en open deze in VS Code
+### Stap 1 – Clone de Git repository en open deze in VS Code
 
 Open een terminal en clone het project naar het systeem.
 
-Stap 2 – Installeer de node modules
+### Stap 2 – Installeer de node modules
 
-npm i
+`npm i`
 
-Stap 3 – API configureren 
+### Stap 3 – API configureren 
 
 Vanaf dit punt zijn er twee mogelijkheden om het project te runnen. 
-Optie 1 – Bestaande API gebruiken
-De eerste en snelste mogelijkheid is om te connecteren met de API gemaakt voor dit project. Deze API is geldig tot 31 juli 2020. Daarna zal de API-key vervallen.  Als je ervoor kiest om te connecteren met de bestaande API, dan hoef je het Amplify framework niet te configurern. Dit is de snelste manier om het project te starten. Maak een file aan genaamd aws-exports.js. Plaats de file in apps > realtime-whiteboard > src. 
-Plaats onderstaande code in de file.
 
+#### Optie 1 – Bestaande API gebruiken
+De eerste en snelste mogelijkheid is om te connecteren met de API gemaakt voor dit project. Deze API is geldig tot 31 juli 2020. Daarna zal de API-key vervallen.  Als je ervoor kiest om te connecteren met de bestaande API, dan hoef je het Amplify framework niet te configurern. Dit is de snelste manier om het project te starten. Maak een file aan genaamd aws-exports.js. <br>
+
+Plaats de file in apps > realtime-whiteboard > src. <br>
+
+Plaats onderstaande code in de file. <br>
+
+```
 const awsmobile = {
   aws_project_region: 'eu-west-1',
   aws_cognito_identity_pool_id:
@@ -45,6 +50,7 @@ const awsmobile = {
 };
 
 export default awsmobile;
+```
 
 
 Optie 2 – Configureer een eigen Amplify project
